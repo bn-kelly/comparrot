@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, Inject, Renderer2 } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { SidenavService } from './layout/sidenav/sidenav.service';
 import { ThemeService } from '../@fury/services/theme.service';
@@ -8,11 +8,19 @@ import { filter } from 'rxjs/operators';
 import { Platform } from '@angular/cdk/platform';
 import { SplashScreenService } from '../@fury/services/splash-screen.service';
 
+declare global {
+  interface Window {
+    chrome: {
+      extension: object;
+    };
+  }
+}
+
 @Component({
   selector: 'fury-root',
   templateUrl: './app.component.html'
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
 
   constructor(private sidenavService: SidenavService,
               private iconRegistry: MatIconRegistry,
@@ -239,5 +247,12 @@ export class AppComponent {
         ]
       }
     ]);
+  }
+
+  ngAfterViewInit() {
+    if (window.chrome && window.chrome.extension) {
+      document.getElementsByTagName('html')[0].style.width = '320px';
+      document.getElementsByTagName('html')[0].style.height = '600px';
+    }
   }
 }
