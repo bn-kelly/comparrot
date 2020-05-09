@@ -12,6 +12,7 @@ import { RecentSalesWidgetOptions } from './widgets/recent-sales-widget/recent-s
 import { SalesSummaryWidgetOptions } from './widgets/sales-summary-widget/sales-summary-widget-options.interface';
 import { DashboardService } from './dashboard.service';
 import { ChartWidgetOptions } from '../../../@fury/shared/chart-widget/chart-widget-options.interface';
+import { Offer } from './offer.model';
 
 @Component({
   selector: 'fury-dashboard',
@@ -21,6 +22,7 @@ import { ChartWidgetOptions } from '../../../@fury/shared/chart-widget/chart-wid
 export class DashboardComponent implements OnInit {
 
   private static isInitialLoad = true;
+  offers$: Offer[];
   salesData$: Observable<ChartData>;
   totalSalesOptions: BarChartWidgetOptions = {
     title: 'Total Sales',
@@ -121,6 +123,7 @@ export class DashboardComponent implements OnInit {
    */
   ngOnInit() {
     this.salesData$ = this.dashboardService.getSales();
+    this.offers$ = this.dashboardService.getOffers();
     this.visitsData$ = this.dashboardService.getVisits();
     this.clicksData$ = this.dashboardService.getClicks();
     this.conversionsData$ = this.dashboardService.getConversions();

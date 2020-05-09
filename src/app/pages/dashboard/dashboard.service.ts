@@ -65,6 +65,31 @@ export class DashboardService {
     );
   }
 
+  getOffers() {
+    /**
+     * Example for real request
+
+     return this.http.get(this.url + '/offers').pipe(
+     map(response => this.toSalesChartData(response))
+     );
+     */
+
+    // Simulating request from local data
+    return [
+      {
+        imageUrl: 'https://images-na.ssl-images-amazon.com/images/I/71BokyIbDCL._AC_SX679_.jpg',
+        title: 'AW 26"x1.75" Rear Wheel 48V 1000W Electric Bicycle Motor Kit E-Bike Cycling Hub Conversion Dual Mode Controller',
+        price: '$235',
+        oldPrice: '$250',
+      },
+      {
+        imageUrl: 'https://images-na.ssl-images-amazon.com/images/I/717tXwhNhrL._AC_SX679_.jpg',
+        title: 'AW 22.5" Electric Bicycle Front Wheel Frame Kit for 26" 48V 1000W 470RPM E-Bike',
+        price: '$456',
+      }
+    ];
+  }
+
   /**
    * Converting Data from Server to Chart compatible format
    * @returns {Chart.ChartData}
