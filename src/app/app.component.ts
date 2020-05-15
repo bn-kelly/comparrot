@@ -248,11 +248,4 @@ export class AppComponent implements AfterViewInit {
       }
     ]);
   }
-
-  ngAfterViewInit() {
-    if (window.chrome && window.chrome.extension) {
-      document.getElementsByTagName('html')[0].style.width = '480px';
-      document.getElementsByTagName('html')[0].style.height = '600px';
-    }
-  }
 }
