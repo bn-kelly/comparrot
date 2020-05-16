@@ -4,6 +4,29 @@ const iframeID = 'extension-iframe';
 const activeClassName = 'active';
 const inactiveClassName = 'inactive';
 
+const getIframe = () => document.getElementById(iframeID);
+
+const toggleIframe = () => {
+  const iframe = getIframe();
+
+  const toggleActiveClass = iframe.classList.contains(activeClassName) ? 'remove' : 'add';
+  iframe.classList[toggleActiveClass](activeClassName);
+  if (iframe.classList.contains(activeClassName)) {
+    iframe.classList.remove(inactiveClassName);
+  } else {
+    iframe.classList.add(inactiveClassName);
+  }
+};
+
+const hideIframe = () => {
+  const iframe = getIframe();
+
+  if (iframe.classList.contains(activeClassName)) {
+    iframe.classList.remove(activeClassName);
+    iframe.classList.add(inactiveClassName);
+  }
+};
+
 if (!location.ancestorOrigins.contains(extensionOrigin)) {
   const iframe = document.createElement('iframe');
   iframe.id = iframeID;
@@ -13,26 +36,19 @@ if (!location.ancestorOrigins.contains(extensionOrigin)) {
 }
 
 chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
-  if (msg.action === 'toggle-iframe') {
-    const iframe = document.getElementById(iframeID);
+  switch (msg.action) {
+    case 'toggle-iframe':
+      toggleIframe();
+      break;
 
-    const toggleActiveClass = iframe.classList.contains(activeClassName) ? 'remove' : 'add';
-    iframe.classList[toggleActiveClass](activeClassName);
-    if (iframe.classList.contains(activeClassName)) {
-      iframe.classList.remove(inactiveClassName);
-    } else {
-      iframe.classList.add(inactiveClassName);
-    }
+    case 'hide-iframe':
+      hideIframe();
+      break;
+
+    default:
+      break;
   }
 });
 
-document.body.addEventListener('click', function(e) {
-  const iframe = document.getElementById(iframeID);
-
-  if (iframe.classList.contains(activeClassName)) {
-    iframe.classList.remove(activeClassName);
-    iframe.classList.add(inactiveClassName);
-  }
-
-});
+document.body.addEventListener('click', hideIframe);
 

@@ -10,9 +10,7 @@ import { SplashScreenService } from '../@fury/services/splash-screen.service';
 
 declare global {
   interface Window {
-    chrome: {
-      extension: object;
-    };
+    chrome: any;
   }
 }
 
