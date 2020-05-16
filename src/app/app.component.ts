@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { AfterViewInit, Component, Inject, Renderer2 } from '@angular/core';
+import { Component, Inject, Renderer2 } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { SidenavService } from './layout/sidenav/sidenav.service';
 import { ThemeService } from '../@fury/services/theme.service';
@@ -20,7 +20,7 @@ declare global {
   selector: 'fury-root',
   templateUrl: './app.component.html'
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent {
 
   constructor(private sidenavService: SidenavService,
               private iconRegistry: MatIconRegistry,
