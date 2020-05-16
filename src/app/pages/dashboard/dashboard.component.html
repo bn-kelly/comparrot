@@ -6,7 +6,11 @@
         <div class="offer__best-deal-chip" color="primary" selected>BEST DEAL</div>
         <img class="offer__img" src={{offer.imageUrl}} alt="" />
       </div>
-      <mat-card-title class="offer__title">{{offer.title}}</mat-card-title>
+      <mat-card-title class="offer__title"
+                      matTooltip="{{offer.title}}"
+                      [matTooltipPosition]="'above'">
+        {{offer.title}}
+      </mat-card-title>
       <mat-card-content class="offer__content">
         <div class="offer__price-container">
             <span class="offer__price">

@@ -12,23 +12,20 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class ToolbarUserComponent implements OnInit {
 
   isOpen: boolean;
-  indexRef: any;
-  user: any;
+  user: any = {};
 
   constructor(
       private router: Router,
       private afs: AngularFirestore,
       public auth: AuthService
-  ) {
-      this.indexRef = this.afs.collection('users').doc(this.auth.uid).ref;
-  }
+  ) { }
 
   signOut() {
     this.auth.signOut();
   }
 
   ngOnInit() {
-    this.indexRef.onSnapshot(doc => this.user = doc.data());
+    this.afs.collection('users').doc(this.auth.uid).ref.onSnapshot(doc => this.user = doc.data());
   }
 
   toggleDropdown() {

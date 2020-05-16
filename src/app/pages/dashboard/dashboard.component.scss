@@ -36,6 +36,10 @@
     font-weight: 600;
     font-size: 22px;
     line-height: 116%;
+    display: -webkit-inline-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
   }
 
   &__content {
