@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ChartData } from 'chart.js';
 import * as moment from 'moment';
 import { Observable, ReplaySubject } from 'rxjs';
+import { DocumentData } from '@angular/fire/firestore';
 import { AdvancedPieChartWidgetOptions } from './widgets/advanced-pie-chart-widget/advanced-pie-chart-widget-options.interface';
 import { AudienceOverviewWidgetOptions } from './widgets/audience-overview-widget/audience-overview-widget-options.interface';
 import { BarChartWidgetOptions } from './widgets/bar-chart-widget/bar-chart-widget-options.interface';
@@ -12,7 +13,6 @@ import { RecentSalesWidgetOptions } from './widgets/recent-sales-widget/recent-s
 import { SalesSummaryWidgetOptions } from './widgets/sales-summary-widget/sales-summary-widget-options.interface';
 import { DashboardService } from './dashboard.service';
 import { ChartWidgetOptions } from '../../../@fury/shared/chart-widget/chart-widget-options.interface';
-import { Offer } from './offer.model';
 
 @Component({
   selector: 'fury-dashboard',
@@ -22,7 +22,7 @@ import { Offer } from './offer.model';
 export class DashboardComponent implements OnInit {
 
   private static isInitialLoad = true;
-  offers$: Offer[];
+  offers$: DocumentData[];
   salesData$: Observable<ChartData>;
   totalSalesOptions: BarChartWidgetOptions = {
     title: 'Total Sales',
@@ -123,7 +123,7 @@ export class DashboardComponent implements OnInit {
    */
   ngOnInit() {
     this.salesData$ = this.dashboardService.getSales();
-    this.offers$ = this.dashboardService.getOffers();
+    this.dashboardService.getOffers().subscribe(data => this.offers$ = data);
     this.visitsData$ = this.dashboardService.getVisits();
     this.clicksData$ = this.dashboardService.getClicks();
     this.conversionsData$ = this.dashboardService.getConversions();

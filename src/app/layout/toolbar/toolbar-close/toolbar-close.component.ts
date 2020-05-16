@@ -11,6 +11,10 @@ export class ToolbarCloseComponent {
   }
 
   hideExtension() {
+    if (!window.chrome || !window.chrome.tabs) {
+      return;
+    }
+
     window.chrome.tabs.getSelected(null, tab => {
       window.chrome.tabs.sendMessage(tab.id, {
         action: 'hide-iframe'

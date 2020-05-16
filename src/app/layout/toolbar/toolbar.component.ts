@@ -12,6 +12,7 @@ export class ToolbarComponent implements OnInit {
   @Input()
   @HostBinding('class.no-box-shadow')
   hasNavigation: boolean;
+  isExtension: boolean;
 
   @Output() openSidenav = new EventEmitter();
   @Output() openQuickPanel = new EventEmitter();
@@ -21,7 +22,9 @@ export class ToolbarComponent implements OnInit {
   constructor(private themeService: ThemeService) {
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.isExtension = !!window.chrome && !!window.chrome.extension;
+  }
 
 
 }

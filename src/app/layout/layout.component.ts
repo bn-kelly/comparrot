@@ -45,6 +45,10 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   toggleExpandIframe(isOpen) {
+    if (!window.chrome || !window.chrome.tabs) {
+      return;
+    }
+
     window.chrome.tabs.getSelected(null, tab => {
       window.chrome.tabs.sendMessage(tab.id, {
         action: 'toggle-expand-iframe',

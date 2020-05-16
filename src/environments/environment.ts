@@ -6,5 +6,13 @@
 export const environment = {
   production: false,
   googleMapsApiKey: '',
-  backend: 'http://localhost:4200' // Put your backend here
+  backend: 'http://localhost:4200', // Put your backend here
+  firebase: {
+    apiKey: 'AIzaSyB43AEAPGnHyfwaoP5KzCp9b9WCVyxxHfY',
+    authDomain: 'botsparked.firebaseapp.com',
+    databaseURL: 'https://botsparked.firebaseio.com',
+    projectId: 'botsparked',
+    storageBucket: 'botsparked.appspot.com',
+    messagingSenderId: '899772049124'
+  }
 };
