@@ -26,7 +26,11 @@
     </mat-sidenav>
     <!-- END SIDENAV -->
 
-    <mat-sidenav [(opened)]="quickPanelOpen" mode="over" position="end">
+    <mat-sidenav [(opened)]="quickPanelOpen"
+                 (openedStart)="toggleExpandIframe(true)"
+                 (closedStart)="toggleExpandIframe(false)"
+                 mode="over"
+                 position="end">
       <fury-quickpanel></fury-quickpanel>
     </mat-sidenav>
 

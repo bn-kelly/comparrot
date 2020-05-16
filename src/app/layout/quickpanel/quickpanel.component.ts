@@ -12,10 +12,12 @@ export class QuickpanelComponent implements OnInit {
   todayDate: string;
   todayDateSuffix: string;
   todayMonth: string;
+  isExtension: boolean;
 
   constructor() { }
 
   ngOnInit() {
+    this.isExtension = !!window.chrome && !!window.chrome.extension;
     this.todayDay = moment().format('dddd');
     this.todayDate = moment().format('Do');
     this.todayDate = this.todayDate.replace(/\D/g, '');

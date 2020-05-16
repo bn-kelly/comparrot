@@ -3,28 +3,38 @@ const extensionOrigin = `chrome-extension://${chrome.runtime.id}`;
 const iframeID = 'extension-iframe';
 const activeClassName = 'active';
 const inactiveClassName = 'inactive';
+const inClassName = 'in';
+const expandedClassName = 'expanded';
+const remove = 'remove';
+const add = 'add';
 
 const getIframe = () => document.getElementById(iframeID);
 
-const toggleIframe = () => {
+const toggleShowIframe = () => {
   const iframe = getIframe();
+  const isActive = iframe.classList.contains(activeClassName);
 
-  const toggleActiveClass = iframe.classList.contains(activeClassName) ? 'remove' : 'add';
+  const toggleActiveClass = isActive ? remove : add;
+  const toggleInactiveClass = isActive ? add : remove;
   iframe.classList[toggleActiveClass](activeClassName);
-  if (iframe.classList.contains(activeClassName)) {
-    iframe.classList.remove(inactiveClassName);
-  } else {
-    iframe.classList.add(inactiveClassName);
-  }
+  iframe.classList[toggleActiveClass](inClassName);
+  iframe.classList[toggleInactiveClass](inactiveClassName);
 };
 
 const hideIframe = () => {
   const iframe = getIframe();
 
-  if (iframe.classList.contains(activeClassName)) {
-    iframe.classList.remove(activeClassName);
-    iframe.classList.add(inactiveClassName);
-  }
+  iframe.classList.remove(activeClassName);
+  iframe.classList.remove(inClassName);
+  iframe.classList.add(inactiveClassName);
+};
+
+const toggleExpandIframe = isOpen => {
+  const iframe = getIframe();
+
+  const toggleExpandedClass = isOpen ? add : remove;
+
+  iframe.classList[toggleExpandedClass](expandedClassName);
 };
 
 if (!location.ancestorOrigins.contains(extensionOrigin)) {
@@ -35,14 +45,18 @@ if (!location.ancestorOrigins.contains(extensionOrigin)) {
   document.body.appendChild(iframe);
 }
 
-chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
+chrome.extension.onMessage.addListener(function(msg) {
   switch (msg.action) {
-    case 'toggle-iframe':
-      toggleIframe();
+    case 'toggle-show-iframe':
+      toggleShowIframe();
       break;
 
     case 'hide-iframe':
       hideIframe();
+      break;
+
+    case 'toggle-expand-iframe':
+      toggleExpandIframe(msg.isOpen);
       break;
 
     default:

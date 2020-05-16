@@ -10,14 +10,30 @@ iframe#extension-iframe {
   border: 0;
   border-radius: 24px;
   box-shadow: 0 4px 50px rgba(0, 0, 0, 0.15);
+  will-change: transform, opacity, top, width;
 }
 
 iframe#extension-iframe.active {
   top: 5px;
+}
+
+iframe#extension-iframe.active.in {
   animation: bounceInDown 0.5s ease-in-out;
 }
+
 iframe#extension-iframe.inactive {
   animation: bounceOutUp 0.25s ease-in-out;
+}
+
+iframe#extension-iframe.expanded {
+  width: calc(100% - 10px);
+  transition: width 0.15s cubic-bezier(0, 1, 0, 1) 0.25s;
+}
+
+@media screen and (min-width: 960px) {
+  iframe#extension-iframe.expanded {
+    width: calc(50% - 10px);
+  }
 }
 
 @keyframes bounceInDown {
@@ -54,7 +70,8 @@ iframe#extension-iframe.inactive {
 
 @keyframes bounceOutUp {
   0% {
-    top: 5px;
+    top: 25px;
+    transform: translate3d(0, -10px, 0) scaleY(0.985);
   }
 
   20% {

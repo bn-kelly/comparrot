@@ -44,6 +44,15 @@ export class LayoutComponent implements OnInit, OnDestroy {
     this.quickPanelOpen = true;
   }
 
+  toggleExpandIframe(isOpen) {
+    window.chrome.tabs.getSelected(null, tab => {
+      window.chrome.tabs.sendMessage(tab.id, {
+        action: 'toggle-expand-iframe',
+        isOpen,
+      });
+    });
+  }
+
   openConfigPanel() {
     this.configPanel.open();
   }

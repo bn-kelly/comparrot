@@ -1,4 +1,4 @@
-<mat-tab-group class="quickpanel" fxFlex>
+<mat-tab-group class="quickpanel" [ngClass]="{'extension': isExtension}" fxFlex>
   <mat-tab label="Overview">
     <fury-scrollbar class="overflow-container">
       <div class="text-padding">

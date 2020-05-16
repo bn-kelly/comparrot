@@ -10,13 +10,23 @@
   min-width: 330px;
   max-width: 330px;
   height: 100%;
-}
 
-@media screen and (max-width: 959px) {
-  .quickpanel {
+  @media screen and (max-width: 959px) {
     width: 80vw;
     min-width: 80vw;
     max-width: 80vw;
+  }
+
+  &.extension {
+    width: 80vw;
+    min-width: 80vw;
+    max-width: 80vw;
+
+    @media screen and (max-width: 959px) {
+      width: 80vw;
+      min-width: 80vw;
+      max-width: 80vw;
+    }
   }
 }
 
