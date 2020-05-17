@@ -11,16 +11,19 @@
   z-index: $footer-z-index;
   padding-left: $spacing;
   padding-right: $spacing;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  .name {
-    letter-spacing: 0;
-  }
+  .action-login {
+    color: $color-accent;
+    font-weight: 600;
+    line-height: 21px;
 
-  .action {
-    .icon {
-      font-size: 18px;
-      height: 18px;
-      width: 18px;
+    &:hover, &:focus {
+      cursor: pointer;
+      text-decoration: underline;
     }
   }
+
 }

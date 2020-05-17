@@ -13,6 +13,7 @@ import { RecentSalesWidgetOptions } from './widgets/recent-sales-widget/recent-s
 import { SalesSummaryWidgetOptions } from './widgets/sales-summary-widget/sales-summary-widget-options.interface';
 import { DashboardService } from './dashboard.service';
 import { ChartWidgetOptions } from '../../../@fury/shared/chart-widget/chart-widget-options.interface';
+import { AuthService } from '../../pages/authentication/services/auth.service';
 
 @Component({
   selector: 'fury-dashboard',
@@ -23,7 +24,8 @@ export class DashboardComponent implements OnInit {
 
   private static isInitialLoad = true;
   isExtension: boolean;
-  offers$: DocumentData[];
+  offersList: DocumentData[];
+  offers: DocumentData[];
   salesData$: Observable<ChartData>;
   totalSalesOptions: BarChartWidgetOptions = {
     title: 'Total Sales',
@@ -98,7 +100,8 @@ export class DashboardComponent implements OnInit {
   gap = `${this._gap}px`;
 
   constructor(private dashboardService: DashboardService,
-              private router: Router) {
+              private router: Router,
+              private auth: AuthService) {
     /**
      * Edge wrong drawing fix
      * Navigate anywhere and on Promise right back
@@ -125,7 +128,16 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.isExtension = !!window.chrome && !!window.chrome.extension;
     this.salesData$ = this.dashboardService.getSales();
-    this.dashboardService.getOffers().subscribe(data => this.offers$ = data);
+    this.dashboardService.getOffers().subscribe(data => {
+      this.offersList = data;
+      this.offers = this.offersList;
+    });
+    this.auth.user.subscribe(user => {
+      const shouldShowAllOffers = user && !user.isAnonymous;
+      if (Array.isArray(this.offersList)) {
+        this.offers = shouldShowAllOffers ? this.offersList : [this.offersList[0]];
+      }
+    });
     this.visitsData$ = this.dashboardService.getVisits();
     this.clicksData$ = this.dashboardService.getClicks();
     this.conversionsData$ = this.dashboardService.getConversions();

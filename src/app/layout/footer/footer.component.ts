@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ThemeService } from '../../../@fury/services/theme.service';
-import { map } from 'rxjs/operators';
+import { AuthService } from '../../pages/authentication/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'fury-footer',
@@ -8,17 +9,23 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit, OnDestroy {
+  isLoggedIn: boolean;
 
-  visible$ = this.themeService.config$.pipe(map(config => config.footerVisible));
-
-  constructor(private themeService: ThemeService) {
+  constructor(
+      private themeService: ThemeService,
+      private auth: AuthService,
+      private router: Router,
+  ) {
   }
 
   ngOnInit() {
+    this.auth.user.subscribe(user => {
+      this.isLoggedIn = !!user && !user.isAnonymous;
+    });
   }
 
-  hide() {
-    this.themeService.setFooterVisible(false);
+  goLogin() {
+    this.router.navigate(['/login']);
   }
 
   ngOnDestroy(): void {}

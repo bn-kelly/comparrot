@@ -1,7 +1,7 @@
 <fury-page [fxLayoutGap]="gap" class="dashboard" [ngClass]="{'extension': isExtension}" fxLayout="column">
   <div [fxLayoutGap]="gap" fxFlex="noshrink" fxLayout="column" fxLayout.gt-lg="row">
 
-    <mat-card class="offer" *ngFor="let offer of offers$">
+    <mat-card class="offer" *ngFor="let offer of offers">
       <div class="offer__product-container">
         <div class="offer__product-info">
           <div class="offer__best-deal-chip" color="primary" selected>BEST DEAL</div>
