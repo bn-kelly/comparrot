@@ -29,7 +29,7 @@ const hideIframe = () => {
   iframe.classList.add(inactiveClassName);
 };
 
-const toggleExpandIframe = isOpen => {
+const toggleExpandIframeWidth = isOpen => {
   const iframe = getIframe();
 
   const toggleExpandedClass = isOpen ? add : remove;
@@ -55,8 +55,8 @@ chrome.extension.onMessage.addListener(function(msg) {
       hideIframe();
       break;
 
-    case 'toggle-expand-iframe':
-      toggleExpandIframe(msg.isOpen);
+    case 'toggle-expand-iframe-width':
+      toggleExpandIframeWidth(msg.isOpen);
       break;
 
     default:

@@ -51,7 +51,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
     window.chrome.tabs.getSelected(null, tab => {
       window.chrome.tabs.sendMessage(tab.id, {
-        action: 'toggle-expand-iframe',
+        action: 'toggle-expand-iframe-width',
         isOpen,
       });
     });
