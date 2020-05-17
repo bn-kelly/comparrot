@@ -1,6 +1,6 @@
 <div *ngIf="!isLoggedIn" class="footer">
-  <span (click)="goLogin()"
+  <a [routerLink]="['/login']"
      class="action-login">
     login to see other deals
-  </span>
+  </a>
 </div>

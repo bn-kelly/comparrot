@@ -81,10 +81,11 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    //console.log("Authenticating " + this.form.value['email'] + " : " + this.form.value['password']);
-    this.auth.emailLogin(this.form.value['email'], this.form.value['password']).then(response => {
-      this.router.navigate(['/']);
-    });
+    if (!this.form.valid) {
+      return;
+    }
+
+    this.auth.emailLogin(this.form.value['email'], this.form.value['password']);
   }
 
   resetPassword() {

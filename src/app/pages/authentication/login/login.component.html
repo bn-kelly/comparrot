@@ -9,7 +9,7 @@
 
       </div>
     </div>
-    <div class="padding" fxLayout="column" fxLayoutGap="16px" [formGroup]="form">
+    <form (ngSubmit)="login()" class="padding" fxLayout="column" fxLayoutGap="16px" [formGroup]="form">
       <div fxFlex="auto" fxLayout="column">
         <mat-form-field fxFlex="grow">
           <mat-label>E-Mail</mat-label>
@@ -39,13 +39,13 @@
         <mat-checkbox class="caption">Remember Me</mat-checkbox>
         <a class="caption" [routerLink]="['/forgot-password']">Forgot Password?</a>
       </div>
-      <button type="button" color="primary" mat-raised-button (click)="login()">
+      <button type="submit" color="primary" mat-raised-button>
         SIGN IN
       </button>
       <p class="secondary-text text-center">
         Don't have an account?<br/>
         <a [routerLink]="['/register']">Click here to create one</a>
       </p>
-    </div>
+    </form>
   </div>
 </div>

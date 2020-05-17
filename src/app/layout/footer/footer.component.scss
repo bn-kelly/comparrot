@@ -19,9 +19,9 @@
     color: $color-accent;
     font-weight: 600;
     line-height: 21px;
+    text-decoration: none;
 
     &:hover, &:focus {
-      cursor: pointer;
       text-decoration: underline;
     }
   }

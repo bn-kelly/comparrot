@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ThemeService } from '../../../@fury/services/theme.service';
 import { AuthService } from '../../pages/authentication/services/auth.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'fury-footer',
@@ -14,7 +13,6 @@ export class FooterComponent implements OnInit, OnDestroy {
   constructor(
       private themeService: ThemeService,
       private auth: AuthService,
-      private router: Router,
   ) {
   }
 
@@ -22,10 +20,6 @@ export class FooterComponent implements OnInit, OnDestroy {
     this.auth.user.subscribe(user => {
       this.isLoggedIn = !!user && !user.isAnonymous;
     });
-  }
-
-  goLogin() {
-    this.router.navigate(['/login']);
   }
 
   ngOnDestroy(): void {}

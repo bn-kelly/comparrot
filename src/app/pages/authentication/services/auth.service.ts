@@ -159,9 +159,9 @@ export class AuthService {
   emailLogin(email: string, password: string) {
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
-      .then(credential => {
+      .then(() => {
+        this.router.navigate(['/']);
         this.notify.update('Welcome back!', 'success');
-        //return this.updateUserData(credential.user);
       })
       .catch(error => this.handleError(error));
   }
