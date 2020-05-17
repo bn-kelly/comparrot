@@ -71,6 +71,12 @@ export class AuthService {
       // tap(user => localStorage.setItem('user', JSON.stringify(user))),
       // startWith(JSON.parse(localStorage.getItem('user')))
     );
+
+    this.afAuth.onAuthStateChanged(user => {
+      if (!user) {
+        this.anonymousLogin();
+      }
+    });
   }
 
   ////// OAuth Methods /////
@@ -115,11 +121,14 @@ export class AuthService {
     return this.afAuth
       .signInAnonymously()
       .then(credential => {
-        this.notify.update('Welcome to Firestarter!!!', 'success');
+        console.log('access granted for anonymous user');
+        this.notify.update('Welcome to Firestarter, anonymous!!!', 'success');
         return this.updateUserData(credential.user); // if using firestore
       })
       .catch(error => {
         this.handleError(error);
+        console.log('access denied');
+        this.router.navigate(['/login']);
       });
   }
 
