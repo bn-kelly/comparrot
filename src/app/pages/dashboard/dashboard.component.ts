@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit {
   private static isInitialLoad = true;
   isExtension: boolean;
   offersList: DocumentData[];
+  isLoggedIn: boolean;
   offers: DocumentData[];
   salesData$: Observable<ChartData>;
   totalSalesOptions: BarChartWidgetOptions = {
@@ -133,9 +134,9 @@ export class DashboardComponent implements OnInit {
       this.offers = this.offersList;
     });
     this.auth.user.subscribe(user => {
-      const shouldShowAllOffers = user && !user.isAnonymous;
+      this.isLoggedIn = user && !user.isAnonymous;
       if (Array.isArray(this.offersList)) {
-        this.offers = shouldShowAllOffers ? this.offersList : [this.offersList[0]];
+        this.offers = this.isLoggedIn ? this.offersList : [this.offersList[0]];
       }
     });
     this.visitsData$ = this.dashboardService.getVisits();

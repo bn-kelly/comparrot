@@ -34,7 +34,7 @@
           BUY
         </button>
       </mat-card-content>
-      <mat-card-actions align="end" class="offer__actions">
+      <mat-card-actions *ngIf="isLoggedIn" align="end" class="offer__actions">
         <button mat-button class="offer__actions-button">
           <mat-icon>share</mat-icon>
           Share
