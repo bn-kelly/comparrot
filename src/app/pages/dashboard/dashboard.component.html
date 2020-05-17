@@ -5,10 +5,10 @@
       <div class="offer__product-container">
         <div class="offer__product-info">
           <div class="offer__best-deal-chip" color="primary" selected>BEST DEAL</div>
-          <img *ngIf="vendor"
+          <img *ngIf="offer.vendor"
                class="offer__product-vendor"
-               src="../../../assets/img/logos/{{vendor}}.svg"
-               alt="">
+               src="../../../assets/img/logos/{{offer.vendor}}.svg"
+               alt={{offer.vendor}}>
         </div>
         <img class="offer__img" src={{offer.imageUrl}} alt="" />
       </div>
