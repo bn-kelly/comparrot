@@ -22,10 +22,11 @@ export class ToolbarUserComponent implements OnInit {
 
   signOut() {
     this.auth.signOut();
+    this.isOpen = false;
   }
 
   ngOnInit() {
-    this.afs.collection('users').doc(this.auth.uid).ref.onSnapshot(doc => this.user = doc.data());
+    this.auth.user.subscribe(user => this.user = user || {});
   }
 
   toggleDropdown() {

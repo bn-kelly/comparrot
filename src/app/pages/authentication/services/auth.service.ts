@@ -21,9 +21,9 @@ import { switchMap, startWith, tap, filter } from 'rxjs/operators';
 // }
 
 export interface User {
-  displayName?: string,
-  email?: string,
-  photoURL?: string,
+  displayName?: string;
+  email?: string;
+  photoURL?: string;
   ui: {
     navigation: 'side' | 'top';
     sidenavUserVisible: boolean;
@@ -34,15 +34,17 @@ export interface User {
     theme: 'fury-default' | 'fury-light' | 'fury-dark' | 'fury-flat';
     title: string;
     search: string;
-  },
+  };
   uid: string;
+  isAnonymous: boolean;
 }
 
 export interface Credential {
-  uid: string,
-  email?: string,
-  displayName?: string,
-  photoURL?: string
+  uid: string;
+  email?: string;
+  displayName?: string;
+  photoURL?: string;
+  isAnonymous: boolean;
 }
 
 @Injectable()
@@ -75,6 +77,17 @@ export class AuthService {
     this.afAuth.onAuthStateChanged(user => {
       if (!user) {
         this.anonymousLogin();
+      } else {
+        this.uid = user.uid;
+        this.afs.collection('users').doc(user.uid).get().subscribe(doc => {
+          const data = doc.data();
+          if (data) {
+            const dataToUpdate = user.isAnonymous ? user : { ...user, ...data };
+            this.currentUser = dataToUpdate;
+
+            this.updateUserData(dataToUpdate);
+          }
+        });
       }
     });
   }
@@ -120,10 +133,9 @@ export class AuthService {
   anonymousLogin() {
     return this.afAuth
       .signInAnonymously()
-      .then(credential => {
+      .then(() => {
         console.log('access granted for anonymous user');
         this.notify.update('Welcome to Firestarter, anonymous!!!', 'success');
-        return this.updateUserData(credential.user); // if using firestore
       })
       .catch(error => {
         this.handleError(error);
@@ -167,8 +179,9 @@ export class AuthService {
   signOut() {
     //return new Promise((resolve, reject) => {
       this.afAuth.signOut().then(() => {
-        console.log("signed out")
-        this.router.navigate(['/login']);
+        console.log('signed out');
+        this.anonymousLogin();
+        // this.router.navigate(['/login']);
         //resolve();
       });
     //});
@@ -189,11 +202,12 @@ export class AuthService {
     const data: User = {
       uid: user.uid,
       email: user.email || null,
-      displayName: user.displayName || "john smith",
-      photoURL: user.photoURL || 'https://goo.gl/Fz9nrQ',
-      ui: this.currentUser.ui
-    }
+      displayName: user.displayName || 'john smith',
+      photoURL: user.photoURL || '',
+      ui: this.currentUser ? this.currentUser.ui : {},
+      isAnonymous: user.isAnonymous,
+    };
 
-    //return userRef.set(data);
+    return userRef.set(data);
   }
 }
