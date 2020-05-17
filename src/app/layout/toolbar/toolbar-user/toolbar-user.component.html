@@ -10,20 +10,24 @@
   <div class="dropdown" [class.open]="isOpen">
     <div class="content">
       <div class="list">
-        <div class="list-item" matRipple>
+        <div *ngIf="isLoggedIn" class="list-item" matRipple>
           <mat-icon class="list-item-icon">account_circle</mat-icon>
           <span>Account</span>
         </div>
-        <div class="list-item" matRipple>
+        <div *ngIf="isLoggedIn" class="list-item" matRipple>
           <mat-icon class="list-item-icon">settings</mat-icon>
           <span>Settings</span>
+        </div>
+        <div *ngIf="!isLoggedIn" class="list-item" matRipple (click)="goToLogin()">
+          <mat-icon class="list-item-icon">how_to_reg</mat-icon>
+          <span>Login</span>
         </div>
         <div class="list-item" matRipple>
           <mat-icon class="list-item-icon">help</mat-icon>
           <span>Help</span>
         </div>
         <mat-divider></mat-divider>
-        <div class="list-item" matRipple (click)="signOut()">
+        <div *ngIf="isLoggedIn" class="list-item" matRipple (click)="signOut()">
           <mat-icon class="list-item-icon">exit_to_app</mat-icon>
           <span>Logout</span>
         </div>

@@ -13,6 +13,7 @@ export class ToolbarUserComponent implements OnInit {
 
   isOpen: boolean;
   user: any = {};
+  isLoggedIn: boolean;
 
   constructor(
       private router: Router,
@@ -20,13 +21,20 @@ export class ToolbarUserComponent implements OnInit {
       public auth: AuthService
   ) { }
 
+  goToLogin() {
+    this.router.navigate(['/login']);
+  }
+
   signOut() {
     this.auth.signOut();
     this.isOpen = false;
   }
 
   ngOnInit() {
-    this.auth.user.subscribe(user => this.user = user || {});
+    this.auth.user.subscribe(user => {
+      this.user = user || {};
+      this.isLoggedIn = !!user && !user.isAnonymous;
+    });
   }
 
   toggleDropdown() {
