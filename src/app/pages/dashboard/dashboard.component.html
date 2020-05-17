@@ -1,9 +1,15 @@
-<fury-page [fxLayoutGap]="gap" class="dashboard" fxLayout="column">
+<fury-page [fxLayoutGap]="gap" class="dashboard" [ngClass]="{'extension': isExtension}" fxLayout="column">
   <div [fxLayoutGap]="gap" fxFlex="noshrink" fxLayout="column" fxLayout.gt-lg="row">
 
     <mat-card class="offer" *ngFor="let offer of offers$">
-      <div class="offer__image-container">
-        <div class="offer__best-deal-chip" color="primary" selected>BEST DEAL</div>
+      <div class="offer__product-container">
+        <div class="offer__product-info">
+          <div class="offer__best-deal-chip" color="primary" selected>BEST DEAL</div>
+          <img *ngIf="vendor"
+               class="offer__product-vendor"
+               src="../../../assets/img/logos/{{vendor}}.svg"
+               alt="">
+        </div>
         <img class="offer__img" src={{offer.imageUrl}} alt="" />
       </div>
       <mat-card-title class="offer__title"
@@ -22,6 +28,7 @@
             </span>
         </div>
         <button
+            class="offer__buy-button"
             mat-raised-button
             color="primary">
           BUY

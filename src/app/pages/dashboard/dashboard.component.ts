@@ -22,6 +22,8 @@ import { ChartWidgetOptions } from '../../../@fury/shared/chart-widget/chart-wid
 export class DashboardComponent implements OnInit {
 
   private static isInitialLoad = true;
+  isExtension: boolean;
+  vendor: string;
   offers$: DocumentData[];
   salesData$: Observable<ChartData>;
   totalSalesOptions: BarChartWidgetOptions = {
@@ -122,6 +124,8 @@ export class DashboardComponent implements OnInit {
    * Everything implemented here is purely for Demo-Demonstration and can be removed and replaced with your implementation
    */
   ngOnInit() {
+    this.isExtension = !!window.chrome && !!window.chrome.extension;
+    this.getVendor();
     this.salesData$ = this.dashboardService.getSales();
     this.dashboardService.getOffers().subscribe(data => this.offers$ = data);
     this.visitsData$ = this.dashboardService.getVisits();
@@ -222,6 +226,26 @@ export class DashboardComponent implements OnInit {
     this.recentSalesData$ = this.dashboardService.getRecentSalesData();
 
     this.advancedPieChartData$ = this.dashboardService.getAdvancedPieChartData();
+  }
+
+  getVendor = () => {
+    if (!this.isExtension) {
+      return;
+    }
+
+    window.chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+      const vendor = tabs[0].url ? tabs[0].url.replace(/.+\/\/|www.|\..+/g, '') : '';
+
+      switch (vendor) {
+        case 'amazon':
+          this.vendor = 'amazon';
+          break;
+
+        default:
+          this.vendor = '';
+          break;
+      }
+    });
   }
 
 }
