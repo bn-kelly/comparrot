@@ -4,7 +4,15 @@
     <mat-card class="offer" *ngFor="let offer of offers">
       <div class="offer__product-container">
         <div class="offer__product-info">
-          <div class="offer__best-deal-chip" color="primary" selected>BEST DEAL</div>
+          <div class="offer__best-deal-container">
+            <div
+                *ngIf="offer.isBestDeal"
+                class="offer__best-deal-chip"
+                color="primary"
+                selected>
+              BEST DEAL
+            </div>
+          </div>
           <img *ngIf="offer.vendor"
                class="offer__product-vendor"
                src="../../../assets/img/logos/{{offer.vendor}}.svg"
@@ -27,12 +35,14 @@
               {{offer.oldPrice}}
             </span>
         </div>
-        <button
+        <a
+            (click)="onBuyButtonClick($event, offer.buyUrl)"
+            href="{{offer.buyUrl}}" target="_blank"
             class="offer__buy-button"
             mat-raised-button
             color="primary">
           BUY
-        </button>
+        </a>
       </mat-card-content>
       <mat-card-actions *ngIf="isLoggedIn" align="end" class="offer__actions">
         <button mat-button class="offer__actions-button">

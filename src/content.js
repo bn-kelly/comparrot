@@ -37,6 +37,40 @@ const toggleExpandIframeWidth = isOpen => {
   iframe.classList[toggleExpandedClass](expandedClassName);
 };
 
+const tryToScrapeDataByVendor = vendor => {
+  const AMAZON = 'amazon';
+  const isAmazon = vendor.includes(AMAZON);
+
+  if (isAmazon) {
+    const productTitleElement = document.getElementById('productTitle');
+    const productPriceElement = document.getElementById('priceblock_ourprice');
+
+    const shouldSendProductToDB = !!productTitleElement;
+
+    if (shouldSendProductToDB) {
+      const title = productTitleElement.innerText;
+      const price = productPriceElement.innerText;
+      const url = location.href;
+      const vendor = AMAZON;
+
+      const product = {
+        title,
+        price,
+        url,
+        vendor,
+      };
+      sendProductToDB(product);
+    }
+  }
+};
+
+const sendProductToDB = product => {
+  chrome.runtime.sendMessage({
+    action: 'send-product-to-db',
+    product,
+  });
+};
+
 if (!location.ancestorOrigins.contains(extensionOrigin)) {
   const iframe = document.createElement('iframe');
   iframe.id = iframeID;
@@ -57,6 +91,10 @@ chrome.extension.onMessage.addListener(function(msg) {
 
     case 'toggle-expand-iframe-width':
       toggleExpandIframeWidth(msg.isOpen);
+      break;
+
+    case 'try-to-scrape-data':
+      tryToScrapeDataByVendor(location.hostname);
       break;
 
     default:

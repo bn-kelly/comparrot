@@ -3,4 +3,6 @@ export class Offer {
   title: string;
   price: string;
   oldPrice?: string;
+  isBestDeal?: boolean;
+  buyUrl: string;
 }

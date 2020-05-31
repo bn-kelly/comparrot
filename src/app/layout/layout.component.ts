@@ -1,3 +1,5 @@
+import sha1 from 'sha1';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SidebarDirective } from '../../@fury/shared/sidebar/sidebar.directive';
 import { SidenavService } from './sidenav/sidenav.service';
@@ -5,6 +7,7 @@ import { filter, map, startWith } from 'rxjs/operators';
 import { ThemeService } from '../../@fury/services/theme.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { checkRouterChildsData } from '../../@fury/utils/check-router-childs-data';
+import { AuthService } from '../pages/authentication/services/auth.service';
 
 @Component({
   selector: 'fury-layout',
@@ -33,12 +36,43 @@ export class LayoutComponent implements OnInit, OnDestroy {
     map(() => checkRouterChildsData(this.router.routerState.root.snapshot, data => data.scrollDisabled))
   );
 
-  constructor(private sidenavService: SidenavService,
+  constructor(private afs: AngularFirestore,
+              public auth: AuthService,
+              private sidenavService: SidenavService,
               private themeService: ThemeService,
               private route: ActivatedRoute,
               private router: Router) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    const isExtension = !!window.chrome && !!window.chrome.extension;
+
+    if (isExtension) {
+      window.chrome.tabs.getSelected(null, tab => {
+        window.chrome.tabs.sendMessage(tab.id, {
+          action: 'try-to-scrape-data'
+        });
+      });
+
+      window.chrome.extension.onMessage.addListener(message => {
+        if (message.action === 'send-product-to-db') {
+          const { uid } = this.auth;
+          if (!uid) {
+            return;
+          }
+
+          const { product } = message;
+          const urlHash = sha1(product.url);
+
+          this.afs
+              .collection('data')
+              .doc(uid)
+              .collection('products')
+              .doc(urlHash)
+              .set(product, { merge: true });
+        }
+      });
+    }
+  }
 
   openQuickPanel() {
     this.quickPanelOpen = true;

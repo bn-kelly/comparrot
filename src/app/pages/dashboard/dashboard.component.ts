@@ -24,6 +24,7 @@ export class DashboardComponent implements OnInit {
 
   private static isInitialLoad = true;
   isExtension: boolean;
+  user: DocumentData;
   offersList: DocumentData[];
   isLoggedIn: boolean;
   offers: DocumentData[];
@@ -123,21 +124,32 @@ export class DashboardComponent implements OnInit {
     return `1 1 calc(${100 / colAmount}% - ${this._gap - (this._gap / colAmount)}px)`;
   }
 
+  onBuyButtonClick(event, url) {
+    if (this.isExtension) {
+      event.preventDefault();
+      window.chrome.tabs.create({ url });
+    }
+  }
+
   /**
    * Everything implemented here is purely for Demo-Demonstration and can be removed and replaced with your implementation
    */
   ngOnInit() {
     this.isExtension = !!window.chrome && !!window.chrome.extension;
     this.salesData$ = this.dashboardService.getSales();
-    this.dashboardService.getOffers().subscribe(data => {
-      this.offersList = data;
-      this.offers = this.offersList;
-    });
     this.auth.user.subscribe(user => {
-      this.isLoggedIn = user && !user.isAnonymous;
-      if (Array.isArray(this.offersList)) {
-        this.offers = this.isLoggedIn ? this.offersList : [this.offersList[0]];
+      this.user = user;
+      if (!user) {
+        return;
       }
+
+      this.dashboardService.getOffersByUser(user).subscribe(data => {
+        this.offersList = data;
+        this.offers = this.offersList;
+        if (Array.isArray(this.offersList)) {
+          this.offers = user.isAnonymous ? [this.offersList[0]] : this.offersList;
+        }
+      });
     });
     this.visitsData$ = this.dashboardService.getVisits();
     this.clicksData$ = this.dashboardService.getClicks();

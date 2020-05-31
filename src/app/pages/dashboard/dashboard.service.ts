@@ -70,11 +70,11 @@ export class DashboardService {
     );
   }
 
-  getOffers() {
+  getOffersByUser(user) {
     return this.afs
-        .collection('data')
-        .doc('comparrot')
         .collection('offers')
+        .doc(user.uid)
+        .collection('latest')
         .valueChanges()
         .pipe() as Observable<Offer[]>;
   }
