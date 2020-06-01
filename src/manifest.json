@@ -22,5 +22,11 @@
   ],
   "web_accessible_resources": [
     "index.html"
-  ]
+  ],
+  "icons": {
+    "16": "assets/img/icons/16x16.png",
+    "32": "assets/img/icons/32x32.png",
+    "48": "assets/img/icons/48x48.png",
+    "128": "assets/img/icons/128x128.png"
+  }
 }

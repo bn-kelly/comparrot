@@ -54,7 +54,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
       });
 
       window.chrome.extension.onMessage.addListener(message => {
-        if (message.action === 'send-product-to-db') {
+        if (message.action === 'save-product-to-db') {
           const { uid } = this.auth;
           if (!uid) {
             return;

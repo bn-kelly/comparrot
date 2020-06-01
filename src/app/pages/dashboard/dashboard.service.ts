@@ -71,6 +71,10 @@ export class DashboardService {
   }
 
   getOffersByUser(user) {
+    if (!user) {
+      return;
+    }
+
     return this.afs
         .collection('offers')
         .doc(user.uid)

@@ -45,9 +45,9 @@ const tryToScrapeDataByVendor = vendor => {
     const productTitleElement = document.getElementById('productTitle');
     const productPriceElement = document.getElementById('priceblock_ourprice');
 
-    const shouldSendProductToDB = !!productTitleElement;
+    const shouldSaveProductToDB = !!productTitleElement;
 
-    if (shouldSendProductToDB) {
+    if (shouldSaveProductToDB) {
       const title = productTitleElement.innerText;
       const price = productPriceElement.innerText;
       const url = location.href;
@@ -59,14 +59,14 @@ const tryToScrapeDataByVendor = vendor => {
         url,
         vendor,
       };
-      sendProductToDB(product);
+      saveProductToDB(product);
     }
   }
 };
 
-const sendProductToDB = product => {
+const saveProductToDB = product => {
   chrome.runtime.sendMessage({
-    action: 'send-product-to-db',
+    action: 'save-product-to-db',
     product,
   });
 };

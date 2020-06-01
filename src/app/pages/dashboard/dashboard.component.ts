@@ -131,6 +131,23 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  getOffersByUser(user) {
+    if (!user) {
+      return;
+    }
+    this.dashboardService.getOffersByUser(user).subscribe(data => {
+      this.offersList = data;
+      this.offers = this.offersList;
+      if (Array.isArray(this.offersList)) {
+        this.offers = user.isAnonymous
+            ? this.offersList[0]
+                ? [this.offersList[0]]
+                : []
+            : this.offersList;
+      }
+    });
+  }
+
   /**
    * Everything implemented here is purely for Demo-Demonstration and can be removed and replaced with your implementation
    */
@@ -140,16 +157,10 @@ export class DashboardComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (!user) {
-        return;
+        this.auth.anonymousLogin();
       }
 
-      this.dashboardService.getOffersByUser(user).subscribe(data => {
-        this.offersList = data;
-        this.offers = this.offersList;
-        if (Array.isArray(this.offersList)) {
-          this.offers = user.isAnonymous ? [this.offersList[0]] : this.offersList;
-        }
-      });
+      this.getOffersByUser(user);
     });
     this.visitsData$ = this.dashboardService.getVisits();
     this.clicksData$ = this.dashboardService.getClicks();

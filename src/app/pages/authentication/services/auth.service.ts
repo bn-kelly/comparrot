@@ -44,6 +44,7 @@ export interface Credential {
   email?: string;
   displayName?: string;
   photoURL?: string;
+  ui?: object;
   isAnonymous: boolean;
 }
 
@@ -133,9 +134,11 @@ export class AuthService {
   anonymousLogin() {
     return this.afAuth
       .signInAnonymously()
-      .then(() => {
+      .then(response => {
         console.log('access granted for anonymous user');
         this.notify.update('Welcome to Firestarter, anonymous!!!', 'success');
+        this.updateUserData(response.user);
+        // return response && response.user ? response.user : {};
       })
       .catch(error => {
         this.handleError(error);
@@ -201,10 +204,10 @@ export class AuthService {
 
     const data: User = {
       uid: user.uid,
-      email: user.email || null,
-      displayName: user.displayName || 'john smith',
+      email: user.email || '',
+      displayName: user.displayName || '',
       photoURL: user.photoURL || '',
-      ui: this.currentUser ? this.currentUser.ui : {},
+      ui: this.currentUser && this.currentUser.ui ? this.currentUser.ui : {},
       isAnonymous: user.isAnonymous,
     };
 
