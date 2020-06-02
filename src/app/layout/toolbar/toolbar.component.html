@@ -1,8 +1,13 @@
 <div class="toolbar" fxLayout="row" fxLayoutAlign="space-between">
   <div fxLayout="row" fxLayoutAlign="start center">
-    <fury-toolbar-sidenav-mobile-toggle (openSidenav)="openSidenav.emit()"></fury-toolbar-sidenav-mobile-toggle>
+    <div *ngIf="isExtension"
+         class="toolbar-logo-container"
+         [class.small]="isLoggedIn"
+         [routerLink]="['/']"></div>
+    
+    <fury-toolbar-sidenav-mobile-toggle *ngIf="!isExtension" (openSidenav)="openSidenav.emit()"></fury-toolbar-sidenav-mobile-toggle>
 
-    <div [fxShow.gt-sm]="topNavigation$ | async" [fxShow.xs]="false" [routerLink]="['/']" class="toolbar-logo" fxShow>
+    <div *ngIf="!isExtension" [fxShow.gt-sm]="topNavigation$ | async" [fxShow.xs]="false" [routerLink]="['/']" class="toolbar-logo" fxShow>
       <svg viewBox="0 0 138.16 70.27" xmlns="http://www.w3.org/2000/svg"><title>Logo</title>
         <polygon points="0 54.1 11.05 54.1 11.03 32 28.82 32 30.83 23.22 11.07 23.22 11.03 8.8 34.48 8.8 36.85 0 0 0 0 54.1"></polygon>
         <path d="M44.34,34.92a8.78,8.78,0,0,0,.72,3.53A9.28,9.28,0,0,0,47,41.33a8.71,8.71,0,0,0,2.91,1.91,9.56,9.56,0,0,0,3.57.68,8.79,8.79,0,0,0,6.33-2.59,9.28,9.28,0,0,0,2-2.88,9,9,0,0,0,.72-3.53V15.77h10V34.92A19,19,0,0,1,71,42.37a19.43,19.43,0,0,1-4,6.09,18.7,18.7,0,0,1-6,4.06A18.37,18.37,0,0,1,53.63,54a19,19,0,0,1-7.52-1.48A19.36,19.36,0,0,1,40,48.46a19.05,19.05,0,0,1-4.14-6.05,18.47,18.47,0,0,1-1.52-7.49V15.77h10Z"></path>
@@ -11,21 +16,21 @@
       </svg>
     </div>
 
-    <fury-toolbar-search-bar fxFlex="500px" fxHide fxShow.gt-md></fury-toolbar-search-bar>
+    <fury-toolbar-search-bar *ngIf="!isExtension" fxFlex="500px" fxHide fxShow.gt-md></fury-toolbar-search-bar>
   </div>
 
   <div fxLayout="row">
 
-    <fury-toolbar-fullscreen-toggle class="toolbar-button"></fury-toolbar-fullscreen-toggle>
+    <fury-toolbar-fullscreen-toggle *ngIf="!isExtension" class="toolbar-button"></fury-toolbar-fullscreen-toggle>
 
-    <fury-toolbar-search fxHide fxShow.gt-sm fxHide.gt-md class="toolbar-button"></fury-toolbar-search>
+    <fury-toolbar-search *ngIf="!isExtension" fxHide fxShow.gt-sm fxHide.gt-md class="toolbar-button"></fury-toolbar-search>
 
-    <fury-toolbar-notifications class="toolbar-button"></fury-toolbar-notifications>
+    <fury-toolbar-notifications *ngIf="isLoggedIn" class="toolbar-button"></fury-toolbar-notifications>
 
-    <fury-toolbar-user class="toolbar-button"></fury-toolbar-user>
+    <fury-toolbar-user class="toolbar-button" (openQuickPanel)="openQuickPanel.emit()"></fury-toolbar-user>
 
-    <fury-toolbar-quickpanel-toggle (openQuickPanel)="openQuickPanel.emit()"
-                                    class="toolbar-button"></fury-toolbar-quickpanel-toggle>
+<!--    <fury-toolbar-quickpanel-toggle (openQuickPanel)="openQuickPanel.emit()"-->
+<!--                                    class="toolbar-button"></fury-toolbar-quickpanel-toggle>-->
 
     <fury-toolbar-close *ngIf="isExtension" class="toolbar-button"></fury-toolbar-close>
   </div>

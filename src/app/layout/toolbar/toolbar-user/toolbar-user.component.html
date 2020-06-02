@@ -14,7 +14,7 @@
           <mat-icon class="list-item-icon">account_circle</mat-icon>
           <span>Account</span>
         </div>
-        <div *ngIf="isLoggedIn" class="list-item" matRipple>
+        <div *ngIf="isLoggedIn" (click)="openQuickPanel.emit()" class="list-item" matRipple>
           <mat-icon class="list-item-icon">settings</mat-icon>
           <span>Settings</span>
         </div>

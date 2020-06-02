@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../../pages/authentication/services/auth.service';
@@ -14,6 +14,8 @@ export class ToolbarUserComponent implements OnInit {
   isOpen: boolean;
   user: any = {};
   isLoggedIn: boolean;
+
+  @Output() openQuickPanel = new EventEmitter();
 
   constructor(
       private router: Router,

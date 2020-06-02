@@ -29,6 +29,24 @@
     }
   }
 
+  .toolbar-logo-container {
+    cursor: pointer;
+    outline: none;
+    width: 120px;
+    height: 35px;
+    margin-left: $spacing;
+    margin-right: $spacing;
+    background-image: url("/assets/img/logo.svg");
+    background-position: 0 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    &.small {
+      width: 30px;
+      background-image: url("/assets/img/logo_mobile.svg");
+    }
+  }
+
   @include media-xs {
     padding-left: $spacing/3;
   }
