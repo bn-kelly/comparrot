@@ -1,6 +1,12 @@
 <fury-page [fxLayoutGap]="gap" class="dashboard" [ngClass]="{'extension': isExtension}" fxLayout="column">
   <div [fxLayoutGap]="gap" fxFlex="noshrink" fxLayout="column" fxLayout.gt-lg="row">
-
+    <div *ngIf="!offers || (!!offers && !offers.length)">
+      <mat-card>
+        <h4>
+          To start using the application, start surfing many retailers web sites we track
+        </h4>
+      </mat-card>
+    </div>
     <mat-card class="offer" *ngFor="let offer of offers">
       <div class="offer__product-container">
         <div class="offer__product-info">
