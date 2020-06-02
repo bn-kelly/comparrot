@@ -154,7 +154,8 @@ export class AuthService {
       .createUserWithEmailAndPassword(email, password)
       .then(credential => {
         this.notify.update('Welcome new user!', 'success');
-        return this.updateUserData(credential.user); // if using firestore
+        this.updateUserData(credential.user);
+        this.router.navigate(['/']);
       })
       .catch(error => this.handleError(error));
   }

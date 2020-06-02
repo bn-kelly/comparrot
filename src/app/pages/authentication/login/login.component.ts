@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.animation';
-
 import { AuthService } from '../services/auth.service';
+
 type UserFields = 'email' | 'password';
 type FormErrors = { [u in UserFields]: string };
 
@@ -74,10 +74,6 @@ export class LoginComponent implements OnInit {
 
   toggleForm() {
     this.newUser = !this.newUser;
-  }
-
-  signup() {
-    this.auth.emailSignUp(this.form.value['email'], this.form.value['password']);
   }
 
   login() {

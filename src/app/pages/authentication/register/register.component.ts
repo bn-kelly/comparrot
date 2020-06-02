@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.animation';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'fury-register',
@@ -18,7 +19,8 @@ export class RegisterComponent implements OnInit {
 
   constructor(private router: Router,
               private fb: FormBuilder,
-              private cd: ChangeDetectorRef
+              private cd: ChangeDetectorRef,
+              public auth: AuthService
   ) { }
 
   ngOnInit() {
@@ -44,5 +46,9 @@ export class RegisterComponent implements OnInit {
       this.visible = true;
       this.cd.markForCheck();
     }
+  }
+
+  signup() {
+    this.auth.emailSignUp(this.form.value['email'], this.form.value['password']);
   }
 }

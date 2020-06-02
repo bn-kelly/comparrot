@@ -3,7 +3,7 @@
     <div class="header padding" fxLayout="column" fxLayoutAlign="center center">
       <div class="logo" [routerLink]="['/']"></div>
     </div>
-    <div class="padding" fxLayout="column" fxLayoutGap="16px" [formGroup]="form">
+    <form (ngSubmit)="signup()" class="padding" fxLayout="column" fxLayoutGap="16px" [formGroup]="form">
       <div fxFlex="auto" fxLayout="column">
         <mat-form-field fxFlex="grow">
           <mat-label>Name</mat-label>
@@ -39,13 +39,13 @@
       <div fxLayout="row" fxLayoutAlign="center center">
         <mat-checkbox class="caption">I accept the <a href="#">terms and conditions.</a></mat-checkbox>
       </div>
-      <button type="button" color="primary" mat-raised-button (click)="send()">
+      <button type="submit" color="primary" mat-raised-button>
         CREATE ACCOUNT
       </button>
       <p class="secondary-text text-center">
         Already have an account?<br/>
         <a [routerLink]="['/login']">Sign in here</a>
       </p>
-    </div>
+    </form>
   </div>
 </div>
