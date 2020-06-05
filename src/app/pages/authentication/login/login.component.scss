@@ -31,3 +31,18 @@
   background-repeat: no-repeat;
   background-size: contain;
 }
+
+.oauth-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 16px 0;
+
+  img {
+    width: 40px;
+
+    &:hover, &:focus {
+      cursor: pointer;
+    }
+  }
+}

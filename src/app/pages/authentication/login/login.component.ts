@@ -4,6 +4,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.animation';
 import { AuthService } from '../services/auth.service';
+import { AngularFireAuth } from '@angular/fire/auth';
+import * as firebase from 'firebase/app';
 
 type UserFields = 'email' | 'password';
 type FormErrors = { [u in UserFields]: string };
@@ -45,7 +47,8 @@ export class LoginComponent implements OnInit {
               private cd: ChangeDetectorRef,
               private snackbar: MatSnackBar,
 
-              public auth: AuthService
+              public auth: AuthService,
+              public afAuth: AngularFireAuth,
   ) {
   }
 
@@ -91,6 +94,38 @@ export class LoginComponent implements OnInit {
             this.formErrors.password = message;
           }
         });
+  }
+
+  doGoogleLogin() {
+    return new Promise<any>((resolve, reject) => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      provider.addScope('profile');
+      provider.addScope('email');
+      this.afAuth
+          .signInWithPopup(provider)
+          .then(response => {
+            resolve(response);
+            this.auth.updateUserData(response.user);
+            this.router.navigate(['/']);
+          }).catch(error => {
+            reject(error);
+      });
+    });
+  }
+
+  doFacebookLogin() {
+    return new Promise<any>((resolve, reject) => {
+      const provider = new firebase.auth.FacebookAuthProvider();
+      this.afAuth
+          .signInWithPopup(provider)
+          .then(response => {
+            resolve(response);
+            this.auth.updateUserData(response.user);
+            this.router.navigate(['/']);
+          }, error => {
+            reject(error);
+          });
+    });
   }
 
   resetPassword() {

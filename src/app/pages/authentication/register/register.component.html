@@ -55,9 +55,12 @@
         CREATE ACCOUNT
       </button>
       <p class="secondary-text text-center">
-        Already have an account?<br/>
-        <a [routerLink]="['/login']">Sign in here</a>
+        <a [routerLink]="['/login']">Sign in</a> or register with
       </p>
+      <div class="oauth-container">
+        <img (click)="doGoogleLogin()" src="/assets/img/logos/social/google.svg" alt="Google">
+        <img (click)="doFacebookLogin()" src="/assets/img/logos/social/facebook.svg" alt="Facebook">
+      </div>
     </form>
   </div>
 </div>

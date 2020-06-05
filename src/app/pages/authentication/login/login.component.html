@@ -37,9 +37,12 @@
         SIGN IN
       </button>
       <p class="secondary-text text-center">
-        Don't have an account?<br/>
-        <a [routerLink]="['/register']">Click here to create one</a>
+        <a [routerLink]="['/register']">Sign up</a> or log in with
       </p>
+      <div class="oauth-container">
+        <img (click)="doGoogleLogin()" src="/assets/img/logos/social/google.svg" alt="Google">
+        <img (click)="doFacebookLogin()" src="/assets/img/logos/social/facebook.svg" alt="Facebook">
+      </div>
     </form>
   </div>
 </div>

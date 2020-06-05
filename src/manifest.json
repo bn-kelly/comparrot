@@ -3,8 +3,10 @@
   "version": "1.0",
   "description": "Comparrot Chrome extension",
   "manifest_version": 2,
+  "content_security_policy": "script-src 'self' https://apis.google.com; object-src 'self'",
   "permissions": [
-    "tabs"
+    "tabs",
+    "<all_urls>"
   ],
   "browser_action": {
     "default_popup": "index.html"
