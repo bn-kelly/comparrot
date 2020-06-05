@@ -195,6 +195,7 @@ export class AuthService {
   private handleError(error: Error) {
     console.error(error);
     this.notify.update(error.message, 'error');
+    return error;
   }
 
   // Sets user data to firestore after succesful login

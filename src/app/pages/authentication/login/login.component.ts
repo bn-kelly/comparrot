@@ -81,7 +81,16 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.auth.emailLogin(this.form.value['email'], this.form.value['password']);
+    this.auth.emailLogin(this.form.value['email'], this.form.value['password'])
+        .then(response => {
+          const data: any  = response ? { ...response } : {};
+          const { code, message } = data;
+
+          if (['auth/wrong-password', 'auth/too-many-requests'].includes(code)) {
+            this.form.controls.password.setErrors({ password: message });
+            this.formErrors.password = message;
+          }
+        });
   }
 
   resetPassword() {
@@ -111,7 +120,7 @@ export class LoginComponent implements OnInit {
     if (!this.form) { return; }
     const form = this.form;
     for (const field in this.formErrors) {
-      if (Object.prototype.hasOwnProperty.call(this.formErrors, field) && (field === 'email' || field === 'password')) {
+      if (Object.prototype.hasOwnProperty.call(this.formErrors, field) && ['email', 'password'].includes(field)) {
         // clear previous error message (if any)
         this.formErrors[field] = '';
         const control = form.get(field);
@@ -119,7 +128,7 @@ export class LoginComponent implements OnInit {
           const messages = this.validationMessages[field];
           if (control.errors) {
             for (const key in control.errors) {
-              if (Object.prototype.hasOwnProperty.call(control.errors, key) ) {
+              if (Object.prototype.hasOwnProperty.call(control.errors, key) && messages[key]) {
                 this.formErrors[field] += `${(messages as {[key: string]: string})[key]} `;
               }
             }

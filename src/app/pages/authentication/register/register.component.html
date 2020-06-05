@@ -8,11 +8,15 @@
         <mat-form-field fxFlex="grow">
           <mat-label>Name</mat-label>
           <input matInput required formControlName="name">
+          <mat-error *ngIf="form.get('name').hasError('required')">Please provide your name</mat-error>
+          {{ formErrors.name }}
         </mat-form-field>
 
         <mat-form-field fxFlex="grow">
           <mat-label>E-Mail</mat-label>
           <input matInput required formControlName="email">
+          <mat-error *ngIf="form.get('email').hasError('required')">Please provide your email</mat-error>
+          {{ formErrors.email }}
         </mat-form-field>
 
         <mat-form-field fxFlex="grow">
@@ -23,6 +27,10 @@
             <mat-icon *ngIf="!visible">visibility_off</mat-icon>
           </button>
           <mat-hint>Click the eye to toggle visibility</mat-hint>
+          <mat-error *ngIf="form.get('password').hasError('required')">Please provide your password</mat-error>
+          <div *ngIf="formErrors.password" class="notification is-danger">
+            {{ formErrors.password }}
+          </div>
         </mat-form-field>
 
         <mat-form-field fxFlex="grow">
@@ -33,6 +41,10 @@
             <mat-icon *ngIf="!visible">visibility_off</mat-icon>
           </button>
           <mat-hint>Please repeat your password from above</mat-hint>
+          <mat-error *ngIf="form.get('passwordConfirm').hasError('required')">Please repeat your password</mat-error>
+          <div *ngIf="formErrors.passwordConfirm" class="notification is-danger">
+            {{ formErrors.passwordConfirm }}
+          </div>
         </mat-form-field>
       </div>
 
