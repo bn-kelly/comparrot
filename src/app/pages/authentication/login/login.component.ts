@@ -86,6 +86,11 @@ export class LoginComponent implements OnInit {
           const data: any  = response ? { ...response } : {};
           const { code, message } = data;
 
+          if (['auth/user-not-found'].includes(code)) {
+            this.form.controls.email.setErrors({ email: message });
+            this.formErrors.email = message;
+          }
+
           if (['auth/wrong-password', 'auth/too-many-requests'].includes(code)) {
             this.form.controls.password.setErrors({ password: message });
             this.formErrors.password = message;
