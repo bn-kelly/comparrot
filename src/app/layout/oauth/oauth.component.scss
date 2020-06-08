@@ -1,0 +1,14 @@
+.oauth-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 16px 0;
+
+  svg {
+    width: 40px;
+
+    &:hover, &:focus {
+      cursor: pointer;
+    }
+  }
+}

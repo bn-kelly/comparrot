@@ -116,3 +116,6 @@ $footer-elevation: 0 !default;
 
 // Donut Chart Widget
 @import "../../../app/pages/dashboard/widgets/donut-chart-widget/donut-chart-widget.component.theme";
+
+// OAuth Component
+@import "../../../app/layout/oauth/oauth.component.theme";

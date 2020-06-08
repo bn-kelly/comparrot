@@ -3,8 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.animation';
 import { AuthService } from '../services/auth.service';
-import { AngularFireAuth } from '@angular/fire/auth';
-import * as firebase from 'firebase/app';
 
 type UserFields = 'name' | 'email' | 'password' | 'passwordConfirm';
 type FormErrors = { [u in UserFields]: string };
@@ -47,7 +45,6 @@ export class RegisterComponent implements OnInit {
               private fb: FormBuilder,
               private cd: ChangeDetectorRef,
               public auth: AuthService,
-              public afAuth: AngularFireAuth,
   ) { }
 
   ngOnInit() {
@@ -86,38 +83,6 @@ export class RegisterComponent implements OnInit {
             this.formErrors.email = message;
           }
         });
-  }
-
-  doGoogleLogin() {
-    return new Promise<any>((resolve, reject) => {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      provider.addScope('profile');
-      provider.addScope('email');
-      this.afAuth
-          .signInWithPopup(provider)
-          .then(response => {
-            resolve(response);
-            this.auth.updateUserData(response.user);
-            this.router.navigate(['/']);
-          }).catch(error => {
-        reject(error);
-      });
-    });
-  }
-
-  doFacebookLogin() {
-    return new Promise<any>((resolve, reject) => {
-      const provider = new firebase.auth.FacebookAuthProvider();
-      this.afAuth
-          .signInWithPopup(provider)
-          .then(response => {
-            resolve(response);
-            this.auth.updateUserData(response.user);
-            this.router.navigate(['/']);
-          }, error => {
-            reject(error);
-          });
-    });
   }
 
   buildForm() {

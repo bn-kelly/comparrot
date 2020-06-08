@@ -39,10 +39,7 @@
       <p class="secondary-text text-center">
         <a [routerLink]="['/register']">Sign up</a> or log in with
       </p>
-      <div class="oauth-container">
-        <img (click)="doGoogleLogin()" src="/assets/img/logos/social/google.svg" alt="Google">
-        <img (click)="doFacebookLogin()" src="/assets/img/logos/social/facebook.svg" alt="Facebook">
-      </div>
+      <fury-oauth-component></fury-oauth-component>
     </form>
   </div>
 </div>
