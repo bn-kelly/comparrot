@@ -1,3 +1,4 @@
+import * as firebase from 'firebase/app';
 import sha1 from 'sha1';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
@@ -63,12 +64,26 @@ export class LayoutComponent implements OnInit, OnDestroy {
           const { product } = message;
           const urlHash = sha1(product.url);
 
+          const productsData = {
+            ...product,
+          };
+
           this.afs
-              .collection('data')
-              .doc(uid)
               .collection('products')
+              .doc(uid)
+              .collection('latest')
               .doc(urlHash)
-              .set(product, { merge: true });
+              .set(productsData, { merge: true });
+
+          const allProductsData = {
+            ...productsData,
+            user: uid,
+          };
+
+          this.afs
+              .collection('allProducts')
+              .doc(urlHash)
+              .set(allProductsData, { merge: true });
         }
       });
     }

@@ -49,7 +49,7 @@ const tryToScrapeDataByVendor = vendor => {
 
     if (shouldSaveProductToDB) {
       const title = productTitleElement.innerText;
-      const price = productPriceElement.innerText;
+      const price = productPriceElement ? productPriceElement.innerText : '';
       const url = location.href;
       const vendor = AMAZON;
 
