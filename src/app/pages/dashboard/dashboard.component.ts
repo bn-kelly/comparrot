@@ -171,6 +171,7 @@ export class DashboardComponent implements OnInit {
       this.user = user;
       if (!user) {
         this.auth.anonymousLogin();
+        return;
       }
 
       this.getOffersByUser(user);
