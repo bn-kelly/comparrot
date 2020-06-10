@@ -1,3 +1,4 @@
+import * as firebase from 'firebase/app';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChartData } from 'chart.js';
@@ -148,6 +149,18 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  showExtension() {
+    if (!window.chrome || !window.chrome.tabs) {
+      return;
+    }
+
+    window.chrome.tabs.getSelected(null, tab => {
+      window.chrome.tabs.sendMessage(tab.id, {
+        action: 'show-iframe'
+      });
+    });
+  }
+
   /**
    * Everything implemented here is purely for Demo-Demonstration and can be removed and replaced with your implementation
    */
@@ -161,6 +174,21 @@ export class DashboardComponent implements OnInit {
       }
 
       this.getOffersByUser(user);
+
+      const shouldShowExtension = user.extension && user.extension.show;
+
+      if (shouldShowExtension) {
+        const userData = {
+          ...user,
+          extension: {
+            show: false,
+            lastShown: firebase.firestore.Timestamp.now().seconds,
+          },
+        };
+
+        this.showExtension();
+        this.auth.updateUserData(userData);
+      }
     });
     this.visitsData$ = this.dashboardService.getVisits();
     this.clicksData$ = this.dashboardService.getClicks();

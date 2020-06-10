@@ -35,6 +35,10 @@ export interface User {
     title: string;
     search: string;
   };
+  extension: {
+    show: boolean,
+    lastShown: number,
+  };
   uid: string;
   isAnonymous: boolean;
 }
@@ -45,6 +49,10 @@ export interface Credential {
   displayName?: string;
   photoURL?: string;
   ui?: object;
+  extension?: {
+    show: boolean,
+    lastShown: number,
+  };
   isAnonymous: boolean;
 }
 
@@ -211,8 +219,12 @@ export class AuthService {
       photoURL: user.photoURL || '',
       ui: this.currentUser && this.currentUser.ui ? this.currentUser.ui : {},
       isAnonymous: user.isAnonymous,
+      extension: {
+        show: (user.extension && user.extension.show) ? user.extension.show : false,
+        lastShown: (user.extension && user.extension.lastShown) ? user.extension.lastShown : 0,
+      },
     };
 
-    return userRef.set(data);
+    return userRef.set(data, { merge: true });
   }
 }

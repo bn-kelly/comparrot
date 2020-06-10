@@ -21,6 +21,16 @@ const toggleShowIframe = () => {
   iframe.classList[toggleInactiveClass](inactiveClassName);
 };
 
+const showIframe = () => {
+  const iframe = getIframe();
+
+  if (!iframe.classList.contains(activeClassName)) {
+    iframe.classList.add(activeClassName);
+    iframe.classList.add(inClassName);
+    iframe.classList.remove(inactiveClassName);
+  }
+};
+
 const hideIframe = () => {
   const iframe = getIframe();
 
@@ -83,6 +93,10 @@ chrome.extension.onMessage.addListener(function(msg) {
   switch (msg.action) {
     case 'toggle-show-iframe':
       toggleShowIframe();
+      break;
+
+    case 'show-iframe':
+      showIframe();
       break;
 
     case 'hide-iframe':
