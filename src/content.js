@@ -10,6 +10,14 @@ const add = 'add';
 
 const getIframe = () => document.getElementById(iframeID);
 
+const inIframe = () => {
+  try {
+    return window.self !== window.top;
+  } catch (e) {
+    return true;
+  }
+}
+
 const toggleShowIframe = () => {
   const iframe = getIframe();
   const isActive = iframe.classList.contains(activeClassName);
@@ -88,7 +96,10 @@ if (!location.ancestorOrigins.contains(extensionOrigin)) {
   iframe.id = iframeID;
   // Must be declared at web_accessible_resources in manifest.json
   iframe.src = chrome.runtime.getURL('index.html');
-  document.body.appendChild(iframe);
+
+  if(!inIframe()) {
+    document.body.appendChild(iframe);
+  }
 }
 
 chrome.extension.onMessage.addListener(function(msg) {
