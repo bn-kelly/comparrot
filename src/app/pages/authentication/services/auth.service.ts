@@ -189,14 +189,14 @@ export class AuthService {
   }
 
   signOut() {
-    //return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.afAuth.signOut().then(() => {
         console.log('signed out');
         this.anonymousLogin();
         // this.router.navigate(['/login']);
-        //resolve();
+        resolve();
       });
-    //});
+    });
   }
 
   // If error, console log and notify user

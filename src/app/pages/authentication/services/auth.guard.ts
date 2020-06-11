@@ -8,7 +8,6 @@ import {
 import { Observable } from 'rxjs';
 import { map, take, tap } from 'rxjs/operators';
 
-import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from './auth.service';
 import { NotifyService } from './notify.service';
 
@@ -27,11 +26,12 @@ export class AuthGuard implements CanActivate {
   ): Observable<boolean> | Promise<boolean> | boolean {
     return this.auth.user.pipe(
       take(1),
-      map(user => !!user),
+      map(user => !!user && !user.isAnonymous),
       tap(loggedIn => {
         if (!loggedIn) {
-          console.log('not logged in, trying to login anonymously...');
-          this.auth.anonymousLogin();
+          console.log('access denied');
+          this.notify.update('You must be logged in!', 'error');
+          this.router.navigate(['/login']);
         } else {
           console.log('access granted for logged in user');
           //this.router.navigate(['apps/inbox']);

@@ -17,7 +17,6 @@ export class ToolbarComponent implements OnInit {
   isLoggedIn: boolean;
 
   @Output() openSidenav = new EventEmitter();
-  @Output() openQuickPanel = new EventEmitter();
 
   topNavigation$ = this.themeService.config$.pipe(map(config => config.navigation === 'top'));
 

@@ -20,6 +20,11 @@ const inIframe = () => {
 
 const toggleShowIframe = () => {
   const iframe = getIframe();
+
+  if (!iframe) {
+    return;
+  }
+
   const isActive = iframe.classList.contains(activeClassName);
 
   const toggleActiveClass = isActive ? remove : add;
@@ -32,6 +37,10 @@ const toggleShowIframe = () => {
 const showIframe = () => {
   const iframe = getIframe();
 
+  if (!iframe) {
+    return;
+  }
+
   if (!iframe.classList.contains(activeClassName)) {
     iframe.classList.add(activeClassName);
     iframe.classList.add(inClassName);
@@ -42,6 +51,10 @@ const showIframe = () => {
 const hideIframe = () => {
   const iframe = getIframe();
 
+  if (!iframe) {
+    return;
+  }
+
   if (iframe.classList.contains(activeClassName)) {
     iframe.classList.remove(activeClassName);
     iframe.classList.remove(inClassName);
@@ -51,6 +64,10 @@ const hideIframe = () => {
 
 const toggleExpandIframeWidth = isOpen => {
   const iframe = getIframe();
+
+  if (!iframe) {
+    return;
+  }
 
   const toggleExpandedClass = isOpen ? add : remove;
 

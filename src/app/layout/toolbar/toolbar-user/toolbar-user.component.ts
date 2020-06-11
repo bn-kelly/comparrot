@@ -11,11 +11,10 @@ import { AngularFirestore } from '@angular/fire/firestore';
 })
 export class ToolbarUserComponent implements OnInit {
 
+  isExtension: boolean;
   isOpen: boolean;
   user: any = {};
   isLoggedIn: boolean;
-
-  @Output() openQuickPanel = new EventEmitter();
 
   constructor(
       private router: Router,
@@ -23,16 +22,23 @@ export class ToolbarUserComponent implements OnInit {
       public auth: AuthService
   ) { }
 
+  goToAccountSettings() {
+    this.router.navigate(['/account/settings']);
+    this.isOpen = false;
+  }
+
   goToLogin() {
     this.router.navigate(['/login']);
   }
 
   signOut() {
-    this.auth.signOut();
+    this.auth.signOut().then(() => this.router.navigate(['/']));
     this.isOpen = false;
   }
 
   ngOnInit() {
+    this.isExtension = !!window.chrome && !!window.chrome.extension;
+
     this.auth.user.subscribe(user => {
       this.user = user || {};
       this.isLoggedIn = !!user && !user.isAnonymous;
