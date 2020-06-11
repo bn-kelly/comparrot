@@ -34,9 +34,11 @@ const showIframe = () => {
 const hideIframe = () => {
   const iframe = getIframe();
 
-  iframe.classList.remove(activeClassName);
-  iframe.classList.remove(inClassName);
-  iframe.classList.add(inactiveClassName);
+  if (iframe.classList.contains(activeClassName)) {
+    iframe.classList.remove(activeClassName);
+    iframe.classList.remove(inClassName);
+    iframe.classList.add(inactiveClassName);
+  }
 };
 
 const toggleExpandIframeWidth = isOpen => {
