@@ -88,9 +88,9 @@ const routes: Routes = [
         loadChildren: () => import('./pages/level5/level5.module').then(m => m.Level5Module),
       },
       {
-        path: 'account/settings',
+        path: 'account',
         canActivate: [AuthGuard],
-        loadChildren: () => import('./pages/account/settings/settings.module').then(m => m.AccountSettingsModule),
+        loadChildren: () => import('./pages/account/account.module').then(m => m.AccountModule),
       },
     ]
   }

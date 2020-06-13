@@ -2,10 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 @Component({
     selector: 'fury-account-settings-component',
-    templateUrl: './settings.component.html',
-    styleUrls: ['./settings.component.scss'],
+    templateUrl: './account.component.html',
+    styleUrls: ['./account.component.scss'],
 })
-export class AccountSettingsComponent implements OnInit, OnDestroy {
+export class AccountComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.toggleExpandIframe(true);
     }

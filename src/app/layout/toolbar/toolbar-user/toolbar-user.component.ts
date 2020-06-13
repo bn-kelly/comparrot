@@ -22,8 +22,8 @@ export class ToolbarUserComponent implements OnInit {
       public auth: AuthService
   ) { }
 
-  goToAccountSettings() {
-    this.router.navigate(['/account/settings']);
+  goToAccount() {
+    this.router.navigate(['/account']);
     this.isOpen = false;
   }
 

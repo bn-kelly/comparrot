@@ -1,0 +1,16 @@
+@import "src/styles/var";
+
+.fury-account-component {
+  padding: $spacing;
+
+  .header {
+    margin-bottom: $spacing;
+  }
+
+  .tab-header {
+    font-weight: 600;
+    font-size: 2rem;
+    line-height: 2.1rem;
+    margin: $spacing 0;
+  }
+}
