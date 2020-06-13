@@ -2,7 +2,7 @@
   <div fxLayout="row" fxLayoutAlign="start center">
     <div *ngIf="isExtension"
          class="toolbar-logo-container"
-         [class.small]="isLoggedIn"
+         [class.logged-in]="isLoggedIn"
          [routerLink]="['/']"></div>
     
     <fury-toolbar-sidenav-mobile-toggle *ngIf="!isExtension" (openSidenav)="openSidenav.emit()"></fury-toolbar-sidenav-mobile-toggle>
