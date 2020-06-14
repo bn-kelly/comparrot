@@ -3,3 +3,30 @@
 .clickable {
   cursor: pointer;
 }
+
+tr {
+  &.error {
+    background-color: $color-error;
+
+    &:hover {
+      background-color: lighten($color-error, 10);
+    }
+  }
+
+  &.warning {
+    background-color: $color-warning;
+
+    &:hover {
+      background-color: lighten($color-warning, 10);
+    }
+  }
+}
+
+.status-buttons {
+  button {
+    + button {
+      margin-left: $padding-xs;
+    }
+  }
+}
+

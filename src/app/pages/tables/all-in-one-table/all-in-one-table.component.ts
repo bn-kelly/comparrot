@@ -34,6 +34,7 @@ export class AllInOneTableComponent implements OnInit, AfterViewInit, OnDestroy 
   @Input()
   columns: ListColumn[] = [
     { name: 'Active', property: 'checkbox', visible: true },
+    { name: 'Icon', property: 'icon', visible: true, isModelProperty: true },
     { name: 'Image', property: 'image', visible: false },
     { name: 'Name', property: 'name', visible: true, isModelProperty: true },
     { name: 'Project', property: 'project', visible: true, isModelProperty: true },
@@ -130,6 +131,10 @@ export class AllInOneTableComponent implements OnInit, AfterViewInit, OnDestroy 
     });
   }
 
+  updateBotStatus(event, id, status) {
+    event.stopPropagation();
+    this.afs.collection('bots').doc(id).update({ status });
+  }
 
   onFilterChange(value) {
     if (!this.dataSource) {

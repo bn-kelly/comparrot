@@ -41,7 +41,21 @@
           <ng-container *ngIf="column.isModelProperty" [matColumnDef]="column.property">
             <th *matHeaderCellDef mat-header-cell mat-sort-header> {{ column.name }}</th>
             <td *matCellDef="let bot" mat-cell>
-              {{ bot[column.property] }}
+              <div class="status-buttons" *ngIf="column.property === 'status'">
+                <button [disabled]="bot.status === 'play'" (click)="updateBotStatus($event, bot.id, 'play')" mat-icon-button>
+                  <mat-icon>play_arrow</mat-icon>
+                </button>
+                <button [disabled]="!bot.status || bot.status === 'pause' || bot.status === 'stop'" (click)="updateBotStatus($event, bot.id, 'pause')" mat-icon-button>
+                  <mat-icon>pause</mat-icon>
+                </button>
+                <button [disabled]="!bot.status || bot.status === 'stop'" (click)="updateBotStatus($event, bot.id, 'stop')" mat-icon-button>
+                  <mat-icon>stop</mat-icon>
+                </button>
+              </div>
+              <div *ngIf="column.property === 'icon'">
+                <mat-icon>{{bot.icon}}</mat-icon>
+              </div>
+              <div *ngIf="!['icon', 'status'].includes(column.property)">{{bot[column.property]}}</div>
             </td>
           </ng-container>
         </ng-container>
@@ -68,6 +82,7 @@
 
         <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
         <tr (click)="toggleSelectBot(bot.id)"
+            [ngClass]="{'error': bot.icon === 'error', 'warning': bot.icon === 'warning'}"
             *matRowDef="let bot; columns: visibleColumns;"
             class="clickable route-animations-elements"
             mat-row></tr>
