@@ -1,4 +1,3 @@
-import * as firebase from 'firebase/app';
 import sha1 from 'sha1';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
@@ -47,46 +46,49 @@ export class LayoutComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const isExtension = !!window.chrome && !!window.chrome.extension;
 
-    if (isExtension) {
-      window.chrome.tabs.getSelected(null, tab => {
-        window.chrome.tabs.sendMessage(tab.id, {
-          action: 'try-to-scrape-data'
+    this.auth.user.subscribe(user => {
+      if (!user) {
+        return;
+      }
+
+      const { uid } = user;
+
+      if (isExtension && !!uid) {
+        window.chrome.tabs.getSelected(null, tab => {
+          window.chrome.tabs.sendMessage(tab.id, {
+            action: 'try-to-scrape-data'
+          });
         });
-      });
 
-      window.chrome.extension.onMessage.addListener(message => {
-        if (message.action === 'save-product-to-db') {
-          const { uid } = this.auth;
-          if (!uid) {
-            return;
+        window.chrome.extension.onMessage.addListener(message => {
+          if (message.action === 'save-product-to-db') {
+            const { product } = message;
+            const urlHash = sha1(product.url);
+
+            const productsData = {
+              ...product,
+            };
+
+            this.afs
+                .collection('products')
+                .doc(uid)
+                .collection('latest')
+                .doc(urlHash)
+                .set(productsData, { merge: true });
+
+            const allProductsData = {
+              ...productsData,
+              user: uid,
+            };
+
+            this.afs
+                .collection('allProducts')
+                .doc(urlHash)
+                .set(allProductsData, { merge: true });
           }
-
-          const { product } = message;
-          const urlHash = sha1(product.url);
-
-          const productsData = {
-            ...product,
-          };
-
-          this.afs
-              .collection('products')
-              .doc(uid)
-              .collection('latest')
-              .doc(urlHash)
-              .set(productsData, { merge: true });
-
-          const allProductsData = {
-            ...productsData,
-            user: uid,
-          };
-
-          this.afs
-              .collection('allProducts')
-              .doc(urlHash)
-              .set(allProductsData, { merge: true });
-        }
-      });
-    }
+        });
+      }
+    });
   }
 
   openQuickPanel() {

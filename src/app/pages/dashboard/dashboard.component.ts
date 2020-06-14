@@ -176,7 +176,7 @@ export class DashboardComponent implements OnInit {
 
       this.getOffersByUser(user);
 
-      const shouldShowExtension = user.extension && user.extension.show;
+      const shouldShowExtension = user.extension && user.extension && user.extension.show;
 
       if (shouldShowExtension) {
         const userData = {
