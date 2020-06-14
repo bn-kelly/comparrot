@@ -7,7 +7,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 8057,
     'city': 'Munjor',
     'phoneNumber': '+32 (818) 580-3557',
-    'mail': 'dejesus.chang@yourcompany.biz'
+    'mail': 'dejesus.chang@yourcompany.biz',
+    'selected': false
   },
   {
     'id': 1,
@@ -17,7 +18,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 5943,
     'city': 'Temperanceville',
     'phoneNumber': '+11 (977) 574-3636',
-    'mail': 'short.lowe@yourcompany.ca'
+    'mail': 'short.lowe@yourcompany.ca',
+    'selected': false
   },
   {
     'id': 2,
@@ -27,7 +29,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 7894,
     'city': 'Crayne',
     'phoneNumber': '+49 (969) 505-3323',
-    'mail': 'antoinette.carson@yourcompany.net'
+    'mail': 'antoinette.carson@yourcompany.net',
+    'selected': false
   },
   {
     'id': 3,
@@ -37,7 +40,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 4831,
     'city': 'Coyote',
     'phoneNumber': '+48 (836) 545-3237',
-    'mail': 'lynnette.adkins@yourcompany.info'
+    'mail': 'lynnette.adkins@yourcompany.info',
+    'selected': false
   },
   {
     'id': 4,
@@ -47,7 +51,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 4679,
     'city': 'Whitmer',
     'phoneNumber': '+36 (955) 485-3652',
-    'mail': 'patrica.good@yourcompany.me'
+    'mail': 'patrica.good@yourcompany.me',
+    'selected': false
   },
   {
     'id': 5,
@@ -57,7 +62,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 6178,
     'city': 'Newcastle',
     'phoneNumber': '+35 (983) 587-3423',
-    'mail': 'kane.koch@yourcompany.org'
+    'mail': 'kane.koch@yourcompany.org',
+    'selected': false
   },
   {
     'id': 6,
@@ -67,7 +73,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 532,
     'city': 'Frizzleburg',
     'phoneNumber': '+47 (914) 469-3270',
-    'mail': 'donovan.gonzalez@yourcompany.tv'
+    'mail': 'donovan.gonzalez@yourcompany.tv',
+    'selected': false
   },
   {
     'id': 7,
@@ -77,7 +84,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 4763,
     'city': 'Frystown',
     'phoneNumber': '+37 (896) 474-3143',
-    'mail': 'sabrina.logan@yourcompany.co.uk'
+    'mail': 'sabrina.logan@yourcompany.co.uk',
+    'selected': false
   },
   {
     'id': 8,
@@ -87,7 +95,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 9966,
     'city': 'Blende',
     'phoneNumber': '+2 (993) 445-3626',
-    'mail': 'estela.jordan@yourcompany.name'
+    'mail': 'estela.jordan@yourcompany.name',
+    'selected': false
   },
   {
     'id': 9,
@@ -97,7 +106,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 4204,
     'city': 'Bellfountain',
     'phoneNumber': '+12 (877) 563-2737',
-    'mail': 'rosanna.cross@yourcompany.biz'
+    'mail': 'rosanna.cross@yourcompany.biz',
+    'selected': false
   },
   {
     'id': 10,
@@ -107,7 +117,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 4221,
     'city': 'Louisville',
     'phoneNumber': '+15 (877) 334-2231',
-    'mail': 'Mary.jane@yourcompany.biz'
+    'mail': 'Mary.jane@yourcompany.biz',
+    'selected': false
   },
   {
     'id': 11,
@@ -117,7 +128,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 6411,
     'city': 'Avoca',
     'phoneNumber': '+1 (969) 570-2843',
-    'mail': 'lane.delaney@yourcompany.ca'
+    'mail': 'lane.delaney@yourcompany.ca',
+    'selected': false
   },
   {
     'id': 12,
@@ -127,7 +139,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 5286,
     'city': 'Joes',
     'phoneNumber': '+1 (812) 535-2368',
-    'mail': 'cooper.odom@yourcompany.info'
+    'mail': 'cooper.odom@yourcompany.info',
+    'selected': false
   },
   {
     'id': 13,
@@ -137,7 +150,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 4864,
     'city': 'Finzel',
     'phoneNumber': '+1 (838) 519-3416',
-    'mail': 'kirby.hardin@yourcompany.us'
+    'mail': 'kirby.hardin@yourcompany.us',
+    'selected': false
   },
   {
     'id': 14,
@@ -147,7 +161,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 9000,
     'city': 'Walland',
     'phoneNumber': '+1 (965) 482-2100',
-    'mail': 'marquita.haynes@yourcompany.me'
+    'mail': 'marquita.haynes@yourcompany.me',
+    'selected': false
   },
   {
     'id': 15,
@@ -157,7 +172,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 9519,
     'city': 'Nettie',
     'phoneNumber': '+1 (941) 434-2481',
-    'mail': 'horton.townsend@yourcompany.biz'
+    'mail': 'horton.townsend@yourcompany.biz',
+    'selected': false
   },
   {
     'id': 16,
@@ -167,7 +183,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 4345,
     'city': 'Colton',
     'phoneNumber': '+1 (854) 556-2844',
-    'mail': 'carrie.bond@yourcompany.biz'
+    'mail': 'carrie.bond@yourcompany.biz',
+    'selected': false
   },
   {
     'id': 17,
@@ -177,7 +194,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 8174,
     'city': 'Innsbrook',
     'phoneNumber': '+1 (989) 561-2440',
-    'mail': 'carroll.pugh@yourcompany.tv'
+    'mail': 'carroll.pugh@yourcompany.tv',
+    'selected': false
   },
   {
     'id': 18,
@@ -187,7 +205,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 9034,
     'city': 'Maybell',
     'phoneNumber': '+1 (807) 417-3508',
-    'mail': 'fuller.espinoza@yourcompany.name'
+    'mail': 'fuller.espinoza@yourcompany.name',
+    'selected': false
   },
   {
     'id': 19,
@@ -197,7 +216,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 2246,
     'city': 'Fowlerville',
     'phoneNumber': '+1 (950) 429-3240',
-    'mail': 'lamb.herring@yourcompany.com'
+    'mail': 'lamb.herring@yourcompany.com',
+    'selected': false
   },
   {
     'id': 20,
@@ -207,7 +227,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 8843,
     'city': 'Idledale',
     'phoneNumber': '+1 (989) 483-2305',
-    'mail': 'liza.price@yourcompany.net'
+    'mail': 'liza.price@yourcompany.net',
+    'selected': false
   },
   {
     'id': 21,
@@ -217,7 +238,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 2792,
     'city': 'Garberville',
     'phoneNumber': '+1 (921) 598-2475',
-    'mail': 'monroe.head@yourcompany.io'
+    'mail': 'monroe.head@yourcompany.io',
+    'selected': false
   },
   {
     'id': 22,
@@ -227,7 +249,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 8572,
     'city': 'Celeryville',
     'phoneNumber': '+1 (823) 429-3500',
-    'mail': 'lucile.harding@yourcompany.org'
+    'mail': 'lucile.harding@yourcompany.org',
+    'selected': false
   },
   {
     'id': 23,
@@ -237,7 +260,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 8323,
     'city': 'Lindisfarne',
     'phoneNumber': '+1 (970) 580-3162',
-    'mail': 'edna.richard@yourcompany.ca'
+    'mail': 'edna.richard@yourcompany.ca',
+    'selected': false
   },
   {
     'id': 24,
@@ -247,7 +271,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 9294,
     'city': 'Welch',
     'phoneNumber': '+1 (817) 412-3752',
-    'mail': 'avila.lancaster@yourcompany.info'
+    'mail': 'avila.lancaster@yourcompany.info',
+    'selected': false
   },
   {
     'id': 25,
@@ -257,7 +282,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 2230,
     'city': 'Eagleville',
     'phoneNumber': '+1 (953) 483-3110',
-    'mail': 'carlene.newman@yourcompany.us'
+    'mail': 'carlene.newman@yourcompany.us',
+    'selected': false
   },
   {
     'id': 26,
@@ -267,7 +293,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 9564,
     'city': 'Iola',
     'phoneNumber': '+1 (992) 447-3392',
-    'mail': 'griffith.wise@yourcompany.me'
+    'mail': 'griffith.wise@yourcompany.me',
+    'selected': false
   },
   {
     'id': 27,
@@ -277,7 +304,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 4425,
     'city': 'Dexter',
     'phoneNumber': '+1 (923) 504-2799',
-    'mail': 'schwartz.dodson@yourcompany.biz'
+    'mail': 'schwartz.dodson@yourcompany.biz',
+    'selected': false
   },
   {
     'id': 28,
@@ -287,7 +315,8 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 6432,
     'city': 'Cascades',
     'phoneNumber': '+1 (854) 456-2734',
-    'mail': 'susanna.kidd@yourcompany.biz'
+    'mail': 'susanna.kidd@yourcompany.biz',
+    'selected': false
   },
   {
     'id': 29,
@@ -297,6 +326,7 @@ export const ALL_IN_ONE_TABLE_DEMO_DATA = [
     'zipcode': 2989,
     'city': 'Barstow',
     'phoneNumber': '+1 (833) 465-3036',
-    'mail': 'deborah.weiss@yourcompany.tv'
+    'mail': 'deborah.weiss@yourcompany.tv',
+    'selected': false
   }
 ];

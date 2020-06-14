@@ -6,7 +6,8 @@ import { ListModule } from '../../../../@fury/shared/list/list.module';
 import { MaterialModule } from '../../../../@fury/shared/material-components.module';
 import { AllInOneTableRoutingModule } from './all-in-one-table-routing.module';
 import { AllInOneTableComponent } from './all-in-one-table.component';
-import { CustomerCreateUpdateModule } from './customer-create-update/customer-create-update.module';
+import { BotCreateUpdateModule } from './bot-create-update-delete/bot-create-update.module';
+import { BotDeleteModule } from './bot-create-update-delete/bot-delete.module';
 import { FurySharedModule } from '../../../../@fury/fury-shared.module';
 
 @NgModule({
@@ -19,7 +20,8 @@ import { FurySharedModule } from '../../../../@fury/fury-shared.module';
 
     // Core
     ListModule,
-    CustomerCreateUpdateModule,
+    BotCreateUpdateModule,
+    BotDeleteModule,
     BreadcrumbsModule
   ],
   declarations: [AllInOneTableComponent],

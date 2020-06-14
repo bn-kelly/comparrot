@@ -5,10 +5,11 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
 import { ListColumn } from '../../../../@fury/shared/list/list-column.model';
-import { ALL_IN_ONE_TABLE_DEMO_DATA } from './all-in-one-table.demo';
-import { CustomerCreateUpdateComponent } from './customer-create-update/customer-create-update.component';
-import { Customer } from './customer-create-update/customer.model';
+import { BotCreateUpdateComponent } from './bot-create-update-delete/bot-create-update.component';
+import { BotDeleteComponent } from './bot-create-update-delete/bot-delete.component';
+import { Bot } from './bot-create-update-delete/bot.model';
 import { fadeInRightAnimation } from '../../../../@fury/animations/fade-in-right.animation';
 import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.animation';
 
@@ -24,56 +25,56 @@ export class AllInOneTableComponent implements OnInit, AfterViewInit, OnDestroy 
    * Simulating a service with HTTP that returns Observables
    * You probably want to remove this and do all requests in a service with HTTP
    */
-  subject$: ReplaySubject<Customer[]> = new ReplaySubject<Customer[]>(1);
-  data$: Observable<Customer[]> = this.subject$.asObservable();
-  customers: Customer[];
+  subject$: ReplaySubject<Bot[]> = new ReplaySubject<Bot[]>(1);
+  data$: Observable<Bot[]> = this.subject$.asObservable();
+  bots: Bot[];
+  botsCollection: AngularFirestoreCollection<Bot>;
+  areAllBotsSelected: boolean;
 
   @Input()
   columns: ListColumn[] = [
-    { name: 'Checkbox', property: 'checkbox', visible: false },
-    { name: 'Image', property: 'image', visible: true },
+    { name: 'Active', property: 'checkbox', visible: true },
+    { name: 'Image', property: 'image', visible: false },
     { name: 'Name', property: 'name', visible: true, isModelProperty: true },
-    { name: 'First Name', property: 'firstName', visible: false, isModelProperty: true },
-    { name: 'Last Name', property: 'lastName', visible: false, isModelProperty: true },
-    { name: 'Street', property: 'street', visible: true, isModelProperty: true },
-    { name: 'Zipcode', property: 'zipcode', visible: true, isModelProperty: true },
-    { name: 'City', property: 'city', visible: true, isModelProperty: true },
-    { name: 'Phone', property: 'phoneNumber', visible: true, isModelProperty: true },
+    { name: 'Project', property: 'project', visible: true, isModelProperty: true },
+    { name: 'Job', property: 'job', visible: true, isModelProperty: true },
+    { name: 'Site', property: 'site', visible: true, isModelProperty: true },
+    { name: 'id', property: 'id', visible: false, isModelProperty: true },
+    { name: 'Last Seen', property: 'lastseen', visible: true, isModelProperty: true },
+    { name: 'Sessions', property: 'sessions', visible: true, isModelProperty: true },
+    { name: 'Proxy', property: 'proxy', visible: false, isModelProperty: true },
+    { name: 'Status', property: 'status', visible: true, isModelProperty: true },
     { name: 'Actions', property: 'actions', visible: true },
   ] as ListColumn[];
   pageSize = 10;
-  dataSource: MatTableDataSource<Customer> | null;
+  dataSource: MatTableDataSource<Bot> | null;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  constructor(private dialog: MatDialog) {
+  constructor(private dialog: MatDialog, private afs: AngularFirestore) {
   }
 
   get visibleColumns() {
     return this.columns.filter(column => column.visible).map(column => column.property);
   }
 
-  /**
-   * Example on how to get data and pass it to the table - usually you would want a dedicated service with a HTTP request for this
-   * We are simulating this request here.
-   */
-  getData() {
-    return of(ALL_IN_ONE_TABLE_DEMO_DATA.map(customer => new Customer(customer)));
-  }
-
   ngOnInit() {
-    this.getData().subscribe(customers => {
-      this.subject$.next(customers);
+    this.botsCollection = this.afs.collection('bots');
+    this.data$ = this.botsCollection.valueChanges();
+
+    this.data$.subscribe(bots => {
+      this.bots = bots;
+      this.subject$.next(bots);
     });
 
     this.dataSource = new MatTableDataSource();
 
     this.data$.pipe(
       filter(data => !!data)
-    ).subscribe((customers) => {
-      this.customers = customers;
-      this.dataSource.data = customers;
+    ).subscribe((bots) => {
+      this.bots = bots;
+      this.dataSource.data = bots;
     });
   }
 
@@ -82,49 +83,53 @@ export class AllInOneTableComponent implements OnInit, AfterViewInit, OnDestroy 
     this.dataSource.sort = this.sort;
   }
 
-  createCustomer() {
-    this.dialog.open(CustomerCreateUpdateComponent).afterClosed().subscribe((customer: Customer) => {
-      /**
-       * Customer is the updated customer (if the user pressed Save - otherwise it's null)
-       */
-      if (customer) {
-        /**
-         * Here we are updating our local array.
-         * You would probably make an HTTP request here.
-         */
-        this.customers.unshift(new Customer(customer));
-        this.subject$.next(this.customers);
+  createBot() {
+    this.dialog.open(BotCreateUpdateComponent).afterClosed().subscribe((bot: Bot) => {
+      if (bot) {
+        this.bots.unshift(new Bot(bot));
+        this.subject$.next(this.bots);
       }
     });
   }
 
-  updateCustomer(customer) {
-    this.dialog.open(CustomerCreateUpdateComponent, {
-      data: customer
-    }).afterClosed().subscribe((customer) => {
-      /**
-       * Customer is the updated customer (if the user pressed Save - otherwise it's null)
-       */
-      if (customer) {
-        /**
-         * Here we are updating our local array.
-         * You would probably make an HTTP request here.
-         */
-        const index = this.customers.findIndex((existingCustomer) => existingCustomer.id === customer.id);
-        this.customers[index] = new Customer(customer);
-        this.subject$.next(this.customers);
+  updateBot(bot) {
+    this.dialog.open(BotCreateUpdateComponent, {
+      data: bot
+    }).afterClosed().subscribe((data) => {
+      if (data) {
+        const index = this.bots.findIndex((existingBot) => existingBot.id === bot.id);
+        this.bots[index] = new Bot(bot);
+        this.subject$.next(this.bots);
       }
     });
   }
 
-  deleteCustomer(customer) {
-    /**
-     * Here we are updating our local array.
-     * You would probably make an HTTP request here.
-     */
-    this.customers.splice(this.customers.findIndex((existingCustomer) => existingCustomer.id === customer.id), 1);
-    this.subject$.next(this.customers);
+  deleteBot(bot) {
+    this.dialog.open(BotDeleteComponent, {
+      data: bot
+    }).afterClosed().subscribe((data: Bot) => {
+      if (data) {
+        this.bots.splice(this.bots.findIndex((existingBot) => existingBot.id === bot.id), 1);
+        this.subject$.next(this.bots);
+      }
+    });
   }
+
+  toggleSelectAllBots() {
+    this.areAllBotsSelected = !this.areAllBotsSelected;
+    this.bots.forEach(bot => {
+      this.afs.collection('bots').doc(bot.id).update({ selected: this.areAllBotsSelected });
+    });
+  }
+
+  toggleSelectBot(id) {
+    this.bots.forEach(bot => {
+      if (bot.id === id) {
+        this.afs.collection('bots').doc(id).update({ selected: !bot.selected });
+      }
+    });
+  }
+
 
   onFilterChange(value) {
     if (!this.dataSource) {

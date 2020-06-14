@@ -4,9 +4,9 @@
   </fury-page-layout-header>
 
   <fury-page-layout-content [@fadeInUp]>
-    <fury-list name="Customers" [columns]="columns" (filterChange)="onFilterChange($event)">
+    <fury-list name="Bots" [columns]="columns" (filterChange)="onFilterChange($event)">
       <div class="actions">
-        <button class="create" (click)="createCustomer()" type="button" mat-mini-fab color="primary">
+        <button class="create" (click)="createBot()" type="button" mat-mini-fab color="primary">
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -19,18 +19,20 @@
         <!-- Checkbox Column -->
         <ng-container matColumnDef="checkbox">
           <th *matHeaderCellDef class="actions-cell" mat-header-cell>
-            <mat-checkbox color="primary" (click)="$event.stopPropagation()"></mat-checkbox>
+            <mat-checkbox color="primary" (click)="toggleSelectAllBots()"></mat-checkbox>
           </th>
-          <td *matCellDef="let row" class="actions-cell" mat-cell>
-            <mat-checkbox color="primary" (click)="$event.stopPropagation()"></mat-checkbox>
+          <td *matCellDef="let bot" class="actions-cell" mat-cell>
+            <mat-checkbox color="primary"
+                          [checked]="bot.selected"
+                          (click)="toggleSelectBot(bot.id)"></mat-checkbox>
           </td>
         </ng-container>
 
         <!-- Image Column -->
         <ng-container matColumnDef="image">
           <th *matHeaderCellDef class="image-cell" mat-header-cell></th>
-          <td *matCellDef="let row" class="image-cell" mat-cell>
-            <img src="http://i.pravatar.cc/30?u={{ row.name }}">
+          <td *matCellDef="let bot" class="image-cell" mat-cell>
+            <img src="http://i.pravatar.cc/30?u={{ bot.name }}">
           </td>
         </ng-container>
 
@@ -38,8 +40,8 @@
         <ng-container *ngFor="let column of columns">
           <ng-container *ngIf="column.isModelProperty" [matColumnDef]="column.property">
             <th *matHeaderCellDef mat-header-cell mat-sort-header> {{ column.name }}</th>
-            <td *matCellDef="let row" mat-cell>
-              {{ row[column.property] }}
+            <td *matCellDef="let bot" mat-cell>
+              {{ bot[column.property] }}
             </td>
           </ng-container>
         </ng-container>
@@ -48,16 +50,16 @@
         <!-- actions Column -->
         <ng-container matColumnDef="actions">
           <th *matHeaderCellDef class="actions-cell" mat-header-cell mat-sort-header></th>
-          <td *matCellDef="let row" class="actions-cell" mat-cell>
+          <td *matCellDef="let bot" class="actions-cell" mat-cell>
             <button type="button" mat-icon-button [matMenuTriggerFor]="actionsMenu" (click)="$event.stopPropagation()">
               <mat-icon>more_horiz</mat-icon>
             </button>
 
             <mat-menu #actionsMenu="matMenu" yPosition="below" xPosition="before">
-              <button (click)="updateCustomer(row)" mat-menu-item>
+              <button (click)="updateBot(bot)" mat-menu-item>
                 <span>Modify</span>
               </button>
-              <button (click)="deleteCustomer(row)" mat-menu-item>
+              <button (click)="deleteBot(bot)" mat-menu-item>
                 <span>Delete</span>
               </button>
             </mat-menu>
@@ -65,8 +67,8 @@
         </ng-container>
 
         <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
-        <tr (click)="updateCustomer(row)"
-            *matRowDef="let row; columns: visibleColumns;"
+        <tr (click)="toggleSelectBot(bot.id)"
+            *matRowDef="let bot; columns: visibleColumns;"
             class="clickable route-animations-elements"
             mat-row></tr>
       </table>

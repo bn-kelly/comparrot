@@ -1,0 +1,62 @@
+<h2 mat-dialog-title>{{mode === 'create' ? 'Create' : 'Update'}} bot</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content>
+    <div class="person">
+      <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+        <mat-form-field fxFlex>
+          <mat-label>name</mat-label>
+          <input type="text" formControlName="name" matInput>
+        </mat-form-field>
+
+        <mat-form-field fxFlex>
+          <mat-label>id</mat-label>
+          <input type="text" readonly formControlName="id" matInput>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="person">
+      <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+        <mat-form-field fxFlex>
+          <mat-label>job</mat-label>
+          <input type="text" formControlName="job" matInput>
+        </mat-form-field>
+
+        <mat-form-field fxFlex>
+          <mat-label>site</mat-label>
+          <input type="text" formControlName="site" matInput>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+      <mat-form-field fxFlex>
+        <mat-label>active</mat-label>
+        <input type="text" formControlName="active" matInput>
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+      <mat-form-field fxFlex>
+        <mat-label>status</mat-label>
+        <input type="text" formControlName="status" matInput>
+      </mat-form-field>
+      <mat-form-field fxFlex>
+        <mat-label>proxy</mat-label>
+        <input type="text" formControlName="proxy" matInput>
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+      <mat-form-field fxFlex>
+        <mat-label>project</mat-label>
+        <input type="text" formControlName="project" matInput>
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
+    <button *ngIf="isCreateMode()" mat-button [disabled]="!form.valid">CREATE BOT</button>
+    <button *ngIf="isUpdateMode()" mat-button [disabled]="!form.valid">UPDATE BOT</button>
+  </mat-dialog-actions>
+</form>

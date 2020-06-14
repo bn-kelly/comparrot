@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { CustomerCreateUpdateComponent } from './customer-create-update.component';
+import { BotCreateUpdateComponent } from './bot-create-update.component';
 
 @NgModule({
   imports: [
@@ -23,9 +23,9 @@ import { CustomerCreateUpdateComponent } from './customer-create-update.componen
     MatRadioModule,
     MatSelectModule
   ],
-  declarations: [CustomerCreateUpdateComponent],
-  entryComponents: [CustomerCreateUpdateComponent],
-  exports: [CustomerCreateUpdateComponent]
+  declarations: [BotCreateUpdateComponent],
+  entryComponents: [BotCreateUpdateComponent],
+  exports: [BotCreateUpdateComponent]
 })
-export class CustomerCreateUpdateModule {
+export class BotCreateUpdateModule {
 }
