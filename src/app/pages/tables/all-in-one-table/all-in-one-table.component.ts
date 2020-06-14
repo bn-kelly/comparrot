@@ -12,6 +12,7 @@ import { BotDeleteComponent } from './bot-create-update-delete/bot-delete.compon
 import { Bot } from './bot-create-update-delete/bot.model';
 import { fadeInRightAnimation } from '../../../../@fury/animations/fade-in-right.animation';
 import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.animation';
+import * as moment from 'moment';
 
 @Component({
   selector: 'fury-all-in-one-table',
@@ -41,7 +42,7 @@ export class AllInOneTableComponent implements OnInit, AfterViewInit, OnDestroy 
     { name: 'Job', property: 'job', visible: true, isModelProperty: true },
     { name: 'Site', property: 'site', visible: true, isModelProperty: true },
     { name: 'id', property: 'id', visible: false, isModelProperty: true },
-    { name: 'Last Seen', property: 'lastseen', visible: true, isModelProperty: true },
+    { name: 'Last Seen', property: 'lastSeen', visible: true, isModelProperty: true },
     { name: 'Sessions', property: 'sessions', visible: true, isModelProperty: true },
     { name: 'Proxy', property: 'proxy', visible: false, isModelProperty: true },
     { name: 'Status', property: 'status', visible: true, isModelProperty: true },

@@ -14,7 +14,8 @@ export class Bot {
     city: string;
     phoneNumber: string;
     mail: string;
-    lastseen: string;
+    lastSeen: string;
+    lastSeenStatus: string;
     sessions: string;
     icon: string;
     selected: boolean;
@@ -28,7 +29,8 @@ export class Bot {
         this.proxy = bot.proxy;
         this.project = bot.project;
         this.grid = bot.grid;
-        this.lastseen = bot.lastseen;
+        this.lastSeen = bot.lastSeen;
+        this.lastSeenStatus = bot.lastSeenStatus;
         this.sessions = bot.sessions;
         this.icon = bot.icon;
         this.firstName = bot.firstName;

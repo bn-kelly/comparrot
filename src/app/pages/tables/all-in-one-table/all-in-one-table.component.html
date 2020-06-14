@@ -82,7 +82,7 @@
 
         <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
         <tr (click)="toggleSelectBot(bot.id)"
-            [ngClass]="{'error': bot.icon === 'error', 'warning': bot.icon === 'warning'}"
+            [ngClass]="{'error': bot.lastSeenStatus === 'error', 'warning': bot.lastSeenStatus === 'warning'}"
             *matRowDef="let bot; columns: visibleColumns;"
             class="clickable route-animations-elements"
             mat-row></tr>
