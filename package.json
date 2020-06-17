@@ -37,6 +37,7 @@
     "highlight.js": "~9.18.1",
     "lodash-es": "~4.17.15",
     "moment": "~2.24.0",
+    "ng2-ace-editor": "^0.3.9",
     "ng2-charts": "~2.3.0",
     "ngx-quill": "~8.1.0",
     "normalize.css": "~8.0.1",

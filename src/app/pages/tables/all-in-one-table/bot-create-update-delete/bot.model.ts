@@ -19,6 +19,7 @@ export class Bot {
     sessions: string;
     icon: string;
     selected: boolean;
+    callback: string;
 
     constructor(bot) {
         this.id = bot.id;
@@ -41,6 +42,7 @@ export class Bot {
         this.phoneNumber = bot.phoneNumber;
         this.mail = bot.mail;
         this.selected = bot.selected;
+        this.callback = bot.callback;
     }
 
     get name() {

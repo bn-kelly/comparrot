@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { AceEditorModule } from 'ng2-ace-editor';
 import { BotCreateUpdateComponent } from './bot-create-update.component';
 
 @NgModule({
@@ -21,7 +22,8 @@ import { BotCreateUpdateComponent } from './bot-create-update.component';
     MatButtonModule,
     MatIconModule,
     MatRadioModule,
-    MatSelectModule
+    MatSelectModule,
+    AceEditorModule
   ],
   declarations: [BotCreateUpdateComponent],
   entryComponents: [BotCreateUpdateComponent],

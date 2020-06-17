@@ -24,6 +24,7 @@ export class BotCreateUpdateComponent implements OnInit {
       this.mode = 'update';
     } else {
       this.defaults = {} as Bot;
+      this.defaults.callback = `(function() {\n\tconsole.log('hello');\n})();`;
     }
 
     const { name, id, job, site, active, status, proxy, project } = this.defaults;
@@ -41,30 +42,13 @@ export class BotCreateUpdateComponent implements OnInit {
   }
 
   save() {
-    if (this.mode === 'create') {
-      this.createBot();
-    } else if (this.mode === 'update') {
-      this.updateBot();
-    }
-  }
-
-  createBot() {
     const bot = this.form.value;
-    this.afs.collection('bots').doc(bot.id).set(bot);
-    this.dialogRef.close(bot);
-  }
-
-  updateBot() {
-    const bot = this.form.value;
+    bot.callback = this.defaults.callback;
     this.afs.collection('bots').doc(bot.id).set(bot);
     this.dialogRef.close(bot);
   }
 
   isCreateMode() {
     return this.mode === 'create';
-  }
-
-  isUpdateMode() {
-    return this.mode === 'update';
   }
 }
