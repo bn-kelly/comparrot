@@ -9,11 +9,11 @@ iframe#extension-iframe {
   z-index: 100000;
   border: 0;
   border-radius: 24px;
-  box-shadow: 0 4px 50px rgba(0, 0, 0, 0.15);
   will-change: transform, opacity, top;
 }
 
 iframe#extension-iframe.active {
+  box-shadow: 0 4px 50px rgba(0, 0, 0, 0.15);
   top: 5px;
 }
 
@@ -22,6 +22,7 @@ iframe#extension-iframe.active.in {
 }
 
 iframe#extension-iframe.inactive {
+  opacity: 0;
   animation: bounceOutUp 0.25s ease-in-out;
 }
 
@@ -69,6 +70,7 @@ iframe#extension-iframe.expanded {
 
 @keyframes bounceOutUp {
   0% {
+    opacity: 1;
     top: 25px;
     transform: translate3d(0, -10px, 0) scaleY(0.985);
   }
@@ -79,16 +81,15 @@ iframe#extension-iframe.expanded {
   
   40%,
   45% {
-    opacity: 1;
     transform: translate3d(0, 20px, 0) scaleY(0.9);
   }
   
   100% {
+    opacity: 0;
     top: -100%;
   }
   
   to {
-    opacity: 0;
     transform: translate3d(0, -2000px, 0) scaleY(3);
   }
 }
