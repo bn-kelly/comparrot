@@ -1,9 +1,6 @@
-# Fury - Angular 9+ Material Design Admin Template
 ## Introduction
 
-Fury is a creative material design admin template built with Angular 8+ and the Angular-CLI. It extends the Material Design components built by the Angular 8+ team and it offers you everything you need to get started with your next CRM, CMS or dashboard based project.
-
-Support is available through email, ThemeForest comments or chat. If you purchased the theme and love it, consider giving it a 5-star rating here on ThemeForest. It really helps pushing out more updates and adding more great features.
+Angular 9 (Fury Theme Based) Front-end project which compiles/builds to the comparrot extension.
 
 ## Table of Contents
 
