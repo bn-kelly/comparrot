@@ -170,7 +170,7 @@ export class TestComponent {
 The function `addItem` accepts 4 parameters:
 ```typescript
 sidenavService.addItem('The name shown in the navigation menu',
-                       'the material icon to be used', 
+                       'the material favicon to be used', 
                        'the route to put in [routerLink]',
                        'position in menu as number');
 ```
@@ -179,7 +179,7 @@ To create a dropdown menu with sub-items you can use the `addSubItem` function. 
 ```typescript
 sidenavService.addSubItem(referenceToParentItem (as shown in the example above),
                        'The name shown in the navigation menu',
-                       'the material icon to be used', 
+                       'the material favicon to be used', 
                        'the route to put in [routerLink]',
                        'position in sub-menu as number');
 ```

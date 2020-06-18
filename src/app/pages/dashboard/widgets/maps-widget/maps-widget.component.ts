@@ -187,7 +187,7 @@ export class MapsWidgetComponent implements OnInit {
     },
     {
       'featureType': 'transit.station.rail',
-      'elementType': 'labels.icon',
+      'elementType': 'labels.favicon',
       'stylers': [
         {
           'visibility': 'simplified'

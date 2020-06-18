@@ -34,6 +34,8 @@ export interface User {
     theme: 'fury-default' | 'fury-light' | 'fury-dark' | 'fury-flat';
     title: string;
     search: string;
+    logoUrl: string;
+    projectName: string;
   };
   extension: {
     show: boolean,

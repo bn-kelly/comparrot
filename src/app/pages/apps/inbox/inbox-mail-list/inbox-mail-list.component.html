@@ -95,8 +95,8 @@
 
     <div fxFlex="40px" fxFlex.gt-sm="100px" fxLayout="row" fxLayoutAlign="end center">
       <span class="when" fxHide fxShow.gt-sm>{{ mail.when.fromNow() }}</span>
-      <button (click)="$event.stopPropagation()" [matMenuTriggerFor]="mailOptions" class="options" mat-icon-button>
-        <mat-icon>more_vert</mat-icon>
+      <button (click)="$event.stopPropagation()" [matMenuTriggerFor]="mailOptions" class="options" mat-favicon-button>
+        <mat-favicon>more_vert</mat-favicon>
       </button>
     </div>
   </div>

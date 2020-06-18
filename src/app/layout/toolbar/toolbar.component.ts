@@ -15,6 +15,7 @@ export class ToolbarComponent implements OnInit {
   hasNavigation: boolean;
   isExtension: boolean;
   isLoggedIn: boolean;
+  logoUrl: string;
 
   @Output() openSidenav = new EventEmitter();
 
@@ -28,6 +29,7 @@ export class ToolbarComponent implements OnInit {
     this.isExtension = !!window.chrome && !!window.chrome.extension;
 
     this.auth.user.subscribe(user => {
+      this.logoUrl = user && user.ui && user.ui.logoUrl ? user.ui.logoUrl : '';
       this.isLoggedIn = !!user && !user.isAnonymous;
     });
   }

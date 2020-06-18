@@ -22,12 +22,12 @@ export class CalendarComponent implements OnInit {
   activeDayIsOpen = true;
   viewDate: Date = new Date();
   actions: any[] = [{
-    label: '<i class="icon material-icons-outlined">edit</i>',
+    label: '<i class="favicon material-icons-outlined">edit</i>',
     onClick: ({ event }: { event: CalendarEvent }): void => {
       this.handleEvent('Edited', event);
     }
   }, {
-    label: '<i class="icon material-icons-outlined">delete</i>',
+    label: '<i class="favicon material-icons-outlined">delete</i>',
     onClick: ({ event }: { event: CalendarEvent }): void => {
       const foundIndex = this.events.indexOf(event);
 

@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { SidenavItem } from './sidenav-item/sidenav-item.interface';
 import { SidenavService } from './sidenav.service';
 import { ThemeService } from '../../../@fury/services/theme.service';
+import { AuthService } from '../../pages/authentication/services/auth.service';
 
 @Component({
   selector: 'fury-sidenav',
@@ -22,15 +23,23 @@ export class SidenavComponent implements OnInit, OnDestroy {
   @Input()
   @HostBinding('class.expanded')
   expanded: boolean;
+  logoUrl: string;
+  projectName: string;
 
   items$: Observable<SidenavItem[]>;
 
   constructor(private router: Router,
               private sidenavService: SidenavService,
-              private themeService: ThemeService) {
+              private themeService: ThemeService,
+              private auth: AuthService) {
   }
 
   ngOnInit() {
+    this.auth.user.subscribe(user => {
+      this.logoUrl = user && user.ui && user.ui.logoUrl ? user.ui.logoUrl : '';
+      this.projectName = user && user.ui && user.ui.projectName ? user.ui.projectName : 'comparrot';
+    });
+
     this.items$ = this.sidenavService.items$.pipe(
       map((items: SidenavItem[]) => this.sidenavService.sortRecursive(items, 'position'))
     );
