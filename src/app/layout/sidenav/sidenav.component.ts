@@ -6,6 +6,7 @@ import { SidenavItem } from './sidenav-item/sidenav-item.interface';
 import { SidenavService } from './sidenav.service';
 import { ThemeService } from '../../../@fury/services/theme.service';
 import { AuthService } from '../../pages/authentication/services/auth.service';
+import DocumentData = firebase.firestore.DocumentData;
 
 @Component({
   selector: 'fury-sidenav',
@@ -25,6 +26,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   expanded: boolean;
   logoUrl: string;
   projectName: string;
+  themeName: string;
+  user: DocumentData;
 
   items$: Observable<SidenavItem[]>;
 
@@ -35,14 +38,25 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.themeService.theme$.subscribe(([prevTheme, currentTheme]) => {
+      this.themeName = currentTheme.replace('fury-', '');
+      this.handleLogoUrl();
+    });
     this.auth.user.subscribe(user => {
-      this.logoUrl = user && user.ui && user.ui.logoUrl ? user.ui.logoUrl : '';
-      this.projectName = user && user.ui && user.ui.projectName ? user.ui.projectName : 'comparrot';
+      this.user = user;
+      this.handleLogoUrl();
+      this.projectName = user && user.project && user.project.name ? user.project.name : '';
     });
 
     this.items$ = this.sidenavService.items$.pipe(
       map((items: SidenavItem[]) => this.sidenavService.sortRecursive(items, 'position'))
     );
+  }
+
+  handleLogoUrl() {
+    this.logoUrl = this.user && this.user.project && this.user.project.logoUrl
+        ? this.user.project.logoUrl[this.themeName] || this.user.project.logoUrl.default
+        : 'assets/img/logo_mobile.svg';
   }
 
   toggleCollapsed() {

@@ -1,20 +1,10 @@
 <div class="sidenav" fxLayout="column">
   <div class="sidenav-toolbar" fxLayout="row" fxLayoutAlign="start center">
     <div [routerLink]="['/']" class="sidenav-toolbar-logo">
-      <img [src]="logoUrl || 'assets/img/logo_mobile.svg'" alt="">
+      <img [src]="logoUrl" alt="">
       <span class="sidenav-toolbar-project">
         {{projectName}}
       </span>
-    </div>
-
-
-    <span fxFlex><!-- fill space --></span>
-
-    <div fxFlexAlign="center" fxHide fxShow.gt-md>
-      <button (click)="toggleCollapsed()" class="sidenav-toolbar-collapse-toggle" mat-icon-button>
-        <mat-icon *ngIf="!collapsed" class="sidenav-toolbar-collapse-icon">radio_button_checked</mat-icon>
-        <mat-icon *ngIf="collapsed" class="sidenav-toolbar-collapse-icon">radio_button_unchecked</mat-icon>
-      </button>
     </div>
   </div>
 

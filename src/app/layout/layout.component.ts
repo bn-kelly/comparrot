@@ -23,6 +23,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   sidenavCollapsed$ = this.sidenavService.collapsed$;
   sidenavExpanded$ = this.sidenavService.expanded$;
   quickPanelOpen: boolean;
+  showConfigPanel: boolean;
 
   sideNavigation$ = this.themeService.config$.pipe(map(config => config.navigation === 'side'));
   topNavigation$ = this.themeService.config$.pipe(map(config => config.navigation === 'top'));
@@ -48,10 +49,34 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
     this.auth.user.subscribe(user => {
       if (!user) {
+        Array.from(document.getElementsByTagName('link'))
+            .forEach(link => {
+              if (link.getAttribute('rel') === 'icon') {
+                const favicon = link.getAttribute('href');
+                if (favicon !== 'favicon.ico') {
+                  link.setAttribute('href', 'favicon.ico');
+                }
+              }
+            });
+        this.showConfigPanel = false;
         return;
       }
 
-      const { uid } = user;
+      const { uid, project, isAdmin } = user;
+
+      this.showConfigPanel = !!isAdmin;
+
+      if (project && !isExtension) {
+        Array.from(document.getElementsByTagName('link'))
+            .forEach(link => {
+              if (link.getAttribute('rel') === 'icon') {
+                const favicon = link.getAttribute('href');
+                if (!!project.favicon && favicon !== project.favicon) {
+                  link.setAttribute('href', project.favicon);
+                }
+              }
+            });
+      }
 
       if (isExtension && !!uid) {
         window.chrome.tabs.getSelected(null, tab => {

@@ -2,6 +2,7 @@ import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@an
 import { map } from 'rxjs/operators';
 import { ThemeService } from '../../../@fury/services/theme.service';
 import { AuthService } from '../../pages/authentication/services/auth.service';
+import DocumentData = firebase.firestore.DocumentData;
 
 @Component({
   selector: 'fury-toolbar',
@@ -16,6 +17,8 @@ export class ToolbarComponent implements OnInit {
   isExtension: boolean;
   isLoggedIn: boolean;
   logoUrl: string;
+  themeName: string;
+  user: DocumentData;
 
   @Output() openSidenav = new EventEmitter();
 
@@ -28,11 +31,22 @@ export class ToolbarComponent implements OnInit {
   ngOnInit() {
     this.isExtension = !!window.chrome && !!window.chrome.extension;
 
+    this.themeService.theme$.subscribe(([prevTheme, currentTheme]) => {
+      this.themeName = currentTheme.replace('fury-', '');
+      this.handleLogoUrl();
+    });
+
     this.auth.user.subscribe(user => {
-      this.logoUrl = user && user.ui && user.ui.logoUrl ? user.ui.logoUrl : '';
+      this.user = user;
+      this.handleLogoUrl();
       this.isLoggedIn = !!user && !user.isAnonymous;
     });
   }
 
+  handleLogoUrl() {
+    this.logoUrl = this.user && this.user.project && this.user.project.logoUrl
+        ? this.user.project.logoUrl[this.themeName] || this.user.project.logoUrl.default
+        : 'assets/img/logo_mobile.svg';
+  }
 
 }

@@ -24,7 +24,10 @@
                src="../../../assets/img/logos/vendor/{{offer.vendor}}.svg"
                alt={{offer.vendor}}>
         </div>
-        <img class="offer__img" src={{offer.imageUrl}} alt="" />
+        <img class="offer__img"
+             *ngIf="offer.imageUrl"
+             [src]="offer.imageUrl"
+             [alt]="offer.title" />
       </div>
       <mat-card-title class="offer__title"
                       matTooltip="{{offer.title}}"

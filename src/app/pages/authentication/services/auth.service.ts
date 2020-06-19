@@ -34,15 +34,24 @@ export interface User {
     theme: 'fury-default' | 'fury-light' | 'fury-dark' | 'fury-flat';
     title: string;
     search: string;
-    logoUrl: string;
-    projectName: string;
   };
-  extension: {
+  project?: {
+    logoUrl: {
+      default: string,
+      light: string,
+      dark: string,
+      flat: string,
+    };
+    favicon?: string,
+    name: string;
+  };
+  extension?: {
     show: boolean,
     lastShown: number,
   };
   uid: string;
   isAnonymous: boolean;
+  isAdmin?: boolean;
 }
 
 export interface Credential {
@@ -51,11 +60,22 @@ export interface Credential {
   displayName?: string;
   photoURL?: string;
   ui?: object;
+  project?: {
+    logoUrl: {
+      default: string,
+      light: string,
+      dark: string,
+      flat: string,
+    };
+    favicon?: string,
+    name: string;
+  };
   extension?: {
     show: boolean,
     lastShown: number,
   };
   isAnonymous: boolean;
+  isAdmin?: boolean;
 }
 
 @Injectable()
