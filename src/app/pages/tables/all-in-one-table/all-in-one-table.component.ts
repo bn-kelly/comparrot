@@ -12,7 +12,6 @@ import { BotDeleteComponent } from './bot-create-update-delete/bot-delete.compon
 import { Bot } from './bot-create-update-delete/bot.model';
 import { fadeInRightAnimation } from '../../../../@fury/animations/fade-in-right.animation';
 import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.animation';
-import * as moment from 'moment';
 
 @Component({
   selector: 'fury-all-in-one-table',

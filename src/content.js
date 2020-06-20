@@ -74,31 +74,31 @@ const toggleExpandIframeWidth = isOpen => {
   iframe.classList[toggleExpandedClass](expandedClassName);
 };
 
-const tryToScrapeDataByVendor = vendor => {
-  const AMAZON = 'amazon';
-  const isAmazon = vendor.includes(AMAZON);
+const tryToScrapeDataByVendor = (url, vendors = []) => {
+  vendors.forEach(vendor => {
+    if (url.includes(vendor.url)) {
+      const productTitleElement = getElementBySelector(vendor.selectors.title);
+      const productPriceElement = getElementBySelector(vendor.selectors.price);
+      const productImageElement = getElementBySelector(vendor.selectors.image);
 
-  if (isAmazon) {
-    const productTitleElement = document.getElementById('productTitle');
-    const productPriceElement = document.getElementById('priceblock_ourprice');
+      const shouldSaveProductToDB = !!productTitleElement;
 
-    const shouldSaveProductToDB = !!productTitleElement;
+      if (shouldSaveProductToDB) {
+        const title = productTitleElement.innerText;
+        const price = productPriceElement ? productPriceElement.innerText : '';
+        const image = productImageElement ? productImageElement.src : '';
 
-    if (shouldSaveProductToDB) {
-      const title = productTitleElement.innerText;
-      const price = productPriceElement ? productPriceElement.innerText : '';
-      const url = location.href;
-      const vendor = AMAZON;
-
-      const product = {
-        title,
-        price,
-        url,
-        vendor,
-      };
-      saveProductToDB(product);
+        const product = {
+          title,
+          price,
+          image,
+          url,
+          vendor: vendor.url.split('.')[0],
+        };
+        saveProductToDB(product);
+      }
     }
-  }
+  });
 };
 
 const saveProductToDB = product => {
@@ -106,6 +106,16 @@ const saveProductToDB = product => {
     action: 'save-product-to-db',
     product,
   });
+};
+
+const getElementBySelector = (selector = '') => {
+  return typeof selector === 'string'
+    ? document.querySelector(selector)
+    : Array.isArray(selector) && selector
+        .map(item => {
+          return typeof selector === 'string' ? document.querySelector(item) : null;
+        })
+        .filter(Boolean)[0];
 };
 
 if (!location.ancestorOrigins.contains(extensionOrigin)) {
@@ -138,7 +148,7 @@ chrome.extension.onMessage.addListener(function(msg) {
       break;
 
     case 'try-to-scrape-data':
-      tryToScrapeDataByVendor(location.hostname);
+      tryToScrapeDataByVendor(msg.url, msg.vendors);
       break;
 
     default:

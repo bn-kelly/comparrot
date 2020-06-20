@@ -8,6 +8,7 @@ import { ThemeService } from '../../@fury/services/theme.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { checkRouterChildsData } from '../../@fury/utils/check-router-childs-data';
 import { AuthService } from '../pages/authentication/services/auth.service';
+import { Vendor } from './vendor.model';
 
 @Component({
   selector: 'fury-layout',
@@ -24,6 +25,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   sidenavExpanded$ = this.sidenavService.expanded$;
   quickPanelOpen: boolean;
   showConfigPanel: boolean;
+  vendors: Vendor[];
 
   sideNavigation$ = this.themeService.config$.pipe(map(config => config.navigation === 'side'));
   topNavigation$ = this.themeService.config$.pipe(map(config => config.navigation === 'top'));
@@ -46,6 +48,10 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const isExtension = !!window.chrome && !!window.chrome.extension;
+
+    this.afs.collection('vendors').valueChanges().subscribe((vendors: Vendor[]) => {
+      this.vendors = vendors;
+    });
 
     this.auth.user.subscribe(user => {
       if (!user) {
@@ -81,7 +87,9 @@ export class LayoutComponent implements OnInit, OnDestroy {
       if (isExtension && !!uid) {
         window.chrome.tabs.getSelected(null, tab => {
           window.chrome.tabs.sendMessage(tab.id, {
-            action: 'try-to-scrape-data'
+            action: 'try-to-scrape-data',
+            url: tab.url,
+            vendors: this.vendors,
           });
         });
 
