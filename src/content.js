@@ -113,7 +113,7 @@ const getElementBySelector = (selector = '') => {
     ? document.querySelector(selector)
     : Array.isArray(selector) && selector
         .map(item => {
-          return typeof selector === 'string' ? document.querySelector(item) : null;
+          return typeof item === 'string' ? document.querySelector(item) : null;
         })
         .filter(Boolean)[0];
 };
