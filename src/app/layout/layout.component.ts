@@ -54,7 +54,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
     });
 
     this.auth.user.subscribe(user => {
-      if (!user) {
+      if (!user || user.isAnonymous) {
         Array.from(document.getElementsByTagName('link'))
             .forEach(link => {
               if (link.getAttribute('rel') === 'icon') {
@@ -62,6 +62,15 @@ export class LayoutComponent implements OnInit, OnDestroy {
                 if (favicon !== 'favicon.ico') {
                   link.setAttribute('href', 'favicon.ico');
                 }
+              }
+            });
+        Array.from(document.getElementsByTagName('script'))
+            .forEach(script => {
+              if (script.id === 'gtag-src') {
+                script.removeAttribute('src');
+              }
+              if (script.id === 'gtag-func') {
+                script.innerHTML = '';
               }
             });
         this.showConfigPanel = false;
@@ -80,6 +89,24 @@ export class LayoutComponent implements OnInit, OnDestroy {
                 if (!!project.favicon && favicon !== project.favicon) {
                   link.setAttribute('href', project.favicon);
                 }
+              }
+            });
+      }
+
+      if (project && project.gtmCode) {
+        Array.from(document.getElementsByTagName('script'))
+            .forEach(script => {
+              if (script.id === 'gtag-src') {
+                script.setAttribute('src', `https://www.googletagmanager.com/gtag/js?id=${project.gtmCode}`);
+              }
+              if (script.id === 'gtag-func') {
+                script.innerHTML = `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+
+                  gtag('config', '${project.gtmCode}');
+                `;
               }
             });
       }

@@ -42,6 +42,7 @@ export interface User {
       dark: string,
       flat: string,
     };
+    gtmCode? : string,
     favicon?: string,
     name: string;
   };
@@ -67,6 +68,7 @@ export interface Credential {
       dark: string,
       flat: string,
     };
+    gtmCode?: string,
     favicon?: string,
     name: string;
   };
