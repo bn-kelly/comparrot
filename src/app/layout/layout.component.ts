@@ -9,6 +9,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { checkRouterChildsData } from '../../@fury/utils/check-router-childs-data';
 import { AuthService } from '../pages/authentication/services/auth.service';
 import { Vendor } from './vendor.model';
+import { Project } from './project.model';
 
 @Component({
   selector: 'fury-layout',
@@ -53,34 +54,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
       this.vendors = vendors;
     });
 
-    this.auth.user.subscribe(user => {
-      if (!user || user.isAnonymous) {
-        Array.from(document.getElementsByTagName('link'))
-            .forEach(link => {
-              if (link.getAttribute('rel') === 'icon') {
-                const favicon = link.getAttribute('href');
-                if (favicon !== 'favicon.ico') {
-                  link.setAttribute('href', 'favicon.ico');
-                }
-              }
-            });
-        Array.from(document.getElementsByTagName('script'))
-            .forEach(script => {
-              if (script.id === 'gtag-src') {
-                script.removeAttribute('src');
-              }
-              if (script.id === 'gtag-func') {
-                script.innerHTML = '';
-              }
-            });
-        this.showConfigPanel = false;
-        return;
-      }
-
-      const { uid, project, isAdmin } = user;
-
-      this.showConfigPanel = !!isAdmin;
-
+    this.afs.collection('projects').doc('comparrot').valueChanges().subscribe((project: Project) => {
       if (project && !isExtension) {
         Array.from(document.getElementsByTagName('link'))
             .forEach(link => {
@@ -110,6 +84,35 @@ export class LayoutComponent implements OnInit, OnDestroy {
               }
             });
       }
+    });
+
+    this.auth.user.subscribe(user => {
+      if (!user || user.isAnonymous) {
+        Array.from(document.getElementsByTagName('link'))
+            .forEach(link => {
+              if (link.getAttribute('rel') === 'icon') {
+                const favicon = link.getAttribute('href');
+                if (favicon !== 'favicon.ico') {
+                  link.setAttribute('href', 'favicon.ico');
+                }
+              }
+            });
+        Array.from(document.getElementsByTagName('script'))
+            .forEach(script => {
+              if (script.id === 'gtag-src') {
+                script.removeAttribute('src');
+              }
+              if (script.id === 'gtag-func') {
+                script.innerHTML = '';
+              }
+            });
+        this.showConfigPanel = false;
+        return;
+      }
+
+      const { uid, isAdmin } = user;
+
+      this.showConfigPanel = !!isAdmin;
 
       if (isExtension && !!uid) {
         window.chrome.tabs.getSelected(null, tab => {

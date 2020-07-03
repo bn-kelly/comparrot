@@ -5,8 +5,9 @@ import { map } from 'rxjs/operators';
 import { SidenavItem } from './sidenav-item/sidenav-item.interface';
 import { SidenavService } from './sidenav.service';
 import { ThemeService } from '../../../@fury/services/theme.service';
-import { AuthService } from '../../pages/authentication/services/auth.service';
 import DocumentData = firebase.firestore.DocumentData;
+import { Project } from '../project.model';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'fury-sidenav',
@@ -25,16 +26,17 @@ export class SidenavComponent implements OnInit, OnDestroy {
   @HostBinding('class.expanded')
   expanded: boolean;
   logoUrl: string;
+  project: DocumentData;
   projectName: string;
   themeName: string;
   user: DocumentData;
 
   items$: Observable<SidenavItem[]>;
 
-  constructor(private router: Router,
+  constructor(private afs: AngularFirestore,
+              private router: Router,
               private sidenavService: SidenavService,
-              private themeService: ThemeService,
-              private auth: AuthService) {
+              private themeService: ThemeService) {
   }
 
   ngOnInit() {
@@ -42,10 +44,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
       this.themeName = currentTheme.replace('fury-', '');
       this.handleLogoUrl();
     });
-    this.auth.user.subscribe(user => {
-      this.user = user;
+
+    this.afs.collection('projects').doc('comparrot').valueChanges().subscribe((project: Project) => {
+      this.project = project;
+      this.projectName = project && project.name ? project.name : '';
       this.handleLogoUrl();
-      this.projectName = user && user.project && user.project.name ? user.project.name : '';
     });
 
     this.items$ = this.sidenavService.items$.pipe(
@@ -54,8 +57,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   handleLogoUrl() {
-    this.logoUrl = this.user && this.user.project && this.user.project.logoUrl
-        ? this.user.project.logoUrl[this.themeName] || this.user.project.logoUrl.default
+    this.logoUrl = this.project && this.project.logoUrl
+        ? this.project.logoUrl[this.themeName] || this.project.logoUrl.default
         : 'assets/img/logo_mobile.svg';
   }
 

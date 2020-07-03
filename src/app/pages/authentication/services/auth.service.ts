@@ -35,17 +35,6 @@ export interface User {
     title: string;
     search: string;
   };
-  project?: {
-    logoUrl: {
-      default: string,
-      light: string,
-      dark: string,
-      flat: string,
-    };
-    gtmCode? : string,
-    favicon?: string,
-    name: string;
-  };
   extension?: {
     show: boolean,
     lastShown: number,
@@ -61,17 +50,6 @@ export interface Credential {
   displayName?: string;
   photoURL?: string;
   ui?: object;
-  project?: {
-    logoUrl: {
-      default: string,
-      light: string,
-      dark: string,
-      flat: string,
-    };
-    gtmCode?: string,
-    favicon?: string,
-    name: string;
-  };
   extension?: {
     show: boolean,
     lastShown: number,
