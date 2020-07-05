@@ -12,8 +12,8 @@
         </p>
 
         <form (ngSubmit)="updateGeneralProfile()" fxLayout="column" [formGroup]="form">
-          <div fxLayout="column" fxLayout.gt-xs="row" fxLayoutGap="16px" fxLayoutAlign="start start">
-            <div fxFlex="auto" fxLayout="column" fxLayoutAlign="start center">
+          <div fxLayout="column" fxLayout.gt-xs="row" fxLayoutGap="16px" fxLayoutAlign="start" fxLayoutAlign.gt-xs="start start">
+            <div fxFlex="grow" fxFlex.gt-xs="auto" fxLayout="column" fxLayoutAlign="start center">
               <div *ngIf="!isPhotoURLFileChanged" class="input-file-image-container">
                 <input
                     type="file"
