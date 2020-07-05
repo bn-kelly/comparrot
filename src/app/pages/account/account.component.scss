@@ -1,5 +1,8 @@
 @import "src/styles/var";
 
+$avatar-size-default: 200px;
+$avatar-size-desktop: 500px;
+
 .fury-account-component {
   padding: $spacing;
 
@@ -12,6 +15,16 @@
     font-size: 2rem;
     line-height: 2.1rem;
     margin: $spacing 0;
+  }
+
+  .input-file-cropper {
+    max-width: $avatar-size-default;
+    max-height: $avatar-size-default;
+
+    @media (min-width: 768px) {
+      max-width: $avatar-size-desktop;
+      max-height: $avatar-size-desktop;
+    }
   }
 
   .input-file-image-container {
@@ -34,8 +47,14 @@
   .user-image {
     border-radius: 8px;
     width: 100%;
-    max-width: 200px;
     height: auto;
+    max-width: $avatar-size-default;
+    max-height: $avatar-size-default;
+
+    @media (min-width: 768px) {
+      max-width: $avatar-size-desktop;
+      max-height: $avatar-size-desktop;
+    }
   }
 
   .submit-area {

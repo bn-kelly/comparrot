@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService, User } from '../authentication/services/auth.service';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 
 type Fields = 'firstName' | 'lastName' | 'photoURL';
 type FormErrors = { [u in Fields]: string };
@@ -18,6 +19,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     };
     isGeneralProfileUpdated: boolean;
     isGeneralProfileFormSubmitting: boolean;
+    isPhotoURLFileChanged: boolean;
     user: User;
     form: FormGroup;
     formErrors: FormErrors = {
@@ -37,12 +39,15 @@ export class AccountComponent implements OnInit, OnDestroy {
             'maxlength': 'Last name cannot be more than 255 characters long.',
         },
     };
+    imageChangedEvent: any = '';
+    croppedImage: any = '';
 
     constructor(private fb: FormBuilder,
                 private auth: AuthService
     ) {
         this.isGeneralProfileUpdated = false;
         this.isGeneralProfileFormSubmitting = false;
+        this.isPhotoURLFileChanged = false;
     }
 
     ngOnInit() {
@@ -117,18 +122,15 @@ export class AccountComponent implements OnInit, OnDestroy {
 
     areGeneralProfileFormButtonsDisabled = () => this.form.pristine || this.isGeneralProfileFormSubmitting;
 
-    changeUserPhotoURL(event) {
-        if (event.target.files && event.target.files[0]) {
-            const file = event.target.files[0];
+    changeUserPhotoURL(event: any): void {
+        this.imageChangedEvent = event;
+        this.isPhotoURLFileChanged = true;
+    }
 
-            const reader = new FileReader();
-            reader.onload = e => {
-                this.form.patchValue({ photoURL: reader.result });
-                this.form.markAsDirty();
-            };
-
-            reader.readAsDataURL(file);
-        }
+    imageCropped(event: ImageCroppedEvent) {
+        this.croppedImage = event.base64;
+        this.form.patchValue({ photoURL: this.croppedImage });
+        this.form.markAsDirty();
     }
 
     updateGeneralProfile() {
@@ -149,6 +151,7 @@ export class AccountComponent implements OnInit, OnDestroy {
         this.auth.updateUserData(data).then(() => {
             this.isGeneralProfileFormSubmitting = false;
             this.isGeneralProfileUpdated = true;
+            this.isPhotoURLFileChanged = false;
 
             setTimeout(() => {
                 this.isGeneralProfileUpdated = false;
@@ -161,6 +164,7 @@ export class AccountComponent implements OnInit, OnDestroy {
         if (userPhotoURLFileInput) {
             userPhotoURLFileInput.value = '';
         }
+        this.isPhotoURLFileChanged = false;
         this.buildForm(this.initialGeneralProfileFormData);
     }
 }

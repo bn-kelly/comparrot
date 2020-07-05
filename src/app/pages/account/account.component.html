@@ -12,11 +12,28 @@
         </p>
 
         <form (ngSubmit)="updateGeneralProfile()" fxLayout="column" [formGroup]="form">
-          <div fxLayout="column" fxLayout.gt-xs="row" fxLayoutGap="16px">
+          <div fxLayout="column" fxLayout.gt-xs="row" fxLayoutGap="16px" fxLayoutAlign="start start">
             <div fxFlex="auto" fxLayout="column" fxLayoutAlign="start center">
-              <div class="input-file-image-container">
-                <input type="file" id="userPhotoURL" formControlName="photoURL" (change)="changeUserPhotoURL($event)">
+              <div *ngIf="!isPhotoURLFileChanged" class="input-file-image-container">
+                <input
+                    type="file"
+                    id="userPhotoURL"
+                    formControlName="photoURL"
+                    (change)="changeUserPhotoURL($event)"
+                >
                 <img class="user-image" src="{{form.value.photoURL || '../../../assets/img/default-user.jpg'}}">
+              </div>
+              <div *ngIf="isPhotoURLFileChanged">
+                <image-cropper
+                    class="input-file-cropper"
+                    [imageChangedEvent]="imageChangedEvent"
+                    [maintainAspectRatio]="true"
+                    [aspectRatio]="1 / 1"
+                    cropperMinWidth="100"
+                    cropperMinHeight="100"
+                    format="png"
+                    (imageCropped)="imageCropped($event)"
+                ></image-cropper>
               </div>
             </div>
             <div fxFlex="grow" fxLayout="column">
