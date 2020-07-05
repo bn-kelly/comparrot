@@ -14,6 +14,7 @@ export class ToolbarUserComponent implements OnInit {
   isExtension: boolean;
   isOpen: boolean;
   user: any = {};
+  userName: string;
   isLoggedIn: boolean;
 
   constructor(
@@ -34,6 +35,7 @@ export class ToolbarUserComponent implements OnInit {
   signOut() {
     this.auth.signOut().then(() => this.router.navigate(['/']));
     this.isOpen = false;
+    this.userName = '';
   }
 
   ngOnInit() {
@@ -41,6 +43,11 @@ export class ToolbarUserComponent implements OnInit {
 
     this.auth.user.subscribe(user => {
       this.user = user || {};
+      if (!!user) {
+        this.userName = user.firstName && user.lastName
+            ? `${user.firstName} ${user.lastName}`
+            : user.firstName || user.lastName || user.displayName || '';
+      }
       this.isLoggedIn = !!user && !user.isAnonymous;
     });
   }

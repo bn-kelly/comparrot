@@ -16,7 +16,13 @@ import { Router } from '@angular/router';
     ) {}
 
     handleResponse = response => {
-        this.auth.updateUserData(response.user);
+        const [ firstNameFromDisplayName, lastNameFromDisplayName ] = (response.user.displayName || '').split(' ');
+        const data = {
+            ...response.user,
+            firstName: response.user.firstName || firstNameFromDisplayName || '',
+            lastName: response.user.lastName || lastNameFromDisplayName || '',
+        };
+        this.auth.updateUserData(data);
         this.router.navigate(['/']);
     }
 

@@ -22,6 +22,8 @@ import { switchMap, startWith, tap, filter } from 'rxjs/operators';
 
 export interface User {
   displayName?: string;
+  firstName?: string;
+  lastName?: string;
   email?: string;
   photoURL?: string;
   ui: {
@@ -48,6 +50,8 @@ export interface Credential {
   uid: string;
   email?: string;
   displayName?: string;
+  firstName?: string;
+  lastName?: string;
   photoURL?: string;
   ui?: object;
   extension?: {
@@ -218,6 +222,8 @@ export class AuthService {
       uid: user.uid,
       email: user.email || '',
       displayName: user.displayName || '',
+      firstName: user.firstName || '',
+      lastName: user.lastName || '',
       photoURL: user.photoURL || '',
       ui: this.currentUser && this.currentUser.ui ? this.currentUser.ui : {},
       isAnonymous: user.isAnonymous,
