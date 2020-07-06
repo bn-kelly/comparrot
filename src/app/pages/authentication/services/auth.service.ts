@@ -186,9 +186,7 @@ export class AuthService {
 
   // Sends email allowing user to reset password
   resetPassword(email: string) {
-    const fbAuth = auth();
-
-    return fbAuth
+    return this.afAuth
       .sendPasswordResetEmail(email)
       .then(() => this.notify.update('Password update email sent', 'info'))
       .catch(error => this.handleError(error));

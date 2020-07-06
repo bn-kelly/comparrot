@@ -26,7 +26,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   @HostBinding('class.expanded')
   expanded: boolean;
   logoUrl: string;
-  project: DocumentData;
+  project: Project;
   projectName: string;
   themeName: string;
   user: DocumentData;
@@ -59,7 +59,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   handleLogoUrl() {
     this.logoUrl = this.project && this.project.logoUrl
         ? this.project.logoUrl[this.themeName] || this.project.logoUrl.default
-        : 'assets/img/logo_mobile.svg';
+        : '';
   }
 
   toggleCollapsed() {

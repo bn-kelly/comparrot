@@ -4,6 +4,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.animation';
 import { AuthService } from '../services/auth.service';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { ThemeService } from '../../../../@fury/services/theme.service';
+import { Project } from '../../../layout/project.model';
 
 type UserFields = 'email' | 'password';
 type FormErrors = { [u in UserFields]: string };
@@ -19,6 +22,10 @@ export class LoginComponent implements OnInit {
   form: FormGroup;
   inputType = 'password';
   visible = false;
+  logoUrl: string;
+  project: Project;
+  projectName: string;
+  themeName: string;
 
   userForm: FormGroup;
   newUser = true; // to toggle login or signup form
@@ -44,13 +51,45 @@ export class LoginComponent implements OnInit {
               private fb: FormBuilder,
               private cd: ChangeDetectorRef,
               private snackbar: MatSnackBar,
-
-              public auth: AuthService,
+              private afs: AngularFirestore,
+              private auth: AuthService,
+              private themeService: ThemeService,
   ) {
   }
 
   ngOnInit() {
+    const isExtension = !!window.chrome && !!window.chrome.extension;
+
     this.buildForm();
+
+    this.themeService.theme$.subscribe(([prevTheme, currentTheme]) => {
+      this.themeName = currentTheme.replace('fury-', '');
+      this.handleLogoUrl();
+    });
+
+    this.afs.collection('projects').doc('comparrot').valueChanges().subscribe((project: Project) => {
+      this.project = project;
+      this.projectName = project && project.name ? project.name : '';
+      this.handleLogoUrl();
+
+      if (project && !isExtension) {
+        Array.from(document.getElementsByTagName('link'))
+            .forEach(link => {
+              if (link.getAttribute('rel') === 'icon') {
+                const favicon = link.getAttribute('href');
+                if (!!project.favicon && favicon !== project.favicon) {
+                  link.setAttribute('href', project.favicon);
+                }
+              }
+            });
+      }
+    });
+  }
+
+  handleLogoUrl() {
+    this.logoUrl = this.project && this.project.logoUrl
+        ? this.project.logoUrl[this.themeName] || this.project.logoUrl.default
+        : '';
   }
 
   send() {
