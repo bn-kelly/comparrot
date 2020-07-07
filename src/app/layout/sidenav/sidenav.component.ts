@@ -1,4 +1,5 @@
 import { Component, HostBinding, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -36,7 +37,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
   constructor(private afs: AngularFirestore,
               private router: Router,
               private sidenavService: SidenavService,
-              private themeService: ThemeService) {
+              private themeService: ThemeService,
+              public sanitizer: DomSanitizer,
+  ) {
   }
 
   ngOnInit() {

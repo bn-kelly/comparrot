@@ -1,7 +1,7 @@
 <div class="sidenav" fxLayout="column">
   <div class="sidenav-toolbar" fxLayout="row" fxLayoutAlign="start center">
     <div [routerLink]="['/']" class="sidenav-toolbar-logo">
-      <img [src]="logoUrl" alt="">
+      <img [src]="sanitizer.bypassSecurityTrustUrl(logoUrl)" alt="logo">
       <span class="sidenav-toolbar-project">
         {{projectName}}
       </span>

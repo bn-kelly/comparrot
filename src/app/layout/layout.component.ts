@@ -88,24 +88,6 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
     this.auth.user.subscribe(user => {
       if (!user || user.isAnonymous) {
-        Array.from(document.getElementsByTagName('link'))
-            .forEach(link => {
-              if (link.getAttribute('rel') === 'icon') {
-                const favicon = link.getAttribute('href');
-                if (favicon !== 'favicon.ico') {
-                  link.setAttribute('href', 'favicon.ico');
-                }
-              }
-            });
-        Array.from(document.getElementsByTagName('script'))
-            .forEach(script => {
-              if (script.id === 'gtag-src') {
-                script.removeAttribute('src');
-              }
-              if (script.id === 'gtag-func') {
-                script.innerHTML = '';
-              }
-            });
         this.showConfigPanel = false;
         return;
       }
