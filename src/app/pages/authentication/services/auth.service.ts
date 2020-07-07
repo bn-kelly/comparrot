@@ -41,6 +41,7 @@ export interface User {
     show: boolean,
     lastShown: number,
   };
+  projectName?: string;
   uid: string;
   isAnonymous: boolean;
   isAdmin?: boolean;
@@ -58,6 +59,7 @@ export interface Credential {
     show: boolean,
     lastShown: number,
   };
+  projectName?: string;
   isAnonymous: boolean;
   isAdmin?: boolean;
 }

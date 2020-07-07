@@ -1,8 +1,10 @@
 import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { DomSanitizer } from '@angular/platform-browser';
 import { map } from 'rxjs/operators';
 import { ThemeService } from '../../../@fury/services/theme.service';
 import { AuthService } from '../../pages/authentication/services/auth.service';
-import DocumentData = firebase.firestore.DocumentData;
+import { Project } from '../project.model';
 
 @Component({
   selector: 'fury-toolbar',
@@ -18,14 +20,17 @@ export class ToolbarComponent implements OnInit {
   isLoggedIn: boolean;
   logoUrl: string;
   themeName: string;
-  user: DocumentData;
+  project: Project;
 
   @Output() openSidenav = new EventEmitter();
 
   topNavigation$ = this.themeService.config$.pipe(map(config => config.navigation === 'top'));
 
   constructor(private themeService: ThemeService,
-              public auth: AuthService) {
+              public auth: AuthService,
+              private afs: AngularFirestore,
+              public sanitizer: DomSanitizer,
+  ) {
   }
 
   ngOnInit() {
@@ -37,16 +42,21 @@ export class ToolbarComponent implements OnInit {
     });
 
     this.auth.user.subscribe(user => {
-      this.user = user;
-      this.handleLogoUrl();
-      this.isLoggedIn = !!user && !user.isAnonymous;
+      if (user && user.projectName) {
+        this.afs.collection('projects').doc(user.projectName).valueChanges().subscribe((project: Project) => {
+          this.project = project;
+          this.handleLogoUrl();
+        });
+      } else {
+        this.logoUrl = 'assets/img/logo_mobile.svg';
+      }
     });
   }
 
   handleLogoUrl() {
-    this.logoUrl = this.user && this.user.project && this.user.project.logoUrl
-        ? this.user.project.logoUrl[this.themeName] || this.user.project.logoUrl.default
-        : 'assets/img/logo_mobile.svg';
+    this.logoUrl = this.project && this.project.logoUrl
+        ? this.project.logoUrl[this.themeName] || this.project.logoUrl.default
+        : '';
   }
 
 }

@@ -24,7 +24,6 @@ export class LoginComponent implements OnInit {
   visible = false;
   logoUrl: string;
   project: Project;
-  projectName: string;
   themeName: string;
 
   userForm: FormGroup;
@@ -67,21 +66,34 @@ export class LoginComponent implements OnInit {
       this.handleLogoUrl();
     });
 
-    this.afs.collection('projects').doc('comparrot').valueChanges().subscribe((project: Project) => {
-      this.project = project;
-      this.projectName = project && project.name ? project.name : '';
-      this.handleLogoUrl();
+    this.auth.user.subscribe(user => {
+      if (user && user.projectName) {
+        this.afs.collection('projects').doc(user.projectName).valueChanges().subscribe((project: Project) => {
+          this.project = project;
+          this.handleLogoUrl();
 
-      if (project && !isExtension) {
-        Array.from(document.getElementsByTagName('link'))
-            .forEach(link => {
-              if (link.getAttribute('rel') === 'icon') {
-                const favicon = link.getAttribute('href');
-                if (!!project.favicon && favicon !== project.favicon) {
-                  link.setAttribute('href', project.favicon);
+          if (project && !isExtension) {
+            Array.from(document.getElementsByTagName('link'))
+                .forEach(link => {
+                  if (link.getAttribute('rel') === 'icon') {
+                    const favicon = link.getAttribute('href');
+                    if (!!project.favicon && favicon !== project.favicon) {
+                      link.setAttribute('href', project.favicon);
+                    }
+                  }
+                });
+          }
+        });
+      } else {
+        this.logoUrl = 'assets/img/logo_mobile.svg';
+        if (!isExtension) {
+          Array.from(document.getElementsByTagName('link'))
+              .forEach(link => {
+                if (link.getAttribute('rel') === 'icon') {
+                  link.setAttribute('href', 'favicon.ico');
                 }
-              }
-            });
+              });
+        }
       }
     });
   }

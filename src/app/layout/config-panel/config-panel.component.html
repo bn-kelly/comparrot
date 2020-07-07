@@ -5,6 +5,22 @@
   </fury-title>
 
   <div class="section">
+    <h5 class="subheading">PROJECT</h5>
+
+    <mat-radio-group (change)="projectChange($event)"
+                     [value]="user.projectName"
+                     fxLayout="column"
+                     fxLayoutGap="12px">
+      <mat-radio-button
+          *ngFor="let project of projects"
+          [value]="project.name"
+      >
+        {{project.name}}
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <div class="section">
     <h5 class="subheading">THEME STYLE</h5>
 
     <div class="styles">

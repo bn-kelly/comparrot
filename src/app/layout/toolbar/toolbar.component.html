@@ -9,7 +9,7 @@
 
     <div *ngIf="!isExtension" [fxShow.gt-sm]="topNavigation$ | async" [fxShow.xs]="false" [routerLink]="['/']" class="toolbar-logo" fxShow>
 
-      <img [src]="logoUrl || 'assets/img/logo_mobile.svg'" alt="">
+      <img [src]="sanitizer.bypassSecurityTrustUrl(logoUrl)" alt="logo">
     </div>
 
     <fury-toolbar-search-bar *ngIf="!isExtension" fxFlex="500px" fxHide fxShow.gt-md></fury-toolbar-search-bar>

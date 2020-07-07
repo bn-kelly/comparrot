@@ -54,47 +54,80 @@ export class LayoutComponent implements OnInit, OnDestroy {
       this.vendors = vendors;
     });
 
-    this.afs.collection('projects').doc('comparrot').valueChanges().subscribe((project: Project) => {
-      if (project && !isExtension) {
+    this.auth.user.subscribe(user => {
+      if (!user) {
         Array.from(document.getElementsByTagName('link'))
             .forEach(link => {
               if (link.getAttribute('rel') === 'icon') {
-                const favicon = link.getAttribute('href');
-                if (!!project.favicon && favicon !== project.favicon) {
-                  link.setAttribute('href', project.favicon);
-                }
+                link.setAttribute('href', 'favicon.ico');
+              }
+            });
+
+        Array.from(document.getElementsByTagName('script'))
+            .forEach(script => {
+              if (script.id === 'gtag-src') {
+                script.removeAttribute('src');
+              }
+              if (script.id === 'gtag-func') {
+                script.innerHTML = '';
               }
             });
       }
 
-      if (project && project.gtmCode) {
-        Array.from(document.getElementsByTagName('script'))
-            .forEach(script => {
-              if (script.id === 'gtag-src') {
-                script.setAttribute('src', `https://www.googletagmanager.com/gtag/js?id=${project.gtmCode}`);
-              }
-              if (script.id === 'gtag-func') {
-                script.innerHTML = `
+      if (!user || user.isAnonymous) {
+        this.showConfigPanel = false;
+        return;
+      }
+
+      const { uid, isAdmin, projectName } = user;
+
+      this.showConfigPanel = !!isAdmin;
+
+      if (projectName && !isExtension) {
+        this.afs.collection('projects').doc(projectName).valueChanges().subscribe((project: Project) => {
+          if (!project) {
+            return;
+          }
+
+          Array.from(document.getElementsByTagName('link'))
+              .forEach(link => {
+                if (link.getAttribute('rel') === 'icon') {
+                  const favicon = link.getAttribute('href');
+                  if (!!project.favicon && favicon !== project.favicon) {
+                    link.setAttribute('href', project.favicon);
+                  }
+                  if (!project.favicon) {
+                    link.setAttribute('href', 'favicon.ico');
+                  }
+                }
+              });
+
+          Array.from(document.getElementsByTagName('script'))
+              .forEach(script => {
+                if (project.gtmCode) {
+                  if (script.id === 'gtag-src') {
+                    script.setAttribute('src', `https://www.googletagmanager.com/gtag/js?id=${project.gtmCode}`);
+                  }
+                  if (script.id === 'gtag-func') {
+                    script.innerHTML = `
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}
                   gtag('js', new Date());
 
                   gtag('config', '${project.gtmCode}');
                 `;
-              }
-            });
+                  }
+                } else {
+                  if (script.id === 'gtag-src') {
+                    script.removeAttribute('src');
+                  }
+                  if (script.id === 'gtag-func') {
+                    script.innerHTML = '';
+                  }
+                }
+              });
+        });
       }
-    });
-
-    this.auth.user.subscribe(user => {
-      if (!user || user.isAnonymous) {
-        this.showConfigPanel = false;
-        return;
-      }
-
-      const { uid, isAdmin } = user;
-
-      this.showConfigPanel = !!isAdmin;
 
       if (isExtension && !!uid) {
         window.chrome.tabs.getSelected(null, tab => {

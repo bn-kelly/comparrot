@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Theme, ThemeService } from '../../../@fury/services/theme.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatRadioChange } from '@angular/material/radio';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { SidenavService } from '../sidenav/sidenav.service';
 import { map } from 'rxjs/operators';
+import { Project } from '../../layout/project.model';
+import { AuthService, User } from '../../pages/authentication/services/auth.service';
 
 @Component({
   selector: 'fury-config-panel',
@@ -22,11 +25,28 @@ export class ConfigPanelComponent implements OnInit {
   toolbarPosition$ = this.themeService.config$.pipe(map(config => config.toolbarPosition));
   footerVisible$ = this.themeService.config$.pipe(map(config => config.footerVisible));
   footerPosition$ = this.themeService.config$.pipe(map(config => config.footerPosition));
+  projects: Project[] = [];
+  user: User;
 
   constructor(private themeService: ThemeService,
-              private sidenavService: SidenavService) { }
+              private sidenavService: SidenavService,
+              private afs: AngularFirestore,
+              private auth: AuthService,
+  ) { }
 
   ngOnInit() {
+    this.auth.user.subscribe(user => {
+      this.user = user;
+    });
+    this.afs.collection('projects').valueChanges().subscribe((projects: Project[]) => {
+      this.projects = projects;
+    });
+  }
+
+  projectChange(change: MatRadioChange) {
+    if (this.user && this.user.uid) {
+      this.afs.collection('users').doc(this.user.uid).update({ projectName: change.value });
+    }
   }
 
   setActiveTheme(theme: Theme) {
