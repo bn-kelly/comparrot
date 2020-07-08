@@ -7,10 +7,13 @@
   <div class="section">
     <h5 class="subheading">PROJECT</h5>
 
-    <mat-radio-group (change)="projectChange($event)"
-                     [value]="user.projectName"
-                     fxLayout="column"
-                     fxLayoutGap="12px">
+    <mat-radio-group
+        *ngIf="!!user"
+        (change)="projectChange($event)"
+        [value]="user.projectName"
+        fxLayout="column"
+        fxLayoutGap="12px"
+    >
       <mat-radio-button
           *ngFor="let project of projects"
           [value]="project.name"

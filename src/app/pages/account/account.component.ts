@@ -1,7 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService, User } from '../authentication/services/auth.service';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { EmailAlert } from './email-alert.model';
+import { CategoryOfInterest } from './category-of-interest.model';
 
 type Fields = 'firstName' | 'lastName' | 'photoURL';
 type FormErrors = { [u in Fields]: string };
@@ -20,6 +23,8 @@ export class AccountComponent implements OnInit, OnDestroy {
     isGeneralProfileUpdated: boolean;
     isGeneralProfileFormSubmitting: boolean;
     isPhotoURLFileChanged: boolean;
+    emailAlerts: EmailAlert[];
+    categoriesOfInterest: CategoryOfInterest[];
     user: User;
     form: FormGroup;
     formErrors: FormErrors = {
@@ -43,7 +48,8 @@ export class AccountComponent implements OnInit, OnDestroy {
     croppedImage: any = '';
 
     constructor(private fb: FormBuilder,
-                private auth: AuthService
+                private auth: AuthService,
+                private afs: AngularFirestore,
     ) {
         this.isGeneralProfileUpdated = false;
         this.isGeneralProfileFormSubmitting = false;
@@ -51,6 +57,26 @@ export class AccountComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.afs.collection('emailAlerts')
+            .valueChanges()
+            .subscribe((emailAlerts: EmailAlert[]) => {
+                this.emailAlerts = emailAlerts;
+                if (this.user && !Array.isArray(this.user.emailAlerts) && Array.isArray(this.emailAlerts)) {
+                    const userEmailAlerts = this.emailAlerts.map(alert => alert.id);
+                    this.updateUserEmailAlerts(userEmailAlerts);
+                }
+            });
+
+        this.afs.collection('categoriesOfInterest')
+            .valueChanges()
+            .subscribe((categoriesOfInterest: CategoryOfInterest[]) => {
+                this.categoriesOfInterest = categoriesOfInterest;
+                if (this.user && !Array.isArray(this.user.categoriesOfInterest) && Array.isArray(this.categoriesOfInterest)) {
+                    const userCategoriesOfInterest = this.categoriesOfInterest.map(category => category.id);
+                    this.updateUserCategoriesOfInterest(userCategoriesOfInterest);
+                }
+            });
+
         this.auth.user.subscribe(user => {
             this.user = user;
             this.initialGeneralProfileFormData = {
@@ -166,5 +192,40 @@ export class AccountComponent implements OnInit, OnDestroy {
         }
         this.isPhotoURLFileChanged = false;
         this.buildForm(this.initialGeneralProfileFormData);
+    }
+
+    emailAlertChange({ id, checked }) {
+        if (this.user.emailAlerts) {
+            console.log(id, checked);
+            if (checked && !this.user.emailAlerts.includes(id)) {
+                const emailAlerts = [...this.user.emailAlerts, id];
+                this.updateUserEmailAlerts(emailAlerts);
+            }
+
+            if (!checked && this.user.emailAlerts.includes(id)) {
+                const emailAlerts = this.user.emailAlerts.filter(alert => alert !== id);
+                this.updateUserEmailAlerts(emailAlerts);
+            }
+        }
+    }
+
+    toggleSelectCategoryOfInterest(id) {
+        const categoriesOfInterest = this.user.categoriesOfInterest.includes(id)
+            ? this.user.categoriesOfInterest.filter(category => category !== id)
+            : [...this.user.categoriesOfInterest, id];
+
+        this.updateUserCategoriesOfInterest(categoriesOfInterest);
+    }
+
+    updateUserEmailAlerts(emailAlerts = []) {
+        this.afs.collection('users')
+            .doc(this.user.uid)
+            .update({ emailAlerts: emailAlerts.sort() });
+    }
+
+    updateUserCategoriesOfInterest(categoriesOfInterest = []) {
+        this.afs.collection('users')
+            .doc(this.user.uid)
+            .update({ categoriesOfInterest: categoriesOfInterest.sort() });
     }
 }

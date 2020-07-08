@@ -45,6 +45,8 @@ export interface User {
   uid: string;
   isAnonymous: boolean;
   isAdmin?: boolean;
+  emailAlerts?: number[];
+  categoriesOfInterest?: number[];
 }
 
 export interface Credential {
@@ -62,6 +64,8 @@ export interface Credential {
   projectName?: string;
   isAnonymous: boolean;
   isAdmin?: boolean;
+  emailAlerts?: number[];
+  categoriesOfInterest?: number[];
 }
 
 @Injectable()

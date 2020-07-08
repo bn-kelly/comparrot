@@ -1,7 +1,7 @@
 @import "src/styles/var";
 
 $avatar-size-default: 200px;
-$avatar-size-desktop: 500px;
+$avatar-size-desktop: 300px;
 
 .fury-account-component {
   padding: $spacing;
@@ -69,6 +69,78 @@ $avatar-size-desktop: 500px;
 
     &__icon {
       margin-right: 4px;
+    }
+  }
+
+  .divider {
+    &.general-profile-divider {
+      margin: $padding-xl 0;
+    }
+  }
+
+  .categories-container {
+    @media (max-width: 480px) {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (min-width: 481px) and (max-width: 959px) {
+      flex-direction: row;
+      flex-wrap: wrap;
+      margin-bottom: -$spacing;
+    }
+
+    @media (min-width: 960px) {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (min-width: 1200px) {
+      flex-direction: row;
+      flex-wrap: wrap;
+      margin-bottom: -$spacing;
+    }
+  }
+
+  .category-button {
+    @media (max-width: 480px) {
+      width: 100%;
+
+      &:not(:last-of-type) {
+        margin: 0 0 $spacing;
+      }
+    }
+
+    @media (min-width: 481px) {
+      width: calc(50% - #{$spacing/2});
+
+      &:nth-of-type(odd) {
+        margin: 0 $spacing/2 $spacing 0;
+      }
+
+      &:nth-of-type(even) {
+        margin: 0 0 $spacing $spacing/2;
+      }
+    }
+
+    @media (min-width: 960px) {
+      width: 100%;
+
+      &:not(:last-of-type) {
+        margin: 0 0 $spacing;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      width: calc(50% - #{$spacing/2});
+
+      &:nth-of-type(odd) {
+        margin: 0 $spacing/2 $spacing 0;
+      }
+
+      &:nth-of-type(even) {
+        margin: 0 0 $spacing $spacing/2;
+      }
     }
   }
 }

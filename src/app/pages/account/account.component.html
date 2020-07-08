@@ -4,7 +4,7 @@
       <div class="title">Account</div>
     </div>
 
-    <mat-tab-group class="tabs fury-tabs" animationDuration="0ms">
+    <mat-tab-group class="tabs fury-tabs" animationDuration="0ms" dynamicHeight>
       <mat-tab label="General Profile">
         <h2 class="tab-header">General Profile</h2>
         <p class="tab-content">
@@ -91,6 +91,42 @@
             </div>
           </div>
         </form>
+
+        <mat-divider class="divider general-profile-divider"></mat-divider>
+
+        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="16px">
+          <div fxFlex="grow">
+            <h3>Alerts</h3>
+            <p class="padding-bottom">General email alerts, we promise we won’t spam you!</p>
+            <div fxLayout="column" fxLayoutGap="8px" class="padding-horizontal" *ngIf="user && user.emailAlerts">
+              <mat-slide-toggle
+                  *ngFor="let alert of emailAlerts"
+                  [checked]="user.emailAlerts.includes(alert.id)"
+                  (change)="emailAlertChange({ id: alert.id, checked: $event.checked })"
+                  color="primary"
+              >
+                {{alert.description}}
+              </mat-slide-toggle>
+            </div>
+          </div>
+          <div fxFlex="grow">
+            <h3>Categories of Interest</h3>
+            <p class="padding-bottom">
+              If we find some great deals in categories you like we’ll update you on the latest or greatest.
+            </p>
+            <div class="categories-container" *ngIf="user && user.categoriesOfInterest">
+              <button
+                  *ngFor="let category of categoriesOfInterest"
+                  mat-raised-button
+                  [color]="user.categoriesOfInterest.includes(category.id) ? 'primary' : 'default'"
+                  class="category-button"
+                  (click)="toggleSelectCategoryOfInterest(category.id)"
+              >
+                {{category.value.toUpperCase()}}
+              </button>
+            </div>
+          </div>
+        </div>
 
       </mat-tab>
       <mat-tab label="Personalization">
