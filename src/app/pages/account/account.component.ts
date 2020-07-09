@@ -196,7 +196,6 @@ export class AccountComponent implements OnInit, OnDestroy {
 
     emailAlertChange({ id, checked }) {
         if (this.user.emailAlerts) {
-            console.log(id, checked);
             if (checked && !this.user.emailAlerts.includes(id)) {
                 const emailAlerts = [...this.user.emailAlerts, id];
                 this.updateUserEmailAlerts(emailAlerts);
