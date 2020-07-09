@@ -1,11 +1,14 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ViewChild, OnDestroy, OnInit } from '@angular/core';
+import { MatAccordion } from '@angular/material/expansion';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService, User } from '../authentication/services/auth.service';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { EmailAlert } from './email-alert.model';
 import { CategoryOfInterest } from './category-of-interest.model';
+import { FAQ } from './faq.model';
 import { Offer } from '../dashboard/offer.model';
+import {Project} from '../../layout/project.model';
 
 type Fields = 'firstName' | 'lastName' | 'photoURL';
 type FormErrors = { [u in Fields]: string };
@@ -16,6 +19,8 @@ type FormErrors = { [u in Fields]: string };
     styleUrls: ['./account.component.scss'],
 })
 export class AccountComponent implements OnInit, OnDestroy {
+    @ViewChild(MatAccordion) accordion: MatAccordion;
+
     initialGeneralProfileFormData: {
         firstName: string,
         lastName: string,
@@ -26,6 +31,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     isPhotoURLFileChanged: boolean;
     emailAlerts: EmailAlert[];
     categoriesOfInterest: CategoryOfInterest[];
+    faqList: FAQ[];
     wishList: Offer[];
     user: User;
     form: FormGroup;
@@ -48,6 +54,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     };
     imageChangedEvent: any = '';
     croppedImage: any = '';
+    panelOpenState = false;
 
     constructor(private fb: FormBuilder,
                 private auth: AuthService,
@@ -91,6 +98,14 @@ export class AccountComponent implements OnInit, OnDestroy {
                     .subscribe((offers: Offer[]) => {
                         this.wishList = offers.filter(offer => this.user.wishList.includes(offer.id));
                     });
+            }
+
+            if (user && user.projectName) {
+                this.afs.collection('projects').doc(user.projectName).valueChanges().subscribe((project: Project) => {
+                    this.faqList = project.faq || [];
+                });
+            } else {
+                this.faqList = [];
             }
 
             this.initialGeneralProfileFormData = {

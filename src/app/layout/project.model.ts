@@ -8,4 +8,5 @@ export class Project {
     gtmCode?: string;
     favicon?: string;
     name: string;
+    faq: [];
 }
