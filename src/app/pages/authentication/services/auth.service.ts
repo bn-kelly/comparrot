@@ -47,6 +47,7 @@ export interface User {
   isAdmin?: boolean;
   emailAlerts?: number[];
   categoriesOfInterest?: number[];
+  wishList?: string[];
 }
 
 export interface Credential {
@@ -66,6 +67,7 @@ export interface Credential {
   isAdmin?: boolean;
   emailAlerts?: number[];
   categoriesOfInterest?: number[];
+  wishList?: string[];
 }
 
 @Injectable()

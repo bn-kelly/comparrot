@@ -58,8 +58,12 @@
           <mat-icon>share</mat-icon>
           Share
         </button>
-        <button mat-button class="offer__actions-button">
-          <mat-icon>favorite</mat-icon>
+        <button
+            mat-button
+            class="offer__actions-button"
+            (click)="toggleAddToWishlist(offer.id)"
+        >
+          <mat-icon>{{user.wishList.includes(offer.id) ? 'favorite' : 'favorite_border'}}</mat-icon>
           Wishlist
         </button>
       </mat-card-actions>

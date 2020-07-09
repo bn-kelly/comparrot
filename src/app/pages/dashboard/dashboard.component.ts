@@ -1,10 +1,10 @@
 import * as firebase from 'firebase/app';
 import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { ChartData } from 'chart.js';
 import * as moment from 'moment';
 import { Observable, ReplaySubject } from 'rxjs';
-import { DocumentData } from '@angular/fire/firestore';
 import { AdvancedPieChartWidgetOptions } from './widgets/advanced-pie-chart-widget/advanced-pie-chart-widget-options.interface';
 import { AudienceOverviewWidgetOptions } from './widgets/audience-overview-widget/audience-overview-widget-options.interface';
 import { BarChartWidgetOptions } from './widgets/bar-chart-widget/bar-chart-widget-options.interface';
@@ -14,7 +14,8 @@ import { RecentSalesWidgetOptions } from './widgets/recent-sales-widget/recent-s
 import { SalesSummaryWidgetOptions } from './widgets/sales-summary-widget/sales-summary-widget-options.interface';
 import { DashboardService } from './dashboard.service';
 import { ChartWidgetOptions } from '../../../@fury/shared/chart-widget/chart-widget-options.interface';
-import { AuthService } from '../../pages/authentication/services/auth.service';
+import { AuthService, User } from '../../pages/authentication/services/auth.service';
+import { Offer } from './offer.model';
 
 @Component({
   selector: 'fury-dashboard',
@@ -25,10 +26,10 @@ export class DashboardComponent implements OnInit {
 
   private static isInitialLoad = true;
   isExtension: boolean;
-  user: DocumentData;
-  offersList: DocumentData[];
+  user: User;
+  offersList: Offer[];
   isLoggedIn: boolean;
-  offers: DocumentData[];
+  offers: Offer[];
   salesData$: Observable<ChartData>;
   totalSalesOptions: BarChartWidgetOptions = {
     title: 'Total Sales',
@@ -104,7 +105,9 @@ export class DashboardComponent implements OnInit {
 
   constructor(private dashboardService: DashboardService,
               private router: Router,
-              private auth: AuthService) {
+              private auth: AuthService,
+              private afs: AngularFirestore,
+  ) {
     /**
      * Edge wrong drawing fix
      * Navigate anywhere and on Promise right back
@@ -132,12 +135,22 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  toggleAddToWishlist(id) {
+    const wishList = this.user.wishList.includes(id)
+        ? this.user.wishList.filter(category => category !== id)
+        : [...this.user.wishList, id];
+
+    this.afs.collection('users')
+        .doc(this.user.uid)
+        .update({ wishList: wishList.sort() });
+  }
+
   getOffersByUser(user) {
     if (!user) {
       return;
     }
-    this.dashboardService.getOffersByUser(user).subscribe(data => {
-      this.offersList = data;
+    this.dashboardService.getOffersByUser(user).subscribe((offers: Offer[]) => {
+      this.offersList = offers;
       this.offers = this.offersList;
       if (Array.isArray(this.offersList)) {
         this.offers = user.isAnonymous
@@ -170,8 +183,19 @@ export class DashboardComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user;
       if (!user) {
+        this.isLoggedIn = false;
         this.auth.anonymousLogin();
         return;
+      }
+
+      const { isAnonymous } = user;
+
+      this.isLoggedIn = !isAnonymous;
+
+      if (!isAnonymous && !Array.isArray(user.wishList)) {
+        this.afs.collection('users')
+            .doc(this.user.uid)
+            .update({ wishList: [] });
       }
 
       this.getOffersByUser(user);
