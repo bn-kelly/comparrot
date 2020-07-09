@@ -7,139 +7,169 @@
     <mat-tab-group class="tabs fury-tabs" animationDuration="0ms" dynamicHeight>
       <mat-tab label="General Profile">
         <h2 class="tab-header">General Profile</h2>
-        <p class="tab-content">
-          General Profile description
-        </p>
-
-        <form (ngSubmit)="updateGeneralProfile()" fxLayout="column" [formGroup]="form">
-          <div fxLayout="column" fxLayout.gt-xs="row" fxLayoutGap="16px" fxLayoutAlign="start" fxLayoutAlign.gt-xs="start start">
-            <div fxFlex="grow" fxFlex.gt-xs="auto" fxLayout="column" fxLayoutAlign="start center">
-              <div *ngIf="!isPhotoURLFileChanged" class="input-file-image-container">
-                <input
-                    type="file"
-                    id="userPhotoURL"
-                    formControlName="photoURL"
-                    (change)="changeUserPhotoURL($event)"
-                >
-                <img class="user-image" src="{{form.value.photoURL || '../../../assets/img/default-user.jpg'}}">
-              </div>
-              <div *ngIf="isPhotoURLFileChanged">
-                <image-cropper
-                    class="input-file-cropper"
-                    [imageChangedEvent]="imageChangedEvent"
-                    [maintainAspectRatio]="true"
-                    [aspectRatio]="1 / 1"
-                    cropperMinWidth="100"
-                    cropperMinHeight="100"
-                    format="png"
-                    (imageCropped)="imageCropped($event)"
-                ></image-cropper>
-              </div>
-            </div>
-            <div fxFlex="grow" fxLayout="column">
-              <div fxFlex="auto" fxLayout="column">
-                <mat-form-field>
-                  <mat-label>First name</mat-label>
-                  <input matInput required formControlName="firstName" autocomplete="off">
-                  <mat-error *ngIf="form.get('firstName').hasError('required')">Please fill out this field</mat-error>
-                  {{ formErrors.firstName }}
-                </mat-form-field>
-                <div *ngIf="formErrors.firstName" class="notification is-danger">
-                  {{ formErrors.firstName }}
-                </div>
-              </div>
-              <div fxFlex="auto" fxLayout="column">
-                <mat-form-field>
-                  <mat-label>Last name</mat-label>
-                  <input matInput required formControlName="lastName" autocomplete="off">
-                  <mat-error *ngIf="form.get('lastName').hasError('required')">Please fill out this field</mat-error>
-                  {{ formErrors.lastName }}
-                </mat-form-field>
-                <div *ngIf="formErrors.lastName" class="notification is-danger">
-                  {{ formErrors.lastName }}
-                </div>
-              </div>
-
-              <div fxLayout="column" fxLayout.gt-xs="row" fxLayoutGap="16px">
-                <div fxLayout="column">
-                  <button
-                      type="submit"
-                      color="primary"
-                      mat-raised-button
-                      [disabled]="areGeneralProfileFormButtonsDisabled()"
+        <div class="tab-content">
+          <p>General profile allows you to change your profile picture and adjust your account information.</p>
+          <form (ngSubmit)="updateGeneralProfile()" fxLayout="column" [formGroup]="form">
+            <div fxLayout="column" fxLayout.gt-xs="row" fxLayoutGap="16px" fxLayoutAlign="start" fxLayoutAlign.gt-xs="start start">
+              <div fxFlex="grow" fxFlex.gt-xs="auto" fxLayout="column" fxLayoutAlign="start center">
+                <div *ngIf="!isPhotoURLFileChanged" class="input-file-image-container">
+                  <input
+                      type="file"
+                      id="userPhotoURL"
+                      formControlName="photoURL"
+                      (change)="changeUserPhotoURL($event)"
                   >
-                    UPDATE
-                  </button>
+                  <img class="user-image" src="{{form.value.photoURL || '../../../assets/img/default-user.jpg'}}">
                 </div>
-                <div fxLayout="column">
-                  <button
-                      (click)="resetGeneralProfile()"
-                      type="button"
-                      color="primary"
-                      mat-stroked-button
-                      [disabled]="areGeneralProfileFormButtonsDisabled()"
-                  >
-                    RESET
-                  </button>
+                <div *ngIf="isPhotoURLFileChanged">
+                  <image-cropper
+                      class="input-file-cropper"
+                      [imageChangedEvent]="imageChangedEvent"
+                      [maintainAspectRatio]="true"
+                      [aspectRatio]="1 / 1"
+                      cropperMinWidth="100"
+                      cropperMinHeight="100"
+                      format="png"
+                      (imageCropped)="imageCropped($event)"
+                  ></image-cropper>
                 </div>
-                <div fxLayout="column" fxLayoutAlign="center start">
-                  <div class="submit-area__message success" *ngIf="isGeneralProfileUpdated">
-                    <mat-icon class="submit-area__icon">check_circle</mat-icon> Saved
+              </div>
+              <div fxFlex="grow" fxLayout="column">
+                <div fxFlex="auto" fxLayout="column">
+                  <mat-form-field>
+                    <mat-label>First name</mat-label>
+                    <input matInput required formControlName="firstName" autocomplete="off">
+                    <mat-error *ngIf="form.get('firstName').hasError('required')">Please fill out this field</mat-error>
+                    {{ formErrors.firstName }}
+                  </mat-form-field>
+                  <div *ngIf="formErrors.firstName" class="notification is-danger">
+                    {{ formErrors.firstName }}
+                  </div>
+                </div>
+                <div fxFlex="auto" fxLayout="column">
+                  <mat-form-field>
+                    <mat-label>Last name</mat-label>
+                    <input matInput required formControlName="lastName" autocomplete="off">
+                    <mat-error *ngIf="form.get('lastName').hasError('required')">Please fill out this field</mat-error>
+                    {{ formErrors.lastName }}
+                  </mat-form-field>
+                  <div *ngIf="formErrors.lastName" class="notification is-danger">
+                    {{ formErrors.lastName }}
+                  </div>
+                </div>
+
+                <div fxLayout="column" fxLayout.gt-xs="row" fxLayoutGap="16px">
+                  <div fxLayout="column">
+                    <button
+                        type="submit"
+                        color="primary"
+                        mat-raised-button
+                        [disabled]="areGeneralProfileFormButtonsDisabled()"
+                    >
+                      UPDATE
+                    </button>
+                  </div>
+                  <div fxLayout="column">
+                    <button
+                        (click)="resetGeneralProfile()"
+                        type="button"
+                        color="primary"
+                        mat-stroked-button
+                        [disabled]="areGeneralProfileFormButtonsDisabled()"
+                    >
+                      RESET
+                    </button>
+                  </div>
+                  <div fxLayout="column" fxLayoutAlign="center start">
+                    <div class="submit-area__message success" *ngIf="isGeneralProfileUpdated">
+                      <mat-icon class="submit-area__icon">check_circle</mat-icon> Saved
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </form>
+          </form>
 
-        <mat-divider class="divider general-profile-divider"></mat-divider>
+          <mat-divider class="divider general-profile-divider"></mat-divider>
 
-        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="16px">
-          <div fxFlex="grow">
-            <h3>Alerts</h3>
-            <p class="padding-bottom">General email alerts, we promise we won’t spam you!</p>
-            <div fxLayout="column" fxLayoutGap="8px" class="padding-horizontal" *ngIf="user && user.emailAlerts">
-              <mat-slide-toggle
-                  *ngFor="let alert of emailAlerts"
-                  [checked]="user.emailAlerts.includes(alert.id)"
-                  (change)="emailAlertChange({ id: alert.id, checked: $event.checked })"
-                  color="primary"
-              >
-                {{alert.description}}
-              </mat-slide-toggle>
+          <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="16px">
+            <div fxFlex="grow">
+              <h3>Alerts</h3>
+              <p class="padding-bottom">General email alerts, we promise we won’t spam you!</p>
+              <div fxLayout="column" fxLayoutGap="8px" class="padding-horizontal" *ngIf="user && user.emailAlerts">
+                <mat-slide-toggle
+                    *ngFor="let alert of emailAlerts"
+                    [checked]="user.emailAlerts.includes(alert.id)"
+                    (change)="emailAlertChange({ id: alert.id, checked: $event.checked })"
+                    color="primary"
+                >
+                  {{alert.description}}
+                </mat-slide-toggle>
+              </div>
             </div>
-          </div>
-          <div fxFlex="grow">
-            <h3>Categories of Interest</h3>
-            <p class="padding-bottom">
-              If we find some great deals in categories you like we’ll update you on the latest or greatest.
-            </p>
-            <div class="categories-container" *ngIf="user && user.categoriesOfInterest">
-              <button
-                  *ngFor="let category of categoriesOfInterest"
-                  mat-raised-button
-                  [color]="user.categoriesOfInterest.includes(category.id) ? 'primary' : 'default'"
-                  class="category-button"
-                  (click)="toggleSelectCategoryOfInterest(category.id)"
-              >
-                {{category.value.toUpperCase()}}
-              </button>
+            <div fxFlex="grow">
+              <h3>Categories of Interest</h3>
+              <p class="padding-bottom">
+                If we find some great deals in categories you like we’ll update you on the latest or greatest.
+              </p>
+              <div class="categories-container" *ngIf="user && user.categoriesOfInterest">
+                <button
+                    *ngFor="let category of categoriesOfInterest"
+                    mat-raised-button
+                    [color]="user.categoriesOfInterest.includes(category.id) ? 'primary' : 'default'"
+                    class="category-button"
+                    (click)="toggleSelectCategoryOfInterest(category.id)"
+                >
+                  {{category.value.toUpperCase()}}
+                </button>
+              </div>
             </div>
           </div>
         </div>
-
       </mat-tab>
       <mat-tab label="Personalization">
         <h2 class="tab-header">Personalization</h2>
-        <p class="tab-content">
-          Personalization description
-        </p>
+        <div class="tab-content">
+          <p>Personalization description</p>
+        </div>
       </mat-tab>
       <mat-tab label="Wish List">
-        <h2 class="tab-header">Wish List</h2>
-        <p class="tab-content">
-          Wish List description
-        </p>
+        <h2 class="tab-header">My Wishlist</h2>
+        <div class="tab-content">
+          <div
+              class="wishlist-item"
+              fxLayout="column"
+              fxLayout.gt-xs="row"
+              fxLayoutGap="16px"
+              *ngFor="let item of wishList"
+          >
+            <div class="wishlist-item__image-container" fxFlex="grow" fxFlex.gt-xs="auto">
+              <img
+                  class="wishlist-item__img"
+                  *ngIf="item.imageUrl"
+                  [src]="item.imageUrl"
+                  [alt]="item.title">
+              <button
+                  mat-icon-button
+                  class="wishlist-item__delete-btn"
+                  (click)="deleteItemFromWishList(item.id)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+            <div fxFlex="auto" fxFlex.gt-xs="grow">
+              <mat-card-title class="wishlist-item__title"
+                              matTooltip="{{item.title}}"
+                              [matTooltipPosition]="'above'">
+                {{item.title}}
+              </mat-card-title>
+              <div class="wishlist-item__price">
+                {{item.price}}
+                <span *ngIf="item.oldPrice" class="wishlist-item__price__old">{{item.oldPrice}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </mat-tab>
     </mat-tab-group>
   </div>

@@ -5,6 +5,7 @@ import { AuthService, User } from '../authentication/services/auth.service';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { EmailAlert } from './email-alert.model';
 import { CategoryOfInterest } from './category-of-interest.model';
+import { Offer } from '../dashboard/offer.model';
 
 type Fields = 'firstName' | 'lastName' | 'photoURL';
 type FormErrors = { [u in Fields]: string };
@@ -25,6 +26,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     isPhotoURLFileChanged: boolean;
     emailAlerts: EmailAlert[];
     categoriesOfInterest: CategoryOfInterest[];
+    wishList: Offer[];
     user: User;
     form: FormGroup;
     formErrors: FormErrors = {
@@ -79,6 +81,18 @@ export class AccountComponent implements OnInit, OnDestroy {
 
         this.auth.user.subscribe(user => {
             this.user = user;
+
+            if (user) {
+                this.afs
+                    .collection('offers')
+                    .doc(user.uid)
+                    .collection('latest')
+                    .valueChanges()
+                    .subscribe((offers: Offer[]) => {
+                        this.wishList = offers.filter(offer => this.user.wishList.includes(offer.id));
+                    });
+            }
+
             this.initialGeneralProfileFormData = {
                 firstName: user.firstName,
                 lastName: user.lastName,
@@ -226,5 +240,15 @@ export class AccountComponent implements OnInit, OnDestroy {
         this.afs.collection('users')
             .doc(this.user.uid)
             .update({ categoriesOfInterest: categoriesOfInterest.sort() });
+    }
+
+    deleteItemFromWishList(id) {
+        const wishList = this.wishList
+            .filter(item => item.id !== id)
+            .map(item => item.id);
+
+        this.afs.collection('users')
+            .doc(this.user.uid)
+            .update({ wishList: wishList.sort() });
     }
 }
