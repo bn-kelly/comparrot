@@ -8,7 +8,8 @@ import { EmailAlert } from './email-alert.model';
 import { CategoryOfInterest } from './category-of-interest.model';
 import { FAQ } from './faq.model';
 import { Offer } from '../dashboard/offer.model';
-import {Project} from '../../layout/project.model';
+import { Project } from '../../layout/project.model';
+import { PersonalizationData } from './personalization-data.model';
 
 type Fields = 'firstName' | 'lastName' | 'photoURL';
 type FormErrors = { [u in Fields]: string };
@@ -31,6 +32,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     isPhotoURLFileChanged: boolean;
     emailAlerts: EmailAlert[];
     categoriesOfInterest: CategoryOfInterest[];
+    personalizationData: PersonalizationData;
     faqList: FAQ[];
     wishList: Offer[];
     user: User;
@@ -85,6 +87,35 @@ export class AccountComponent implements OnInit, OnDestroy {
                     this.updateUserCategoriesOfInterest(userCategoriesOfInterest);
                 }
             });
+
+        this.afs.collection('personalizationData').doc('latest').valueChanges().subscribe((data: PersonalizationData) => {
+            this.personalizationData = data;
+            if (this.user) {
+                const userPersonalizationData = this.personalizationData.personalizationTypes
+                    .reduce((result, type) => {
+                        result = {
+                            ...result,
+                            [type.id]: this.personalizationData.personalizationCategories
+                                .reduce((acc, category) => {
+                                    const values = this.user.personalizationData &&
+                                        this.user.personalizationData[type.id] &&
+                                        this.user.personalizationData[type.id][category.id] &&
+                                        !!this.user.personalizationData[type.id][category.id].length
+                                            ? this.user.personalizationData[type.id][category.id]
+                                            : [];
+                                    acc = {
+                                        ...acc,
+                                        [category.id]: values
+                                    };
+                                    return acc;
+                                }, {}),
+                        };
+                        return result;
+                        }, {});
+
+                this.updateUserPersonalizationData(userPersonalizationData);
+            }
+        });
 
         this.auth.user.subscribe(user => {
             this.user = user;
@@ -226,7 +257,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     emailAlertChange({ id, checked }) {
         if (this.user.emailAlerts) {
             if (checked && !this.user.emailAlerts.includes(id)) {
-                const emailAlerts = [...this.user.emailAlerts, id];
+                const emailAlerts = [...this.user.emailAlerts, id].sort();
                 this.updateUserEmailAlerts(emailAlerts);
             }
 
@@ -240,30 +271,61 @@ export class AccountComponent implements OnInit, OnDestroy {
     toggleSelectCategoryOfInterest(id) {
         const categoriesOfInterest = this.user.categoriesOfInterest.includes(id)
             ? this.user.categoriesOfInterest.filter(category => category !== id)
-            : [...this.user.categoriesOfInterest, id];
+            : [...this.user.categoriesOfInterest, id].sort();
 
         this.updateUserCategoriesOfInterest(categoriesOfInterest);
+    }
+
+    toggleSelectPersonalizationData({ type, category, value }) {
+        const personalizationData = this.user.personalizationData[type.id][category.id].includes(value.id)
+            ? {
+                ...this.user.personalizationData,
+                [type.id]: {
+                    ...this.user.personalizationData[type.id],
+                    [category.id]: this.user.personalizationData[type.id][category.id]
+                        .filter(item => item !== value.id),
+                },
+            } :
+            {
+                ...this.user.personalizationData,
+                [type.id]: {
+                    ...this.user.personalizationData[type.id],
+                    [category.id]: [
+                        ...this.user.personalizationData[type.id][category.id],
+                        value.id
+                    ].sort(),
+                },
+            };
+
+        this.updateUserPersonalizationData(personalizationData);
     }
 
     updateUserEmailAlerts(emailAlerts = []) {
         this.afs.collection('users')
             .doc(this.user.uid)
-            .update({ emailAlerts: emailAlerts.sort() });
+            .update({ emailAlerts });
     }
 
     updateUserCategoriesOfInterest(categoriesOfInterest = []) {
         this.afs.collection('users')
             .doc(this.user.uid)
-            .update({ categoriesOfInterest: categoriesOfInterest.sort() });
+            .update({ categoriesOfInterest });
+    }
+
+    updateUserPersonalizationData(personalizationData) {
+        this.afs.collection('users')
+            .doc(this.user.uid)
+            .update({ personalizationData });
     }
 
     deleteItemFromWishList(id) {
         const wishList = this.wishList
             .filter(item => item.id !== id)
-            .map(item => item.id);
+            .map(item => item.id)
+            .sort();
 
         this.afs.collection('users')
             .doc(this.user.uid)
-            .update({ wishList: wishList.sort() });
+            .update({ wishList });
     }
 }

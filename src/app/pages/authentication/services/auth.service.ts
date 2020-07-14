@@ -48,6 +48,7 @@ export interface User {
   emailAlerts?: number[];
   categoriesOfInterest?: number[];
   wishList?: string[];
+  personalizationData?: object;
 }
 
 export interface Credential {
@@ -68,6 +69,7 @@ export interface Credential {
   emailAlerts?: number[];
   categoriesOfInterest?: number[];
   wishList?: string[];
+  personalizationData?: object;
 }
 
 @Injectable()
