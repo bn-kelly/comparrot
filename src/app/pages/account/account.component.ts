@@ -318,7 +318,8 @@ export class AccountComponent implements OnInit, OnDestroy {
             .update({ personalizationData });
     }
 
-    deleteItemFromWishList(id) {
+    deleteItemFromWishList(event, id) {
+        event.preventDefault();
         const wishList = this.wishList
             .filter(item => item.id !== id)
             .map(item => item.id)

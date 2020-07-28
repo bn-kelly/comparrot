@@ -183,26 +183,36 @@
             fxLayoutGap="16px"
             *ngFor="let item of wishList"
         >
-          <div class="wishlist-item__image-container" fxFlex="grow" fxFlex.gt-xs="auto">
+          <a
+              [href]="item.buyUrl"
+              target="_blank"
+              class="wishlist-item__image-container"
+              fxFlex="grow"
+              fxFlex.gt-xs="auto"
+          >
             <img
                 class="wishlist-item__img"
                 *ngIf="item.imageUrl"
                 [src]="item.imageUrl"
                 [alt]="item.title">
-            <button
+            <span
                 mat-icon-button
                 class="wishlist-item__delete-btn"
-                (click)="deleteItemFromWishList(item.id)"
+                (click)="deleteItemFromWishList($event, item.id)"
             >
               <mat-icon>delete</mat-icon>
-            </button>
-          </div>
+            </span>
+          </a>
           <div fxFlex="auto" fxFlex.gt-xs="grow">
-            <mat-card-title class="wishlist-item__title"
-                            matTooltip="{{item.title}}"
-                            [matTooltipPosition]="'above'">
+            <a
+                [href]="item.buyUrl" 
+                target="_blank"
+                class="wishlist-item__title"
+                matTooltip="{{item.title}}"
+                [matTooltipPosition]="'above'"
+            >
               {{item.title}}
-            </mat-card-title>
+            </a>
             <div class="wishlist-item__price">
               {{item.price}}
               <span *ngIf="item.oldPrice" class="wishlist-item__price__old">{{item.oldPrice}}</span>
