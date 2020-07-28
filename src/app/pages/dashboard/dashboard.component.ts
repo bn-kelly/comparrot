@@ -150,7 +150,7 @@ export class DashboardComponent implements OnInit {
       return;
     }
     this.dashboardService.getOffersByUser(user).subscribe((offers: Offer[]) => {
-      this.offersList = offers;
+      this.offersList = offers.sort((a, b) => b.created - a.created);
       this.offers = this.offersList;
       if (Array.isArray(this.offersList)) {
         this.offers = user.isAnonymous

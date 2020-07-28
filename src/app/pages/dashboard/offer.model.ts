@@ -7,4 +7,5 @@ export class Offer {
   isBestDeal?: boolean;
   buyUrl: string;
   vendor: string;
+  created?: number;
 }
