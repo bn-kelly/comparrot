@@ -1,14 +1,8 @@
 <div class="toolbar" fxLayout="row" fxLayoutAlign="space-between">
   <div fxLayout="row" fxLayoutAlign="start center">
-    <div *ngIf="isExtension"
-         class="toolbar-logo-container"
-         [class.logged-in]="isLoggedIn"
-         [routerLink]="['/']"></div>
-    
     <fury-toolbar-sidenav-mobile-toggle *ngIf="!isExtension" (openSidenav)="openSidenav.emit()"></fury-toolbar-sidenav-mobile-toggle>
 
-    <div *ngIf="!isExtension" [fxShow.gt-sm]="topNavigation$ | async" [fxShow.xs]="false" [routerLink]="['/']" class="toolbar-logo" fxShow>
-
+    <div [fxShow.gt-sm]="topNavigation$ | async" [routerLink]="['/']" class="toolbar-logo">
       <img [src]="sanitizer.bypassSecurityTrustUrl(logoUrl)" alt="logo">
     </div>
 

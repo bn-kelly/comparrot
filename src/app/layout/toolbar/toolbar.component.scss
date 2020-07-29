@@ -29,28 +29,6 @@
     }
   }
 
-  .toolbar-logo-container {
-    cursor: pointer;
-    outline: none;
-    width: 120px;
-    height: 35px;
-    margin: 0 16px;
-    background-image: url("/assets/img/logo.svg");
-    background-position: 0 50%;
-    background-repeat: no-repeat;
-    background-size: contain;
-
-    &.logged-in {
-      width: 30px;
-      background-image: url("/assets/img/logo_mobile.svg");
-
-      @media screen and (min-width: 400px) {
-        width: 120px;
-        background-image: url("/assets/img/logo.svg");
-      }
-    }
-  }
-
   @include media-xs {
     padding-left: $spacing/3;
   }
