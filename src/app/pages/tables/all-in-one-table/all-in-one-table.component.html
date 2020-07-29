@@ -23,6 +23,7 @@
           </th>
           <td *matCellDef="let bot" class="actions-cell" mat-cell>
             <mat-checkbox color="primary"
+                          [id]="'checkbox-' + bot.id"
                           [checked]="bot.selected"
                           (click)="toggleSelectBot(bot.id)"></mat-checkbox>
           </td>
@@ -70,7 +71,7 @@
             </button>
 
             <mat-menu #actionsMenu="matMenu" yPosition="below" xPosition="before">
-              <button (click)="updateBot(bot)" mat-menu-item>
+              <button (click)="updateBot($event, bot)" mat-menu-item>
                 <span>Modify</span>
               </button>
               <button (click)="deleteBot(bot)" mat-menu-item>
@@ -81,7 +82,7 @@
         </ng-container>
 
         <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
-        <tr (click)="toggleSelectBot(bot.id)"
+        <tr (click)="updateBot($event, bot)"
             [ngClass]="{'error': bot.lastSeenStatus === 'error', 'warning': bot.lastSeenStatus === 'warning'}"
             *matRowDef="let bot; columns: visibleColumns;"
             class="clickable route-animations-elements"

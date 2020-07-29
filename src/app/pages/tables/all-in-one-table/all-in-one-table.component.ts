@@ -93,7 +93,15 @@ export class AllInOneTableComponent implements OnInit, AfterViewInit, OnDestroy 
     });
   }
 
-  updateBot(bot) {
+  updateBot(event, bot) {
+    const isCheckboxClicked = Array.isArray(event.path) &&
+        !!event.path.length &&
+        event.path[0].classList.contains('mat-checkbox-inner-container');
+
+    if (isCheckboxClicked) {
+      return;
+    }
+
     this.dialog.open(BotCreateUpdateComponent, {
       data: bot
     }).afterClosed().subscribe((data) => {
