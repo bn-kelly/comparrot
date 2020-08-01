@@ -84,9 +84,14 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
       const shouldSaveProductToDB = !!productTitleElement;
 
       if (shouldSaveProductToDB) {
+        const priceDivider = ' - ';
         const title = productTitleElement.innerText;
-        const price = productPriceElement ? productPriceElement.innerText : '';
+        const originalPrice = productPriceElement ? productPriceElement.innerText : '';
         const image = productImageElement ? productImageElement.src : '';
+
+        const price = originalPrice.includes(priceDivider)
+          ? getNumericPriceFromString(originalPrice.split(priceDivider)[0])
+          : getNumericPriceFromString(originalPrice);
 
         const product = {
           title,
@@ -117,6 +122,9 @@ const getElementBySelector = (selector = '') => {
         })
         .filter(Boolean)[0];
 };
+
+const getNumericPriceFromString = (price = '') =>
+  Number(price.replace(/[^0-9\.-]+/g, ''));
 
 if (!location.ancestorOrigins.contains(extensionOrigin)) {
   const iframe = document.createElement('iframe');
