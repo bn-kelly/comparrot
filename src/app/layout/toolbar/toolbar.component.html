@@ -2,7 +2,10 @@
   <div fxLayout="row" fxLayoutAlign="start center">
     <fury-toolbar-sidenav-mobile-toggle *ngIf="!isExtension" (openSidenav)="openSidenav.emit()"></fury-toolbar-sidenav-mobile-toggle>
 
-    <div [fxShow.gt-sm]="topNavigation$ | async" [routerLink]="['/']" class="toolbar-logo">
+    <div
+      [fxShow]="isExtension || (topNavigation$ | async)"
+      [routerLink]="['/']" class="toolbar-logo"
+    >
       <img [src]="sanitizer.bypassSecurityTrustUrl(logoUrl)" alt="logo">
     </div>
 
