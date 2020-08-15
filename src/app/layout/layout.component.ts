@@ -27,6 +27,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   quickPanelOpen: boolean;
   showConfigPanel: boolean;
   vendors: Vendor[];
+  isExtension: boolean;
 
   sideNavigation$ = this.themeService.config$.pipe(map(config => config.navigation === 'side'));
   topNavigation$ = this.themeService.config$.pipe(map(config => config.navigation === 'top'));
@@ -48,7 +49,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
               private router: Router) {}
 
   ngOnInit() {
-    const isExtension = !!window.chrome && !!window.chrome.extension;
+    this.isExtension = !!window.chrome && !!window.chrome.extension;
 
     this.afs.collection('vendors').valueChanges().subscribe((vendors: Vendor[]) => {
       this.vendors = vendors;
@@ -83,7 +84,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
       this.showConfigPanel = !!isAdmin;
 
-      if (projectName && !isExtension) {
+      if (projectName && !this.isExtension) {
         this.afs.collection('projects').doc(projectName).valueChanges().subscribe((project: Project) => {
           if (!project) {
             return;
@@ -129,7 +130,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
         });
       }
 
-      if (isExtension && !!uid) {
+      if (this.isExtension && !!uid) {
         window.chrome.tabs.getSelected(null, tab => {
           window.chrome.tabs.sendMessage(tab.id, {
             action: 'try-to-scrape-data',
