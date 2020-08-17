@@ -101,7 +101,7 @@ export class ForgotPasswordComponent implements OnInit {
 
       if (['auth/user-not-found'].includes(code)) {
         this.form.controls.email.setErrors({ email: message });
-        this.formErrors.email = message;
+        this.formErrors.email = 'We\'re sorry. We weren\'t able to identify you given the information provided. ';
       }
 
       if (!response) {
