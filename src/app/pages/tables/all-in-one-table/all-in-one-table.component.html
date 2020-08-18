@@ -56,7 +56,10 @@
               <div *ngIf="column.property === 'icon'">
                 <mat-icon>{{bot.icon}}</mat-icon>
               </div>
-              <div *ngIf="!['icon', 'status'].includes(column.property)">{{bot[column.property]}}</div>
+              <div *ngIf="column.property === 'lastSeen'">
+                <div>{{bot.lastSeen | dateAgo}}</div>
+              </div>
+              <div *ngIf="!['icon', 'status', 'lastSeen'].includes(column.property)">{{bot[column.property]}}</div>
             </td>
           </ng-container>
         </ng-container>

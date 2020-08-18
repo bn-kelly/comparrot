@@ -9,6 +9,7 @@ import { AllInOneTableComponent } from './all-in-one-table.component';
 import { BotCreateUpdateModule } from './bot-create-update-delete/bot-create-update.module';
 import { BotDeleteModule } from './bot-create-update-delete/bot-delete.module';
 import { FurySharedModule } from '../../../../@fury/fury-shared.module';
+import { DateAgoPipe } from '../../../pipes/date-ago.pipe';
 
 @NgModule({
   imports: [
@@ -24,7 +25,7 @@ import { FurySharedModule } from '../../../../@fury/fury-shared.module';
     BotDeleteModule,
     BreadcrumbsModule
   ],
-  declarations: [AllInOneTableComponent],
+  declarations: [AllInOneTableComponent, DateAgoPipe],
   exports: [AllInOneTableComponent]
 })
 export class AllInOneTableModule {
