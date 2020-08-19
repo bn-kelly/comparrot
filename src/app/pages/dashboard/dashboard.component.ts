@@ -27,7 +27,6 @@ export class DashboardComponent implements OnInit {
   private static isInitialLoad = true;
   isExtension: boolean;
   user: User;
-  offersList: Offer[];
   isLoggedIn: boolean;
   offers: Offer[];
   salesData$: Observable<ChartData>;
@@ -150,15 +149,7 @@ export class DashboardComponent implements OnInit {
       return;
     }
     this.dashboardService.getOffersByUser(user).subscribe((offers: Offer[]) => {
-      this.offersList = offers.sort((a, b) => b.created - a.created);
-      this.offers = this.offersList;
-      if (Array.isArray(this.offersList)) {
-        this.offers = user.isAnonymous
-            ? this.offersList[0]
-                ? [this.offersList[0]]
-                : []
-            : this.offersList;
-      }
+      this.offers = user.isAnonymous && offers.length ? [offers[0]] : offers;
     });
   }
 
