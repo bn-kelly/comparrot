@@ -19,15 +19,68 @@
   }
 }
 
-
 .logo {
   cursor: pointer;
   outline: none;
-  width: 80px;
-  height: 80px;
+  width: 200px;
+  height: 60px;
   margin-bottom: -#{$padding};
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: contain;
 }
 
+.form-login {
+  h4 {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 27px;
+    margin: 30px auto;
+    color: #1A1B29;
+  }
+  .mat-form-field-wrapper .mat-form-field-flex {
+    background-color: #EFF1F3;
+    border-radius: 10px;
+    padding: 0.55em 0.75em 0 1.35em;
+  }
+  .mat-input-element {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .mat-form-field-label {
+    color: #153141;
+  }
+  .mat-form-field-underline,
+  .mat-form-field-underline::before {
+    display: none;
+  }
+  .mat-checkbox .mat-checkbox-frame {
+    border: 1.5px solid #EFF1F3;
+    border-radius: 4px;
+    margin-right: 12px;
+    width: 18px;
+    height: 18px;
+  }
+  
+  .mat-checkbox-checked .mat-checkbox-background {
+    background-color: #408bd3;  
+    border-radius: 4px;
+    margin-right: 12px;
+    width: 18px;
+    height: 18px;
+  }
+  a.caption {
+    text-decoration: none;
+  }
+  
+  .form-button-login {
+    background: #408BD3;
+    border-radius: 25px;
+  }
+  
+  p.secondary-text a {
+    color: #408bd3;
+    text-decoration: none;
+  }
+}
