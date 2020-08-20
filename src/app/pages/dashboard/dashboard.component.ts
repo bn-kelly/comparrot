@@ -149,7 +149,7 @@ export class DashboardComponent implements OnInit {
       return;
     }
     this.dashboardService.getOffersByUser(user).subscribe((offers: Offer[]) => {
-      this.offers = user.isAnonymous && offers.length ? [offers[0]] : offers;
+      this.offers = user.isAnonymous && offers.length ? [offers[0]] : offers || [];
     });
   }
 
