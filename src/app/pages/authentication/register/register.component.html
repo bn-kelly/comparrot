@@ -3,17 +3,21 @@
     <div class="header padding" fxLayout="column" fxLayoutAlign="center center">
       <div class="logo" [routerLink]="['/']" [ngStyle]="{'background-image': 'url(' + logoUrl + ')'}"></div>
     </div>
-    <form (ngSubmit)="signup()" class="padding" fxLayout="column" fxLayoutGap="16px" [formGroup]="form">
+    <form (ngSubmit)="signup()" class="form-signup padding" fxLayout="column" fxLayoutGap="16px" [formGroup]="form">
+      <fury-oauth-component></fury-oauth-component>
+      <div class="text-line">
+        <h4>or</h4>
+      </div>
       <div fxFlex="auto" fxLayout="column">
         <mat-form-field fxFlex="grow">
-          <mat-label>Name</mat-label>
+          <mat-label>Enter your Name</mat-label>
           <input matInput required formControlName="name">
           <mat-error *ngIf="formErrors.name">{{ formErrors.name }}</mat-error>
           <mat-error *ngIf="form.get('name').hasError('required') && !formErrors.name">Please provide your name</mat-error>
         </mat-form-field>
 
         <mat-form-field fxFlex="grow">
-          <mat-label>E-Mail</mat-label>
+          <mat-label>Enter your Email Address</mat-label>
           <input matInput required formControlName="email">
           <mat-error *ngIf="formErrors.email">{{ formErrors.email }}</mat-error>
           <mat-error *ngIf="form.get('email').hasError('required') && !formErrors.email">Please provide your email</mat-error>
@@ -26,7 +30,6 @@
             <mat-icon *ngIf="visible">visibility</mat-icon>
             <mat-icon *ngIf="!visible">visibility_off</mat-icon>
           </button>
-          <mat-hint>Click the eye to toggle visibility</mat-hint>
           <mat-error *ngIf="formErrors.password">{{ formErrors.password }}</mat-error>
           <mat-error *ngIf="form.get('password').hasError('required') && !formErrors.password">Please provide your password</mat-error>
         </mat-form-field>
@@ -38,22 +41,20 @@
             <mat-icon *ngIf="visible">visibility</mat-icon>
             <mat-icon *ngIf="!visible">visibility_off</mat-icon>
           </button>
-          <mat-hint>Please repeat your password from above</mat-hint>
           <mat-error *ngIf="formErrors.passwordConfirm">{{ formErrors.passwordConfirm }}</mat-error>
           <mat-error *ngIf="form.get('passwordConfirm').hasError('required') && !formErrors.passwordConfirm">Please repeat your password</mat-error>
         </mat-form-field>
       </div>
 
       <div fxLayout="row" fxLayoutAlign="center center">
-        <mat-checkbox class="caption">I accept the <a href="#">terms and conditions.</a></mat-checkbox>
+        <mat-checkbox class="caption">ToS + Privacy Policy acceptance text goes <br /><a target="_blank" href="https://comparrot.io/terms.html">here.</a> Be sure to accept the terms yo.</mat-checkbox>
       </div>
-      <button type="submit" color="primary" mat-raised-button>
-        CREATE ACCOUNT
+      <button type="submit" class="form-button-signup" color="primary" mat-raised-button>
+        REGISTER
       </button>
       <p class="secondary-text text-center">
-        <a [routerLink]="['/login']">Sign in</a> or register with
+        Already have an account? <a [routerLink]="['/login']">Login</a>
       </p>
-      <fury-oauth-component></fury-oauth-component>
     </form>
   </div>
 </div>

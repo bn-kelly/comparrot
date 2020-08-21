@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.animation';
@@ -14,7 +14,8 @@ type FormErrors = { [u in UserFields]: string };
   selector: 'fury-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
-  animations: [fadeInUpAnimation]
+  animations: [fadeInUpAnimation],
+  encapsulation: ViewEncapsulation.None
 })
 export class RegisterComponent implements OnInit {
 
@@ -84,7 +85,7 @@ export class RegisterComponent implements OnInit {
           }
         });
       } else {
-        this.logoUrl = 'assets/img/logo_mobile.svg';
+        this.logoUrl = 'assets/img/logo.svg';
         if (!isExtension) {
           Array.from(document.getElementsByTagName('link'))
               .forEach(link => {
