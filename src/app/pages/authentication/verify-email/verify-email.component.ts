@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Router } from '@angular/router';
 
 import { AuthService } from '../services/auth.service';
 import { ThemeService } from '../../../../@fury/services/theme.service';
 import { Project } from '../../../layout/project.model';
-import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'fury-verify-email',
@@ -22,10 +20,7 @@ export class VerifyEmailComponent implements OnInit {
     private authService: AuthService,
     private afs: AngularFirestore,
     private themeService: ThemeService,
-    private router: Router,
-    ) { 
-      console.log(this.authService.currentUser);
-    }
+    ) { }
 
   ngOnInit(): void {
     this.user = this.authService.currentUser;
