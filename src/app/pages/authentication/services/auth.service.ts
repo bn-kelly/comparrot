@@ -189,6 +189,9 @@ export class AuthService {
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
+        if (!result || !result.user) {
+          return;
+        }
         if (result.user.emailVerified) {
           this.notify.update('Welcome back!', 'success');
           this.router.navigate(['/']);
