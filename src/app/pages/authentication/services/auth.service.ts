@@ -179,7 +179,8 @@ export class AuthService {
       .then(credential => {
         this.notify.update('Welcome new user!', 'success');
         this.updateUserData(credential.user);
-        this.router.navigate(['/']);
+        this.sendVerificationMail();
+        this.router.navigate(['/verify-email']);
       })
       .catch(error => this.handleError(error));
   }
@@ -187,11 +188,24 @@ export class AuthService {
   emailLogin(email: string, password: string) {
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        this.router.navigate(['/']);
-        this.notify.update('Welcome back!', 'success');
+      .then((result) => {
+        if (result.user.emailVerified) {
+          this.notify.update('Welcome back!', 'success');
+          this.router.navigate(['/']);
+        } else {
+          this.sendVerificationMail();
+          this.notify.update('Please validate your email address. Kindly check your inbox.', 'error');
+          this.router.navigate(['/verify-email']);
+        }
       })
       .catch(error => this.handleError(error));
+  }
+
+  // Send email verfificaiton when new user sign up
+  async sendVerificationMail() {
+    if (!this.currentUser.emailVerified) {
+      return (await this.afAuth.currentUser).sendEmailVerification();
+    }
   }
 
   // Sends email allowing user to reset password

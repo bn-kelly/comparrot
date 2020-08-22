@@ -1,0 +1,27 @@
+<div class="background-pattern page" fxLayout="column" fxLayoutAlign="center center">
+    <div [@fadeInUp] class="card border-radius elevation">
+      <div class="header padding" fxLayout="column" fxLayoutAlign="center center">
+        <div class="logo" [routerLink]="['/']" [ngStyle]="{'background-image': 'url(' + logoUrl + ')'}"></div>
+      </div>
+      <div class="padding content">
+        <h3>Thank You for Registering</h3>
+
+        <div class="formGroup" *ngIf="user">
+            <p class="text-center">We have sent a confirmation email to <strong>{{user.email}}</strong>.</p>
+            <p class="text-center">Please check your email and click on the link to verfiy your email address.</p>
+        </div>
+
+        <button type="button" color="primary" mat-raised-button
+            [routerLink]="['/login']"
+        >
+            Go back to login
+        </button>
+        
+        <p class="secondary-text text-center">
+          <span>
+            <a (click)="sendVerificationMail()">Resend</a> Verification Email
+          </span>
+        </p>
+    </div>
+  </div>
+</div>

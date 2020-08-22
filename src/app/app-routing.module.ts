@@ -18,6 +18,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/authentication/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule),
   },
   {
+    path: 'verify-email',
+    loadChildren: () => import('./pages/authentication/verify-email/verify-email.module').then(m => m.VerifyEmailModule),
+  },
+  {
     path: 'coming-soon',
     loadChildren: () => import('./pages/coming-soon/coming-soon.module').then(m => m.ComingSoonModule),
   },
