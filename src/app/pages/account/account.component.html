@@ -135,36 +135,38 @@
         <ng-template matTabContent>
           <mat-tab-group animationDuration="0ms" dynamicHeight *ngIf="index === 1">
             <mat-tab
-                *ngFor="let type of personalizationData.personalizationTypes"
-                label={{type.value}}
+                *ngFor="let type of personalizationData.data | orderBy:'order'"
+                label={{type.title}}
             >
               <div class="tab-content">
                 <mat-accordion>
                   <mat-expansion-panel
-                      *ngFor="let category of personalizationData.personalizationCategories"
+                      *ngFor="let category of type.categories | orderBy:'order'"
                       (opened)="panelOpenState = true"
                       (closed)="panelOpenState = false">
                     <mat-expansion-panel-header>
                       <mat-panel-title>
-                        {{category.title}}
+                        <strong>{{category.title}}</strong>
                       </mat-panel-title>
                     </mat-expansion-panel-header>
-                    <div>
+                    <div *ngFor="let size of category.sizes | orderBy:'order'">
+                      <h4>{{size.title}}</h4>
                       <button
+                          *ngFor="let value of size.values | orderBy:'order'"
                           mat-button
-                          *ngFor="let value of category.values"
                           color="primary"
-                          [ngClass]="user.personalizationData[type.id][category.id].includes(value.id)
+                          [ngClass]="user.personalizationData[type.id][category.id][size.id].includes(value.id)
                             ? 'mat-raised-button'
                             : 'mat-stroked-button'"
                           class="personalization-data-button"
                           (click)="toggleSelectPersonalizationData({
                             type: type,
                             category: category,
+                            size: size,
                             value: value
                           })"
                       >
-                        {{value.value}}
+                        {{value.title}}
                       </button>
                     </div>
                   </mat-expansion-panel>

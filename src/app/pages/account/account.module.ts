@@ -5,6 +5,7 @@ import { MaterialModule } from '../../../@fury/shared/material-components.module
 import { MatTabsModule } from '@angular/material/tabs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { OrderByPipe } from '../../pipes/order-by.pipe';
 
 import { AccountRoutingModule } from './account-routing.module';
 import { AccountComponent } from './account.component';
@@ -21,6 +22,7 @@ import { AccountComponent } from './account.component';
     ],
     declarations: [
         AccountComponent,
+        OrderByPipe,
     ],
 })
 export class AccountModule {

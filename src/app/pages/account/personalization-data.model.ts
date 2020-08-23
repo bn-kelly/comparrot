@@ -1,14 +1,22 @@
 export class PersonalizationData {
-    personalizationTypes: {
-        id: number;
-        value: string;
-    }[];
-    personalizationCategories: {
-        id: number;
-        title: string;
-        values: {
-            id: number;
-            value: string;
-        }[];
+    data: {
+        id: number,
+        order: number,
+        title: string,
+        categories: {
+            id: number,
+            order: number,
+            title: string,
+            sizes: {
+                id: number,
+                order: number,
+                title: string,
+                values: {
+                    id: number,
+                    order: number,
+                    title: string,
+                }[]
+            }[],
+        }[],
     }[];
 }
