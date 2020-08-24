@@ -91,27 +91,33 @@ export class AccountComponent implements OnInit, OnDestroy {
         this.afs.collection('personalizationData').doc('latest').valueChanges().subscribe((data: PersonalizationData) => {
             this.personalizationData = data;
             if (this.user) {
-                const userPersonalizationData = this.personalizationData.personalizationTypes
-                    .reduce((result, type) => {
-                        result = {
-                            ...result,
-                            [type.id]: this.personalizationData.personalizationCategories
-                                .reduce((acc, category) => {
+                const userPersonalizationData = this.personalizationData.data.reduce((typesAcc, type) => {
+                    typesAcc = {
+                        ...typesAcc,
+                        [type.id]: type.categories.reduce((categoriesAcc, category) => {
+                            categoriesAcc = {
+                                ...categoriesAcc,
+                                [category.id]: category.sizes.reduce((sizesAcc, size) => {
                                     const values = this.user.personalizationData &&
-                                        this.user.personalizationData[type.id] &&
-                                        this.user.personalizationData[type.id][category.id] &&
-                                        !!this.user.personalizationData[type.id][category.id].length
-                                            ? this.user.personalizationData[type.id][category.id]
-                                            : [];
-                                    acc = {
-                                        ...acc,
-                                        [category.id]: values
+                                    this.user.personalizationData[type.id] &&
+                                    this.user.personalizationData[type.id][category.id] &&
+                                    this.user.personalizationData[type.id][category.id][size.id] &&
+                                    !!this.user.personalizationData[type.id][category.id][size.id].length
+                                        ? this.user.personalizationData[type.id][category.id][size.id]
+                                        : [];
+
+                                    sizesAcc = {
+                                        ...sizesAcc,
+                                        [size.id]: values,
                                     };
-                                    return acc;
+                                    return sizesAcc;
                                 }, {}),
-                        };
-                        return result;
-                        }, {});
+                            };
+                            return categoriesAcc;
+                        }, {}),
+                    };
+                    return typesAcc;
+                }, {});
 
                 this.updateUserPersonalizationData(userPersonalizationData);
             }
@@ -276,26 +282,33 @@ export class AccountComponent implements OnInit, OnDestroy {
         this.updateUserCategoriesOfInterest(categoriesOfInterest);
     }
 
-    toggleSelectPersonalizationData({ type, category, value }) {
-        const personalizationData = this.user.personalizationData[type.id][category.id].includes(value.id)
-            ? {
-                ...this.user.personalizationData,
-                [type.id]: {
-                    ...this.user.personalizationData[type.id],
-                    [category.id]: this.user.personalizationData[type.id][category.id]
-                        .filter(item => item !== value.id),
-                },
-            } :
-            {
-                ...this.user.personalizationData,
-                [type.id]: {
-                    ...this.user.personalizationData[type.id],
-                    [category.id]: [
-                        ...this.user.personalizationData[type.id][category.id],
-                        value.id
-                    ].sort(),
-                },
-            };
+    toggleSelectPersonalizationData({ type, category, size, value }) {
+        const personalizationData = this.user.personalizationData[type.id][category.id][size.id]
+            .includes(value.id) ?
+                {
+                    ...this.user.personalizationData,
+                    [type.id]: {
+                        ...this.user.personalizationData[type.id],
+                        [category.id]: {
+                            ...this.user.personalizationData[type.id][category.id],
+                            [size.id]: this.user.personalizationData[type.id][category.id][size.id]
+                                .filter(item => item !== value.id)
+                        },
+                    },
+                } :
+                {
+                    ...this.user.personalizationData,
+                    [type.id]: {
+                        ...this.user.personalizationData[type.id],
+                        [category.id]: {
+                            ...this.user.personalizationData[type.id][category.id],
+                            [size.id]: [
+                                ...this.user.personalizationData[type.id][category.id][size.id],
+                                value.id
+                            ].sort((a, b) => a - b),
+                        },
+                    },
+                };
 
         this.updateUserPersonalizationData(personalizationData);
     }
