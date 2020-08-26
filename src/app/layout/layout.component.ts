@@ -77,7 +77,6 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
       if (!user || user.isAnonymous) {
         this.showConfigPanel = false;
-        return;
       }
 
       const { uid, isAdmin, projectName } = user;
