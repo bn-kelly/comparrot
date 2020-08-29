@@ -1,5 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  FormGroupDirective,
+  Validators,
+} from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
 import { Observable } from 'rxjs';
 import { InboxService } from '../inbox.service';
@@ -9,10 +21,9 @@ import { MailLabel } from '../shared/mail-label.interface';
 @Component({
   selector: 'fury-inbox-mail-label-list',
   templateUrl: './inbox-mail-label-list.component.html',
-  styleUrls: ['./inbox-mail-label-list.component.scss']
+  styleUrls: ['./inbox-mail-label-list.component.scss'],
 })
 export class InboxMailLabelListComponent implements OnInit {
-
   @Input() icon = 'label';
   @Input() availableLabels: MailLabel[];
   @Input() labels: MailLabel[];
@@ -24,21 +35,21 @@ export class InboxMailLabelListComponent implements OnInit {
 
   @ViewChild(FormGroupDirective, { static: true }) form: FormGroupDirective;
 
-  constructor(private inboxService: InboxService,
-              private fb: FormBuilder) {
-  }
+  constructor(private inboxService: InboxService, private fb: FormBuilder) {}
 
   ngOnInit() {
     this.labelGroup = this.fb.group({
       color: [null, Validators.required],
-      name: [null, Validators.required]
+      name: [null, Validators.required],
     });
 
     this.colors$ = this.inboxService.getLabelColors();
   }
 
   selectLabel(selectChange: MatSelectChange, label: MailLabel) {
-    selectChange.value ? this.addLabel.emit(label) : this.removeLabel.emit(label);
+    selectChange.value
+      ? this.addLabel.emit(label)
+      : this.removeLabel.emit(label);
   }
 
   selectLabelButton(clickEvent: Event, label: MailLabel) {
@@ -46,7 +57,9 @@ export class InboxMailLabelListComponent implements OnInit {
       clickEvent.stopPropagation();
     }
 
-    this.labelSelected(label) ? this.removeLabel.emit(label) : this.addLabel.emit(label);
+    this.labelSelected(label)
+      ? this.removeLabel.emit(label)
+      : this.addLabel.emit(label);
   }
 
   labelSelected(label: MailLabel) {

@@ -4,17 +4,14 @@ import * as moment from 'moment';
 @Component({
   selector: 'fury-quickpanel',
   templateUrl: './quickpanel.component.html',
-  styleUrls: ['./quickpanel.component.scss']
+  styleUrls: ['./quickpanel.component.scss'],
 })
 export class QuickpanelComponent implements OnInit {
-
   todayDay: string;
   todayDate: string;
   todayDateSuffix: string;
   todayMonth: string;
   isExtension: boolean;
-
-  constructor() { }
 
   ngOnInit() {
     this.isExtension = !!window.chrome && !!window.chrome.extension;
@@ -25,5 +22,4 @@ export class QuickpanelComponent implements OnInit {
     this.todayDateSuffix = this.todayDateSuffix.replace(/[0-9]/g, '');
     this.todayMonth = moment().format('MMMM');
   }
-
 }

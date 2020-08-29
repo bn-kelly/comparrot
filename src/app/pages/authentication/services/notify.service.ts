@@ -10,7 +10,6 @@ export interface Msg {
 
 @Injectable()
 export class NotifyService {
-
   private _msgSource = new Subject<Msg | null>();
 
   msg = this._msgSource.asObservable();

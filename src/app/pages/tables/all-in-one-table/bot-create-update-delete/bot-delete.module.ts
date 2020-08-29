@@ -21,11 +21,10 @@ import { BotDeleteComponent } from './bot-delete.component';
     MatButtonModule,
     MatIconModule,
     MatRadioModule,
-    MatSelectModule
+    MatSelectModule,
   ],
   declarations: [BotDeleteComponent],
   entryComponents: [BotDeleteComponent],
-  exports: [BotDeleteComponent]
+  exports: [BotDeleteComponent],
 })
-export class BotDeleteModule {
-}
+export class BotDeleteModule {}

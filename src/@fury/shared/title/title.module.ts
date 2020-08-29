@@ -3,11 +3,8 @@ import { CommonModule } from '@angular/common';
 import { TitleDirective } from './title.directive';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   declarations: [TitleDirective],
-  exports: [TitleDirective]
+  exports: [TitleDirective],
 })
-export class TitleModule {
-}
+export class TitleModule {}

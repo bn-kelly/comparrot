@@ -23,10 +23,9 @@ import { DateAgoPipe } from '../../../pipes/date-ago.pipe';
     ListModule,
     BotCreateUpdateModule,
     BotDeleteModule,
-    BreadcrumbsModule
+    BreadcrumbsModule,
   ],
   declarations: [AllInOneTableComponent, DateAgoPipe],
-  exports: [AllInOneTableComponent]
+  exports: [AllInOneTableComponent],
 })
-export class AllInOneTableModule {
-}
+export class AllInOneTableModule {}

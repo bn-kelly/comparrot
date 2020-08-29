@@ -1,15 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import escape from 'lodash-es/escape';
 
 @Component({
   selector: 'fury-lists',
   templateUrl: './lists.component.html',
-  styleUrls: ['./lists.component.scss']
+  styleUrls: ['./lists.component.scss'],
 })
-export class ListsComponent implements OnInit {
-
-  listHTML =
-    escape(`<mat-list class="list mat-elevation-z1">
+export class ListsComponent {
+  listHTML = escape(`<mat-list class="list mat-elevation-z1">
   <h3 mat-subheader>Contacts</h3>
   <mat-list-item>
     <img mat-list-avatar src="assets/img/avatars/1.jpg">
@@ -54,9 +52,4 @@ export class ListsComponent implements OnInit {
     </p>
   </mat-list-item>
 </mat-list>`);
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 }

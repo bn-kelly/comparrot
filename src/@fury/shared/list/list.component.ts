@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ListColumn } from './list-column.model';
@@ -7,10 +16,9 @@ import { ListColumn } from './list-column.model';
   selector: 'fury-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class ListComponent implements AfterViewInit {
-
   @Input() name: string;
   @Input() columns: ListColumn[];
 
@@ -19,17 +27,13 @@ export class ListComponent implements AfterViewInit {
 
   @Input() hideHeader: boolean;
 
-  constructor() {
-  }
-
   ngAfterViewInit() {
     if (!this.hideHeader) {
-      fromEvent(this.filter.nativeElement, 'keyup').pipe(
-        distinctUntilChanged(),
-        debounceTime(150)
-      ).subscribe(() => {
-        this.filterChange.emit(this.filter.nativeElement.value);
-      });
+      fromEvent(this.filter.nativeElement, 'keyup')
+        .pipe(distinctUntilChanged(), debounceTime(150))
+        .subscribe(() => {
+          this.filterChange.emit(this.filter.nativeElement.value);
+        });
     }
   }
 

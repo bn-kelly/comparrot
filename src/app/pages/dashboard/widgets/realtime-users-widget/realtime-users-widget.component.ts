@@ -1,18 +1,27 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  ViewChild,
+} from '@angular/core';
 import * as Chart from 'chart.js';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import defaultsDeep from 'lodash-es/defaultsDeep';
 import { Observable } from 'rxjs';
 import { defaultChartOptions } from '../../../../../@fury/shared/chart-widget/chart-widget-defaults';
-import { RealtimeUsersWidgetData, RealtimeUsersWidgetPages } from './realtime-users-widget.interface';
+import {
+  RealtimeUsersWidgetData,
+  RealtimeUsersWidgetPages,
+} from './realtime-users-widget.interface';
 
 @Component({
   selector: 'fury-realtime-users-widget',
   templateUrl: './realtime-users-widget.component.html',
-  styleUrls: ['./realtime-users-widget.component.scss']
+  styleUrls: ['./realtime-users-widget.component.scss'],
 })
 export class RealtimeUsersWidgetComponent implements AfterViewInit {
-
   @Input() pages$: Observable<RealtimeUsersWidgetPages>;
   @Input() data$: Observable<RealtimeUsersWidgetData>;
 
@@ -23,30 +32,35 @@ export class RealtimeUsersWidgetComponent implements AfterViewInit {
 
   currentUsers: number;
 
-  constructor(private cd: ChangeDetectorRef) {
-  }
+  constructor(private cd: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
-    this.chart = new Chart(this.canvas.nativeElement.getContext('2d'), <ChartConfiguration>{
+    this.chart = new Chart(this.canvas.nativeElement.getContext('2d'), <
+      ChartConfiguration
+    >{
       type: 'bar',
       data: {
         labels: [],
-        datasets: [{
-          data: []
-        }]
+        datasets: [
+          {
+            data: [],
+          },
+        ],
       },
-      options: defaultsDeep({
-        tooltips: {
-          mode: 'index',
-          intersect: false,
-        },
-        hover: {
-          intersect: true
-        }
-      } as ChartOptions, defaultChartOptions)
+      options: defaultsDeep(
+        {
+          tooltips: {
+            mode: 'index',
+            intersect: false,
+          },
+          hover: {
+            intersect: true,
+          },
+        } as ChartOptions,
+        defaultChartOptions,
+      ),
     });
 
-    let first = true;
     this.data$.subscribe(newData => {
       const oldData = this.chart.data.datasets[0].data as any;
       this.addData(newData);

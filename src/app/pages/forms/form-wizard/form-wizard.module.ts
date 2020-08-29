@@ -14,7 +14,6 @@ import { FurySharedModule } from '../../../../@fury/fury-shared.module';
     ReactiveFormsModule,
     MaterialModule,
   ],
-  declarations: [FormWizardComponent]
+  declarations: [FormWizardComponent],
 })
-export class FormWizardModule {
-}
+export class FormWizardModule {}

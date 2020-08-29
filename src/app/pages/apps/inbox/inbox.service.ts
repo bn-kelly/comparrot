@@ -7,7 +7,6 @@ import { Mail } from './shared/mail.interface';
 
 @Injectable()
 export class InboxService {
-
   mails = inboxMails;
   availableLabels: MailLabel[] = [];
 
@@ -26,19 +25,19 @@ export class InboxService {
 
   getStarred() {
     return of(this.mails).pipe(
-      map(mails => mails.filter(mail => mail.starred))
+      map(mails => mails.filter(mail => mail.starred)),
     );
   }
 
   getGroup(group: string) {
     return of(this.mails).pipe(
-      map(mails => mails.filter(mail => mail.group === group))
+      map(mails => mails.filter(mail => mail.group === group)),
     );
   }
 
   getMail(id: number | string) {
     return of(this.mails).pipe(
-      map(mails => mails.find(mail => mail.id === id))
+      map(mails => mails.find(mail => mail.id === id)),
     );
   }
 
@@ -47,7 +46,6 @@ export class InboxService {
     if (foundMail) {
       foundMail.starred = !mail.starred;
     }
-
   }
 
   addLabel(label: MailLabel, mail: Mail) {
@@ -96,7 +94,7 @@ export class InboxService {
   }
 
   find(mail: Mail) {
-    return this.mails.find((existingMail) => existingMail.id === mail.id);
+    return this.mails.find(existingMail => existingMail.id === mail.id);
   }
 
   getLabelColors() {

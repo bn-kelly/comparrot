@@ -1,4 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.animation';
@@ -15,30 +20,29 @@ type FormErrors = { [u in UserFields]: string };
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
   animations: [fadeInUpAnimation],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class RegisterComponent implements OnInit {
-
   form: FormGroup;
   formErrors: FormErrors = {
-    'name': '',
-    'email': '',
-    'password': '',
-    'passwordConfirm': '',
+    name: '',
+    email: '',
+    password: '',
+    passwordConfirm: '',
   };
   validationMessages = {
-    'name': {
-      'required': 'Name is required',
+    name: {
+      required: 'Name is required',
     },
-    'email': {
-      'required': 'Email is required.',
-      'email': 'Email must be a valid email',
+    email: {
+      required: 'Email is required.',
+      email: 'Email must be a valid email',
     },
-    'password': {
-      'required': 'Password is required.',
-      'pattern': 'Password must be include at one letter and one number.',
-      'minlength': 'Password must be at least 4 characters long.',
-      'maxlength': 'Password cannot be more than 40 characters long.',
+    password: {
+      required: 'Password is required.',
+      pattern: 'Password must be include at one letter and one number.',
+      minlength: 'Password must be at least 4 characters long.',
+      maxlength: 'Password cannot be more than 40 characters long.',
     },
   };
 
@@ -48,58 +52,64 @@ export class RegisterComponent implements OnInit {
   project: Project;
   themeName: string;
 
-  constructor(private router: Router,
-              private fb: FormBuilder,
-              private cd: ChangeDetectorRef,
-              private afs: AngularFirestore,
-              private auth: AuthService,
-              private themeService: ThemeService,
-  ) { }
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
+    private cd: ChangeDetectorRef,
+    private afs: AngularFirestore,
+    private auth: AuthService,
+    private themeService: ThemeService,
+  ) {}
 
   ngOnInit() {
     const isExtension = !!window.chrome && !!window.chrome.extension;
 
     this.buildForm();
 
-    this.themeService.theme$.subscribe(([prevTheme, currentTheme]) => {
+    this.themeService.theme$.subscribe(([currentTheme]) => {
       this.themeName = currentTheme.replace('fury-', '');
       this.handleLogoUrl();
     });
 
     this.auth.user.subscribe(user => {
       if (user && user.projectName) {
-        this.afs.collection('projects').doc(user.projectName).valueChanges().subscribe((project: Project) => {
-          this.project = project;
-          this.handleLogoUrl();
+        this.afs
+          .collection('projects')
+          .doc(user.projectName)
+          .valueChanges()
+          .subscribe((project: Project) => {
+            this.project = project;
+            this.handleLogoUrl();
 
-          if (project && !isExtension) {
-            Array.from(document.getElementsByTagName('link'))
-                .forEach(link => {
+            if (project && !isExtension) {
+              Array.from(document.getElementsByTagName('link')).forEach(
+                link => {
                   if (link.getAttribute('rel') === 'icon') {
                     const favicon = link.getAttribute('href');
                     if (!!project.favicon && favicon !== project.favicon) {
                       link.setAttribute('href', project.favicon);
                     }
                   }
-                });
-          }
-        });
+                },
+              );
+            }
+          });
       } else {
         this.logoUrl = 'assets/img/logo.svg';
         if (!isExtension) {
-          Array.from(document.getElementsByTagName('link'))
-              .forEach(link => {
-                if (link.getAttribute('rel') === 'icon') {
-                  link.setAttribute('href', 'favicon.ico');
-                }
-              });
+          Array.from(document.getElementsByTagName('link')).forEach(link => {
+            if (link.getAttribute('rel') === 'icon') {
+              link.setAttribute('href', 'favicon.ico');
+            }
+          });
         }
       }
     });
   }
 
   handleLogoUrl() {
-    this.logoUrl = this.project && this.project.logoUrl
+    this.logoUrl =
+      this.project && this.project.logoUrl
         ? this.project.logoUrl[this.themeName] || this.project.logoUrl.default
         : '';
   }
@@ -121,21 +131,22 @@ export class RegisterComponent implements OnInit {
   }
 
   signup() {
-    this.auth.emailSignUp(this.form.value['email'], this.form.value['password'])
-        .then(response => {
-          const data: any  = response ? { ...response } : {};
-          const { code, message } = data;
+    this.auth
+      .emailSignUp(this.form.value['email'], this.form.value['password'])
+      .then(response => {
+        const data: any = response ? { ...response } : {};
+        const { code, message } = data;
 
-          if (['auth/wrong-password', 'auth/too-many-requests'].includes(code)) {
-            this.form.controls.password.setErrors({ password: message });
-            this.formErrors.password = message;
-          }
+        if (['auth/wrong-password', 'auth/too-many-requests'].includes(code)) {
+          this.form.controls.password.setErrors({ password: message });
+          this.formErrors.password = message;
+        }
 
-          if (['auth/email-already-in-use'].includes(code)) {
-            this.form.controls.email.setErrors({ email: message });
-            this.formErrors.email = message;
-          }
-        });
+        if (['auth/email-already-in-use'].includes(code)) {
+          this.form.controls.email.setErrors({ email: message });
+          this.formErrors.email = message;
+        }
+      });
   }
 
   buildForm() {
@@ -146,16 +157,21 @@ export class RegisterComponent implements OnInit {
       passwordConfirm: ['', Validators.required],
     });
 
-    this.form.valueChanges.subscribe((data) => this.onValueChanged(data));
+    this.form.valueChanges.subscribe(() => this.onValueChanged());
     this.onValueChanged(); // reset validation messages
   }
 
   // Updates validation state on form changes.
-  onValueChanged(data?: any) {
-    if (!this.form) { return; }
+  onValueChanged() {
+    if (!this.form) {
+      return;
+    }
     const form = this.form;
     for (const field in this.formErrors) {
-      if (Object.prototype.hasOwnProperty.call(this.formErrors, field) && ['name', 'email', 'password'].includes(field)) {
+      if (
+        Object.prototype.hasOwnProperty.call(this.formErrors, field) &&
+        ['name', 'email', 'password'].includes(field)
+      ) {
         // clear previous error message (if any)
         this.formErrors[field] = '';
         const control = form.get(field);
@@ -163,8 +179,13 @@ export class RegisterComponent implements OnInit {
           const messages = this.validationMessages[field];
           if (control.errors) {
             for (const key in control.errors) {
-              if (Object.prototype.hasOwnProperty.call(control.errors, key) && messages[key]) {
-                this.formErrors[field] += `${(messages as {[key: string]: string})[key]} `;
+              if (
+                Object.prototype.hasOwnProperty.call(control.errors, key) &&
+                messages[key]
+              ) {
+                this.formErrors[field] += `${
+                  (messages as { [key: string]: string })[key]
+                } `;
               }
             }
           }

@@ -12,10 +12,9 @@ import { ScrollbarModule } from '../../../../../@fury/shared/scrollbar/scrollbar
 
     // Core
     FuryCardModule,
-    ScrollbarModule
+    ScrollbarModule,
   ],
   declarations: [RealtimeUsersWidgetComponent],
-  exports: [RealtimeUsersWidgetComponent]
+  exports: [RealtimeUsersWidgetComponent],
 })
-export class RealtimeUsersWidgetModule {
-}
+export class RealtimeUsersWidgetModule {}

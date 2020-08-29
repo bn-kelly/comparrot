@@ -28,9 +28,8 @@ import { NavigationModule } from './navigation/navigation.module';
     FooterModule,
     BackdropModule,
     ConfigPanelModule,
-    NavigationModule
+    NavigationModule,
   ],
-  declarations: [LayoutComponent]
+  declarations: [LayoutComponent],
 })
-export class LayoutModule {
-}
+export class LayoutModule {}

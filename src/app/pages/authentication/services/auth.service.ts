@@ -1,24 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { firebase } from '@firebase/app';
 import { auth } from 'firebase';
 import { AngularFireAuth } from '@angular/fire/auth';
 import {
   AngularFirestore,
-  AngularFirestoreDocument
+  AngularFirestoreDocument,
 } from '@angular/fire/firestore';
 import { NotifyService } from './notify.service';
 
 import { Observable, of } from 'rxjs';
-import { switchMap, startWith, tap, filter } from 'rxjs/operators';
-
-// interface User {
-//   uid: string;
-//   email?: string | null;
-//   photoURL?: string;
-//   displayName?: string;
-// }
+import { switchMap } from 'rxjs/operators';
 
 export interface User {
   displayName?: string;
@@ -38,8 +30,8 @@ export interface User {
     search: string;
   };
   extension?: {
-    show: boolean,
-    lastShown: number,
+    show: boolean;
+    lastShown: number;
   };
   projectName?: string;
   uid: string;
@@ -48,7 +40,7 @@ export interface User {
   emailAlerts?: number[];
   categoriesOfInterest?: number[];
   wishList?: string[];
-  personalizationData?: object;
+  personalizationData?: any;
 }
 
 export interface Credential {
@@ -58,10 +50,10 @@ export interface Credential {
   firstName?: string;
   lastName?: string;
   photoURL?: string;
-  ui?: object;
+  ui?: any;
   extension?: {
-    show: boolean,
-    lastShown: number,
+    show: boolean;
+    lastShown: number;
   };
   projectName?: string;
   isAnonymous: boolean;
@@ -69,7 +61,7 @@ export interface Credential {
   emailAlerts?: number[];
   categoriesOfInterest?: number[];
   wishList?: string[];
-  personalizationData?: object;
+  personalizationData?: any;
 }
 
 @Injectable()
@@ -82,9 +74,8 @@ export class AuthService {
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
     private router: Router,
-    private notify: NotifyService
+    private notify: NotifyService,
   ) {
-
     this.user = this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
@@ -94,9 +85,7 @@ export class AuthService {
         } else {
           return of(null);
         }
-      })
-      // tap(user => localStorage.setItem('user', JSON.stringify(user))),
-      // startWith(JSON.parse(localStorage.getItem('user')))
+      }),
     );
 
     this.afAuth.onAuthStateChanged(user => {
@@ -104,15 +93,21 @@ export class AuthService {
         this.anonymousLogin();
       } else {
         this.uid = user.uid;
-        this.afs.collection('users').doc(user.uid).get().subscribe(doc => {
-          const data = doc.data();
-          if (data) {
-            const dataToUpdate = user.isAnonymous ? user : { ...user, ...data };
-            this.currentUser = dataToUpdate;
+        this.afs
+          .collection('users')
+          .doc(user.uid)
+          .get()
+          .subscribe(doc => {
+            const data = doc.data();
+            if (data) {
+              const dataToUpdate = user.isAnonymous
+                ? user
+                : { ...user, ...data };
+              this.currentUser = dataToUpdate;
 
-            this.updateUserData(dataToUpdate);
-          }
-        });
+              this.updateUserData(dataToUpdate);
+            }
+          });
       }
     });
   }
@@ -159,14 +154,13 @@ export class AuthService {
     return this.afAuth
       .signInAnonymously()
       .then(response => {
-        console.log('access granted for anonymous user');
+        // access granted for anonymous user
         this.notify.update('Welcome to Firestarter, anonymous!!!', 'success');
         this.updateUserData(response.user);
-        // return response && response.user ? response.user : {};
       })
       .catch(error => {
         this.handleError(error);
-        console.log('access denied');
+        // access denied
         this.router.navigate(['/login']);
       });
   }
@@ -188,7 +182,7 @@ export class AuthService {
   emailLogin(email: string, password: string) {
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
-      .then((result) => {
+      .then(result => {
         if (!result || !result.user) {
           return;
         }
@@ -197,7 +191,10 @@ export class AuthService {
           this.router.navigate(['/']);
         } else {
           this.sendVerificationMail();
-          this.notify.update('Please validate your email address. Kindly check your inbox.', 'error');
+          this.notify.update(
+            'Please validate your email address. Kindly check your inbox.',
+            'error',
+          );
           this.router.navigate(['/verify-email']);
         }
       })
@@ -220,11 +217,10 @@ export class AuthService {
   }
 
   signOut() {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       this.afAuth.signOut().then(() => {
-        console.log('signed out');
+        // signed out
         this.anonymousLogin();
-        // this.router.navigate(['/login']);
         resolve();
       });
     });
@@ -232,7 +228,6 @@ export class AuthService {
 
   // If error, console log and notify user
   private handleError(error: Error) {
-    console.error(error);
     this.notify.update(error.message, 'error');
     return error;
   }
@@ -240,7 +235,7 @@ export class AuthService {
   // Sets user data to firestore after succesful login
   public updateUserData(user: Credential) {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(
-      `users/${user.uid}`
+      `users/${user.uid}`,
     );
 
     const data: User = {
@@ -253,8 +248,12 @@ export class AuthService {
       ui: this.currentUser && this.currentUser.ui ? this.currentUser.ui : {},
       isAnonymous: user.isAnonymous,
       extension: {
-        show: (user.extension && user.extension.show) ? user.extension.show : false,
-        lastShown: (user.extension && user.extension.lastShown) ? user.extension.lastShown : 0,
+        show:
+          user.extension && user.extension.show ? user.extension.show : false,
+        lastShown:
+          user.extension && user.extension.lastShown
+            ? user.extension.lastShown
+            : 0,
       },
     };
 

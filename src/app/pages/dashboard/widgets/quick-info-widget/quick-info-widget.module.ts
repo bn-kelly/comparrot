@@ -4,12 +4,8 @@ import { MaterialModule } from '../../../../../@fury/shared/material-components.
 import { QuickInfoWidgetComponent } from './quick-info-widget.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MaterialModule
-  ],
+  imports: [CommonModule, MaterialModule],
   declarations: [QuickInfoWidgetComponent],
-  exports: [QuickInfoWidgetComponent]
+  exports: [QuickInfoWidgetComponent],
 })
-export class QuickInfoWidgetModule {
-}
+export class QuickInfoWidgetModule {}

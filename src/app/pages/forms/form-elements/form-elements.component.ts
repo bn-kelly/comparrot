@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import escape from 'lodash-es/escape';
 import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.animation';
@@ -8,10 +8,9 @@ import { fadeInRightAnimation } from '../../../../@fury/animations/fade-in-right
   selector: 'fury-form-elements',
   templateUrl: './form-elements.component.html',
   styleUrls: ['./form-elements.component.scss'],
-  animations: [fadeInUpAnimation, fadeInRightAnimation]
+  animations: [fadeInUpAnimation, fadeInRightAnimation],
 })
-export class FormElementsComponent implements OnInit {
-
+export class FormElementsComponent {
   selectCtrl: FormControl = new FormControl();
   showBasicFormSource: boolean;
   basicFormSource = escape(
@@ -42,7 +41,8 @@ export class FormElementsComponent implements OnInit {
 <mat-form-field>
   <input matInput placeholder="Disabled" disabled>
 </mat-form-field>
-`);
+`,
+  );
   showAdvancedFormSource: boolean;
   advancedFormSource = escape(
     `<div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
@@ -79,7 +79,8 @@ export class FormElementsComponent implements OnInit {
   <button matSuffix [mdDatepickerToggle]="datepickerRef"></button>
 </mat-form-field>
 <mat-datepicker #datepickerRef></mat-datepicker>
-`);
+`,
+  );
   showFormThemingSource: boolean;
   formThemingSource = escape(
     `<mat-form-field color="primary">
@@ -93,7 +94,8 @@ export class FormElementsComponent implements OnInit {
 <mat-form-field color="warn">
   <input matInput placeholder="Warn Color">
 </mat-form-field>
-`);
+`,
+  );
   showFormPrefixSuffixSource: boolean;
   formPrefixSuffixSource = escape(
     `<mat-form-field>
@@ -111,7 +113,8 @@ export class FormElementsComponent implements OnInit {
   <input matInput placeholder="Input with prefix text and suffix icon">
   <mat-icon matSuffix>camera</mat-icon>
 </mat-form-field>
-`);
+`,
+  );
   showFormHintLabelSource: boolean;
   formHintLabelSource = escape(
     `<mat-form-field>
@@ -130,7 +133,8 @@ export class FormElementsComponent implements OnInit {
   <mat-hint align="end">{{ hintLabelInputLengthRef.value.length }}/10</mat-hint>
 </mat-form-field>
 </div>
-`);
+`,
+  );
   showFormCheckboxSource: boolean;
   formCheckboxSource = escape(
     `<mat-checkbox [checked]="false">Stay signed in</mat-checkbox>
@@ -138,13 +142,15 @@ export class FormElementsComponent implements OnInit {
 <mat-checkbox [checked]="false">Simply useful</mat-checkbox>
 <mat-checkbox [indeterminate]="true">Indeterminate</mat-checkbox>
 <mat-checkbox [checked]="true" align="end">Align end</mat-checkbox>
-`);
+`,
+  );
   showFormCheckboxThemingSource: boolean;
   formCheckboxThemingSource = escape(
     `<mat-checkbox [checked]="true" color="primary">Primary Color</mat-checkbox>
 <mat-checkbox [checked]="true" color="accent">Accent Color</mat-checkbox>
 <mat-checkbox [checked]="true" color="warn">Warn Color</mat-checkbox>
-`);
+`,
+  );
   selectModel;
   showFormSelectSource: boolean;
   formSelectSource = escape(
@@ -155,7 +161,8 @@ export class FormElementsComponent implements OnInit {
   <mat-option value="Mango">Mango</mat-option>
   <mat-option value="Apples">Cucumber</mat-option>
 </mat-select>
-`);
+`,
+  );
   showFormDatepickerSource: boolean;
   formDatepickerSource = escape(
     `<mat-form-field>
@@ -164,7 +171,8 @@ export class FormElementsComponent implements OnInit {
   <mat-hint>Click on the icon to the right for the Datepicker</mat-hint>
 </mat-form-field>
 <mat-datepicker #formDatepickerRef></mat-datepicker>
-`);
+`,
+  );
   showFormSliderSource: boolean;
   formSliderSource = escape(
     `<mat-slider [min]="0" [max]="100" [step]="1" [thumbLabel]="true" [tickInterval]="10" value="36"></mat-slider>
@@ -174,7 +182,8 @@ export class FormElementsComponent implements OnInit {
   <mat-slider fxFlex [min]="0" [max]="10" [step]="1" value="8" color="accent"></mat-slider>
   <mat-slider fxFlex [min]="0" [max]="10" [step]="1" value="7" color="warn"></mat-slider>
 </div>
-`);
+`,
+  );
   showFormRadioSource: boolean;
   formRadioSource = escape(
     `<mat-radio-group fxLayout="row" fxLayoutGap="16px">
@@ -186,7 +195,8 @@ export class FormElementsComponent implements OnInit {
   <mat-radio-button value="accent" color="accent">Accent Color</mat-radio-button>
   <mat-radio-button value="warn" color="warn">Warn Color</mat-radio-button>
 </mat-radio-group>
-`);
+`,
+  );
   showFormSlideToggleSource: boolean;
   formSlideToggleSource = escape(
     `<div fxLayout="column" fxLayoutGap="8px">
@@ -199,7 +209,8 @@ export class FormElementsComponent implements OnInit {
   <mat-slide-toggle [checked]="true" color="accent" labelPosition="before">Accent Color</mat-slide-toggle>
   <mat-slide-toggle [checked]="true" color="warn" labelPosition="before">Warn Color</mat-slide-toggle>
 </div>
-`);
+`,
+  );
   private _gap = 16;
   gap = `${this._gap}px`;
   col2 = `1 1 calc(50% - ${this._gap / 2}px)`;
@@ -208,8 +219,7 @@ export class FormElementsComponent implements OnInit {
   inputType = 'password';
   visible = false;
 
-  constructor(private cd: ChangeDetectorRef) {
-  }
+  constructor(private cd: ChangeDetectorRef) {}
 
   togglePassword() {
     if (this.visible) {
@@ -221,8 +231,5 @@ export class FormElementsComponent implements OnInit {
       this.visible = true;
       this.cd.markForCheck();
     }
-  }
-
-  ngOnInit() {
   }
 }

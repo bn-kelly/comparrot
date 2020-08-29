@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import * as Chart from 'chart.js';
 import { ChartData, ChartOptions } from 'chart.js';
 import defaultsDeep from 'lodash-es/defaultsDeep';
@@ -8,25 +8,24 @@ import { AdvancedPieChartWidgetOptions } from './advanced-pie-chart-widget-optio
 @Component({
   selector: 'fury-advanced-pie-chart-widget',
   templateUrl: './advanced-pie-chart-widget.component.html',
-  styleUrls: ['./advanced-pie-chart-widget.component.scss']
+  styleUrls: ['./advanced-pie-chart-widget.component.scss'],
 })
-export class AdvancedPieChartWidgetComponent implements OnInit {
-
+export class AdvancedPieChartWidgetComponent {
   @Input() options: AdvancedPieChartWidgetOptions;
-  @Input() chartOptions: ChartOptions = defaultsDeep({
-    cutoutPercentage: 70,
-    legend: {
-      display: false
-    }
-  }, defaultChartOptions);
+  @Input() chartOptions: ChartOptions = defaultsDeep(
+    {
+      cutoutPercentage: 70,
+      legend: {
+        display: false,
+      },
+    },
+    defaultChartOptions,
+  );
   @ViewChild('canvas', { read: ElementRef, static: true }) canvas: ElementRef;
   chart: Chart;
   total: number;
 
   isLoading: boolean;
-
-  constructor() {
-  }
 
   private _data: ChartData;
 
@@ -42,25 +41,25 @@ export class AdvancedPieChartWidgetComponent implements OnInit {
 
     this._data = data;
     this.total = total;
-  };
+  }
 
   get legendData() {
     return this._data.datasets[0].data;
   }
 
   getLegendLabel(index: number) {
-    return this._data && this._data.labels.length > 0 ? this._data.labels[index] : null;
-  }
-
-  getLegendBackground(index: number) {
-    return this._data && this._data.datasets
-    && this._data.datasets[0]
-    && this._data.datasets[0].backgroundColor
-      ? this._data.datasets[0].backgroundColor[index]
+    return this._data && this._data.labels.length > 0
+      ? this._data.labels[index]
       : null;
   }
 
-  ngOnInit() {
+  getLegendBackground(index: number) {
+    return this._data &&
+      this._data.datasets &&
+      this._data.datasets[0] &&
+      this._data.datasets[0].backgroundColor
+      ? this._data.datasets[0].backgroundColor[index]
+      : null;
   }
 
   getPercentageValue(value) {

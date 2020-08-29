@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { LayoutService } from '../../layout/layout.service';
 import { AutocompleteComponent } from './autocomplete/autocomplete.component';
 import { ButtonsComponent } from './buttons/buttons.component';
@@ -25,43 +25,57 @@ import { ScrollDispatcher } from '@angular/cdk/scrolling';
   selector: 'fury-components',
   templateUrl: './components.component.html',
   styleUrls: ['./components.component.scss'],
-  animations: [fadeInUpAnimation, fadeInRightAnimation]
+  animations: [fadeInUpAnimation, fadeInRightAnimation],
 })
-export class ComponentsComponent implements OnInit {
-
+export class ComponentsComponent {
   menuWidth = '250px';
 
-  @ViewChild(AutocompleteComponent, { read: ElementRef, static: true }) private autocomplete: ElementRef;
-  @ViewChild(ButtonsComponent, { read: ElementRef, static: true }) private buttons: ElementRef;
-  @ViewChild(CardsComponent, { read: ElementRef, static: true }) private cards: ElementRef;
-  @ViewChild(CheckboxComponent, { read: ElementRef, static: true }) private checkbox: ElementRef;
-  @ViewChild(DialogsComponent, { read: ElementRef, static: true }) private dialogs: ElementRef;
-  @ViewChild(GridListComponent, { read: ElementRef, static: true }) private gridList: ElementRef;
-  @ViewChild(InputComponent, { read: ElementRef, static: true }) private input: ElementRef;
-  @ViewChild(ListsComponent, { read: ElementRef, static: true }) private lists: ElementRef;
-  @ViewChild(MenuComponent, { read: ElementRef, static: true }) private menu: ElementRef;
-  @ViewChild(ProgressComponent, { read: ElementRef, static: true }) private progress: ElementRef;
-  @ViewChild(ProgressSpinnerComponent, { read: ElementRef, static: true }) private progressSpinner: ElementRef;
-  @ViewChild(RadioComponent, { read: ElementRef, static: true }) private radio: ElementRef;
-  @ViewChild(SliderComponent, { read: ElementRef, static: true }) private slider: ElementRef;
-  @ViewChild(SlideToggleComponent, { read: ElementRef, static: true }) private slideToggle: ElementRef;
-  @ViewChild(SnackBarComponent, { read: ElementRef, static: true }) private snackBar: ElementRef;
-  @ViewChild(TooltipComponent, { read: ElementRef, static: true }) private tooltip: ElementRef;
+  @ViewChild(AutocompleteComponent, { read: ElementRef, static: true })
+  private autocomplete: ElementRef;
+  @ViewChild(ButtonsComponent, { read: ElementRef, static: true })
+  private buttons: ElementRef;
+  @ViewChild(CardsComponent, { read: ElementRef, static: true })
+  private cards: ElementRef;
+  @ViewChild(CheckboxComponent, { read: ElementRef, static: true })
+  private checkbox: ElementRef;
+  @ViewChild(DialogsComponent, { read: ElementRef, static: true })
+  private dialogs: ElementRef;
+  @ViewChild(GridListComponent, { read: ElementRef, static: true })
+  private gridList: ElementRef;
+  @ViewChild(InputComponent, { read: ElementRef, static: true })
+  private input: ElementRef;
+  @ViewChild(ListsComponent, { read: ElementRef, static: true })
+  private lists: ElementRef;
+  @ViewChild(MenuComponent, { read: ElementRef, static: true })
+  private menu: ElementRef;
+  @ViewChild(ProgressComponent, { read: ElementRef, static: true })
+  private progress: ElementRef;
+  @ViewChild(ProgressSpinnerComponent, { read: ElementRef, static: true })
+  private progressSpinner: ElementRef;
+  @ViewChild(RadioComponent, { read: ElementRef, static: true })
+  private radio: ElementRef;
+  @ViewChild(SliderComponent, { read: ElementRef, static: true })
+  private slider: ElementRef;
+  @ViewChild(SlideToggleComponent, { read: ElementRef, static: true })
+  private slideToggle: ElementRef;
+  @ViewChild(SnackBarComponent, { read: ElementRef, static: true })
+  private snackBar: ElementRef;
+  @ViewChild(TooltipComponent, { read: ElementRef, static: true })
+  private tooltip: ElementRef;
 
-  @ViewChild('contentScroll', { read: ScrollbarDirective }) private contentScroll: ScrollbarDirective;
+  @ViewChild('contentScroll', { read: ScrollbarDirective })
+  private contentScroll: ScrollbarDirective;
 
-  constructor(private layoutService: LayoutService,
-              private scrollDispatcher: ScrollDispatcher,
-              private elem: ElementRef) {
-  }
-
-  ngOnInit() {
-  }
+  constructor(
+    private layoutService: LayoutService,
+    private scrollDispatcher: ScrollDispatcher,
+    private elem: ElementRef,
+  ) {}
 
   scrollTo(elem: string) {
     this.scrollDispatcher.getAncestorScrollContainers(this.elem)[1].scrollTo({
       top: this[elem].nativeElement.offsetTop - 64 - 24,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   }
 }

@@ -5,13 +5,12 @@ import { PageLayoutCardComponent } from './page-layout-card.component';
 const routes: Routes = [
   {
     path: '',
-    component: PageLayoutCardComponent
-  }
+    component: PageLayoutCardComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class PageLayoutCardRoutingModule {
-}
+export class PageLayoutCardRoutingModule {}

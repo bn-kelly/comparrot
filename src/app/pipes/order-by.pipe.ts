@@ -5,10 +5,9 @@ const desc = 'desc';
 
 @Pipe({
   name: 'orderBy',
-  pure: true
+  pure: true,
 })
 export class OrderByPipe implements PipeTransform {
-
   transform(array, orderBy, dir = asc) {
     if (!orderBy || !orderBy.trim() || ![asc, desc].includes(dir)) {
       return array;
@@ -24,11 +23,15 @@ export class OrderByPipe implements PipeTransform {
         return this.orderByComparator(b[orderBy], a[orderBy]);
       });
     }
-
   }
 
   orderByComparator(a: any, b: any): number {
-    if ((isNaN(parseFloat(a)) || !isFinite(a)) || (isNaN(parseFloat(b)) || !isFinite(b))) {
+    if (
+      isNaN(parseFloat(a)) ||
+      !isFinite(a) ||
+      isNaN(parseFloat(b)) ||
+      !isFinite(b)
+    ) {
       if (a.toLowerCase() < b.toLowerCase()) {
         return -1;
       }

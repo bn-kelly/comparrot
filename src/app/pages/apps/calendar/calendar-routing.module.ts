@@ -7,14 +7,13 @@ const routes: Routes = [
     path: '',
     component: CalendarComponent,
     data: {
-      scrollDisabled: true
-    }
-  }
+      scrollDisabled: true,
+    },
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class CalendarRoutingModule {
-}
+export class CalendarRoutingModule {}

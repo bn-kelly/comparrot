@@ -8,9 +8,8 @@ describe('PageLayoutSimpleComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PageLayoutSimpleComponent]
-    })
-      .compileComponents();
+      declarations: [PageLayoutSimpleComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

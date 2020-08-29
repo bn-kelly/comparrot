@@ -19,9 +19,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { PageLayoutModule } from './shared/page-layout/page-layout.module';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   declarations: [],
   exports: [
     BreadcrumbsModule,
@@ -42,8 +40,7 @@ import { PageLayoutModule } from './shared/page-layout/page-layout.module';
     MatRadioModule,
     MatMenuModule,
     FontAwesomeModule,
-    ScrollingModule
-  ]
+    ScrollingModule,
+  ],
 })
-export class FurySharedModule {
-}
+export class FurySharedModule {}

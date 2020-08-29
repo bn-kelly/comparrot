@@ -4,12 +4,8 @@ import { MaterialModule } from '../../../../../@fury/shared/material-components.
 import { MarketWidgetComponent } from './market-widget.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MaterialModule
-  ],
+  imports: [CommonModule, MaterialModule],
   declarations: [MarketWidgetComponent],
-  exports: [MarketWidgetComponent]
+  exports: [MarketWidgetComponent],
 })
-export class MarketWidgetModule {
-}
+export class MarketWidgetModule {}

@@ -9,10 +9,9 @@ import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.anima
   selector: 'fury-form-wizard',
   templateUrl: './form-wizard.component.html',
   styleUrls: ['./form-wizard.component.scss'],
-  animations: [fadeInUpAnimation, fadeInRightAnimation, scaleInAnimation]
+  animations: [fadeInUpAnimation, fadeInRightAnimation, scaleInAnimation],
 })
 export class FormWizardComponent implements OnInit {
-
   accountFormGroup: FormGroup;
   passwordFormGroup: FormGroup;
   confirmFormGroup: FormGroup;
@@ -25,10 +24,11 @@ export class FormWizardComponent implements OnInit {
 
   passwordInputType = 'password';
 
-  constructor(private fb: FormBuilder,
-              private cd: ChangeDetectorRef,
-              private snackbar: MatSnackBar) {
-  }
+  constructor(
+    private fb: FormBuilder,
+    private cd: ChangeDetectorRef,
+    private snackbar: MatSnackBar,
+  ) {}
 
   ngOnInit() {
     /**
@@ -46,18 +46,13 @@ export class FormWizardComponent implements OnInit {
     this.passwordFormGroup = this.fb.group({
       password: [
         null,
-        Validators.compose(
-          [
-            Validators.required,
-            Validators.minLength(6)
-          ]
-        )
+        Validators.compose([Validators.required, Validators.minLength(6)]),
       ],
-      passwordConfirm: [null, Validators.required]
+      passwordConfirm: [null, Validators.required],
     });
 
     this.confirmFormGroup = this.fb.group({
-      terms: [null, Validators.requiredTrue]
+      terms: [null, Validators.requiredTrue],
     });
 
     /**
@@ -75,18 +70,13 @@ export class FormWizardComponent implements OnInit {
     this.verticalPasswordFormGroup = this.fb.group({
       password: [
         null,
-        Validators.compose(
-          [
-            Validators.required,
-            Validators.minLength(6)
-          ]
-        )
+        Validators.compose([Validators.required, Validators.minLength(6)]),
       ],
-      passwordConfirm: [null, Validators.required]
+      passwordConfirm: [null, Validators.required],
     });
 
     this.verticalConfirmFormGroup = this.fb.group({
-      terms: [null, Validators.requiredTrue]
+      terms: [null, Validators.requiredTrue],
     });
   }
 
@@ -102,7 +92,7 @@ export class FormWizardComponent implements OnInit {
 
   submit() {
     this.snackbar.open('Hooray! You successfully created your account.', null, {
-      duration: 5000
+      duration: 5000,
     });
   }
 }

@@ -8,19 +8,23 @@ export const defaultChartOptions: ChartOptions = {
   },
   maintainAspectRatio: false,
   legend: {
-    display: false
+    display: false,
   },
   scales: {
-    xAxes: [{
-      display: false
-    }],
-    yAxes: [{
-      display: false
-    }]
+    xAxes: [
+      {
+        display: false,
+      },
+    ],
+    yAxes: [
+      {
+        display: false,
+      },
+    ],
   },
   tooltips: {
-    titleFontFamily: 'Roboto, \'Helvetica Neue\', Arial, sans-serif',
-    bodyFontFamily: 'Roboto, \'Helvetica Neue\', Arial, sans-serif',
-    footerFontFamily: 'Roboto, \'Helvetica Neue\', Arial, sans-serif'
-  }
+    titleFontFamily: "Roboto, 'Helvetica Neue', Arial, sans-serif",
+    bodyFontFamily: "Roboto, 'Helvetica Neue', Arial, sans-serif",
+    footerFontFamily: "Roboto, 'Helvetica Neue', Arial, sans-serif",
+  },
 };

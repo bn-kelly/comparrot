@@ -8,43 +8,44 @@ import { BarChartWidgetOptions } from './bar-chart-widget-options.interface';
 @Component({
   selector: 'fury-bar-chart-widget',
   templateUrl: './bar-chart-widget.component.html',
-  styleUrls: ['./bar-chart-widget.component.scss']
+  styleUrls: ['./bar-chart-widget.component.scss'],
 })
 export class BarChartWidgetComponent {
-
   @Input() data: ChartData;
   @Input() options: BarChartWidgetOptions;
-  @Input() chartOptions: ChartOptions = defaultsDeep({
-    layout: {
-      padding: {
-        left: 24,
-        right: 24,
-        top: 16,
-        bottom: 24
-      }
+  @Input() chartOptions: ChartOptions = defaultsDeep(
+    {
+      layout: {
+        padding: {
+          left: 24,
+          right: 24,
+          top: 16,
+          bottom: 24,
+        },
+      },
+      scales: {
+        xAxes: [
+          {
+            barPercentage: 0.5,
+          },
+        ],
+      },
+      tooltips: {
+        mode: 'index',
+        intersect: false,
+      },
+      hover: {
+        intersect: true,
+      },
     },
-    scales: {
-      xAxes: [{
-        barPercentage: 0.5
-      }]
-    },
-    tooltips: {
-      mode: 'index',
-      intersect: false,
-    },
-    hover: {
-      intersect: true
-    }
-  }, defaultChartOptions);
+    defaultChartOptions,
+  );
 
   @ViewChild('canvas', { read: ElementRef, static: true }) canvas: ElementRef;
 
   chart: Chart;
 
   isLoading: boolean;
-
-  constructor() {
-  }
 
   reload() {
     this.isLoading = true;

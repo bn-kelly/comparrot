@@ -1,15 +1,11 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'fury-toolbar-close',
   templateUrl: './toolbar-close.component.html',
-  styleUrls: ['./toolbar-close.component.scss']
+  styleUrls: ['./toolbar-close.component.scss'],
 })
 export class ToolbarCloseComponent {
-
-  constructor() {
-  }
-
   hideExtension() {
     if (!window.chrome || !window.chrome.tabs) {
       return;
@@ -17,7 +13,7 @@ export class ToolbarCloseComponent {
 
     window.chrome.tabs.getSelected(null, tab => {
       window.chrome.tabs.sendMessage(tab.id, {
-        action: 'hide-iframe'
+        action: 'hide-iframe',
       });
     });
   }

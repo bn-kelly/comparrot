@@ -5,13 +5,12 @@ import { PageLayoutSimpleTabbedComponent } from './page-layout-simple-tabbed.com
 const routes: Routes = [
   {
     path: '',
-    component: PageLayoutSimpleTabbedComponent
-  }
+    component: PageLayoutSimpleTabbedComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class PageLayoutSimpleTabbedRoutingModule {
-}
+export class PageLayoutSimpleTabbedRoutingModule {}

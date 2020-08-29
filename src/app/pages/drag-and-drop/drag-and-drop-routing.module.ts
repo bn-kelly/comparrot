@@ -5,13 +5,12 @@ import { DragAndDropComponent } from './drag-and-drop.component';
 const routes: Routes = [
   {
     path: '',
-    component: DragAndDropComponent
-  }
+    component: DragAndDropComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class DragAndDropRoutingModule {
-}
+export class DragAndDropRoutingModule {}

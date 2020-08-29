@@ -5,13 +5,8 @@ import { MaterialModule } from '../../../../@fury/shared/material-components.mod
 import { VerifyEmailRoutingModule } from './verify-email-routing.module';
 import { VerifyEmailComponent } from './verify-email.component';
 
-
 @NgModule({
   declarations: [VerifyEmailComponent],
-  imports: [
-    CommonModule,
-    VerifyEmailRoutingModule,
-    MaterialModule
-  ]
+  imports: [CommonModule, VerifyEmailRoutingModule, MaterialModule],
 })
-export class VerifyEmailModule { }
+export class VerifyEmailModule {}

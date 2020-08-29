@@ -9,21 +9,26 @@ import { AdvancedPieChartWidgetOptions } from './widgets/advanced-pie-chart-widg
 import { AudienceOverviewWidgetOptions } from './widgets/audience-overview-widget/audience-overview-widget-options.interface';
 import { BarChartWidgetOptions } from './widgets/bar-chart-widget/bar-chart-widget-options.interface';
 import { DonutChartWidgetOptions } from './widgets/donut-chart-widget/donut-chart-widget-options.interface';
-import { RealtimeUsersWidgetData, RealtimeUsersWidgetPages } from './widgets/realtime-users-widget/realtime-users-widget.interface';
+import {
+  RealtimeUsersWidgetData,
+  RealtimeUsersWidgetPages,
+} from './widgets/realtime-users-widget/realtime-users-widget.interface';
 import { RecentSalesWidgetOptions } from './widgets/recent-sales-widget/recent-sales-widget-options.interface';
 import { SalesSummaryWidgetOptions } from './widgets/sales-summary-widget/sales-summary-widget-options.interface';
 import { DashboardService } from './dashboard.service';
 import { ChartWidgetOptions } from '../../../@fury/shared/chart-widget/chart-widget-options.interface';
-import { AuthService, User } from '../../pages/authentication/services/auth.service';
+import {
+  AuthService,
+  User,
+} from '../../pages/authentication/services/auth.service';
 import { Offer } from './offer.model';
 
 @Component({
   selector: 'fury-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-
   private static isInitialLoad = true;
   isExtension: boolean;
   user: User;
@@ -35,7 +40,7 @@ export class DashboardComponent implements OnInit {
     gain: 16.3,
     subTitle: 'compared to last month',
     background: '#3F51B5',
-    color: '#FFFFFF'
+    color: '#FFFFFF',
   };
   visitsData$: Observable<ChartData>;
   totalVisitsOptions: ChartWidgetOptions = {
@@ -43,7 +48,7 @@ export class DashboardComponent implements OnInit {
     gain: 42.5,
     subTitle: 'compared to last month',
     background: '#03A9F4',
-    color: '#FFFFFF'
+    color: '#FFFFFF',
   };
   clicksData$: Observable<ChartData>;
   totalClicksOptions: ChartWidgetOptions = {
@@ -51,7 +56,7 @@ export class DashboardComponent implements OnInit {
     gain: -6.1,
     subTitle: 'compared to last month',
     background: '#4CAF50',
-    color: '#FFFFFF'
+    color: '#FFFFFF',
   };
   conversionsData$: Observable<ChartData>;
   conversionsOptions: ChartWidgetOptions = {
@@ -59,53 +64,77 @@ export class DashboardComponent implements OnInit {
     gain: 10.4,
     subTitle: 'compared to last month',
     background: '#009688',
-    color: '#FFFFFF'
+    color: '#FFFFFF',
   };
   salesSummaryData$: Observable<ChartData>;
   salesSummaryOptions: SalesSummaryWidgetOptions = {
     title: 'Sales Summary',
     subTitle: 'Compare Sales by Time',
-    gain: 37.2
+    gain: 37.2,
   };
   top5CategoriesData$: Observable<ChartData>;
   top5CategoriesOptions: DonutChartWidgetOptions = {
     title: 'Top Categories',
-    subTitle: 'Compare Sales by Category'
+    subTitle: 'Compare Sales by Category',
   };
   audienceOverviewOptions: AudienceOverviewWidgetOptions[] = [];
   recentSalesData$: Observable<ChartData>;
   recentSalesOptions: RecentSalesWidgetOptions = {
     title: 'Recent Sales',
-    subTitle: 'See who bought what in realtime'
+    subTitle: 'See who bought what in realtime',
   };
   recentSalesTableOptions = {
     pageSize: 5,
     columns: [
-      { name: 'Product', property: 'name', visible: true, isModelProperty: true },
-      { name: '$ Price', property: 'price', visible: true, isModelProperty: true },
-      { name: 'Time ago', property: 'timestamp', visible: true, isModelProperty: true },
-    ]
+      {
+        name: 'Product',
+        property: 'name',
+        visible: true,
+        isModelProperty: true,
+      },
+      {
+        name: '$ Price',
+        property: 'price',
+        visible: true,
+        isModelProperty: true,
+      },
+      {
+        name: 'Time ago',
+        property: 'timestamp',
+        visible: true,
+        isModelProperty: true,
+      },
+    ],
   };
   recentSalesTableData$: Observable<any[]>;
   advancedPieChartOptions: AdvancedPieChartWidgetOptions = {
     title: 'Sales by country',
-    subTitle: 'Top 3 countries sold 34% more items this month\n'
+    subTitle: 'Top 3 countries sold 34% more items this month\n',
   };
   advancedPieChartData$: Observable<ChartData>;
-  private _realtimeUsersDataSubject = new ReplaySubject<RealtimeUsersWidgetData>(30);
-  realtimeUsersData$: Observable<RealtimeUsersWidgetData> = this._realtimeUsersDataSubject.asObservable();
-  private _realtimeUsersPagesSubject = new ReplaySubject<RealtimeUsersWidgetPages[]>(1);
-  realtimeUsersPages$: Observable<RealtimeUsersWidgetPages[]> = this._realtimeUsersPagesSubject.asObservable();
+  private _realtimeUsersDataSubject = new ReplaySubject<
+    RealtimeUsersWidgetData
+  >(30);
+  realtimeUsersData$: Observable<
+    RealtimeUsersWidgetData
+  > = this._realtimeUsersDataSubject.asObservable();
+  private _realtimeUsersPagesSubject = new ReplaySubject<
+    RealtimeUsersWidgetPages[]
+  >(1);
+  realtimeUsersPages$: Observable<
+    RealtimeUsersWidgetPages[]
+  > = this._realtimeUsersPagesSubject.asObservable();
   /**
    * Needed for the Layout
    */
   private _gap = 16;
   gap = `${this._gap}px`;
 
-  constructor(private dashboardService: DashboardService,
-              private router: Router,
-              private auth: AuthService,
-              private afs: AngularFirestore,
+  constructor(
+    private dashboardService: DashboardService,
+    private router: Router,
+    private auth: AuthService,
+    private afs: AngularFirestore,
   ) {
     /**
      * Edge wrong drawing fix
@@ -120,11 +149,12 @@ export class DashboardComponent implements OnInit {
         DashboardComponent.isInitialLoad = false;
       }
     }
-
   }
 
   col(colAmount: number) {
-    return `1 1 calc(${100 / colAmount}% - ${this._gap - (this._gap / colAmount)}px)`;
+    return `1 1 calc(${100 / colAmount}% - ${
+      this._gap - this._gap / colAmount
+    }px)`;
   }
 
   onBuyButtonClick(event, url) {
@@ -136,12 +166,13 @@ export class DashboardComponent implements OnInit {
 
   toggleAddToWishlist(id) {
     const wishList = this.user.wishList.includes(id)
-        ? this.user.wishList.filter(category => category !== id)
-        : [...this.user.wishList, id];
+      ? this.user.wishList.filter(category => category !== id)
+      : [...this.user.wishList, id];
 
-    this.afs.collection('users')
-        .doc(this.user.uid)
-        .update({ wishList: wishList.sort() });
+    this.afs
+      .collection('users')
+      .doc(this.user.uid)
+      .update({ wishList: wishList.sort() });
   }
 
   getOffersByUser(user) {
@@ -149,7 +180,8 @@ export class DashboardComponent implements OnInit {
       return;
     }
     this.dashboardService.getOffersByUser(user).subscribe((offers: Offer[]) => {
-      this.offers = user.isAnonymous && offers.length ? [offers[0]] : offers || [];
+      this.offers =
+        user.isAnonymous && offers.length ? [offers[0]] : offers || [];
       if (!this.isLoggedIn && !this.offers.length && this.isExtension) {
         this.router.navigate(['/login']);
       }
@@ -163,7 +195,7 @@ export class DashboardComponent implements OnInit {
 
     window.chrome.tabs.getSelected(null, tab => {
       window.chrome.tabs.sendMessage(tab.id, {
-        action: 'show-iframe'
+        action: 'show-iframe',
       });
     });
   }
@@ -187,14 +219,16 @@ export class DashboardComponent implements OnInit {
       this.isLoggedIn = !isAnonymous;
 
       if (!isAnonymous && !Array.isArray(user.wishList)) {
-        this.afs.collection('users')
-            .doc(this.user.uid)
-            .update({ wishList: [] });
+        this.afs
+          .collection('users')
+          .doc(this.user.uid)
+          .update({ wishList: [] });
       }
 
       this.getOffersByUser(user);
 
-      const shouldShowExtension = user.extension && user.extension && user.extension.show;
+      const shouldShowExtension =
+        user.extension && user.extension && user.extension.show;
 
       if (shouldShowExtension) {
         const userData = {
@@ -219,77 +253,101 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getAudienceOverviewUsers().subscribe(response => {
       this.audienceOverviewOptions.push({
         label: 'Users',
-        data: response
+        data: response,
       } as AudienceOverviewWidgetOptions);
     });
     this.dashboardService.getAudienceOverviewSessions().subscribe(response => {
       this.audienceOverviewOptions.push({
         label: 'Sessions',
-        data: response
+        data: response,
       } as AudienceOverviewWidgetOptions);
     });
-    this.dashboardService.getAudienceOverviewBounceRate().subscribe(response => {
-      const property: AudienceOverviewWidgetOptions = {
-        label: 'Bounce Rate',
-        data: response
-      };
+    this.dashboardService
+      .getAudienceOverviewBounceRate()
+      .subscribe(response => {
+        const property: AudienceOverviewWidgetOptions = {
+          label: 'Bounce Rate',
+          data: response,
+        };
 
-      // Calculate Bounce Rate Average
-      const data = response.datasets[0].data as number[];
-      property.sum = `${(data.reduce((sum, x) => sum + x) / data.length).toFixed(2)}%`;
+        // Calculate Bounce Rate Average
+        const data = response.datasets[0].data as number[];
+        property.sum = `${(
+          data.reduce((sum, x) => sum + x) / data.length
+        ).toFixed(2)}%`;
 
-      this.audienceOverviewOptions.push(property);
-    });
+        this.audienceOverviewOptions.push(property);
+      });
 
-    this.dashboardService.getAudienceOverviewSessionDuration().subscribe(response => {
-      const property: AudienceOverviewWidgetOptions = {
-        label: 'Session Duration',
-        data: response
-      };
+    this.dashboardService
+      .getAudienceOverviewSessionDuration()
+      .subscribe(response => {
+        const property: AudienceOverviewWidgetOptions = {
+          label: 'Session Duration',
+          data: response,
+        };
 
-      // Calculate Average Session Duration and Format to Human Readable Format
-      const data = response.datasets[0].data as number[];
-      const averageSeconds = (data.reduce((sum, x) => sum + x) / data.length).toFixed(0);
-      property.sum = `${averageSeconds} sec`;
+        // Calculate Average Session Duration and Format to Human Readable Format
+        const data = response.datasets[0].data as number[];
+        const averageSeconds = (
+          data.reduce((sum, x) => sum + x) / data.length
+        ).toFixed(0);
+        property.sum = `${averageSeconds} sec`;
 
-      this.audienceOverviewOptions.push(property);
-    });
+        this.audienceOverviewOptions.push(property);
+      });
 
     // Prefill realtimeUsersData with 30 random values
     for (let i = 0; i < 30; i++) {
-      this._realtimeUsersDataSubject.next(
-        {
-          label: moment().fromNow(),
-          value: Math.round(Math.random() * (100 - 10) + 10)
-        } as RealtimeUsersWidgetData);
+      this._realtimeUsersDataSubject.next({
+        label: moment().fromNow(),
+        value: Math.round(Math.random() * (100 - 10) + 10),
+      } as RealtimeUsersWidgetData);
     }
 
     // Simulate incoming values for Realtime Users Widget
     setInterval(() => {
-      this._realtimeUsersDataSubject.next(
-        {
-          label: moment().fromNow(),
-          value: Math.round(Math.random() * (100 - 10) + 10)
-        } as RealtimeUsersWidgetData);
+      this._realtimeUsersDataSubject.next({
+        label: moment().fromNow(),
+        value: Math.round(Math.random() * (100 - 10) + 10),
+      } as RealtimeUsersWidgetData);
     }, 5000);
 
     // Prefill realtimeUsersPages with 3 random values
     const demoPages = [];
-    const demoPagesPossibleValues = ['/components', '/tables/all-in-one-table', '/apps/inbox', '/apps/chat', '/dashboard', '/login', '/register', '/apps/calendar', '/forms/form-elements'];
+    const demoPagesPossibleValues = [
+      '/components',
+      '/tables/all-in-one-table',
+      '/apps/inbox',
+      '/apps/chat',
+      '/dashboard',
+      '/login',
+      '/register',
+      '/apps/calendar',
+      '/forms/form-elements',
+    ];
     for (let i = 0; i < 3; i++) {
-      const nextPossibleValue = demoPagesPossibleValues[+Math.round(Math.random() * (demoPagesPossibleValues.length - 1))];
+      const nextPossibleValue =
+        demoPagesPossibleValues[
+          +Math.round(Math.random() * (demoPagesPossibleValues.length - 1))
+        ];
       if (demoPages.indexOf(nextPossibleValue) === -1) {
         demoPages.push(nextPossibleValue);
       }
 
-      this._realtimeUsersPagesSubject.next(demoPages.map(pages => {
-        return { 'page': pages } as RealtimeUsersWidgetPages;
-      }));
+      this._realtimeUsersPagesSubject.next(
+        demoPages.map(pages => {
+          return { page: pages } as RealtimeUsersWidgetPages;
+        }),
+      );
     }
 
     // Simulate incoming values for Realtime Users Widget
     setInterval(() => {
-      const nextPossibleValue = demoPagesPossibleValues[+Math.round(Math.random() * (demoPagesPossibleValues.length - 1))];
+      const nextPossibleValue =
+        demoPagesPossibleValues[
+          +Math.round(Math.random() * (demoPagesPossibleValues.length - 1))
+        ];
       if (demoPages.indexOf(nextPossibleValue) === -1) {
         demoPages.push(nextPossibleValue);
       }
@@ -298,9 +356,11 @@ export class DashboardComponent implements OnInit {
         demoPages.splice(Math.round(Math.random() * demoPages.length), 1);
       }
 
-      this._realtimeUsersPagesSubject.next(demoPages.map(pages => {
-        return { 'page': pages } as RealtimeUsersWidgetPages;
-      }));
+      this._realtimeUsersPagesSubject.next(
+        demoPages.map(pages => {
+          return { page: pages } as RealtimeUsersWidgetPages;
+        }),
+      );
     }, 5000);
 
     this.recentSalesTableData$ = this.dashboardService.getRecentSalesTableData();
@@ -308,5 +368,4 @@ export class DashboardComponent implements OnInit {
 
     this.advancedPieChartData$ = this.dashboardService.getAdvancedPieChartData();
   }
-
 }

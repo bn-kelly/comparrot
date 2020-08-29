@@ -5,13 +5,8 @@ import { ScrollbarModule } from '../../../@fury/shared/scrollbar/scrollbar.modul
 import { QuickpanelComponent } from './quickpanel.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MaterialModule,
-    ScrollbarModule
-  ],
+  imports: [CommonModule, MaterialModule, ScrollbarModule],
   declarations: [QuickpanelComponent],
-  exports: [QuickpanelComponent]
+  exports: [QuickpanelComponent],
 })
-export class QuickpanelModule {
-}
+export class QuickpanelModule {}

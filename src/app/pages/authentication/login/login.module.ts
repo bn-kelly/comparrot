@@ -14,7 +14,6 @@ import { OAuthModule } from '../../../layout/oauth/oauth.module';
     ReactiveFormsModule,
     OAuthModule,
   ],
-  declarations: [LoginComponent]
+  declarations: [LoginComponent],
 })
-export class LoginModule {
-}
+export class LoginModule {}

@@ -1,5 +1,11 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -13,18 +19,26 @@ import isFunction from 'lodash-es/isFunction';
   styleUrls: ['./sidenav-item.component.scss'],
   animations: [
     trigger('dropdownOpen', [
-      state('false', style({
-        height: 0
-      })),
-      state('true', style({
-        height: '*'
-      })),
-      transition('false <=> true', animate('300ms cubic-bezier(.35, 0, .25, 1)'))
-    ])
-  ]
+      state(
+        'false',
+        style({
+          height: 0,
+        }),
+      ),
+      state(
+        'true',
+        style({
+          height: '*',
+        }),
+      ),
+      transition(
+        'false <=> true',
+        animate('300ms cubic-bezier(.35, 0, .25, 1)'),
+      ),
+    ]),
+  ],
 })
-export class SidenavItemComponent implements OnInit {
-
+export class SidenavItemComponent {
   @Input('item') item: SidenavItem;
   @Input('level') level: number;
 
@@ -33,7 +47,12 @@ export class SidenavItemComponent implements OnInit {
 
   constructor(private sidenavService: SidenavService, private router: Router) {
     this.dropdownOpen$ = this.sidenavService.currentlyOpen$.pipe(
-      map(currentlyOpen => this.item.subItems && this.item.subItems.length > 0 && currentlyOpen.indexOf(this.item) > -1)
+      map(
+        currentlyOpen =>
+          this.item.subItems &&
+          this.item.subItems.length > 0 &&
+          currentlyOpen.indexOf(this.item) > -1,
+      ),
     );
   }
 
@@ -41,22 +60,27 @@ export class SidenavItemComponent implements OnInit {
     return `level-${this.level}`;
   }
 
-  ngOnInit() {
-  }
-
-  isFunction(routeOrFunction: string[] | Function) {
+  isFunction(routeOrFunction: string[] | void) {
     return isFunction(routeOrFunction);
   }
 
   handleClick() {
     if (this.item.subItems && this.item.subItems.length > 0) {
       this.sidenavService.toggleItemOpen(this.item);
-    } else if (typeof this.item.routeOrFunction === 'string' || this.item.routeOrFunction instanceof String) {
+    } else if (
+      typeof this.item.routeOrFunction === 'string' ||
+      this.item.routeOrFunction instanceof String
+    ) {
       this.router.navigate([this.item.routeOrFunction]);
-    } else if (typeof this.item.routeOrFunction === 'function' || this.item.routeOrFunction instanceof Function) {
+    } else if (
+      typeof this.item.routeOrFunction === 'function' ||
+      this.item.routeOrFunction instanceof Function
+    ) {
       this.item.routeOrFunction();
     } else {
-      throw Error('Could not determine what to do, Sidenav-Item has no routeOrFunction set AND does not contain any subItems');
+      throw Error(
+        'Could not determine what to do, Sidenav-Item has no routeOrFunction set AND does not contain any subItems',
+      );
     }
   }
 

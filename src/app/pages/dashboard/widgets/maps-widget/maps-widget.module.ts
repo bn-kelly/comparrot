@@ -4,12 +4,8 @@ import { NgModule } from '@angular/core';
 import { MapsWidgetComponent } from './maps-widget.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    AgmCoreModule
-  ],
+  imports: [CommonModule, AgmCoreModule],
   declarations: [MapsWidgetComponent],
-  exports: [MapsWidgetComponent]
+  exports: [MapsWidgetComponent],
 })
-export class MapsWidgetModule {
-}
+export class MapsWidgetModule {}

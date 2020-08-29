@@ -8,8 +8,14 @@ import { LayoutModule } from './layout/layout.module';
 import { AgmCoreModule } from '@agm/core';
 import { environment } from '../environments/environment';
 import { PendingInterceptorModule } from '../@fury/shared/loading-indicator/pending-interceptor.module';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions } from '@angular/material/form-field';
-import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarConfig } from '@angular/material/snack-bar';
+import {
+  MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MatFormFieldDefaultOptions,
+} from '@angular/material/form-field';
+import {
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
+  MatSnackBarConfig,
+} from '@angular/material/snack-bar';
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -34,7 +40,7 @@ import { CoreModule } from './pages/authentication/services/core.module';
 
     // Google Maps Module
     AgmCoreModule.forRoot({
-      apiKey: environment.googleMapsApiKey
+      apiKey: environment.googleMapsApiKey,
     }),
 
     // Displays Loading Bar when a Route Request or HTTP Request is pending
@@ -48,7 +54,7 @@ import { CoreModule } from './pages/authentication/services/core.module';
     AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
-    AngularFireFunctionsModule
+    AngularFireFunctionsModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
@@ -56,18 +62,17 @@ import { CoreModule } from './pages/authentication/services/core.module';
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: {
-        appearance: 'fill'
-      } as MatFormFieldDefaultOptions
+        appearance: 'fill',
+      } as MatFormFieldDefaultOptions,
     },
     {
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
       useValue: {
         duration: 5000,
         horizontalPosition: 'end',
-        verticalPosition: 'bottom'
-      } as MatSnackBarConfig
-    }
-  ]
+        verticalPosition: 'bottom',
+      } as MatSnackBarConfig,
+    },
+  ],
 })
-export class AppModule {
-}
+export class AppModule {}

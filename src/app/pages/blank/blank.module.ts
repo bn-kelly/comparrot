@@ -6,12 +6,7 @@ import { BlankComponent } from './blank.component';
 import { FurySharedModule } from '../../../@fury/fury-shared.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    BlankRoutingModule,
-    FurySharedModule
-  ],
-  declarations: [BlankComponent]
+  imports: [CommonModule, BlankRoutingModule, FurySharedModule],
+  declarations: [BlankComponent],
 })
-export class BlankModule {
-}
+export class BlankModule {}

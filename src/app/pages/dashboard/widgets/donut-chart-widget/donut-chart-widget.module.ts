@@ -17,7 +17,6 @@ import { ChartsModule } from 'ng2-charts';
     ChartsModule,
   ],
   declarations: [DonutChartWidgetComponent],
-  exports: [DonutChartWidgetComponent]
+  exports: [DonutChartWidgetComponent],
 })
-export class DonutChartWidgetModule {
-}
+export class DonutChartWidgetModule {}

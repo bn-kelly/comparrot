@@ -25,11 +25,20 @@ import { InboxService } from './inbox.service';
     ReactiveFormsModule,
     QuillModule.forRoot(),
     ScrollbarModule,
-    ScrollingModule
+    ScrollingModule,
   ],
-  declarations: [InboxComponent, InboxNavigationComponent, InboxMailListComponent, InboxMailComponent, InboxMailLabelComponent, InboxMailStarComponent, InboxMailLabelListComponent, InboxMailConfirmDialogComponent, InboxComposeComponent],
+  declarations: [
+    InboxComponent,
+    InboxNavigationComponent,
+    InboxMailListComponent,
+    InboxMailComponent,
+    InboxMailLabelComponent,
+    InboxMailStarComponent,
+    InboxMailLabelListComponent,
+    InboxMailConfirmDialogComponent,
+    InboxComposeComponent,
+  ],
   entryComponents: [InboxMailConfirmDialogComponent, InboxComposeComponent],
-  providers: [InboxService]
+  providers: [InboxService],
 })
-export class InboxModule {
-}
+export class InboxModule {}

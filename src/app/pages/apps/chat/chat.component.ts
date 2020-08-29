@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import sortBy from 'lodash-es/sortBy';
 import * as moment from 'moment';
@@ -7,14 +13,14 @@ import { chatDemoData } from './chat.demo';
 import { MediaObserver } from '@angular/flex-layout';
 import { map, takeUntil } from 'rxjs/operators';
 import { componentDestroyed } from '../../../../@fury/shared/component-destroyed';
+import { noop } from 'rxjs';
 
 @Component({
   selector: 'fury-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.scss']
+  styleUrls: ['./chat.component.scss'],
 })
 export class ChatComponent implements OnInit, OnDestroy {
-
   drawerOpen = true;
   drawerMode = 'side';
   replyCtrl: FormControl;
@@ -22,11 +28,13 @@ export class ChatComponent implements OnInit, OnDestroy {
   chats: any[];
   activeChat: any;
 
-  @ViewChild('messagesScroll', { read: ScrollbarDirective, static: true }) messagesScroll: ScrollbarDirective;
+  @ViewChild('messagesScroll', { read: ScrollbarDirective, static: true })
+  messagesScroll: ScrollbarDirective;
 
-  constructor(private cd: ChangeDetectorRef,
-              private mediaObserver: MediaObserver) {
-  }
+  constructor(
+    private cd: ChangeDetectorRef,
+    private mediaObserver: MediaObserver,
+  ) {}
 
   ngOnInit() {
     this.replyCtrl = new FormControl();
@@ -34,10 +42,15 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chats = sortBy(chatDemoData, 'lastMessageTime').reverse();
     this.activeChat = this.chats[0];
 
-    this.mediaObserver.asObservable().pipe(
-      map(() => this.mediaObserver.isActive('lt-md')),
-      takeUntil(componentDestroyed(this))
-    ).subscribe(isLowerThanMedium => isLowerThanMedium ? this.hideDrawer() : this.showDrawer());
+    this.mediaObserver
+      .asObservable()
+      .pipe(
+        map(() => this.mediaObserver.isActive('lt-md')),
+        takeUntil(componentDestroyed(this)),
+      )
+      .subscribe(isLowerThanMedium =>
+        isLowerThanMedium ? this.hideDrawer() : this.showDrawer(),
+      );
   }
 
   showDrawer() {
@@ -63,13 +76,18 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.chats[0].messages.push({
         message: this.replyCtrl.value,
         when: moment(),
-        who: 'me'
+        who: 'me',
       });
 
       this.replyCtrl.reset();
       this.cd.markForCheck();
       setTimeout(() => {
-        this.messagesScroll.scrollbarRef.getScrollElement().scrollTo(0, this.messagesScroll.scrollbarRef.getScrollElement().scrollHeight);
+        this.messagesScroll.scrollbarRef
+          .getScrollElement()
+          .scrollTo(
+            0,
+            this.messagesScroll.scrollbarRef.getScrollElement().scrollHeight,
+          );
       }, 10);
     }
   }
@@ -78,5 +96,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     activeChat.messages.length = 0;
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy() {
+    noop();
+  }
 }

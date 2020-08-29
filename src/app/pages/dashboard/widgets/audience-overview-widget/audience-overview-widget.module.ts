@@ -19,7 +19,6 @@ import { ChartsModule } from 'ng2-charts';
     ChartsModule,
   ],
   declarations: [AudienceOverviewWidgetComponent],
-  exports: [AudienceOverviewWidgetComponent]
+  exports: [AudienceOverviewWidgetComponent],
 })
-export class AudienceOverviewWidgetModule {
-}
+export class AudienceOverviewWidgetModule {}

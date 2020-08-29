@@ -9,10 +9,9 @@ import { fadeInUpAnimation } from '../../../@fury/animations/fade-in-up.animatio
   selector: 'fury-icons',
   templateUrl: './icons.component.html',
   styleUrls: ['./icons.component.scss'],
-  animations: [fadeInRightAnimation, fadeInUpAnimation]
+  animations: [fadeInRightAnimation, fadeInUpAnimation],
 })
 export class IconsComponent {
-
   iconCtrl: FormControl;
   icons = [
     '3d_rotation',
@@ -809,7 +808,7 @@ export class IconsComponent {
     'wrap_text',
     'youtube_searched_for',
     'zoom_in',
-    'zoom_out'
+    'zoom_out',
   ];
   filteredIcons$: Observable<string[]>;
 
@@ -818,8 +817,11 @@ export class IconsComponent {
 
     this.filteredIcons$ = this.iconCtrl.valueChanges.pipe(
       startWith(null),
-      map(search => this.icons.filter(icon => icon.indexOf(search ? search.toLowerCase() : '') !== -1))
+      map(search =>
+        this.icons.filter(
+          icon => icon.indexOf(search ? search.toLowerCase() : '') !== -1,
+        ),
+      ),
     );
   }
 }
-

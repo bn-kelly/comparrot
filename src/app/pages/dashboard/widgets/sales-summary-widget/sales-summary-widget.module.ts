@@ -14,10 +14,9 @@ import { ChartsModule } from 'ng2-charts';
     // Core
     LoadingOverlayModule,
     FuryCardModule,
-    ChartsModule
+    ChartsModule,
   ],
   declarations: [SalesSummaryWidgetComponent],
-  exports: [SalesSummaryWidgetComponent]
+  exports: [SalesSummaryWidgetComponent],
 })
-export class SalesSummaryWidgetModule {
-}
+export class SalesSummaryWidgetModule {}

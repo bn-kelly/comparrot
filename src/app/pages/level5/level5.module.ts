@@ -10,9 +10,8 @@ import { Level5Component } from './level5.component';
     CommonModule,
     Level5RoutingModule,
     FuryCardModule,
-    BreadcrumbsModule
+    BreadcrumbsModule,
   ],
-  declarations: [Level5Component]
+  declarations: [Level5Component],
 })
-export class Level5Module {
-}
+export class Level5Module {}

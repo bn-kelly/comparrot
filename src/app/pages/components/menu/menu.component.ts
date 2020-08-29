@@ -1,13 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import escape from 'lodash-es/escape';
 
 @Component({
   selector: 'fury-menu',
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss']
+  styleUrls: ['./menu.component.scss'],
 })
-export class MenuComponent implements OnInit {
-
+export class MenuComponent {
   menuHTML = escape(`<button mat-icon-button [mdMenuTriggerFor]="menu">
   <mat-icon>more_vert</mat-icon>
 </button>
@@ -26,9 +25,4 @@ export class MenuComponent implements OnInit {
     <span> Disable alerts </span>
   </button>
 </mat-menu>`);
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 }

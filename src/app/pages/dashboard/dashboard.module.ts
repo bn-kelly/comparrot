@@ -35,10 +35,9 @@ import { FurySharedModule } from '../../../@fury/fury-shared.module';
     RecentSalesWidgetModule,
     AdvancedPieChartWidgetModule,
     MapsWidgetModule,
-    MarketWidgetModule
+    MarketWidgetModule,
   ],
   declarations: [DashboardComponent],
-  providers: [DashboardService]
+  providers: [DashboardService],
 })
-export class DashboardModule {
-}
+export class DashboardModule {}

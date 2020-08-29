@@ -8,9 +8,8 @@ describe('PageLayoutCardTabbedComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PageLayoutCardTabbedComponent]
-    })
-      .compileComponents();
+      declarations: [PageLayoutCardTabbedComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

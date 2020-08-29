@@ -14,9 +14,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MaterialModule,
     QuillModule.forRoot(),
     FurySharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
-  declarations: [EditorComponent]
+  declarations: [EditorComponent],
 })
-export class EditorModule {
-}
+export class EditorModule {}

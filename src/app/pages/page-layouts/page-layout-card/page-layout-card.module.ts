@@ -14,8 +14,7 @@ import { FuryCardModule } from '../../../../@fury/shared/card/card.module';
     PageLayoutCardRoutingModule,
     FurySharedModule,
     FuryCardModule,
-    PageLayoutDemoContentModule
-  ]
+    PageLayoutDemoContentModule,
+  ],
 })
-export class PageLayoutCardModule {
-}
+export class PageLayoutCardModule {}

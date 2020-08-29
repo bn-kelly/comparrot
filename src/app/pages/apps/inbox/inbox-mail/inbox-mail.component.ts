@@ -11,10 +11,9 @@ import { Mail } from '../shared/mail.interface';
 @Component({
   selector: 'fury-inbox-mail',
   templateUrl: './inbox-mail.component.html',
-  styleUrls: ['./inbox-mail.component.scss']
+  styleUrls: ['./inbox-mail.component.scss'],
 })
 export class InboxMailComponent implements OnInit {
-
   id: number | string;
   mail$: Observable<Mail>;
   availableLabels: MailLabel[];
@@ -22,12 +21,13 @@ export class InboxMailComponent implements OnInit {
 
   replying: boolean;
 
-  constructor(private route: ActivatedRoute,
-              private inboxService: InboxService,
-              private dialog: MatDialog,
-              private router: Router,
-              private snackbar: MatSnackBar) {
-  }
+  constructor(
+    private route: ActivatedRoute,
+    private inboxService: InboxService,
+    private dialog: MatDialog,
+    private router: Router,
+    private snackbar: MatSnackBar,
+  ) {}
 
   ngOnInit() {
     this.availableLabels = this.inboxService.availableLabels;
@@ -55,32 +55,49 @@ export class InboxMailComponent implements OnInit {
   }
 
   removeMail() {
-    this.dialog.open(InboxMailConfirmDialogComponent, {
-      data: {
-        content: 'Are you sure you want to delete this mail?'
-      }
-    }).afterClosed().subscribe(confirmed => {
-      if (confirmed) {
-        this.inboxService.removeMail(this._mail);
-        this.router.navigate(['../../'], { relativeTo: this.route });
-        this.snackbar.open(`You deleted the mail from: ${this._mail.from.name}`, 'UNDO', {
-          duration: 3000
-        })
-          .onAction().subscribe(() => {
-          const mail = this.inboxService.undoRemove();
-          if (mail) {
-            this.router.navigate(['/apps/inbox/mail', mail.id]);
-            this.snackbar.open(`Restored your mail from: ${mail.from.name}`, null, {
-              duration: 3000
+    this.dialog
+      .open(InboxMailConfirmDialogComponent, {
+        data: {
+          content: 'Are you sure you want to delete this mail?',
+        },
+      })
+      .afterClosed()
+      .subscribe(confirmed => {
+        if (confirmed) {
+          this.inboxService.removeMail(this._mail);
+          this.router.navigate(['../../'], { relativeTo: this.route });
+          this.snackbar
+            .open(
+              `You deleted the mail from: ${this._mail.from.name}`,
+              'UNDO',
+              {
+                duration: 3000,
+              },
+            )
+            .onAction()
+            .subscribe(() => {
+              const mail = this.inboxService.undoRemove();
+              if (mail) {
+                this.router.navigate(['/apps/inbox/mail', mail.id]);
+                this.snackbar.open(
+                  `Restored your mail from: ${mail.from.name}`,
+                  null,
+                  {
+                    duration: 3000,
+                  },
+                );
+              } else {
+                this.snackbar.open(
+                  'Could not UNDO last delete action. Sorry!',
+                  null,
+                  {
+                    duration: 3000,
+                  },
+                );
+              }
             });
-          } else {
-            this.snackbar.open('Could not UNDO last delete action. Sorry!', null, {
-              duration: 3000
-            });
-          }
-        });
-      }
-    });
+        }
+      });
   }
 
   showReply() {
@@ -92,7 +109,7 @@ export class InboxMailComponent implements OnInit {
 
     if (send) {
       this.snackbar.open(`You replied to ${this._mail.from.name}`, 'UNDO', {
-        duration: 3000
+        duration: 3000,
       });
     }
   }

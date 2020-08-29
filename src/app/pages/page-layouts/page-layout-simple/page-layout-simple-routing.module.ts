@@ -5,13 +5,12 @@ import { PageLayoutSimpleComponent } from './page-layout-simple.component';
 const routes: Routes = [
   {
     path: '',
-    component: PageLayoutSimpleComponent
-  }
+    component: PageLayoutSimpleComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class PageLayoutSimpleRoutingModule {
-}
+export class PageLayoutSimpleRoutingModule {}

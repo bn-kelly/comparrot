@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -10,10 +16,9 @@ import { ListColumn } from '../../../../../../@fury/shared/list/list-column.mode
 @Component({
   selector: 'fury-recent-sales-widget-table',
   templateUrl: './recent-sales-widget-table.component.html',
-  styleUrls: ['./recent-sales-widget-table.component.scss']
+  styleUrls: ['./recent-sales-widget-table.component.scss'],
 })
 export class RecentSalesWidgetTableComponent implements OnInit, AfterViewInit {
-
   @Input() columns: ListColumn[];
   @Input() pageSize = 10;
   /**
@@ -26,28 +31,28 @@ export class RecentSalesWidgetTableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  constructor(private dialog: MatDialog) {
-  }
+  constructor(private dialog: MatDialog) {}
 
   @Input() set data(value: any[]) {
     this.subject$.next(value);
-  };
+  }
 
   get visibleColumns() {
-    return this.columns.filter(column => column.visible).map(column => column.property);
+    return this.columns
+      .filter(column => column.visible)
+      .map(column => column.property);
   }
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource();
 
-    this.data$.pipe(
-      filter(data => !!data)
-    ).subscribe((values) => this.dataSource.data = values);
+    this.data$
+      .pipe(filter(data => !!data))
+      .subscribe(values => (this.dataSource.data = values));
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-
 }

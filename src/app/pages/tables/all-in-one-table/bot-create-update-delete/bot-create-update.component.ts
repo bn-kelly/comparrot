@@ -7,17 +7,18 @@ import { Bot } from './bot.model';
 @Component({
   selector: 'fury-bot-create-update',
   templateUrl: './bot-create-update.component.html',
-  styleUrls: ['./bot-create-update.component.scss']
+  styleUrls: ['./bot-create-update.component.scss'],
 })
 export class BotCreateUpdateComponent implements OnInit {
   form: FormGroup;
   mode: 'create' | 'update' = 'create';
 
-  constructor(@Inject(MAT_DIALOG_DATA) public defaults: any,
-              private afs: AngularFirestore,
-              private dialogRef: MatDialogRef<BotCreateUpdateComponent>,
-              private fb: FormBuilder) {
-  }
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public defaults: any,
+    private afs: AngularFirestore,
+    private dialogRef: MatDialogRef<BotCreateUpdateComponent>,
+    private fb: FormBuilder,
+  ) {}
 
   ngOnInit() {
     if (this.defaults) {
@@ -27,7 +28,16 @@ export class BotCreateUpdateComponent implements OnInit {
       this.defaults.callback = `(function() {\n\tconsole.log('hello');\n})();`;
     }
 
-    const { name, id, job, site, active, status, proxy, project } = this.defaults;
+    const {
+      name,
+      id,
+      job,
+      site,
+      active,
+      status,
+      proxy,
+      project,
+    } = this.defaults;
 
     this.form = this.fb.group({
       name,

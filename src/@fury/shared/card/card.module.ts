@@ -7,7 +7,7 @@ import {
   FuryCardHeader,
   FuryCardHeaderActions,
   FuryCardHeaderSubTitle,
-  FuryCardHeaderTitle
+  FuryCardHeaderTitle,
 } from './card.component';
 
 const cardComponents = [
@@ -17,19 +17,12 @@ const cardComponents = [
   FuryCardHeaderSubTitle,
   FuryCardHeaderActions,
   FuryCardContent,
-  FuryCardActions
+  FuryCardActions,
 ];
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  declarations: [
-    ...cardComponents
-  ],
-  exports: [
-    ...cardComponents
-  ]
+  imports: [CommonModule],
+  declarations: [...cardComponents],
+  exports: [...cardComponents],
 })
-export class FuryCardModule {
-}
+export class FuryCardModule {}

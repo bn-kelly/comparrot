@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../../pages/authentication/services/auth.service';
@@ -7,10 +7,9 @@ import { AngularFirestore } from '@angular/fire/firestore';
 @Component({
   selector: 'fury-toolbar-user',
   templateUrl: './toolbar-user.component.html',
-  styleUrls: ['./toolbar-user.component.scss']
+  styleUrls: ['./toolbar-user.component.scss'],
 })
 export class ToolbarUserComponent implements OnInit {
-
   isExtension: boolean;
   isOpen: boolean;
   user: any = {};
@@ -18,10 +17,10 @@ export class ToolbarUserComponent implements OnInit {
   isLoggedIn: boolean;
 
   constructor(
-      private router: Router,
-      private afs: AngularFirestore,
-      public auth: AuthService
-  ) { }
+    private router: Router,
+    private afs: AngularFirestore,
+    public auth: AuthService,
+  ) {}
 
   goToAccount() {
     this.router.navigate(['/account']);
@@ -44,7 +43,8 @@ export class ToolbarUserComponent implements OnInit {
     this.auth.user.subscribe(user => {
       this.user = user || {};
       if (!!user) {
-        this.userName = user.firstName && user.lastName
+        this.userName =
+          user.firstName && user.lastName
             ? `${user.firstName} ${user.lastName}`
             : user.firstName || user.lastName || user.displayName || '';
       }
@@ -59,5 +59,4 @@ export class ToolbarUserComponent implements OnInit {
   onClickOutside() {
     this.isOpen = false;
   }
-
 }

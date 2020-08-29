@@ -1,18 +1,25 @@
-import { AfterViewInit, Directive, HostBinding, Inject, Input, OnDestroy } from '@angular/core';
+import {
+  AfterViewInit,
+  Directive,
+  HostBinding,
+  Inject,
+  Input,
+  OnDestroy,
+} from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { componentDestroyed } from '../component-destroyed';
 import { BackdropDirective } from '../backdrop/backdrop.directive';
 import { DOCUMENT } from '@angular/common';
+import { noop } from 'rxjs';
 
 @Directive({
   selector: '[furySidebar],fury-sidebar',
   host: {
-    class: 'fury-sidebar'
+    class: 'fury-sidebar',
   },
-  exportAs: 'furySidebar'
+  exportAs: 'furySidebar',
 })
 export class SidebarDirective implements AfterViewInit, OnDestroy {
-
   @Input() position: 'left' | 'right' = 'left';
   @Input() backdrop: BackdropDirective;
   @Input() invisibleBackdrop: boolean;
@@ -43,9 +50,9 @@ export class SidebarDirective implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.backdrop.closed.pipe(
-      takeUntil(componentDestroyed(this))
-    ).subscribe(() => this.close());
+    this.backdrop.closed
+      .pipe(takeUntil(componentDestroyed(this)))
+      .subscribe(() => this.close());
   }
 
   showBackdrop() {
@@ -84,5 +91,7 @@ export class SidebarDirective implements AfterViewInit, OnDestroy {
     this.opened = false;
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy() {
+    noop();
+  }
 }

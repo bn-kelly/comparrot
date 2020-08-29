@@ -16,8 +16,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     FurySharedModule,
     FuryCardModule,
     PageLayoutDemoContentModule,
-    MatTabsModule
-  ]
+    MatTabsModule,
+  ],
 })
-export class PageLayoutCardTabbedModule {
-}
+export class PageLayoutCardTabbedModule {}

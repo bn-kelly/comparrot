@@ -5,13 +5,12 @@ import { Level5Component } from './level5.component';
 const routes: Routes = [
   {
     path: '',
-    component: Level5Component
-  }
+    component: Level5Component,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class Level5RoutingModule {
-}
+export class Level5RoutingModule {}

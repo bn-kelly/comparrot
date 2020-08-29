@@ -1,12 +1,16 @@
-import { Directive, ElementRef, EventEmitter, HostListener, Output } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Output,
+} from '@angular/core';
 
 @Directive({
-  selector: '[furyClickOutside]'
+  selector: '[furyClickOutside]',
 })
 export class ClickOutsideDirective {
-
-  constructor(private _elementRef: ElementRef) {
-  }
+  constructor(private _elementRef: ElementRef) {}
 
   @Output()
   public furyClickOutside = new EventEmitter<MouseEvent>();
@@ -17,10 +21,11 @@ export class ClickOutsideDirective {
       return;
     }
 
-    const clickedInside = this._elementRef.nativeElement.contains(targetElement);
+    const clickedInside = this._elementRef.nativeElement.contains(
+      targetElement,
+    );
     if (!clickedInside) {
       this.furyClickOutside.emit(event);
     }
   }
-
 }

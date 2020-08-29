@@ -12,8 +12,7 @@ import { PageLayoutDemoContentModule } from '../components/page-layout-content/p
     CommonModule,
     PageLayoutSimpleRoutingModule,
     FurySharedModule,
-    PageLayoutDemoContentModule
-  ]
+    PageLayoutDemoContentModule,
+  ],
 })
-export class PageLayoutSimpleModule {
-}
+export class PageLayoutSimpleModule {}

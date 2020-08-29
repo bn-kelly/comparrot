@@ -1,22 +1,26 @@
-import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
+import {
+  Directive,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  Input,
+  Output,
+} from '@angular/core';
 
 @Directive({
   selector: '[furyBackdrop],fury-backdrop',
   host: {
-    class: 'fury-backdrop'
+    class: 'fury-backdrop',
   },
-  exportAs: 'furyBackdrop'
+  exportAs: 'furyBackdrop',
 })
 export class BackdropDirective {
-
   @Input()
   @HostBinding('class.visible')
   visible: boolean;
 
   @HostBinding('class.invisible') invisible: boolean;
   @Output() closed = new EventEmitter();
-
-  constructor() {}
 
   show() {
     if (!this.visible) {
