@@ -43,11 +43,6 @@
                   *ngIf="offer.oldPrice">
               {{offer.oldPrice}}
             </span>
-
-            <!-- TODO: remove after sorting demonstration -->
-            <span>
-              {{offer.timestamp | date:'short'}}
-            </span>
         </div>
         <a
             (click)="onBuyButtonClick($event, offer.buyUrl)"
