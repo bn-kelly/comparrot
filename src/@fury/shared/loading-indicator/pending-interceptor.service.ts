@@ -1,6 +1,17 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import {
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
+import {
+  NavigationCancel,
+  NavigationEnd,
+  NavigationError,
+  NavigationStart,
+  Router,
+} from '@angular/router';
 import { Observable, ReplaySubject, throwError } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
 
@@ -12,7 +23,9 @@ export class PendingInterceptorService implements HttpInterceptor {
     return this._pendingRequests;
   }
 
-  private _pendingRequestsStatus: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
+  private _pendingRequestsStatus: ReplaySubject<boolean> = new ReplaySubject<
+    boolean
+  >(1);
 
   get pendingRequestsStatus(): Observable<boolean> {
     return this._pendingRequestsStatus.asObservable();
@@ -30,13 +43,20 @@ export class PendingInterceptorService implements HttpInterceptor {
         this._pendingRequestsStatus.next(true);
       }
 
-      if ((event instanceof NavigationError || event instanceof NavigationEnd || event instanceof NavigationCancel)) {
+      if (
+        event instanceof NavigationError ||
+        event instanceof NavigationEnd ||
+        event instanceof NavigationCancel
+      ) {
         this._pendingRequestsStatus.next(false);
       }
     });
   }
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler,
+  ): Observable<HttpEvent<any>> {
     const shouldBypass = this.shouldBypass(req.url);
 
     if (!shouldBypass) {
@@ -62,7 +82,7 @@ export class PendingInterceptorService implements HttpInterceptor {
             this._pendingRequestsStatus.next(false);
           }
         }
-      })
+      }),
     );
   }
 
@@ -77,8 +97,8 @@ export function PendingInterceptorServiceFactory(router: Router) {
   return new PendingInterceptorService(router);
 }
 
-export let PendingInterceptorServiceFactoryProvider = {
+export const PendingInterceptorServiceFactoryProvider = {
   provide: PendingInterceptorService,
   useFactory: PendingInterceptorServiceFactory,
-  deps: [Router]
+  deps: [Router],
 };

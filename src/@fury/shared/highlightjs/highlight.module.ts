@@ -4,7 +4,6 @@ import { HighlightDirective } from './highlight.directive';
 @NgModule({
   imports: [],
   declarations: [HighlightDirective],
-  exports: [HighlightDirective]
+  exports: [HighlightDirective],
 })
-export class HighlightModule {
-}
+export class HighlightModule {}

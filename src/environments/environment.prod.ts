@@ -9,6 +9,6 @@ export const environment = {
     projectId: 'coingenius-253507',
     storageBucket: 'coingenius-253507.appspot.com',
     messagingSenderId: '861149901860',
-    appId: '1:861149901860:web:0fdd111c9fe7cecd01d4b1'
-  }
+    appId: '1:861149901860:web:0fdd111c9fe7cecd01d4b1',
+  },
 };

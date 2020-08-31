@@ -16,7 +16,6 @@ import { ChatComponent } from './chat.component';
     // Core
     ScrollbarModule,
   ],
-  declarations: [ChatComponent]
+  declarations: [ChatComponent],
 })
-export class ChatModule {
-}
+export class ChatModule {}

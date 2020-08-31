@@ -20,9 +20,8 @@ import { FurySharedModule } from '../../../@fury/fury-shared.module';
     ScrollbarModule,
     DragDropModule,
     BreadcrumbsModule,
-    FuryCardModule
+    FuryCardModule,
   ],
-  declarations: [DragAndDropComponent]
+  declarations: [DragAndDropComponent],
 })
-export class DragAndDropModule {
-}
+export class DragAndDropModule {}

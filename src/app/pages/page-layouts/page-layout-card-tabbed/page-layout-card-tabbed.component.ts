@@ -1,15 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'fury-page-layout-card-tabbed',
   templateUrl: './page-layout-card-tabbed.component.html',
-  styleUrls: ['./page-layout-card-tabbed.component.scss']
+  styleUrls: ['./page-layout-card-tabbed.component.scss'],
 })
-export class PageLayoutCardTabbedComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-}
+export class PageLayoutCardTabbedComponent {}

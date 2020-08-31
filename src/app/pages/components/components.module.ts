@@ -11,7 +11,10 @@ import { CardsComponent } from './cards/cards.component';
 import { CheckboxComponent } from './checkbox/checkbox.component';
 import { ComponentsRoutingModule } from './components-routing.module';
 import { ComponentsComponent } from './components.component';
-import { DemoDialogComponent, DialogsComponent } from './dialogs/dialogs.component';
+import {
+  DemoDialogComponent,
+  DialogsComponent,
+} from './dialogs/dialogs.component';
 import { GridListComponent } from './grid-list/grid-list.component';
 import { InputComponent } from './input/input.component';
 import { ListsComponent } from './lists/lists.component';
@@ -37,7 +40,7 @@ import { FurySharedModule } from '../../../@fury/fury-shared.module';
     // Core
     HighlightModule,
     ScrollbarModule,
-    BreadcrumbsModule
+    BreadcrumbsModule,
   ],
   declarations: [
     ComponentsComponent,
@@ -59,7 +62,6 @@ import { FurySharedModule } from '../../../@fury/fury-shared.module';
     TooltipComponent,
     SlideToggleComponent,
   ],
-  entryComponents: [DemoDialogComponent]
+  entryComponents: [DemoDialogComponent],
 })
-export class ComponentsModule {
-}
+export class ComponentsModule {}

@@ -1,15 +1,13 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import escape from 'lodash-es/escape';
 
 @Component({
   selector: 'fury-input',
   templateUrl: './input.component.html',
-  styleUrls: ['./input.component.scss']
+  styleUrls: ['./input.component.scss'],
 })
-export class InputComponent implements OnInit {
-
-  inputHTML =
-    escape(`<mat-form-field>
+export class InputComponent {
+  inputHTML = escape(`<mat-form-field>
   <button *ngIf="!visible" type="button" mat-icon-button matPrefix (click)="show()">
     <mat-icon matPrefix>lock</mat-icon>
   </button>
@@ -28,11 +26,7 @@ export class InputComponent implements OnInit {
   inputType = 'password';
   visible = false;
 
-  constructor(private cd: ChangeDetectorRef) {
-  }
-
-  ngOnInit() {
-  }
+  constructor(private cd: ChangeDetectorRef) {}
 
   show() {
     this.inputType = 'text';

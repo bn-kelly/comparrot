@@ -1,9 +1,9 @@
 chrome.browserAction.setPopup({
-  popup: ''
+  popup: '',
 });
 
-chrome.browserAction.onClicked.addListener(function(tab) {
+chrome.browserAction.onClicked.addListener(function (tab) {
   chrome.tabs.sendMessage(tab.id, {
-    action: 'toggle-show-iframe'
+    action: 'toggle-show-iframe',
   });
 });

@@ -1,19 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import escape from 'lodash-es/escape';
 
 @Component({
   selector: 'fury-tooltip',
   templateUrl: './tooltip.component.html',
-  styleUrls: ['./tooltip.component.scss']
+  styleUrls: ['./tooltip.component.scss'],
 })
-export class TooltipComponent implements OnInit {
-
+export class TooltipComponent {
   tooltipHTML = escape(`<button mat-icon-button matTooltip="Favorite this">
   <mat-icon>favorite</mat-icon>
 </button>`);
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 }

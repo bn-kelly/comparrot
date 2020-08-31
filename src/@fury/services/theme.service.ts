@@ -16,22 +16,22 @@ export interface ThemeConfig {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ThemeService {
-
-  private _themeSubject = new BehaviorSubject<[Theme, Theme]>([null, 'fury-default']);
+  private _themeSubject = new BehaviorSubject<[Theme, Theme]>([
+    null,
+    'fury-default',
+  ]);
   theme$ = this._themeSubject.asObservable();
-  activeTheme$ = this.theme$.pipe(
-    map(theme => theme[1])
-  );
+  activeTheme$ = this.theme$.pipe(map(theme => theme[1]));
   private _configSubject = new BehaviorSubject<ThemeConfig>({
     navigation: 'side',
     sidenavUserVisible: true,
     toolbarVisible: true,
     toolbarPosition: 'fixed',
     footerVisible: true,
-    footerPosition: 'fixed'
+    footerPosition: 'fixed',
   });
   config$ = this._configSubject.asObservable();
 
@@ -46,42 +46,42 @@ export class ThemeService {
   setNavigation(navigation: 'side' | 'top') {
     this._configSubject.next({
       ...this._configSubject.getValue(),
-      navigation
+      navigation,
     });
   }
 
   setSidenavUserVisible(sidenavUserVisible: boolean) {
     this._configSubject.next({
       ...this._configSubject.getValue(),
-      sidenavUserVisible
+      sidenavUserVisible,
     });
   }
 
   setToolbarVisible(toolbarVisible: boolean) {
     this._configSubject.next({
       ...this._configSubject.getValue(),
-      toolbarVisible
+      toolbarVisible,
     });
   }
 
   setToolbarPosition(toolbarPosition: ThemePosition) {
     this._configSubject.next({
       ...this._configSubject.getValue(),
-      toolbarPosition
+      toolbarPosition,
     });
   }
 
   setFooterVisible(footerVisible: boolean) {
     this._configSubject.next({
       ...this._configSubject.getValue(),
-      footerVisible
+      footerVisible,
     });
   }
 
   setFooterPosition(footerPosition: ThemePosition) {
     this._configSubject.next({
       ...this._configSubject.getValue(),
-      footerPosition
+      footerPosition,
     });
   }
 
@@ -94,7 +94,7 @@ export class ThemeService {
           toolbarVisible: true,
           toolbarPosition: 'static',
           footerVisible: true,
-          footerPosition: 'static'
+          footerPosition: 'static',
         });
 
         this.sidenavService.setCollapsed(true);
@@ -114,7 +114,7 @@ export class ThemeService {
           toolbarVisible: true,
           toolbarPosition: 'static',
           footerVisible: true,
-          footerPosition: 'static'
+          footerPosition: 'static',
         });
 
         this.setTheme('fury-light');
@@ -128,7 +128,7 @@ export class ThemeService {
           toolbarVisible: true,
           toolbarPosition: 'fixed',
           footerVisible: true,
-          footerPosition: 'fixed'
+          footerPosition: 'fixed',
         });
         break;
       }

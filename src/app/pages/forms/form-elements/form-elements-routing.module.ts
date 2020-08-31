@@ -5,13 +5,12 @@ import { FormElementsComponent } from './form-elements.component';
 const routes: Routes = [
   {
     path: '',
-    component: FormElementsComponent
-  }
+    component: FormElementsComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class FormElementsRoutingModule {
-}
+export class FormElementsRoutingModule {}

@@ -1,13 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import escape from 'lodash-es/escape';
 
 @Component({
   selector: 'fury-radio',
   templateUrl: './radio.component.html',
-  styleUrls: ['./radio.component.scss']
+  styleUrls: ['./radio.component.scss'],
 })
-export class RadioComponent implements OnInit {
-
+export class RadioComponent {
   radioHTML = escape(`<mat-radio-group [(ngModel)]="favoriteSeason">
   <mat-radio-button class="radio" *ngFor="let season of seasons" [value]="season">
     {{ season }}
@@ -16,17 +15,5 @@ export class RadioComponent implements OnInit {
 
   favoriteSeason: string;
 
-  seasons = [
-    'Winter',
-    'Spring',
-    'Summer',
-    'Autumn',
-  ];
-
-  constructor() {
-  }
-
-  ngOnInit() {
-  }
-
+  seasons = ['Winter', 'Spring', 'Summer', 'Autumn'];
 }

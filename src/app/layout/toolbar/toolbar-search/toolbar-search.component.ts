@@ -1,21 +1,14 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'fury-toolbar-search',
   templateUrl: './toolbar-search.component.html',
-  styleUrls: ['./toolbar-search.component.scss']
+  styleUrls: ['./toolbar-search.component.scss'],
 })
-export class ToolbarSearchComponent implements OnInit {
-
+export class ToolbarSearchComponent {
   isOpen: boolean;
 
   @ViewChild('input', { read: ElementRef, static: true }) input: ElementRef;
-
-  constructor() {
-  }
-
-  ngOnInit() {
-  }
 
   open() {
     this.isOpen = true;
@@ -23,11 +16,9 @@ export class ToolbarSearchComponent implements OnInit {
     setTimeout(() => {
       this.input.nativeElement.focus();
     }, 100);
-
   }
 
   close() {
     this.isOpen = false;
   }
-
 }

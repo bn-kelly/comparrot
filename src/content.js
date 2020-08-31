@@ -16,7 +16,7 @@ const inIframe = () => {
   } catch (e) {
     return true;
   }
-}
+};
 
 const toggleShowIframe = () => {
   const iframe = getIframe();
@@ -86,7 +86,9 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
       if (shouldSaveProductToDB) {
         const priceDivider = ' - ';
         const title = productTitleElement.innerText;
-        const originalPrice = productPriceElement ? productPriceElement.innerText : '';
+        const originalPrice = productPriceElement
+          ? productPriceElement.innerText
+          : '';
         const image = productImageElement ? productImageElement.src : '';
 
         const price = originalPrice.includes(priceDivider)
@@ -116,11 +118,14 @@ const saveProductToDB = product => {
 const getElementBySelector = (selector = '') => {
   return typeof selector === 'string'
     ? document.querySelector(selector)
-    : Array.isArray(selector) && selector
-        .map(item => {
-          return typeof item === 'string' ? document.querySelector(item) : null;
-        })
-        .filter(Boolean)[0];
+    : Array.isArray(selector) &&
+        selector
+          .map(item => {
+            return typeof item === 'string'
+              ? document.querySelector(item)
+              : null;
+          })
+          .filter(Boolean)[0];
 };
 
 const getNumericPriceFromString = (price = '') =>
@@ -132,12 +137,12 @@ if (!location.ancestorOrigins.contains(extensionOrigin)) {
   // Must be declared at web_accessible_resources in manifest.json
   iframe.src = chrome.runtime.getURL('index.html');
 
-  if(!inIframe()) {
+  if (!inIframe()) {
     document.body.appendChild(iframe);
   }
 }
 
-chrome.extension.onMessage.addListener(function(msg) {
+chrome.extension.onMessage.addListener(function (msg) {
   switch (msg.action) {
     case 'toggle-show-iframe':
       toggleShowIframe();
@@ -165,4 +170,3 @@ chrome.extension.onMessage.addListener(function(msg) {
 });
 
 document.body.addEventListener('click', hideIframe);
-

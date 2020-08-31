@@ -7,15 +7,12 @@ hljs.registerLanguage('xml', xml);
 hljs.registerLanguage('typescript', typescript);
 
 @Directive({
-  selector: 'code[furyHighlight]'
+  selector: 'code[furyHighlight]',
 })
 export class HighlightDirective implements AfterViewInit {
-
-  constructor(private elem: ElementRef) {
-  }
+  constructor(private elem: ElementRef) {}
 
   ngAfterViewInit() {
     hljs.highlightBlock(this.elem.nativeElement);
   }
-
 }

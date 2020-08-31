@@ -14,8 +14,7 @@ import { FurySharedModule } from '../../../../@fury/fury-shared.module';
     PageLayoutSimpleTabbedRoutingModule,
     MatTabsModule,
     FurySharedModule,
-    PageLayoutDemoContentModule
-  ]
+    PageLayoutDemoContentModule,
+  ],
 })
-export class PageLayoutSimpleTabbedModule {
-}
+export class PageLayoutSimpleTabbedModule {}

@@ -13,6 +13,6 @@ export const environment = {
     databaseURL: 'https://botsparked.firebaseio.com',
     projectId: 'botsparked',
     storageBucket: 'botsparked.appspot.com',
-    messagingSenderId: '899772049124'
-  }
+    messagingSenderId: '899772049124',
+  },
 };

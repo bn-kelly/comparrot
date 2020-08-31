@@ -22,12 +22,11 @@ export function momentAdapterFactory() {
     MaterialModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
-      useFactory: momentAdapterFactory
+      useFactory: momentAdapterFactory,
     }),
-    ScrollbarModule
+    ScrollbarModule,
   ],
   declarations: [CalendarComponent, CalendarEditComponent],
-  entryComponents: [CalendarEditComponent]
+  entryComponents: [CalendarEditComponent],
 })
-export class CalendarAppModule {
-}
+export class CalendarAppModule {}

@@ -9,27 +9,29 @@ import { ChartWidgetOptions } from '../../../../../@fury/shared/chart-widget/cha
 @Component({
   selector: 'fury-donut-chart-widget',
   templateUrl: './donut-chart-widget.component.html',
-  styleUrls: ['./donut-chart-widget.component.scss']
+  styleUrls: ['./donut-chart-widget.component.scss'],
 })
 export class DonutChartWidgetComponent {
-
   @Input() data: ChartData;
   @Input() options: ChartWidgetOptions;
-  @Input() chartOptions: ChartOptions = defaultsDeep({
-    layout: {
-      padding: {
-        left: 5,
-        right: 5,
-        top: 5
-      }
+  @Input() chartOptions: ChartOptions = defaultsDeep(
+    {
+      layout: {
+        padding: {
+          left: 5,
+          right: 5,
+          top: 5,
+        },
+      },
+      pieceLabel: {
+        render: 'label',
+        arc: true,
+        position: 'border',
+        fontColor: '#FFFFFF',
+      },
     },
-    pieceLabel: {
-      render: 'label',
-      arc: true,
-      position: 'border',
-      fontColor: '#FFFFFF'
-    }
-  }, defaultChartOptions);
+    defaultChartOptions,
+  );
   @Input() chartPlugins = [ChartJSPieceLabelPlugin];
 
   @ViewChild('canvas', { read: ElementRef, static: true }) canvas: ElementRef;
@@ -37,9 +39,6 @@ export class DonutChartWidgetComponent {
   chart: Chart;
 
   isLoading: boolean;
-
-  constructor() {
-  }
 
   reload() {
     this.isLoading = true;

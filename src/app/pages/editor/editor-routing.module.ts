@@ -7,14 +7,13 @@ const routes: Routes = [
     path: '',
     component: EditorComponent,
     data: {
-      scrollDisabled: true
-    }
-  }
+      scrollDisabled: true,
+    },
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class EditorRoutingModule {
-}
+export class EditorRoutingModule {}

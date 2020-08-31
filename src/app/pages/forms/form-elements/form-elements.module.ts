@@ -20,9 +20,8 @@ import { FurySharedModule } from '../../../../@fury/fury-shared.module';
     // Core
     HighlightModule,
     FuryCardModule,
-    BreadcrumbsModule
+    BreadcrumbsModule,
   ],
-  declarations: [FormElementsComponent]
+  declarations: [FormElementsComponent],
 })
-export class FormElementsModule {
-}
+export class FormElementsModule {}

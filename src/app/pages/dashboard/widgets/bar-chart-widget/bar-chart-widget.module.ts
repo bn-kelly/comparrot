@@ -16,10 +16,9 @@ import { ChartsModule } from 'ng2-charts';
 
     // Chart Widget Style
     FuryCardModule,
-    ChartsModule
+    ChartsModule,
   ],
   declarations: [BarChartWidgetComponent],
-  exports: [BarChartWidgetComponent]
+  exports: [BarChartWidgetComponent],
 })
-export class BarChartWidgetModule {
-}
+export class BarChartWidgetModule {}

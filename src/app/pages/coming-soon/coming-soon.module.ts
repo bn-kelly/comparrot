@@ -11,9 +11,8 @@ import { FuryCardModule } from '../../../@fury/shared/card/card.module';
     CommonModule,
     ComingSoonRoutingModule,
     FurySharedModule,
-    FuryCardModule
+    FuryCardModule,
   ],
-  declarations: [ComingSoonComponent]
+  declarations: [ComingSoonComponent],
 })
-export class ComingSoonModule {
-}
+export class ComingSoonModule {}

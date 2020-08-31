@@ -5,11 +5,7 @@ import { FurySharedModule } from '../../../../../@fury/fury-shared.module';
 
 @NgModule({
   declarations: [PageLayoutDemoContentComponent],
-  imports: [
-    CommonModule,
-    FurySharedModule
-  ],
-  exports: [PageLayoutDemoContentComponent]
+  imports: [CommonModule, FurySharedModule],
+  exports: [PageLayoutDemoContentComponent],
 })
-export class PageLayoutDemoContentModule {
-}
+export class PageLayoutDemoContentModule {}

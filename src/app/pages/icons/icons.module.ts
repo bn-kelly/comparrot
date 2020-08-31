@@ -14,9 +14,8 @@ import { IconsComponent } from './icons.component';
     ReactiveFormsModule,
     MaterialModule,
     BreadcrumbsModule,
-    FuryCardModule
+    FuryCardModule,
   ],
-  declarations: [IconsComponent]
+  declarations: [IconsComponent],
 })
-export class IconsModule {
-}
+export class IconsModule {}

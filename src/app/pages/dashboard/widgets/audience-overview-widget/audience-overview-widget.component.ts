@@ -10,58 +10,62 @@ import { AudienceOverviewWidgetOptions } from './audience-overview-widget-option
 @Component({
   selector: 'fury-audience-overview-widget',
   templateUrl: './audience-overview-widget.component.html',
-  styleUrls: ['./audience-overview-widget.component.scss']
+  styleUrls: ['./audience-overview-widget.component.scss'],
 })
 export class AudienceOverviewWidgetComponent {
-
   data: ChartData;
   @ViewChild('canvas', { read: ElementRef, static: true }) canvas: ElementRef;
-  @Input() chartOptions: ChartOptions = defaultsDeep({
-    scales: {
-      xAxes: [{
-        display: true,
-        gridLines: {
-          display: false,
-          drawBorder: false,
+  @Input() chartOptions: ChartOptions = defaultsDeep(
+    {
+      scales: {
+        xAxes: [
+          {
+            display: true,
+            gridLines: {
+              display: false,
+              drawBorder: false,
+            },
+            ticks: {
+              fontColor: '#9e9e9e',
+              padding: 12,
+            },
+          },
+        ],
+        yAxes: [
+          {
+            display: true,
+            position: 'right',
+            gridLines: {
+              drawBorder: false,
+              offsetGridLines: true,
+            },
+            ticks: {
+              fontColor: '#9e9e9e',
+              maxTicksLimit: 5,
+            },
+          },
+        ],
+      },
+      layout: {
+        padding: {
+          left: 5,
+          right: 5,
+          top: 5,
         },
-        ticks: {
-          fontColor: '#9e9e9e',
-          padding: 12
-        },
-      }],
-      yAxes: [{
-        display: true,
-        position: 'right',
-        gridLines: {
-          drawBorder: false,
-          offsetGridLines: true
-        },
-        ticks: {
-          fontColor: '#9e9e9e',
-          maxTicksLimit: 5
-        }
-      }]
+      },
+      tooltips: {
+        mode: 'index',
+        intersect: false,
+      },
+      hover: {
+        intersect: true,
+      },
     },
-    layout: {
-      padding: {
-        left: 5,
-        right: 5,
-        top: 5
-      }
-    },
-    tooltips: {
-      mode: 'index',
-      intersect: false,
-    },
-    hover: {
-      intersect: true
-    }
-  }, defaultChartOptions);
+    defaultChartOptions,
+  );
   chart: Chart;
   isLoading: boolean;
   timeframe = new FormControl('last7');
-
-  constructor() {}
 
   private _options: AudienceOverviewWidgetOptions[];
 
@@ -79,13 +83,17 @@ export class AudienceOverviewWidgetComponent {
           option.sum = data.reduce((sum: number, x: number) => sum + x);
         }
 
-        if (!option.gain && option.data.datasets && option.data.datasets.length > 1) {
+        if (
+          !option.gain &&
+          option.data.datasets &&
+          option.data.datasets.length > 1
+        ) {
           const data1 = option.data.datasets[0].data as number[];
           const data2 = option.data.datasets[1].data as number[];
           const sum1 = data1.reduce((sum: number, x: number) => sum + x);
           const sum2 = data2.reduce((sum: number, x: number) => sum + x);
 
-          option.gain = Math.round(((sum1 - sum2) / sum2 * 100) * 100) / 100;
+          option.gain = Math.round(((sum1 - sum2) / sum2) * 100 * 100) / 100;
         }
       });
 
@@ -93,7 +101,9 @@ export class AudienceOverviewWidgetComponent {
     }
   }
 
-  private _activeOptions = new BehaviorSubject<AudienceOverviewWidgetOptions>({ label: '' });
+  private _activeOptions = new BehaviorSubject<AudienceOverviewWidgetOptions>({
+    label: '',
+  });
 
   get activeOptions() {
     return this._activeOptions.getValue();

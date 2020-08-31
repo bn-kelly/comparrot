@@ -14,33 +14,32 @@ const routes: Routes = [
         redirectTo: 'primary',
         pathMatch: 'full',
         data: {
-          scrollDisabled: true
-        }
+          scrollDisabled: true,
+        },
       },
       {
         path: ':category',
         component: InboxMailListComponent,
         data: {
-          scrollDisabled: true
-        }
+          scrollDisabled: true,
+        },
       },
       {
         path: 'mail/:id',
         component: InboxMailComponent,
         data: {
-          scrollDisabled: true
-        }
-      }
+          scrollDisabled: true,
+        },
+      },
     ],
     data: {
-      scrollDisabled: true
-    }
-  }
+      scrollDisabled: true,
+    },
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class InboxRoutingModule {
-}
+export class InboxRoutingModule {}

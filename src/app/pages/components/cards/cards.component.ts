@@ -1,13 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import escape from 'lodash-es/escape';
 
 @Component({
   selector: 'fury-cards',
   templateUrl: './cards.component.html',
-  styleUrls: ['./cards.component.scss']
+  styleUrls: ['./cards.component.scss'],
 })
-export class CardsComponent implements OnInit {
-
+export class CardsComponent {
   cardHTML = escape(`<mat-card>
   <mat-card-header>
     <img mat-card-avatar src="assets/img/avatars/3.jpg">
@@ -39,9 +38,4 @@ export class CardsComponent implements OnInit {
     </div>
   </mat-card-actions>
 </mat-card>`);
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 }

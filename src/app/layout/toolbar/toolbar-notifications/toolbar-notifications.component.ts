@@ -6,15 +6,11 @@ import { LIST_FADE_ANIMATION } from '../../../../@fury/shared/list.animation';
   templateUrl: './toolbar-notifications.component.html',
   styleUrls: ['./toolbar-notifications.component.scss'],
   animations: [...LIST_FADE_ANIMATION],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToolbarNotificationsComponent implements OnInit {
-
   notifications: any[];
   isOpen: boolean;
-
-  constructor() {
-  }
 
   ngOnInit() {
     this.notifications = [
@@ -23,36 +19,36 @@ export class ToolbarNotificationsComponent implements OnInit {
         name: 'This is a notification',
         time: 'few sec ago',
         read: false,
-        colorClass: ''
+        colorClass: '',
       },
       {
         icon: 'shopping_basket',
         name: 'User bought your template',
         time: '23 min ago',
         read: false,
-        colorClass: 'primary'
+        colorClass: 'primary',
       },
       {
         icon: 'eject',
         name: 'Server Crashed',
         time: 'an hour ago',
         read: false,
-        colorClass: 'accent'
+        colorClass: 'accent',
       },
       {
         icon: 'cached',
         name: 'New user registered',
         time: '6 hours ago',
         read: true,
-        colorClass: ''
+        colorClass: '',
       },
       {
         icon: 'code',
         name: 'John added you as friend',
         time: 'yesterday',
         read: true,
-        colorClass: ''
-      }
+        colorClass: '',
+      },
     ];
   }
 
@@ -74,6 +70,6 @@ export class ToolbarNotificationsComponent implements OnInit {
   }
 
   markAllAsRead() {
-    this.notifications.forEach(notification => notification.read = true);
+    this.notifications.forEach(notification => (notification.read = true));
   }
 }

@@ -11,19 +11,15 @@ import { AccountRoutingModule } from './account-routing.module';
 import { AccountComponent } from './account.component';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        AccountRoutingModule,
-        MaterialModule,
-        MatTabsModule,
-        ReactiveFormsModule,
-        ImageCropperModule,
-        MatExpansionModule,
-    ],
-    declarations: [
-        AccountComponent,
-        OrderByPipe,
-    ],
+  imports: [
+    CommonModule,
+    AccountRoutingModule,
+    MaterialModule,
+    MatTabsModule,
+    ReactiveFormsModule,
+    ImageCropperModule,
+    MatExpansionModule,
+  ],
+  declarations: [AccountComponent, OrderByPipe],
 })
-export class AccountModule {
-}
+export class AccountModule {}

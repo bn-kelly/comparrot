@@ -16,10 +16,9 @@ import { ChartsModule } from 'ng2-charts';
     FuryCardModule,
     LoadingOverlayModule,
     ScrollbarModule,
-    ChartsModule
+    ChartsModule,
   ],
   declarations: [AdvancedPieChartWidgetComponent],
-  exports: [AdvancedPieChartWidgetComponent]
+  exports: [AdvancedPieChartWidgetComponent],
 })
-export class AdvancedPieChartWidgetModule {
-}
+export class AdvancedPieChartWidgetModule {}

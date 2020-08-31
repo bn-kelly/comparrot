@@ -4,12 +4,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { LoadingIndicatorComponent } from './loading-indicator.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MatProgressBarModule
-  ],
+  imports: [CommonModule, MatProgressBarModule],
   declarations: [LoadingIndicatorComponent],
   exports: [LoadingIndicatorComponent],
 })
-export class LoadingIndicatorModule {
-}
+export class LoadingIndicatorModule {}

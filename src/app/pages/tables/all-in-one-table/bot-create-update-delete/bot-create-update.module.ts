@@ -23,11 +23,10 @@ import { BotCreateUpdateComponent } from './bot-create-update.component';
     MatIconModule,
     MatRadioModule,
     MatSelectModule,
-    AceEditorModule
+    AceEditorModule,
   ],
   declarations: [BotCreateUpdateComponent],
   entryComponents: [BotCreateUpdateComponent],
-  exports: [BotCreateUpdateComponent]
+  exports: [BotCreateUpdateComponent],
 })
-export class BotCreateUpdateModule {
-}
+export class BotCreateUpdateModule {}

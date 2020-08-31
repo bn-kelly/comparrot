@@ -5,12 +5,8 @@ import { FurySharedModule } from '../../../@fury/fury-shared.module';
 import { ConfigPanelToggleComponent } from './config-panel-toggle/config-panel-toggle.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FurySharedModule
-  ],
+  imports: [CommonModule, FurySharedModule],
   declarations: [ConfigPanelComponent, ConfigPanelToggleComponent],
-  exports: [ConfigPanelComponent, ConfigPanelToggleComponent]
+  exports: [ConfigPanelComponent, ConfigPanelToggleComponent],
 })
-export class ConfigPanelModule {
-}
+export class ConfigPanelModule {}

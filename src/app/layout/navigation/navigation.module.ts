@@ -5,12 +5,8 @@ import { FurySharedModule } from '../../../@fury/fury-shared.module';
 import { NavigationItemComponent } from './navigation-item/navigation-item.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FurySharedModule
-  ],
+  imports: [CommonModule, FurySharedModule],
   declarations: [NavigationComponent, NavigationItemComponent],
-  exports: [NavigationComponent]
+  exports: [NavigationComponent],
 })
-export class NavigationModule {
-}
+export class NavigationModule {}

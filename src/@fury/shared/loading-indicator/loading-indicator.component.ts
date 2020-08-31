@@ -6,10 +6,9 @@ import { PendingInterceptorService } from './pending-interceptor.service';
 @Component({
   selector: 'fury-loading-indicator',
   templateUrl: './loading-indicator.component.html',
-  styleUrls: ['./loading-indicator.component.scss']
+  styleUrls: ['./loading-indicator.component.scss'],
 })
 export class LoadingIndicatorComponent implements OnInit, OnDestroy {
-
   public isSpinnerVisible: boolean;
   @Input()
   public backgroundColor: string;
@@ -21,11 +20,14 @@ export class LoadingIndicatorComponent implements OnInit, OnDestroy {
   public entryComponent: any = null;
   private subscription: Subscription;
 
-  constructor(private pendingRequestInterceptorService: PendingInterceptorService) {
-    this.subscription = this.pendingRequestInterceptorService
-      .pendingRequestsStatus
+  constructor(
+    private pendingRequestInterceptorService: PendingInterceptorService,
+  ) {
+    this.subscription = this.pendingRequestInterceptorService.pendingRequestsStatus
       .pipe(debounce(this.handleDebounce.bind(this)))
-      .subscribe(hasPendingRequests => this.isSpinnerVisible = hasPendingRequests);
+      .subscribe(
+        hasPendingRequests => (this.isSpinnerVisible = hasPendingRequests),
+      );
   }
 
   ngOnInit(): void {
@@ -35,7 +37,9 @@ export class LoadingIndicatorComponent implements OnInit, OnDestroy {
 
     if (!!this.filteredUrlPatterns.length) {
       this.filteredUrlPatterns.forEach(e => {
-        this.pendingRequestInterceptorService.filteredUrlPatterns.push(new RegExp(e));
+        this.pendingRequestInterceptorService.filteredUrlPatterns.push(
+          new RegExp(e),
+        );
       });
     }
   }

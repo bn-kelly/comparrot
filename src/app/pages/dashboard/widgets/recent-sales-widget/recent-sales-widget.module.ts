@@ -17,10 +17,9 @@ import { ChartsModule } from 'ng2-charts';
     LoadingOverlayModule,
     FuryCardModule,
     ListModule,
-    ChartsModule
+    ChartsModule,
   ],
   declarations: [RecentSalesWidgetComponent, RecentSalesWidgetTableComponent],
-  exports: [RecentSalesWidgetComponent]
+  exports: [RecentSalesWidgetComponent],
 })
-export class RecentSalesWidgetModule {
-}
+export class RecentSalesWidgetModule {}

@@ -1,4 +1,10 @@
-import { Component, HostBinding, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  HostBinding,
+  HostListener,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -8,16 +14,20 @@ import { SidenavItem } from './sidenav-item/sidenav-item.interface';
 import { SidenavService } from './sidenav.service';
 import { ThemeService } from '../../../@fury/services/theme.service';
 import { Project } from '../project.model';
-import { AuthService, User } from '../../pages/authentication/services/auth.service';
+import {
+  AuthService,
+  User,
+} from '../../pages/authentication/services/auth.service';
 
 @Component({
   selector: 'fury-sidenav',
   templateUrl: './sidenav.component.html',
-  styleUrls: ['./sidenav.component.scss']
+  styleUrls: ['./sidenav.component.scss'],
 })
-export class SidenavComponent implements OnInit, OnDestroy {
-
-  sidenavUserVisible$ = this.themeService.config$.pipe(map(config => config.sidenavUserVisible));
+export class SidenavComponent implements OnInit {
+  sidenavUserVisible$ = this.themeService.config$.pipe(
+    map(config => config.sidenavUserVisible),
+  );
 
   @Input()
   @HostBinding('class.collapsed')
@@ -34,17 +44,17 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   items$: Observable<SidenavItem[]>;
 
-  constructor(private afs: AngularFirestore,
-              private router: Router,
-              private sidenavService: SidenavService,
-              private themeService: ThemeService,
-              public sanitizer: DomSanitizer,
-              private auth: AuthService,
-  ) {
-  }
+  constructor(
+    private afs: AngularFirestore,
+    private router: Router,
+    private sidenavService: SidenavService,
+    private themeService: ThemeService,
+    public sanitizer: DomSanitizer,
+    private auth: AuthService,
+  ) {}
 
   ngOnInit() {
-    this.themeService.theme$.subscribe(([prevTheme, currentTheme]) => {
+    this.themeService.theme$.subscribe(([currentTheme]) => {
       this.themeName = currentTheme.replace('fury-', '');
       this.handleLogoUrl();
     });
@@ -53,11 +63,15 @@ export class SidenavComponent implements OnInit, OnDestroy {
       this.user = user;
 
       if (user && user.projectName) {
-        this.afs.collection('projects').doc(user.projectName).valueChanges().subscribe((project: Project) => {
-          this.project = project;
-          this.projectName = project && project.name ? project.name : '';
-          this.handleLogoUrl();
-        });
+        this.afs
+          .collection('projects')
+          .doc(user.projectName)
+          .valueChanges()
+          .subscribe((project: Project) => {
+            this.project = project;
+            this.projectName = project && project.name ? project.name : '';
+            this.handleLogoUrl();
+          });
       } else {
         this.projectName = '';
         this.logoUrl = 'assets/img/logo_mobile.svg';
@@ -65,12 +79,15 @@ export class SidenavComponent implements OnInit, OnDestroy {
     });
 
     this.items$ = this.sidenavService.items$.pipe(
-      map((items: SidenavItem[]) => this.sidenavService.sortRecursive(items, 'position'))
+      map((items: SidenavItem[]) =>
+        this.sidenavService.sortRecursive(items, 'position'),
+      ),
     );
   }
 
   handleLogoUrl() {
-    this.logoUrl = this.project && this.project.logoUrl
+    this.logoUrl =
+      this.project && this.project.logoUrl
         ? this.project.logoUrl[this.themeName] || this.project.logoUrl.default
         : '';
   }
@@ -89,8 +106,5 @@ export class SidenavComponent implements OnInit, OnDestroy {
   @HostListener('touchleave')
   onMouseLeave() {
     this.sidenavService.setExpanded(false);
-  }
-
-  ngOnDestroy() {
   }
 }

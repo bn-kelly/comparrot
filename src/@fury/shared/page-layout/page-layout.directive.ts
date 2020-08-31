@@ -3,14 +3,11 @@ import { Directive, HostBinding, Input } from '@angular/core';
 @Directive({
   selector: '[furyPageLayout],fury-page-layout',
   host: {
-    class: 'fury-page-layout'
-  }
+    class: 'fury-page-layout',
+  },
 })
 export class PageLayoutDirective {
-
   @Input() mode: 'card' | 'simple' = 'simple';
-
-  constructor() { }
 
   @HostBinding('class.fury-page-layout-card')
   get isCard() {
@@ -21,5 +18,4 @@ export class PageLayoutDirective {
   get isSimple() {
     return this.mode === 'simple';
   }
-
 }

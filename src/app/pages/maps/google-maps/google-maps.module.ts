@@ -5,12 +5,7 @@ import { GoogleMapsRoutingModule } from './google-maps-routing.module';
 import { GoogleMapsComponent } from './google-maps.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    GoogleMapsRoutingModule,
-    AgmCoreModule
-  ],
-  declarations: [GoogleMapsComponent]
+  imports: [CommonModule, GoogleMapsRoutingModule, AgmCoreModule],
+  declarations: [GoogleMapsComponent],
 })
-export class GoogleMapsModule {
-}
+export class GoogleMapsModule {}

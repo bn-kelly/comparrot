@@ -5,11 +5,7 @@ import { PageLayoutsRoutingModule } from './page-layouts-routing.module';
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    PageLayoutsRoutingModule
-  ],
-  exports: []
+  imports: [CommonModule, PageLayoutsRoutingModule],
+  exports: [],
 })
-export class PageLayoutsModule {
-}
+export class PageLayoutsModule {}

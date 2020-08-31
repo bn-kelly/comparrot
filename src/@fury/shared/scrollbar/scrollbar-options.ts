@@ -1,2 +1,1 @@
-export const scrollbarOptions = {
-};
+export const scrollbarOptions = {};

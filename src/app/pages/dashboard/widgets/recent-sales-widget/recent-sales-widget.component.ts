@@ -8,33 +8,32 @@ import { RecentSalesWidgetOptions } from './recent-sales-widget-options.interfac
 @Component({
   selector: 'fury-recent-sales-widget',
   templateUrl: './recent-sales-widget.component.html',
-  styleUrls: ['./recent-sales-widget.component.scss']
+  styleUrls: ['./recent-sales-widget.component.scss'],
 })
 export class RecentSalesWidgetComponent {
-
   @Input() tableOptions: {
     pageSize: number;
-    columns: ListColumn[]
+    columns: ListColumn[];
   };
   @Input() tableData: any[];
   @Input() chartData: ChartData;
   @Input() options: RecentSalesWidgetOptions;
-  @Input() chartOptions: ChartOptions = defaultsDeep({
-    tooltips: {
-      mode: 'index',
-      intersect: false,
+  @Input() chartOptions: ChartOptions = defaultsDeep(
+    {
+      tooltips: {
+        mode: 'index',
+        intersect: false,
+      },
+      elements: {
+        point: {
+          radius: 0,
+        },
+      },
     },
-    elements: {
-      point: {
-        radius: 0
-      }
-    }
-  }, defaultChartOptions);
+    defaultChartOptions,
+  );
 
   isLoading: boolean;
-
-  constructor() {
-  }
 
   reload() {
     this.isLoading = true;

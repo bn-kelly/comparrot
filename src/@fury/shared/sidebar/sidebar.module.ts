@@ -3,11 +3,8 @@ import { CommonModule } from '@angular/common';
 import { SidebarDirective } from './sidebar.directive';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   declarations: [SidebarDirective],
-  exports: [SidebarDirective]
+  exports: [SidebarDirective],
 })
-export class SidebarModule {
-}
+export class SidebarModule {}

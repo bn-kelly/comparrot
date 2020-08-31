@@ -3,11 +3,8 @@ import { NgModule } from '@angular/core';
 import { BackdropDirective } from './backdrop.directive';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   declarations: [BackdropDirective],
-  exports: [BackdropDirective]
+  exports: [BackdropDirective],
 })
-export class BackdropModule {
-}
+export class BackdropModule {}

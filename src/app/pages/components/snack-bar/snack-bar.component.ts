@@ -1,27 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import escape from 'lodash-es/escape';
 
 @Component({
   selector: 'fury-snack-bar',
   templateUrl: './snack-bar.component.html',
-  styleUrls: ['./snack-bar.component.scss']
+  styleUrls: ['./snack-bar.component.scss'],
 })
-export class SnackBarComponent implements OnInit {
+export class SnackBarComponent {
+  snackbarHTML = escape(
+    `<button mat-raised-button (click)="openSnackbar()">TRIGGER SNACKBAR</button>`,
+  );
 
-  snackbarHTML = escape(`<button mat-raised-button (click)="openSnackbar()">TRIGGER SNACKBAR</button>`);
-
-  constructor(
-    private snackBar: MatSnackBar
-  ) { }
-
-  ngOnInit() {
-  }
+  constructor(private snackBar: MatSnackBar) {}
 
   openSnackbar() {
-    this.snackBar.open('I\'m a notification!', 'CLOSE', {
+    this.snackBar.open(`I'm a notification!`, 'CLOSE', {
       duration: 3000,
-      horizontalPosition: 'right'
+      horizontalPosition: 'right',
     });
   }
 }

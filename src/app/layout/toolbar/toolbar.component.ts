@@ -1,4 +1,11 @@
-import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { DomSanitizer } from '@angular/platform-browser';
 import { map } from 'rxjs/operators';
@@ -9,10 +16,9 @@ import { Project } from '../project.model';
 @Component({
   selector: 'fury-toolbar',
   templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.scss']
+  styleUrls: ['./toolbar.component.scss'],
 })
 export class ToolbarComponent implements OnInit {
-
   @Input()
   @HostBinding('class.no-box-shadow')
   hasNavigation: boolean;
@@ -24,29 +30,35 @@ export class ToolbarComponent implements OnInit {
 
   @Output() openSidenav = new EventEmitter();
 
-  topNavigation$ = this.themeService.config$.pipe(map(config => config.navigation === 'top'));
+  topNavigation$ = this.themeService.config$.pipe(
+    map(config => config.navigation === 'top'),
+  );
 
-  constructor(private themeService: ThemeService,
-              public auth: AuthService,
-              private afs: AngularFirestore,
-              public sanitizer: DomSanitizer,
-  ) {
-  }
+  constructor(
+    private themeService: ThemeService,
+    public auth: AuthService,
+    private afs: AngularFirestore,
+    public sanitizer: DomSanitizer,
+  ) {}
 
   ngOnInit() {
     this.isExtension = !!window.chrome && !!window.chrome.extension;
 
-    this.themeService.theme$.subscribe(([prevTheme, currentTheme]) => {
+    this.themeService.theme$.subscribe(([currentTheme]) => {
       this.themeName = currentTheme.replace('fury-', '');
       this.handleLogoUrl();
     });
 
     this.auth.user.subscribe(user => {
       if (user && user.projectName) {
-        this.afs.collection('projects').doc(user.projectName).valueChanges().subscribe((project: Project) => {
-          this.project = project;
-          this.handleLogoUrl();
-        });
+        this.afs
+          .collection('projects')
+          .doc(user.projectName)
+          .valueChanges()
+          .subscribe((project: Project) => {
+            this.project = project;
+            this.handleLogoUrl();
+          });
       } else {
         this.logoUrl = 'assets/img/logo_mobile.svg';
       }
@@ -54,9 +66,9 @@ export class ToolbarComponent implements OnInit {
   }
 
   handleLogoUrl() {
-    this.logoUrl = this.project && this.project.logoUrl
+    this.logoUrl =
+      this.project && this.project.logoUrl
         ? this.project.logoUrl[this.themeName] || this.project.logoUrl.default
         : '';
   }
-
 }

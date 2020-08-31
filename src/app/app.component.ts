@@ -16,21 +16,24 @@ declare global {
 
 @Component({
   selector: 'fury-root',
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
 })
 export class AppComponent {
-
-  constructor(private sidenavService: SidenavService,
-              private iconRegistry: MatIconRegistry,
-              private renderer: Renderer2,
-              private themeService: ThemeService,
-              @Inject(DOCUMENT) private document: Document,
-              private platform: Platform,
-              private route: ActivatedRoute,
-              private splashScreenService: SplashScreenService) {
-    this.route.queryParamMap.pipe(
-      filter(queryParamMap => queryParamMap.has('style'))
-    ).subscribe(queryParamMap => this.themeService.setStyle(queryParamMap.get('style')));
+  constructor(
+    private sidenavService: SidenavService,
+    private iconRegistry: MatIconRegistry,
+    private renderer: Renderer2,
+    private themeService: ThemeService,
+    @Inject(DOCUMENT) private document: Document,
+    private platform: Platform,
+    private route: ActivatedRoute,
+    private splashScreenService: SplashScreenService,
+  ) {
+    this.route.queryParamMap
+      .pipe(filter(queryParamMap => queryParamMap.has('style')))
+      .subscribe(queryParamMap =>
+        this.themeService.setStyle(queryParamMap.get('style')),
+      );
 
     this.iconRegistry.setDefaultFontSetClass('material-icons-outlined');
     this.themeService.theme$.subscribe(theme => {
@@ -50,14 +53,14 @@ export class AppComponent {
         name: 'APPS',
         position: 5,
         type: 'subheading',
-        customClass: 'first-subheading'
+        customClass: 'first-subheading',
       },
       {
         name: 'Dashboard',
         routeOrFunction: '/',
         icon: 'dashboard',
         position: 10,
-        pathMatchExact: true
+        pathMatchExact: true,
       },
       {
         name: 'All-In-One Table',
@@ -71,13 +74,13 @@ export class AppComponent {
         name: 'Calendar',
         routeOrFunction: '/apps/calendar',
         icon: 'date_range',
-        position: 20
+        position: 20,
       },
       {
         name: 'Inbox',
         routeOrFunction: '/apps/inbox',
         icon: 'inbox',
-        position: 25
+        position: 25,
       },
       {
         name: 'Chat',
@@ -85,18 +88,18 @@ export class AppComponent {
         icon: 'chat',
         position: 30,
         badge: '14',
-        badgeColor: '#009688'
+        badgeColor: '#009688',
       },
       {
         name: 'USER INTERFACE',
         type: 'subheading',
-        position: 35
+        position: 35,
       },
       {
         name: 'Components',
         routeOrFunction: '/components',
         icon: 'layers',
-        position: 40
+        position: 40,
       },
       {
         name: 'Forms',
@@ -106,31 +109,31 @@ export class AppComponent {
           {
             name: 'Form Elements',
             routeOrFunction: '/forms/form-elements',
-            position: 10
+            position: 10,
           },
           {
             name: 'Form Wizard',
             routeOrFunction: '/forms/form-wizard',
-            position: 15
-          }
-        ]
+            position: 15,
+          },
+        ],
       },
       {
         name: 'Drag & Drop',
         routeOrFunction: '/drag-and-drop',
         icon: 'mouse',
-        position: 55
+        position: 55,
       },
       {
         name: 'WYSIWYG Editor',
         routeOrFunction: '/editor',
         icon: 'format_shapes',
-        position: 60
+        position: 60,
       },
       {
         name: 'PAGES',
         type: 'subheading',
-        position: 65
+        position: 65,
       },
       {
         name: 'Authentication',
@@ -140,19 +143,19 @@ export class AppComponent {
           {
             name: 'Login Page',
             routeOrFunction: '/login',
-            position: 5
+            position: 5,
           },
           {
             name: 'Register Page',
             routeOrFunction: '/register',
-            position: 10
+            position: 10,
           },
           {
             name: 'Forgot Password',
             routeOrFunction: '/forgot-password',
-            position: 15
-          }
-        ]
+            position: 15,
+          },
+        ],
       },
       {
         name: 'Page Layouts',
@@ -162,36 +165,36 @@ export class AppComponent {
           {
             name: 'Simple',
             routeOrFunction: '/page-layouts/simple',
-            position: 5
+            position: 5,
           },
           {
             name: 'Simple Tabbed',
             routeOrFunction: '/page-layouts/simple-tabbed',
-            position: 5
+            position: 5,
           },
           {
             name: 'Card',
             routeOrFunction: '/page-layouts/card',
-            position: 10
+            position: 10,
           },
           {
             name: 'Card Tabbed',
             routeOrFunction: '/page-layouts/card-tabbed',
-            position: 15
+            position: 15,
           },
-        ]
+        ],
       },
       {
         name: 'Coming Soon',
         routeOrFunction: '/coming-soon',
         icon: 'watch_later',
-        position: 68
+        position: 68,
       },
       {
         name: 'Blank',
         routeOrFunction: '/blank',
         icon: 'picture_in_picture',
-        position: 69
+        position: 69,
       },
       {
         name: 'Maps',
@@ -201,17 +204,17 @@ export class AppComponent {
           {
             name: 'Google Maps',
             routeOrFunction: '/maps/google-maps',
-            position: 0
-          }
+            position: 0,
+          },
         ],
         badge: '3',
-        badgeColor: '#4CAF50'
+        badgeColor: '#4CAF50',
       },
       {
         name: 'Material Icons',
         routeOrFunction: '/icons',
         icon: 'grade',
-        position: 75
+        position: 75,
       },
       {
         name: 'Multi-Level Menu',
@@ -232,18 +235,19 @@ export class AppComponent {
                         subItems: [
                           {
                             name: 'Level 5',
-                            routeOrFunction: '/level1/level2/level3/level4/level5'
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
+                            routeOrFunction:
+                              '/level1/level2/level3/level4/level5',
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
     ]);
   }
 }

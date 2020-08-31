@@ -1,5 +1,9 @@
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, OnInit } from '@angular/core';
+import {
+  CdkDragDrop,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
+import { Component } from '@angular/core';
 import { fadeInRightAnimation } from '../../../@fury/animations/fade-in-right.animation';
 import { fadeInUpAnimation } from '../../../@fury/animations/fade-in-up.animation';
 
@@ -11,62 +15,61 @@ export interface Task {
   selector: 'fury-drag-and-drop',
   templateUrl: './drag-and-drop.component.html',
   styleUrls: ['./drag-and-drop.component.scss'],
-  animations: [fadeInUpAnimation, fadeInRightAnimation]
+  animations: [fadeInUpAnimation, fadeInRightAnimation],
 })
-export class DragAndDropComponent implements OnInit {
-
+export class DragAndDropComponent {
   todo = [
     {
       name: 'Meeting with Denis',
-      due: 'tomorrow'
+      due: 'tomorrow',
     },
     {
       name: 'Interview scheduled with Frank',
-      due: 'in 2 days'
+      due: 'in 2 days',
     },
     {
-      name: 'Party at Rakesh\' house',
-      due: 'this weekend'
+      name: `Party at Rakesh' house`,
+      due: 'this weekend',
     },
     {
       name: 'Interview with Nikita',
-      due: 'next week'
-    }
+      due: 'next week',
+    },
   ];
 
   done = [
     {
       name: 'Talk to Jennifer',
-      due: 'today'
+      due: 'today',
     },
     {
       name: 'Get stuff done',
-      due: 'this weekend'
+      due: 'this weekend',
     },
     {
       name: 'Meet up with the new coworkers',
-      due: 'next week'
+      due: 'next week',
     },
     {
       name: 'Have fun at work',
-      due: 'next week'
-    }
+      due: 'next week',
+    },
   ];
-
-  constructor() {
-  }
-
-  ngOnInit() {
-  }
 
   drop(event: CdkDragDrop<Task[]>) {
     if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
+      moveItemInArray(
         event.container.data,
         event.previousIndex,
-        event.currentIndex);
+        event.currentIndex,
+      );
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
     }
   }
 }

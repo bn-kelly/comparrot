@@ -24,7 +24,7 @@ import { ToolbarComponent } from './toolbar.component';
     ScrollbarModule,
     FormsModule,
     ClickOutsideModule,
-    FuryCardModule
+    FuryCardModule,
   ],
   declarations: [
     ToolbarComponent,
@@ -35,9 +35,8 @@ import { ToolbarComponent } from './toolbar.component';
     ToolbarQuickpanelToggleComponent,
     ToolbarCloseComponent,
     ToolbarFullscreenToggleComponent,
-    ToolbarSidenavMobileToggleComponent
+    ToolbarSidenavMobileToggleComponent,
   ],
-  exports: [ToolbarComponent]
+  exports: [ToolbarComponent],
 })
-export class ToolbarModule {
-}
+export class ToolbarModule {}

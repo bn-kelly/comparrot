@@ -5,13 +5,12 @@ import { FormWizardComponent } from './form-wizard.component';
 const routes: Routes = [
   {
     path: '',
-    component: FormWizardComponent
-  }
+    component: FormWizardComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class FormWizardRoutingModule {
-}
+export class FormWizardRoutingModule {}

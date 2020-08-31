@@ -15,18 +15,17 @@ type FormErrors = { [u in UserFields]: string };
   selector: 'fury-forgot-password',
   templateUrl: './forgot-password.component.html',
   styleUrls: ['./forgot-password.component.scss'],
-  animations: [fadeInUpAnimation]
+  animations: [fadeInUpAnimation],
 })
 export class ForgotPasswordComponent implements OnInit {
-
   form: FormGroup;
   formErrors: FormErrors = {
-    'email': '',
+    email: '',
   };
   validationMessages = {
-    'email': {
-      'required': 'We can\'t recover your password, without your email',
-      'email': 'Email must be a valid email',
+    email: {
+      required: `We can't recover your password, without your email`,
+      email: 'Email must be a valid email',
     },
   };
   logoUrl: string;
@@ -40,52 +39,57 @@ export class ForgotPasswordComponent implements OnInit {
     private auth: AuthService,
     private themeService: ThemeService,
     private snackBar: MatSnackBar,
-  ) { }
+  ) {}
 
   ngOnInit() {
     const isExtension = !!window.chrome && !!window.chrome.extension;
 
     this.buildForm();
 
-    this.themeService.theme$.subscribe(([prevTheme, currentTheme]) => {
+    this.themeService.theme$.subscribe(([currentTheme]) => {
       this.themeName = currentTheme.replace('fury-', '');
       this.handleLogoUrl();
     });
 
     this.auth.user.subscribe(user => {
       if (user && user.projectName) {
-        this.afs.collection('projects').doc(user.projectName).valueChanges().subscribe((project: Project) => {
-          this.project = project;
-          this.handleLogoUrl();
+        this.afs
+          .collection('projects')
+          .doc(user.projectName)
+          .valueChanges()
+          .subscribe((project: Project) => {
+            this.project = project;
+            this.handleLogoUrl();
 
-          if (project && !isExtension) {
-            Array.from(document.getElementsByTagName('link'))
-                .forEach(link => {
+            if (project && !isExtension) {
+              Array.from(document.getElementsByTagName('link')).forEach(
+                link => {
                   if (link.getAttribute('rel') === 'icon') {
                     const favicon = link.getAttribute('href');
                     if (!!project.favicon && favicon !== project.favicon) {
                       link.setAttribute('href', project.favicon);
                     }
                   }
-                });
-          }
-        });
+                },
+              );
+            }
+          });
       } else {
         this.logoUrl = 'assets/img/logo_mobile.svg';
         if (!isExtension) {
-          Array.from(document.getElementsByTagName('link'))
-              .forEach(link => {
-                if (link.getAttribute('rel') === 'icon') {
-                  link.setAttribute('href', 'favicon.ico');
-                }
-              });
+          Array.from(document.getElementsByTagName('link')).forEach(link => {
+            if (link.getAttribute('rel') === 'icon') {
+              link.setAttribute('href', 'favicon.ico');
+            }
+          });
         }
       }
     });
   }
 
   handleLogoUrl() {
-    this.logoUrl = this.project && this.project.logoUrl
+    this.logoUrl =
+      this.project && this.project.logoUrl
         ? this.project.logoUrl[this.themeName] || this.project.logoUrl.default
         : '';
   }
@@ -96,41 +100,49 @@ export class ForgotPasswordComponent implements OnInit {
     }
 
     this.auth.resetPassword(this.form.value.email).then(response => {
-      const data: any  = response ? { ...response } : {};
+      const data: any = response ? { ...response } : {};
       const { code, message } = data;
 
       if (['auth/user-not-found'].includes(code)) {
         this.form.controls.email.setErrors({ email: message });
-        this.formErrors.email = 'We\'re sorry. We weren\'t able to identify you given the information provided. ';
+        this.formErrors.email = `We're sorry. We weren't able to identify you given the information provided.`;
       }
 
       if (!response) {
-        const snackBarRef = this.snackBar.open('Instructions have been successfully sent to you email', 'Go to login', {
-          duration: 5000,
-        });
+        const snackBarRef = this.snackBar.open(
+          'Instructions have been successfully sent to you email',
+          'Go to login',
+          {
+            duration: 5000,
+          },
+        );
 
-        snackBarRef.afterDismissed().subscribe(() => this.router.navigate(['/login']));
+        snackBarRef
+          .afterDismissed()
+          .subscribe(() => this.router.navigate(['/login']));
       }
     });
   }
 
   buildForm() {
     this.form = this.fb.group({
-      'email': ['', [
-        Validators.required,
-        Validators.email,
-      ]]
+      email: ['', [Validators.required, Validators.email]],
     });
 
-    this.form.valueChanges.subscribe((data) => this.onValueChanged(data));
+    this.form.valueChanges.subscribe(() => this.onValueChanged());
     this.onValueChanged(); // reset validation messages
   }
 
-  onValueChanged(data?: any) {
-    if (!this.form) { return; }
+  onValueChanged() {
+    if (!this.form) {
+      return;
+    }
     const form = this.form;
     for (const field in this.formErrors) {
-      if (Object.prototype.hasOwnProperty.call(this.formErrors, field) && ['email'].includes(field)) {
+      if (
+        Object.prototype.hasOwnProperty.call(this.formErrors, field) &&
+        ['email'].includes(field)
+      ) {
         // clear previous error message (if any)
         this.formErrors[field] = '';
         const control = form.get(field);
@@ -138,8 +150,13 @@ export class ForgotPasswordComponent implements OnInit {
           const messages = this.validationMessages[field];
           if (control.errors) {
             for (const key in control.errors) {
-              if (Object.prototype.hasOwnProperty.call(control.errors, key) && messages[key]) {
-                this.formErrors[field] += `${(messages as {[key: string]: string})[key]} `;
+              if (
+                Object.prototype.hasOwnProperty.call(control.errors, key) &&
+                messages[key]
+              ) {
+                this.formErrors[field] += `${
+                  (messages as { [key: string]: string })[key]
+                } `;
               }
             }
           }

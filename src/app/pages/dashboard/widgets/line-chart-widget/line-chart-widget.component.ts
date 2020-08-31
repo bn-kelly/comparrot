@@ -7,34 +7,33 @@ import { ChartWidgetOptions } from '../../../../../@fury/shared/chart-widget/cha
 @Component({
   selector: 'fury-line-chart-widget',
   templateUrl: './line-chart-widget.component.html',
-  styleUrls: ['./line-chart-widget.component.scss']
+  styleUrls: ['./line-chart-widget.component.scss'],
 })
 export class LineChartWidgetComponent {
-
   @Input() data: ChartData;
   @Input() options: ChartWidgetOptions;
-  @Input() chartOptions: ChartOptions = defaultsDeep({
-    layout: {
-      padding: {
-        left: 24,
-        right: 24,
-        top: 16,
-        bottom: 24
-      }
+  @Input() chartOptions: ChartOptions = defaultsDeep(
+    {
+      layout: {
+        padding: {
+          left: 24,
+          right: 24,
+          top: 16,
+          bottom: 24,
+        },
+      },
+      tooltips: {
+        mode: 'index',
+        intersect: false,
+      },
+      hover: {
+        intersect: true,
+      },
     },
-    tooltips: {
-      mode: 'index',
-      intersect: false,
-    },
-    hover: {
-      intersect: true
-    }
-  }, defaultChartOptions);
+    defaultChartOptions,
+  );
 
   isLoading: boolean;
-
-  constructor() {
-  }
 
   reload() {
     this.isLoading = true;

@@ -6,27 +6,24 @@ import { SidenavService } from '../../sidenav/sidenav.service';
 @Component({
   selector: 'fury-toolbar-search-bar',
   templateUrl: './toolbar-search-bar.component.html',
-  styleUrls: ['./toolbar-search-bar.component.scss']
+  styleUrls: ['./toolbar-search-bar.component.scss'],
 })
 export class ToolbarSearchBarComponent implements OnInit {
-
   input: string;
   focused: boolean;
 
-  recentlyVisited: SidenavItem[] = [ ];
+  recentlyVisited: SidenavItem[] = [];
 
-  constructor(
-    private router: Router,
-    private sidenavService: SidenavService
-  ) { }
+  constructor(private router: Router, private sidenavService: SidenavService) {}
 
   ngOnInit() {
     this.setupDemoData();
 
-    this.router.events.subscribe((event) => {
+    this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-
-        const item = this.sidenavService.getItemByRoute(event.urlAfterRedirects);
+        const item = this.sidenavService.getItemByRoute(
+          event.urlAfterRedirects,
+        );
 
         if (item) {
           const index = this.recentlyVisited.indexOf(item);
@@ -41,7 +38,6 @@ export class ToolbarSearchBarComponent implements OnInit {
           }
         }
       }
-
     });
   }
 
@@ -52,7 +48,9 @@ export class ToolbarSearchBarComponent implements OnInit {
     const inbox = this.sidenavService.getItemByRoute('/apps/inbox');
     if (inbox) this.recentlyVisited.push(inbox);
 
-    const allInOneTable = this.sidenavService.getItemByRoute('/tables/all-in-one-table');
+    const allInOneTable = this.sidenavService.getItemByRoute(
+      '/tables/all-in-one-table',
+    );
     if (allInOneTable) this.recentlyVisited.push(allInOneTable);
 
     const editor = this.sidenavService.getItemByRoute('/editor');
@@ -69,5 +67,4 @@ export class ToolbarSearchBarComponent implements OnInit {
   closeDropdown() {
     this.focused = false;
   }
-
 }

@@ -5,13 +5,12 @@ import { AllInOneTableComponent } from './all-in-one-table.component';
 const routes: Routes = [
   {
     path: '',
-    component: AllInOneTableComponent
-  }
+    component: AllInOneTableComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AllInOneTableRoutingModule {
-}
+export class AllInOneTableRoutingModule {}
