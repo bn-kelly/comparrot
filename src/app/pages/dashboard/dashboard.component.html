@@ -1,9 +1,20 @@
-<fury-page [fxLayoutGap]="gap" class="dashboard" [ngClass]="{'extension': isExtension}" fxLayout="column">
-  <div [fxLayoutGap]="gap" fxFlex="noshrink" fxLayout="column" fxLayout.gt-lg="row">
+<fury-page
+  [fxLayoutGap]="gap"
+  class="dashboard"
+  [ngClass]="{ extension: isExtension }"
+  fxLayout="column"
+>
+  <div
+    [fxLayoutGap]="gap"
+    fxFlex="noshrink"
+    fxLayout="column"
+    fxLayout.gt-lg="row"
+  >
     <div *ngIf="!offers || (!!offers && !offers.length)">
       <mat-card>
         <h4>
-          To start using the application, start surfing many retailers web sites we track
+          To start using the application, start surfing many retailers web sites
+          we track
         </h4>
       </mat-card>
     </div>
@@ -12,44 +23,52 @@
         <div class="offer__product-info">
           <div class="offer__best-deal-container">
             <div
-                *ngIf="offer.isBestDeal"
-                class="offer__best-deal-chip"
-                color="primary"
-                selected>
+              *ngIf="offer.isBestDeal"
+              class="offer__best-deal-chip"
+              color="primary"
+              selected
+            >
               BEST DEAL
             </div>
           </div>
-          <img *ngIf="offer.vendor"
-               class="offer__product-vendor"
-               src="../../../assets/img/logos/vendor/{{offer.vendor}}.svg"
-               alt={{offer.vendor}}>
+          <img
+            *ngIf="offer.vendor"
+            class="offer__product-vendor"
+            src="../../../assets/img/logos/vendor/{{ offer.vendor }}.svg"
+            alt="{{ offer.vendor }}"
+          />
         </div>
-        <img class="offer__img"
-             *ngIf="offer.imageUrl"
-             [src]="offer.imageUrl"
-             [alt]="offer.title" />
+        <img
+          class="offer__img"
+          *ngIf="offer.imageUrl"
+          [src]="offer.imageUrl"
+          [alt]="offer.title"
+        />
       </div>
-      <mat-card-title class="offer__title"
-                      matTooltip="{{offer.title}}"
-                      [matTooltipPosition]="'above'">
-        {{offer.title}}
+      <mat-card-title
+        class="offer__title"
+        matTooltip="{{ offer.title }}"
+        [matTooltipPosition]="'above'"
+      >
+        {{ offer.title }}
       </mat-card-title>
       <mat-card-content class="offer__content">
         <div class="offer__price-container">
-            <span class="offer__price">
-              {{offer.price}}
-            </span>
-            <span class="offer__price offer__price__old"
-                  *ngIf="offer.oldPrice">
-              {{offer.oldPrice}}
-            </span>
+          <span class="offer__price">
+            {{ offer.price }}
+          </span>
+          <span class="offer__price offer__price__old" *ngIf="offer.oldPrice">
+            {{ offer.oldPrice }}
+          </span>
         </div>
         <a
-            (click)="onBuyButtonClick($event, offer.buyUrl)"
-            href="{{offer.buyUrl}}" target="_blank"
-            class="offer__buy-button"
-            mat-raised-button
-            color="primary">
+          (click)="onBuyButtonClick($event, offer.buyUrl)"
+          href="{{ offer.buyUrl }}"
+          target="_blank"
+          class="offer__buy-button"
+          mat-raised-button
+          color="primary"
+        >
           BUY
         </a>
       </mat-card-content>
@@ -59,17 +78,16 @@
           Share
         </button>
         <button
-            mat-button
-            class="offer__actions-button"
-            (click)="toggleAddToWishlist(offer.id)"
+          mat-button
+          class="offer__actions-button"
+          (click)="toggleAddToWishlist(offer.id)"
         >
-          <mat-icon>{{user.wishList.includes(offer.id) ? 'favorite' : 'favorite_border'}}</mat-icon>
+          <mat-icon>{{
+            user.wishList.includes(offer.id) ? 'favorite' : 'favorite_border'
+          }}</mat-icon>
           Wishlist
         </button>
       </mat-card-actions>
     </mat-card>
-
   </div>
 </fury-page>
-
-

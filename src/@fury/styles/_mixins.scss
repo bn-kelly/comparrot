@@ -13,7 +13,7 @@
     // Here is the change from the original function:
     // If the $color resolved to something different from a color, we assume it is a CSS variable
     // in the form of rgba(var(--rgba-css-var),a) and replace the 'a' value.
-    @return #{str-slice($color, 0, str-index($color, ',')) + $opacity + ')'};
+    @return #{str-slice($color, 0, str-index($color, ",")) + $opacity + ")"};
   }
 
   @return rgba($color, if($opacity == null, opacity($color), $opacity));
@@ -22,7 +22,11 @@
 $mat-elevation-color: #523f68;
 $mat-elevation-opacity: 0.3;
 
-@function vex-elevation($zValue, $color: $mat-elevation-color, $opacity: $mat-elevation-opacity) {
+@function vex-elevation(
+  $zValue,
+  $color: $mat-elevation-color,
+  $opacity: $mat-elevation-opacity
+) {
   @if type-of($zValue) != number or not unitless($zValue) {
     @error '$zValue must be a unitless number';
   }
@@ -31,6 +35,6 @@ $mat-elevation-opacity: 0.3;
   }
 
   @return #{map-get(_get-umbra-map($color, $opacity), $zValue)},
-  #{map-get(_get-penumbra-map($color, $opacity), $zValue)},
-  #{map-get(_get-ambient-map($color, $opacity), $zValue)};
+    #{map-get(_get-penumbra-map($color, $opacity), $zValue)},
+    #{map-get(_get-ambient-map($color, $opacity), $zValue)};
 }

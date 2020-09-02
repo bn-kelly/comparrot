@@ -1,7 +1,15 @@
-<fury-card [style.background]="options.background" [style.color]="options.color">
+<fury-card
+  [style.background]="options.background"
+  [style.color]="options.color"
+>
   <fury-card-header class="header">
-    <fury-card-header-heading [style.color]="options.color">{{ options.title }}</fury-card-header-heading>
-    <fury-card-header-subheading [style.color]="options.color" class="subheading">
+    <fury-card-header-heading [style.color]="options.color">{{
+      options.title
+    }}</fury-card-header-heading>
+    <fury-card-header-subheading
+      [style.color]="options.color"
+      class="subheading"
+    >
       <mat-icon *ngIf="options.gain >= 0">arrow_upward</mat-icon>
       <mat-icon *ngIf="options.gain < 0">arrow_downward</mat-icon>
       {{ options.gain }}% {{ options.subTitle }}
@@ -18,13 +26,15 @@
   </fury-card-header>
 
   <fury-card-content class="card-content">
-    <canvas *ngIf="data"
-            [datasets]="data.datasets"
-            [labels]="data.labels"
-            [legend]="false"
-            [options]="chartOptions"
-            baseChart
-            chartType="bar">
+    <canvas
+      *ngIf="data"
+      [datasets]="data.datasets"
+      [labels]="data.labels"
+      [legend]="false"
+      [options]="chartOptions"
+      baseChart
+      chartType="bar"
+    >
     </canvas>
   </fury-card-content>
 

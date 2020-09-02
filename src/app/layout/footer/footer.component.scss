@@ -21,9 +21,9 @@
     line-height: 21px;
     text-decoration: none;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       text-decoration: underline;
     }
   }
-
 }

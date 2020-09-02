@@ -1,14 +1,36 @@
 <div class="page" fxLayout="column">
   <div class="toolbar" fxFlex="none" fxLayout="row" fxLayoutAlign="start end">
-    <div fxFlex="grow" fxLayout="column" fxLayout.gt-xs="row" fxLayoutAlign="space-between center">
-      <div class="title">{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</div>
+    <div
+      fxFlex="grow"
+      fxLayout="column"
+      fxLayout.gt-xs="row"
+      fxLayoutAlign="space-between center"
+    >
+      <div class="title">
+        {{ viewDate | calendarDate: view + 'ViewTitle':'en' }}
+      </div>
 
-      <div class="actions" fxLayout="column" fxLayout.gt-xs="row" fxLayoutAlign="end center">
+      <div
+        class="actions"
+        fxLayout="column"
+        fxLayout.gt-xs="row"
+        fxLayoutAlign="end center"
+      >
         <div class="chevrons">
-          <button mat-icon-button mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate">
+          <button
+            mat-icon-button
+            mwlCalendarPreviousView
+            [view]="view"
+            [(viewDate)]="viewDate"
+          >
             <mat-icon>chevron_left</mat-icon>
           </button>
-          <button mat-icon-button mwlCalendarNextView [view]="view" [(viewDate)]="viewDate">
+          <button
+            mat-icon-button
+            mwlCalendarNextView
+            [view]="view"
+            [(viewDate)]="viewDate"
+          >
             <mat-icon>chevron_right</mat-icon>
           </button>
         </div>
@@ -32,7 +54,8 @@
         [activeDayIsOpen]="activeDayIsOpen"
         (dayClicked)="dayClicked($event.day)"
         (eventClicked)="handleEvent('Clicked', $event.event)"
-        (eventTimesChanged)="eventTimesChanged($event)">
+        (eventTimesChanged)="eventTimesChanged($event)"
+      >
       </mwl-calendar-month-view>
     </fury-scrollbar>
     <fury-scrollbar fxFlex fxLayout="column" *ngSwitchCase="'week'">
@@ -43,7 +66,8 @@
         [events]="events"
         [refresh]="refresh"
         (eventClicked)="handleEvent('Clicked', $event.event)"
-        (eventTimesChanged)="eventTimesChanged($event)">
+        (eventTimesChanged)="eventTimesChanged($event)"
+      >
       </mwl-calendar-week-view>
     </fury-scrollbar>
     <fury-scrollbar fxFlex fxLayout="column" *ngSwitchCase="'day'">
@@ -54,9 +78,9 @@
         [events]="events"
         [refresh]="refresh"
         (eventClicked)="handleEvent('Clicked', $event.event)"
-        (eventTimesChanged)="eventTimesChanged($event)">
+        (eventTimesChanged)="eventTimesChanged($event)"
+      >
       </mwl-calendar-day-view>
     </fury-scrollbar>
   </div>
-
 </div>

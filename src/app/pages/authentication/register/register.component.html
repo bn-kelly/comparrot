@@ -1,9 +1,23 @@
-<div class="background-pattern page" fxLayout="column" fxLayoutAlign="center center">
+<div
+  class="background-pattern page"
+  fxLayout="column"
+  fxLayoutAlign="center center"
+>
   <div [@fadeInUp] class="card border-radius elevation">
     <div class="header padding" fxLayout="column" fxLayoutAlign="center center">
-      <div class="logo" [routerLink]="['/']" [ngStyle]="{'background-image': 'url(' + logoUrl + ')'}"></div>
+      <div
+        class="logo"
+        [routerLink]="['/']"
+        [ngStyle]="{ 'background-image': 'url(' + logoUrl + ')' }"
+      ></div>
     </div>
-    <form (ngSubmit)="signup()" class="form-signup padding" fxLayout="column" fxLayoutGap="16px" [formGroup]="form">
+    <form
+      (ngSubmit)="signup()"
+      class="form-signup padding"
+      fxLayout="column"
+      fxLayoutGap="16px"
+      [formGroup]="form"
+    >
       <fury-oauth-component></fury-oauth-component>
       <div class="text-line">
         <h4>or</h4>
@@ -11,45 +25,100 @@
       <div fxFlex="auto" fxLayout="column">
         <mat-form-field fxFlex="grow">
           <mat-label>Enter your Name</mat-label>
-          <input matInput required formControlName="name">
+          <input matInput required formControlName="name" />
           <mat-error *ngIf="formErrors.name">{{ formErrors.name }}</mat-error>
-          <mat-error *ngIf="form.get('name').hasError('required') && !formErrors.name">Please provide your name</mat-error>
+          <mat-error
+            *ngIf="form.get('name').hasError('required') && !formErrors.name"
+            >Please provide your name</mat-error
+          >
         </mat-form-field>
 
         <mat-form-field fxFlex="grow">
           <mat-label>Enter your Email Address</mat-label>
-          <input matInput required formControlName="email">
+          <input matInput required formControlName="email" />
           <mat-error *ngIf="formErrors.email">{{ formErrors.email }}</mat-error>
-          <mat-error *ngIf="form.get('email').hasError('required') && !formErrors.email">Please provide your email</mat-error>
+          <mat-error
+            *ngIf="form.get('email').hasError('required') && !formErrors.email"
+            >Please provide your email</mat-error
+          >
         </mat-form-field>
 
         <mat-form-field fxFlex="grow">
           <mat-label>Password</mat-label>
-          <input matInput [type]="inputType" formControlName="password" required>
-          <button type="button" mat-icon-button matSuffix (click)="toggleVisibility()" matTooltip="Toggle Visibility">
+          <input
+            matInput
+            [type]="inputType"
+            formControlName="password"
+            required
+          />
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="toggleVisibility()"
+            matTooltip="Toggle Visibility"
+          >
             <mat-icon *ngIf="visible">visibility</mat-icon>
             <mat-icon *ngIf="!visible">visibility_off</mat-icon>
           </button>
-          <mat-error *ngIf="formErrors.password">{{ formErrors.password }}</mat-error>
-          <mat-error *ngIf="form.get('password').hasError('required') && !formErrors.password">Please provide your password</mat-error>
+          <mat-error *ngIf="formErrors.password">{{
+            formErrors.password
+          }}</mat-error>
+          <mat-error
+            *ngIf="
+              form.get('password').hasError('required') && !formErrors.password
+            "
+            >Please provide your password</mat-error
+          >
         </mat-form-field>
 
         <mat-form-field fxFlex="grow">
           <mat-label>Password (Confirm)</mat-label>
-          <input matInput [type]="inputType" formControlName="passwordConfirm" required>
-          <button type="button" mat-icon-button matSuffix (click)="toggleVisibility()" matTooltip="Toggle Visibility">
+          <input
+            matInput
+            [type]="inputType"
+            formControlName="passwordConfirm"
+            required
+          />
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="toggleVisibility()"
+            matTooltip="Toggle Visibility"
+          >
             <mat-icon *ngIf="visible">visibility</mat-icon>
             <mat-icon *ngIf="!visible">visibility_off</mat-icon>
           </button>
-          <mat-error *ngIf="formErrors.passwordConfirm">{{ formErrors.passwordConfirm }}</mat-error>
-          <mat-error *ngIf="form.get('passwordConfirm').hasError('required') && !formErrors.passwordConfirm">Please repeat your password</mat-error>
+          <mat-error *ngIf="formErrors.passwordConfirm">{{
+            formErrors.passwordConfirm
+          }}</mat-error>
+          <mat-error
+            *ngIf="
+              form.get('passwordConfirm').hasError('required') &&
+              !formErrors.passwordConfirm
+            "
+            >Please repeat your password</mat-error
+          >
         </mat-form-field>
       </div>
 
       <div fxLayout="row" fxLayoutAlign="center center">
-        <mat-checkbox class="caption">ToS + Privacy Policy acceptance text goes <br /><a target="_blank" href="https://comparrot.io/terms.html">here.</a> Be sure to accept the terms yo.</mat-checkbox>
+        <mat-checkbox class="caption"
+          >ToS + Privacy Policy acceptance text goes <br /><a
+            target="_blank"
+            href="https://comparrot.io/terms.html"
+            >here.</a
+          >
+          Be sure to accept the terms yo.</mat-checkbox
+        >
       </div>
-      <button type="submit" class="form-button-signup" color="primary" mat-raised-button>
+      <button
+        type="submit"
+        class="form-button-signup"
+        color="primary"
+        mat-raised-button
+      >
         REGISTER
       </button>
       <p class="secondary-text text-center">

@@ -1,12 +1,12 @@
 @import "var";
 
 .icon-list {
-
   .icon {
     display: inline-block;
     width: 20%;
     text-align: center;
-    transition: background-color $swift-ease-out-duration $swift-ease-out-timing-function;
+    transition: background-color $swift-ease-out-duration
+      $swift-ease-out-timing-function;
     border-radius: $border-radius;
 
     @include media-xs {

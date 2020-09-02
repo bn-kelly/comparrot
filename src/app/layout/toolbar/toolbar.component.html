@@ -1,31 +1,53 @@
 <div class="toolbar" fxLayout="row" fxLayoutAlign="space-between">
   <div fxLayout="row" fxLayoutAlign="start center">
-    <fury-toolbar-sidenav-mobile-toggle *ngIf="!isExtension" (openSidenav)="openSidenav.emit()"></fury-toolbar-sidenav-mobile-toggle>
+    <fury-toolbar-sidenav-mobile-toggle
+      *ngIf="!isExtension"
+      (openSidenav)="openSidenav.emit()"
+    ></fury-toolbar-sidenav-mobile-toggle>
 
     <div
       [fxShow]="isExtension || (topNavigation$ | async)"
-      [routerLink]="['/']" class="toolbar-logo"
+      [routerLink]="['/']"
+      class="toolbar-logo"
     >
-      <img [src]="sanitizer.bypassSecurityTrustUrl(logoUrl)" alt="logo">
+      <img [src]="sanitizer.bypassSecurityTrustUrl(logoUrl)" alt="logo" />
     </div>
 
-    <fury-toolbar-search-bar *ngIf="!isExtension" fxFlex="500px" fxHide fxShow.gt-md></fury-toolbar-search-bar>
+    <fury-toolbar-search-bar
+      *ngIf="!isExtension"
+      fxFlex="500px"
+      fxHide
+      fxShow.gt-md
+    ></fury-toolbar-search-bar>
   </div>
 
   <div fxLayout="row">
+    <fury-toolbar-fullscreen-toggle
+      *ngIf="!isExtension"
+      class="toolbar-button"
+    ></fury-toolbar-fullscreen-toggle>
 
-    <fury-toolbar-fullscreen-toggle *ngIf="!isExtension" class="toolbar-button"></fury-toolbar-fullscreen-toggle>
+    <fury-toolbar-search
+      *ngIf="!isExtension"
+      fxHide
+      fxShow.gt-sm
+      fxHide.gt-md
+      class="toolbar-button"
+    ></fury-toolbar-search>
 
-    <fury-toolbar-search *ngIf="!isExtension" fxHide fxShow.gt-sm fxHide.gt-md class="toolbar-button"></fury-toolbar-search>
-
-    <fury-toolbar-notifications *ngIf="isLoggedIn" class="toolbar-button"></fury-toolbar-notifications>
+    <fury-toolbar-notifications
+      *ngIf="isLoggedIn"
+      class="toolbar-button"
+    ></fury-toolbar-notifications>
 
     <fury-toolbar-user class="toolbar-button"></fury-toolbar-user>
 
-<!--    <fury-toolbar-quickpanel-toggle (openQuickPanel)="openQuickPanel.emit()"-->
-<!--                                    class="toolbar-button"></fury-toolbar-quickpanel-toggle>-->
+    <!--    <fury-toolbar-quickpanel-toggle (openQuickPanel)="openQuickPanel.emit()"-->
+    <!--                                    class="toolbar-button"></fury-toolbar-quickpanel-toggle>-->
 
-    <fury-toolbar-close *ngIf="isExtension" class="toolbar-button"></fury-toolbar-close>
+    <fury-toolbar-close
+      *ngIf="isExtension"
+      class="toolbar-button"
+    ></fury-toolbar-close>
   </div>
 </div>
-

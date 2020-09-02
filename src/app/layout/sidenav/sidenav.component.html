@@ -1,16 +1,16 @@
 <div class="sidenav" fxLayout="column">
   <div class="sidenav-toolbar" fxLayout="row" fxLayoutAlign="start center">
     <div [routerLink]="['/']" class="sidenav-toolbar-logo">
-      <img [src]="sanitizer.bypassSecurityTrustUrl(logoUrl)" alt="logo">
+      <img [src]="sanitizer.bypassSecurityTrustUrl(logoUrl)" alt="logo" />
       <span class="sidenav-toolbar-project">
-        {{projectName}}
+        {{ projectName }}
       </span>
     </div>
   </div>
 
   <fury-scrollbar class="sidenav-items" fxFlex="auto">
     <div *ngIf="sidenavUserVisible$ | async" class="sidenav-user">
-      <img class="sidenav-user-image" src="assets/img/avatars/default.jpg">
+      <img class="sidenav-user-image" src="assets/img/avatars/default.jpg" />
       <h4 class="sidenav-user-name">David Smith</h4>
       <h5 class="sidenav-user-email">david.smith@example.com</h5>
 
@@ -27,7 +27,10 @@
       </div>
     </div>
 
-    <fury-sidenav-item *ngFor="let item of items$ | async" [item]="item" [level]="0"></fury-sidenav-item>
+    <fury-sidenav-item
+      *ngFor="let item of items$ | async"
+      [item]="item"
+      [level]="0"
+    ></fury-sidenav-item>
   </fury-scrollbar>
-
 </div>

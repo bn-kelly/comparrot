@@ -14,17 +14,17 @@
 // Sidebar
 $sidebar-width: 330px;
 $sidebar-background: $theme-background;
-$sidebar-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, .40);
+$sidebar-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.4);
 @import "../../shared/sidebar/sidebar.directive.theme";
 
 // Sidenav
 $sidenav-background: #283144 !default;
 $sidenav-color: white !default;
-$sidenav-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, .40) !default;
+$sidenav-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.4) !default;
 $sidenav-toolbar-background: darken($sidenav-background, 3.5) !default;
 $sidenav-logo-color: white !default;
 $sidenav-secondary-text: $light-secondary-text !default;
-$sidenav-collapsed-hover-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, .40) !default;
+$sidenav-collapsed-hover-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.4) !default;
 
 @import "../../../app/layout/sidenav/sidenav.component.theme";
 

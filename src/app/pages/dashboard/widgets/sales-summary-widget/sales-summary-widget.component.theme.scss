@@ -1,5 +1,4 @@
 fury-sales-summary-widget {
-
   .gain {
     &.increase {
       color: $color-success;
@@ -15,7 +14,6 @@ fury-sales-summary-widget {
   }
 
   .indicator {
-
     &.success {
       color: $color-success;
     }
@@ -32,5 +30,4 @@ fury-sales-summary-widget {
       color: $theme-color-warn;
     }
   }
-
 }

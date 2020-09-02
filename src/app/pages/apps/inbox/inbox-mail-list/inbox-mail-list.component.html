@@ -1,40 +1,88 @@
 <div class="mail-list" fxLayout="column">
-  <div class="header border-bottom" fxFlex="none" fxLayout="row" fxLayoutAlign="start center">
+  <div
+    class="header border-bottom"
+    fxFlex="none"
+    fxLayout="row"
+    fxLayoutAlign="start center"
+  >
     <mat-checkbox></mat-checkbox>
-    <button [matMenuTriggerFor]="menu" class="icon" mat-icon-button type="button">
+    <button
+      [matMenuTriggerFor]="menu"
+      class="icon"
+      mat-icon-button
+      type="button"
+    >
       <mat-icon>arrow_drop_down</mat-icon>
     </button>
   </div>
 
   <div class="content" furyScrollbar fxFlex="auto">
-    <div *ngFor="let mail of mails$ | async"
-         [class.background-hover]="mail.read"
-         [routerLink]="['../mail', mail.id]"
-         class="mail border-bottom"
-         gdColumns="68px 1fr 140px" gdColumns.lt-md="68px 1fr auto" gdColumns.lt-sm="auto 1fr auto" gdGap="8px">
-      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="6px" fxHide fxShow.gt-xs>
-        <mat-checkbox (click)="$event.stopPropagation()" class="checkbox"></mat-checkbox>
-        <fury-inbox-mail-star (click)="$event.stopPropagation()" (starred)="toggleStarred(mail)"
-                              [isStarred]="mail.starred"></fury-inbox-mail-star>
+    <div
+      *ngFor="let mail of mails$ | async"
+      [class.background-hover]="mail.read"
+      [routerLink]="['../mail', mail.id]"
+      class="mail border-bottom"
+      gdColumns="68px 1fr 140px"
+      gdColumns.lt-md="68px 1fr auto"
+      gdColumns.lt-sm="auto 1fr auto"
+      gdGap="8px"
+    >
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start center"
+        fxLayoutGap="6px"
+        fxHide
+        fxShow.gt-xs
+      >
+        <mat-checkbox
+          (click)="$event.stopPropagation()"
+          class="checkbox"
+        ></mat-checkbox>
+        <fury-inbox-mail-star
+          (click)="$event.stopPropagation()"
+          (starred)="toggleStarred(mail)"
+          [isStarred]="mail.starred"
+        ></fury-inbox-mail-star>
       </div>
 
-      <div class="content-container" gdColumns.gt-sm="150px 1fr" gdRows.lt-md="auto 1fr">
+      <div
+        class="content-container"
+        gdColumns.gt-sm="150px 1fr"
+        gdRows.lt-md="auto 1fr"
+      >
         <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-          <img class="picture" fxFlex="noshrink" fxHide fxShow.gt-sm
-               src="http://i.pravatar.cc/30?u={{ mail.from.name }}">
-          <div class="from text" fxFlex="grow" fxLayout="row" fxLayoutAlign="space-between center">
+          <img
+            class="picture"
+            fxFlex="noshrink"
+            fxHide
+            fxShow.gt-sm
+            src="http://i.pravatar.cc/30?u={{ mail.from.name }}"
+          />
+          <div
+            class="from text"
+            fxFlex="grow"
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+          >
             {{ mail.from.name }}
-            <div class="when secondary-text" fxHide.gt-sm>{{ mail.when.fromNow() }}</div>
+            <div class="when secondary-text" fxHide.gt-sm>
+              {{ mail.when.fromNow() }}
+            </div>
           </div>
         </div>
 
-        <div class="content-wrapper"
-             fxLayout="column"
-             fxLayout.gt-sm="row"
-             fxLayoutAlign.gt-sm="start center"
-             fxLayoutGap="8px">
+        <div
+          class="content-wrapper"
+          fxLayout="column"
+          fxLayout.gt-sm="row"
+          fxLayoutAlign.gt-sm="start center"
+          fxLayoutGap="8px"
+        >
           <div fxLayout="row" fxLayoutGap="8px">
-            <fury-inbox-mail-label *ngFor="let label of mail.labels" [color]="label.color">{{ label.name }}
+            <fury-inbox-mail-label
+              *ngFor="let label of mail.labels"
+              [color]="label.color"
+              >{{ label.name }}
             </fury-inbox-mail-label>
           </div>
 
@@ -45,14 +93,20 @@
       </div>
 
       <div fxLayout="row" fxLayoutAlign="end center">
-        <span class="when secondary-text" fxHide fxShow.gt-sm>{{ mail.when.fromNow() }}</span>
-        <button (click)="$event.stopPropagation()" [matMenuTriggerFor]="mailOptions" class="icon" mat-icon-button>
+        <span class="when secondary-text" fxHide fxShow.gt-sm>{{
+          mail.when.fromNow()
+        }}</span>
+        <button
+          (click)="$event.stopPropagation()"
+          [matMenuTriggerFor]="mailOptions"
+          class="icon"
+          mat-icon-button
+        >
           <mat-icon>more_vert</mat-icon>
         </button>
       </div>
     </div>
   </div>
-
 </div>
 
 <!--<div class="content">

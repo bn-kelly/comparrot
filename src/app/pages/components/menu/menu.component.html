@@ -1,7 +1,12 @@
 <div class="fury-preview-card" fxLayout="column" fxLayout.gt-sm="row">
   <div class="preview">
     <div class="title">Preview</div>
-    <div class="preview-content" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="24px">
+    <div
+      class="preview-content"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      fxLayoutGap="24px"
+    >
       <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>more_vert</mat-icon>
       </button>
@@ -32,8 +37,9 @@
     <mat-tab-group class="tabs fury-tabs">
       <mat-tab label="DESCRIPTION">
         <p class="tab-content">
-          Menus offer a list of options that are displayed when triggered. The position (before, after) and (above,
-          below) is automatically decided, but can be overridden with e.g. x-position='before'.
+          Menus offer a list of options that are displayed when triggered. The
+          position (before, after) and (above, below) is automatically decided,
+          but can be overridden with e.g. x-position='before'.
         </p>
       </mat-tab>
       <mat-tab label="SOURCE CODE">
@@ -42,4 +48,3 @@
     </mat-tab-group>
   </div>
 </div>
-

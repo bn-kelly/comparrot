@@ -9,7 +9,8 @@
   font-weight: 400;
 }
 
-.crumb, .link {
+.crumb,
+.link {
   text-decoration: none;
   transition: color $swift-ease-out-duration $swift-ease-out-timing-function;
 

@@ -16,7 +16,8 @@ fury-navigation {
       }
     }
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       .navigation-item {
         color: $sidenav-item-color-hover;
         background: $sidenav-item-background-hover;

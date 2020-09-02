@@ -3,7 +3,6 @@
 $inbox-navigation-width-collapsed: 116px;
 $inbox-navigation-width: 250px;
 
-
 .drawer-container {
   height: 100%;
 }
@@ -18,12 +17,12 @@ $inbox-navigation-width: 250px;
 }
 
 .header {
-  padding: $spacing*2 $spacing ($spacing*2)+$inbox-header-height 0;
+  padding: $spacing * 2 $spacing ($spacing * 2) + $inbox-header-height 0;
   background-size: cover;
   z-index: 10;
 
   @include media-xs {
-    padding: $spacing/3 $spacing/3 $spacing/3+$inbox-header-height;
+    padding: $spacing/3 $spacing/3 $spacing/3 + $inbox-header-height;
   }
 
   .logo {
@@ -97,4 +96,3 @@ $inbox-navigation-width: 250px;
     margin: 0 $spacing/3 $spacing/3;
   }
 }
-
