@@ -1,4 +1,5 @@
 export class CategoryOfInterest {
   id: number;
-  value: string;
+  img: string;
+  value: string;  
 }

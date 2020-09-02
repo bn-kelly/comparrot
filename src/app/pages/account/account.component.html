@@ -124,7 +124,8 @@
                   class="category-button"
                   (click)="toggleSelectCategoryOfInterest(category.id)"
               >
-                {{category.value.toUpperCase()}}
+                <img src="{{category.img}}" alt="" class="category-button-image">
+                {{category.value}}
               </button>
             </div>
           </div>
