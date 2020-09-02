@@ -1,13 +1,20 @@
-<div class="search-wrapper" fxLayout="row" [ngClass]="{ 'focus': focused, 'has-input': input }" fxFlex
-     (furyClickOutside)="closeDropdown()">
+<div
+  class="search-wrapper"
+  fxLayout="row"
+  [ngClass]="{ focus: focused, 'has-input': input }"
+  fxFlex
+  (furyClickOutside)="closeDropdown()"
+>
   <mat-icon class="search-icon">search</mat-icon>
-  <input type="search"
-         autocomplete="off"
-         spellcheck="false"
-         class="search-input"
-         [(ngModel)]="input"
-         (focus)="openDropdown()"
-         placeholder="Search...">
+  <input
+    type="search"
+    autocomplete="off"
+    spellcheck="false"
+    class="search-input"
+    [(ngModel)]="input"
+    (focus)="openDropdown()"
+    placeholder="Search..."
+  />
 
   <div class="search-dropdown">
     <div class="content results" *ngIf="input" fxLayout="column">
@@ -16,11 +23,21 @@
         Search results for: {{ input }}
       </div>
       <div class="items">
-        <div class="item" matRipple [routerLink]="['/forms/form-elements']">Form Elements</div>
-        <div class="item" matRipple [routerLink]="['/forms/form-wizard']">Form Wizard</div>
-        <div class="item" matRipple [routerLink]="['/editor']">WYSIWYG Editor</div>
-        <div class="item" matRipple [routerLink]="['/maps/google-maps']">Google Maps</div>
-        <div class="item" matRipple [routerLink]="['/components/dialogs']">Material Dialog</div>
+        <div class="item" matRipple [routerLink]="['/forms/form-elements']">
+          Form Elements
+        </div>
+        <div class="item" matRipple [routerLink]="['/forms/form-wizard']">
+          Form Wizard
+        </div>
+        <div class="item" matRipple [routerLink]="['/editor']">
+          WYSIWYG Editor
+        </div>
+        <div class="item" matRipple [routerLink]="['/maps/google-maps']">
+          Google Maps
+        </div>
+        <div class="item" matRipple [routerLink]="['/components/dialogs']">
+          Material Dialog
+        </div>
       </div>
     </div>
 
@@ -31,8 +48,14 @@
           Recently Visited
         </div>
         <div class="items">
-          <div class="item" matRipple *ngFor="let item of recentlyVisited" [routerLink]="item.routeOrFunction"
-               (click)="closeDropdown()">{{ item.name }}
+          <div
+            class="item"
+            matRipple
+            *ngFor="let item of recentlyVisited"
+            [routerLink]="item.routeOrFunction"
+            (click)="closeDropdown()"
+          >
+            {{ item.name }}
           </div>
         </div>
       </div>
@@ -42,11 +65,21 @@
           Frequently Visited
         </div>
         <div class="items">
-          <div class="item" matRipple [routerLink]="['/forms/form-elements']">Form Elements</div>
-          <div class="item" matRipple [routerLink]="['/forms/form-wizard']">Form Wizard</div>
-          <div class="item" matRipple [routerLink]="['/editor']">WYSIWYG Editor</div>
-          <div class="item" matRipple [routerLink]="['/maps/google-maps']">Google Maps</div>
-          <div class="item" matRipple [routerLink]="['/components/dialogs']">Material Dialog</div>
+          <div class="item" matRipple [routerLink]="['/forms/form-elements']">
+            Form Elements
+          </div>
+          <div class="item" matRipple [routerLink]="['/forms/form-wizard']">
+            Form Wizard
+          </div>
+          <div class="item" matRipple [routerLink]="['/editor']">
+            WYSIWYG Editor
+          </div>
+          <div class="item" matRipple [routerLink]="['/maps/google-maps']">
+            Google Maps
+          </div>
+          <div class="item" matRipple [routerLink]="['/components/dialogs']">
+            Material Dialog
+          </div>
         </div>
       </div>
     </div>

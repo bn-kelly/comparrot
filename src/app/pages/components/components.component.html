@@ -3,12 +3,18 @@
     <fury-breadcrumbs [@fadeInRight] current="Components"></fury-breadcrumbs>
   </fury-page-layout-header>
 
-  <fury-page-layout-content fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="24px">
-    <fury-scrollbar [fxFlex]="menuWidth"
-                    class="sticky-list"
-                    fxHide
-                    fxLayout="column"
-                    fxShow.gt-sm>
+  <fury-page-layout-content
+    fxLayout="row"
+    fxLayoutAlign="start start"
+    fxLayoutGap="24px"
+  >
+    <fury-scrollbar
+      [fxFlex]="menuWidth"
+      class="sticky-list"
+      fxHide
+      fxLayout="column"
+      fxShow.gt-sm
+    >
       <mat-list [@fadeInUp] class="navigation" fxFlex="grow">
         <h3 matSubheader>Components</h3>
         <mat-list-item (click)="scrollTo('autocomplete')" matRipple>
@@ -82,4 +88,3 @@
     </div>
   </fury-page-layout-content>
 </fury-page-layout>
-

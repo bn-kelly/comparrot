@@ -1,6 +1,5 @@
 @import "var";
 
-
 .header {
   height: $inbox-header-height;
   min-height: $inbox-header-height;
@@ -14,7 +13,6 @@
 }
 
 .content {
-
   .mail {
     height: $inbox-mail-list-item-height;
     min-height: $inbox-mail-list-item-height;
@@ -42,7 +40,6 @@
     }
 
     &.background-hover {
-
       .from {
         font-weight: 400;
       }
@@ -61,7 +58,6 @@
     }
 
     .checkbox {
-
     }
 
     .picture {
@@ -106,6 +102,5 @@
       text-overflow: ellipsis;
       font-weight: 500;
     }
-
   }
 }

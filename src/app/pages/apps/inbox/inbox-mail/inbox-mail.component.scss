@@ -7,13 +7,13 @@
 }
 
 .inbox-mail {
-
   .header {
     height: $inbox-header-height;
     padding-left: $spacing/3;
     padding-right: $spacing/3;
 
-    .mat-icon-button, .button {
+    .mat-icon-button,
+    .button {
       margin-left: $spacing/3;
       margin-right: $spacing/3;
     }
@@ -55,7 +55,6 @@
       white-space: nowrap;
       overflow-x: hidden;
       text-overflow: ellipsis;
-
     }
 
     .to {
@@ -66,7 +65,6 @@
     }
 
     .extra {
-
       .when {
         white-space: nowrap;
         overflow-x: hidden;

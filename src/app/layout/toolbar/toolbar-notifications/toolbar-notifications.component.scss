@@ -23,7 +23,8 @@
   visibility: hidden;
   border-bottom-left-radius: $border-radius;
   border-bottom-right-radius: $border-radius;
-  transition: transform .4s cubic-bezier(.25, .8, .25, 1), visibility .4s cubic-bezier(.25, .8, .25, 1);
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+    visibility 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 
   @media screen and (max-width: 599px) {
     min-width: 100vw;

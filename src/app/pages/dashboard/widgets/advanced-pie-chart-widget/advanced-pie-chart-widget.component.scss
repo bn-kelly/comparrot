@@ -29,10 +29,11 @@
     cursor: pointer;
     min-width: 72px;
     transition: color $swift-ease-in-duration $swift-ease-in-timing-function,
-    opacity $swift-ease-in-duration $swift-ease-in-timing-function;
+      opacity $swift-ease-in-duration $swift-ease-in-timing-function;
 
     &:hover {
-      .item-label, .item-percent {
+      .item-label,
+      .item-percent {
         opacity: 1;
       }
     }
@@ -72,4 +73,3 @@
     width: 50px;
   }
 }
-

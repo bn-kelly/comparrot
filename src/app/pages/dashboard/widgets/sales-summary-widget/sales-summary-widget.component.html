@@ -43,13 +43,15 @@
     </div>
 
     <div class="content">
-      <canvas *ngIf="data"
-              [datasets]="data.datasets"
-              [labels]="data.labels"
-              [legend]="false"
-              [options]="chartOptions"
-              baseChart
-              chartType="line">
+      <canvas
+        *ngIf="data"
+        [datasets]="data.datasets"
+        [labels]="data.labels"
+        [legend]="false"
+        [options]="chartOptions"
+        baseChart
+        chartType="line"
+      >
       </canvas>
     </div>
   </fury-card-content>

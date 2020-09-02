@@ -1,9 +1,18 @@
 <div class="fury-preview-card" fxLayout="column" fxLayout.gt-sm="row">
   <div class="preview">
     <div class="title">Preview</div>
-    <div class="preview-content" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="24px">
+    <div
+      class="preview-content"
+      fxLayout="column"
+      fxLayoutAlign="start center"
+      fxLayoutGap="24px"
+    >
       <mat-radio-group class="radio" [(ngModel)]="favoriteSeason">
-        <mat-radio-button class="example-radio-button" *ngFor="let season of seasons" [value]="season">
+        <mat-radio-button
+          class="example-radio-button"
+          *ngFor="let season of seasons"
+          [value]="season"
+        >
           {{ season }}
         </mat-radio-button>
       </mat-radio-group>
@@ -19,9 +28,11 @@
     <mat-tab-group class="tabs fury-tabs">
       <mat-tab label="DESCRIPTION">
         <p class="tab-content">
-          Radio buttons allow the user to select one option from a set. Use radio buttons for exclusive selection if you
-          think that the user needs to see all available options side-by-side.
-          <br>Otherwise, consider a dropdown, which uses less space than displaying all options.
+          Radio buttons allow the user to select one option from a set. Use
+          radio buttons for exclusive selection if you think that the user needs
+          to see all available options side-by-side.
+          <br />Otherwise, consider a dropdown, which uses less space than
+          displaying all options.
         </p>
       </mat-tab>
       <mat-tab label="SOURCE CODE">
@@ -30,4 +41,3 @@
     </mat-tab-group>
   </div>
 </div>
-

@@ -1,8 +1,18 @@
 <div class="fury-preview-card" fxLayout="column" fxLayout.gt-sm="row">
   <div class="preview">
     <div class="title">Preview</div>
-    <div class="preview-content" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="24px">
-      <button type="button" color="primary" mat-raised-button (click)="openSnackbar()">
+    <div
+      class="preview-content"
+      fxLayout="column"
+      fxLayoutAlign="start center"
+      fxLayoutGap="24px"
+    >
+      <button
+        type="button"
+        color="primary"
+        mat-raised-button
+        (click)="openSnackbar()"
+      >
         TRIGGER SNACKBAR
       </button>
     </div>
@@ -17,8 +27,8 @@
     <mat-tab-group class="tabs fury-tabs">
       <mat-tab label="DESCRIPTION">
         <p class="tab-content">
-          Snackbars contain a single line of text directly related to the operation performed. They may contain a text
-          action, but no icons.
+          Snackbars contain a single line of text directly related to the
+          operation performed. They may contain a text action, but no icons.
         </p>
       </mat-tab>
       <mat-tab label="SOURCE CODE">
@@ -27,4 +37,3 @@
     </mat-tab-group>
   </div>
 </div>
-

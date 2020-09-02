@@ -1,10 +1,9 @@
 fury-inbox {
   .drawer-content > .header {
-    background: $theme-color-accent url('/assets/img/backgrounds/inbox.png');
+    background: $theme-color-accent url("/assets/img/backgrounds/inbox.png");
   }
 
   fury-inbox-navigation {
-
     .mat-list-item {
       &.active {
         color: $theme-color-primary;
@@ -18,14 +17,12 @@ fury-inbox {
   }
 
   fury-inbox-mail {
-
     .vertical-divider {
       background: $theme-divider;
     }
   }
 
   fury-inbox-mail-list {
-
     .mail {
       &:hover {
         background: $theme-background-hover;

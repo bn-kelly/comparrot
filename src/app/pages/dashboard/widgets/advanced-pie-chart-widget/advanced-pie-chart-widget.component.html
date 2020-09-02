@@ -1,7 +1,9 @@
 <fury-card>
   <fury-card-header>
     <fury-card-header-heading>{{ options?.title }}</fury-card-header-heading>
-    <fury-card-header-subheading *ngIf="options?.subTitle">{{ options?.subTitle }}</fury-card-header-subheading>
+    <fury-card-header-subheading *ngIf="options?.subTitle">{{
+      options?.subTitle
+    }}</fury-card-header-subheading>
 
     <fury-card-header-actions>
       <button mat-icon-button (click)="reload()">
@@ -16,15 +18,17 @@
   <fury-card-content>
     <div class="content" fxLayout="row">
       <div class="chart" fxFlex="150px">
-        <canvas *ngIf="data"
-                [datasets]="data.datasets"
-                [labels]="data.labels"
-                [legend]="false"
-                [options]="chartOptions"
-                baseChart
-                chartType="doughnut"
-                height="150"
-                width="150">
+        <canvas
+          *ngIf="data"
+          [datasets]="data.datasets"
+          [labels]="data.labels"
+          [legend]="false"
+          [options]="chartOptions"
+          baseChart
+          chartType="doughnut"
+          height="150"
+          width="150"
+        >
         </canvas>
       </div>
       <div class="legend" fxLayout="column" fxFlex="0 1 100%">
@@ -33,8 +37,15 @@
 
         <fury-scrollbar class="legend-items">
           <div fxLayout="row" fxLayoutAlign="space-between stretch">
-            <div class="legend-item" *ngFor="let value of legendData; let i = index" fxLayout="row">
-              <div class="item-color" [style.background-color]="getLegendBackground(i)"></div>
+            <div
+              class="legend-item"
+              *ngFor="let value of legendData; let i = index"
+              fxLayout="row"
+            >
+              <div
+                class="item-color"
+                [style.background-color]="getLegendBackground(i)"
+              ></div>
               <div fxLayout="column">
                 <div class="item-value">{{ value }}</div>
                 <div class="item-label">{{ getLegendLabel(i) }}</div>

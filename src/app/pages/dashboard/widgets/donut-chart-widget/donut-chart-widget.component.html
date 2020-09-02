@@ -19,23 +19,35 @@
 
   <fury-card-content>
     <div class="content">
-      <canvas *ngIf="data"
-              [datasets]="data.datasets"
-              [labels]="data.labels"
-              [legend]="false"
-              [options]="chartOptions"
-              baseChart
-              chartType="pie">
+      <canvas
+        *ngIf="data"
+        [datasets]="data.datasets"
+        [labels]="data.labels"
+        [legend]="false"
+        [options]="chartOptions"
+        baseChart
+        chartType="pie"
+      >
       </canvas>
     </div>
   </fury-card-content>
 
   <fury-card-actions class="footer" fxLayout="row" fxLayoutAlign="start center">
-    <div class="section" fxFlex="grow" fxLayout="column" fxLayoutAlign="center center">
+    <div
+      class="section"
+      fxFlex="grow"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+    >
       <div class="value">1096</div>
       <div class="label">Total Sales</div>
     </div>
-    <div class="section" fxFlex="grow" fxLayout="column" fxLayoutAlign="center center">
+    <div
+      class="section"
+      fxFlex="grow"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+    >
       <div class="value">598</div>
       <div class="label">Top Categories</div>
     </div>

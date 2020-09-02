@@ -20,18 +20,18 @@
 }
 
 .logo {
-    cursor: pointer;
-    outline: none;
-    width: 200px;
-    height: 60px;
-    margin-bottom: -#{$padding};
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-    background-size: contain;
-  }
+  cursor: pointer;
+  outline: none;
+  width: 200px;
+  height: 60px;
+  margin-bottom: -#{$padding};
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
 
 .content {
-    text-align: center;
+  text-align: center;
 }
 
 button {

@@ -38,7 +38,8 @@
   cursor: pointer;
   border-radius: $border-radius;
   padding: $padding-xs;
-  transition: background $swift-ease-out-duration $swift-ease-out-timing-function
+  transition: background $swift-ease-out-duration
+    $swift-ease-out-timing-function;
 }
 
 .color {

@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   min-height: 100%;
   height: 100%;
   font: var(--font-body-1);
@@ -57,8 +58,8 @@ div {
     padding-right: $spacing/2;
   }
 
-  .fury-inbox-mail-label-list-color, .fury-inbox-mail-label-list-name {
-
+  .fury-inbox-mail-label-list-color,
+  .fury-inbox-mail-label-list-name {
     .mat-form-field-infix {
       width: auto;
     }
@@ -116,8 +117,7 @@ p {
   box-sizing: border-box;
   border-radius: 4px;
   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-  0 8px 10px 1px rgba(0, 0, 0, 0.14),
-  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 
 .cdk-drag-placeholder {

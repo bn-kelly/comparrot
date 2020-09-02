@@ -1,7 +1,12 @@
 <div class="fury-preview-card" fxLayout="column" fxLayout.gt-sm="row">
   <div class="preview">
     <div class="title">Preview</div>
-    <div class="preview-content" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="24px">
+    <div
+      class="preview-content"
+      fxLayout="column"
+      fxLayoutAlign="start center"
+      fxLayoutGap="24px"
+    >
       <mat-progress-bar mode="determinate" [value]="40"></mat-progress-bar>
       <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
       <mat-progress-bar mode="buffer" color="accent"></mat-progress-bar>
@@ -18,10 +23,12 @@
     <mat-tab-group class="tabs fury-tabs">
       <mat-tab label="DESCRIPTION">
         <p class="tab-content">
-          A linear progress indicator should always fill from 0% to 100% and never decrease in value. It should be
-          represented by bars on the edge of a header or sheet that appear and disappear.
-          <br>For multiple operations happening in sequence, use the indicator to represent the progress as a whole, and
-          not each individual operation.
+          A linear progress indicator should always fill from 0% to 100% and
+          never decrease in value. It should be represented by bars on the edge
+          of a header or sheet that appear and disappear.
+          <br />For multiple operations happening in sequence, use the indicator
+          to represent the progress as a whole, and not each individual
+          operation.
         </p>
       </mat-tab>
       <mat-tab label="SOURCE CODE">
@@ -30,4 +37,3 @@
     </mat-tab-group>
   </div>
 </div>
-

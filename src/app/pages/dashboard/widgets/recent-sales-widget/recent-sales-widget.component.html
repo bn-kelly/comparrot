@@ -1,7 +1,9 @@
 <fury-card>
   <fury-card-header>
     <fury-card-header-heading>{{ options.title }}</fury-card-header-heading>
-    <fury-card-header-subheading *ngIf="options.subTitle">{{ options.subTitle }}</fury-card-header-subheading>
+    <fury-card-header-subheading *ngIf="options.subTitle">{{
+      options.subTitle
+    }}</fury-card-header-subheading>
 
     <fury-card-header-actions>
       <button mat-icon-button (click)="reload()">
@@ -14,17 +16,22 @@
   </fury-card-header>
 
   <fury-card-content class="card-content">
-    <fury-recent-sales-widget-table [data]="tableData" [columns]="tableOptions?.columns"
-                                    [pageSize]="tableOptions?.pageSize"></fury-recent-sales-widget-table>
+    <fury-recent-sales-widget-table
+      [data]="tableData"
+      [columns]="tableOptions?.columns"
+      [pageSize]="tableOptions?.pageSize"
+    ></fury-recent-sales-widget-table>
 
     <div class="content">
-      <canvas *ngIf="chartData"
-              [datasets]="chartData.datasets"
-              [labels]="chartData.labels"
-              [legend]="false"
-              [options]="chartOptions"
-              baseChart
-              chartType="line">
+      <canvas
+        *ngIf="chartData"
+        [datasets]="chartData.datasets"
+        [labels]="chartData.labels"
+        [legend]="false"
+        [options]="chartOptions"
+        baseChart
+        chartType="line"
+      >
       </canvas>
     </div>
   </fury-card-content>
