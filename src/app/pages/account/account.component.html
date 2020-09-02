@@ -1,60 +1,120 @@
-<div *ngIf="!!user" class="fury-account-component" fxLayout="column" fxLayout.gt-sm="row">
+<div
+  *ngIf="!!user"
+  class="fury-account-component"
+  fxLayout="column"
+  fxLayout.gt-sm="row"
+>
   <div class="content" fxFlex>
     <div class="header">
       <div class="title">Account</div>
     </div>
 
     <mat-tab-group
-        class="tabs fury-tabs"
-        animationDuration="0ms"
-        dynamicHeight
-        [(selectedIndex)]="index"
+      class="tabs fury-tabs"
+      animationDuration="0ms"
+      dynamicHeight
+      [(selectedIndex)]="index"
     >
       <mat-tab label="General Profile">
         <h2 class="tab-header">General Profile</h2>
-        <p>General profile allows you to change your profile picture and adjust your account information.</p>
-        <form (ngSubmit)="updateGeneralProfile()" fxLayout="column" [formGroup]="form">
-          <div fxLayout="column" fxLayout.gt-xs="row" fxLayoutGap="16px" fxLayoutAlign="start" fxLayoutAlign.gt-xs="start start">
-            <div fxFlex="grow" fxFlex.gt-xs="auto" fxLayout="column" fxLayoutAlign="start center">
-              <div *ngIf="!isPhotoURLFileChanged" class="input-file-image-container">
+        <p>
+          General profile allows you to change your profile picture and adjust
+          your account information.
+        </p>
+        <form
+          (ngSubmit)="updateGeneralProfile()"
+          fxLayout="column"
+          [formGroup]="form"
+        >
+          <div
+            fxLayout="column"
+            fxLayout.gt-xs="row"
+            fxLayoutGap="16px"
+            fxLayoutAlign="start"
+            fxLayoutAlign.gt-xs="start start"
+          >
+            <div
+              fxFlex="grow"
+              fxFlex.gt-xs="auto"
+              fxLayout="column"
+              fxLayoutAlign="start center"
+            >
+              <div
+                *ngIf="!isPhotoURLFileChanged"
+                class="input-file-image-container"
+              >
                 <input
-                    type="file"
-                    id="userPhotoURL"
-                    formControlName="photoURL"
-                    (change)="changeUserPhotoURL($event)"
-                >
-                <img class="user-image" src="{{form.value.photoURL || '../../../assets/img/default-user.jpg'}}">
+                  type="file"
+                  id="userPhotoURL"
+                  formControlName="photoURL"
+                  (change)="changeUserPhotoURL($event)"
+                />
+                <img
+                  class="user-image"
+                  src="{{
+                    form.value.photoURL ||
+                      '../../../assets/img/default-user.jpg'
+                  }}"
+                  alt=""
+                />
               </div>
-              <div *ngIf="isPhotoURLFileChanged">
+              <div
+                *ngIf="isPhotoURLFileChanged"
+                class="input-file-cropper__container"
+                [class]="{
+                  'input-file-cropper__container__submitting': isGeneralProfileFormSubmitting
+                }"
+              >
                 <image-cropper
-                    class="input-file-cropper"
-                    [imageChangedEvent]="imageChangedEvent"
-                    [maintainAspectRatio]="true"
-                    [aspectRatio]="1 / 1"
-                    cropperMinWidth="100"
-                    cropperMinHeight="100"
-                    format="png"
-                    (imageCropped)="imageCropped($event)"
+                  class="input-file-cropper"
+                  [imageChangedEvent]="imageChangedEvent"
+                  [maintainAspectRatio]="true"
+                  [aspectRatio]="1 / 1"
+                  cropperMinWidth="100"
+                  cropperMinHeight="100"
+                  format="png"
+                  (imageCropped)="imageCropped($event)"
                 ></image-cropper>
+                <mat-spinner
+                  *ngIf="isGeneralProfileFormSubmitting"
+                  class="input-file-cropper__spinner"
+                ></mat-spinner>
               </div>
             </div>
             <div fxFlex="grow" fxLayout="column">
               <div fxFlex="auto" fxLayout="column">
                 <mat-form-field>
                   <mat-label>First name</mat-label>
-                  <input matInput required formControlName="firstName" autocomplete="off">
-                  <mat-error *ngIf="form.get('firstName').hasError('required')">Please fill out this field</mat-error>
+                  <input
+                    matInput
+                    required
+                    formControlName="firstName"
+                    autocomplete="off"
+                  />
+                  <mat-error *ngIf="form.get('firstName').hasError('required')"
+                    >Please fill out this field</mat-error
+                  >
                   {{ formErrors.firstName }}
                 </mat-form-field>
-                <div *ngIf="formErrors.firstName" class="notification is-danger">
+                <div
+                  *ngIf="formErrors.firstName"
+                  class="notification is-danger"
+                >
                   {{ formErrors.firstName }}
                 </div>
               </div>
               <div fxFlex="auto" fxLayout="column">
                 <mat-form-field>
                   <mat-label>Last name</mat-label>
-                  <input matInput required formControlName="lastName" autocomplete="off">
-                  <mat-error *ngIf="form.get('lastName').hasError('required')">Please fill out this field</mat-error>
+                  <input
+                    matInput
+                    required
+                    formControlName="lastName"
+                    autocomplete="off"
+                  />
+                  <mat-error *ngIf="form.get('lastName').hasError('required')"
+                    >Please fill out this field</mat-error
+                  >
                   {{ formErrors.lastName }}
                 </mat-form-field>
                 <div *ngIf="formErrors.lastName" class="notification is-danger">
@@ -65,28 +125,32 @@
               <div fxLayout="column" fxLayout.gt-xs="row" fxLayoutGap="16px">
                 <div fxLayout="column">
                   <button
-                      type="submit"
-                      color="primary"
-                      mat-raised-button
-                      [disabled]="areGeneralProfileFormButtonsDisabled()"
+                    type="submit"
+                    color="primary"
+                    mat-raised-button
+                    [disabled]="areGeneralProfileFormButtonsDisabled()"
                   >
                     UPDATE
                   </button>
                 </div>
                 <div fxLayout="column">
                   <button
-                      (click)="resetGeneralProfile()"
-                      type="button"
-                      color="primary"
-                      mat-stroked-button
-                      [disabled]="areGeneralProfileFormButtonsDisabled()"
+                    (click)="resetGeneralProfile()"
+                    type="button"
+                    color="primary"
+                    mat-stroked-button
+                    [disabled]="areGeneralProfileFormButtonsDisabled()"
                   >
                     RESET
                   </button>
                 </div>
                 <div fxLayout="column" fxLayoutAlign="center start">
-                  <div class="submit-area__message success" *ngIf="isGeneralProfileUpdated">
-                    <mat-icon class="submit-area__icon">check_circle</mat-icon> Saved
+                  <div
+                    class="submit-area__message success"
+                    *ngIf="isGeneralProfileUpdated"
+                  >
+                    <mat-icon class="submit-area__icon">check_circle</mat-icon>
+                    Saved
                   </div>
                 </div>
               </div>
@@ -99,33 +163,54 @@
         <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="16px">
           <div fxFlex="grow">
             <h3>Alerts</h3>
-            <p class="padding-bottom">General email alerts, we promise we won’t spam you!</p>
-            <div fxLayout="column" fxLayoutGap="8px" class="padding-horizontal" *ngIf="user && user.emailAlerts">
+            <p class="padding-bottom">
+              General email alerts, we promise we won’t spam you!
+            </p>
+            <div
+              fxLayout="column"
+              fxLayoutGap="8px"
+              class="padding-horizontal"
+              *ngIf="user && user.emailAlerts"
+            >
               <mat-slide-toggle
-                  *ngFor="let alert of emailAlerts"
-                  [checked]="user.emailAlerts.includes(alert.id)"
-                  (change)="emailAlertChange({ id: alert.id, checked: $event.checked })"
-                  color="primary"
+                *ngFor="let alert of emailAlerts"
+                [checked]="user.emailAlerts.includes(alert.id)"
+                (change)="
+                  emailAlertChange({ id: alert.id, checked: $event.checked })
+                "
+                color="primary"
               >
-                {{alert.description}}
+                {{ alert.description }}
               </mat-slide-toggle>
             </div>
           </div>
           <div fxFlex="grow">
             <h3>Categories of Interest</h3>
             <p class="padding-bottom">
-              If we find some great deals in categories you like we’ll update you on the latest or greatest.
+              If we find some great deals in categories you like we’ll update
+              you on the latest or greatest.
             </p>
-            <div class="categories-container" *ngIf="user && user.categoriesOfInterest">
+            <div
+              class="categories-container"
+              *ngIf="user && user.categoriesOfInterest"
+            >
               <button
-                  *ngFor="let category of categoriesOfInterest"
-                  mat-raised-button
-                  [color]="user.categoriesOfInterest.includes(category.id) ? 'primary' : 'default'"
-                  class="category-button"
-                  (click)="toggleSelectCategoryOfInterest(category.id)"
+                *ngFor="let category of categoriesOfInterest"
+                mat-raised-button
+                [color]="
+                  user.categoriesOfInterest.includes(category.id)
+                    ? 'primary'
+                    : 'default'
+                "
+                class="category-button"
+                (click)="toggleSelectCategoryOfInterest(category.id)"
               >
-                <img src="{{category.img}}" alt="" class="category-button-image">
-                {{category.value}}
+                <img
+                  src="{{ category.img }}"
+                  alt=""
+                  class="category-button-image"
+                />
+                {{ category.value }}
               </button>
             </div>
           </div>
@@ -134,40 +219,51 @@
       <mat-tab label="Personalization">
         <h2 class="tab-header">Personalization</h2>
         <ng-template matTabContent>
-          <mat-tab-group animationDuration="0ms" dynamicHeight *ngIf="index === 1">
+          <mat-tab-group
+            animationDuration="0ms"
+            dynamicHeight
+            *ngIf="index === 1"
+          >
             <mat-tab
-                *ngFor="let type of personalizationData.data | orderBy:'order'"
-                label={{type.title}}
+              *ngFor="let type of personalizationData.data | orderBy: 'order'"
+              label="{{ type.title }}"
             >
               <div class="tab-content">
                 <mat-accordion>
                   <mat-expansion-panel
-                      *ngFor="let category of type.categories | orderBy:'order'"
-                      (opened)="panelOpenState = true"
-                      (closed)="panelOpenState = false">
+                    *ngFor="let category of type.categories | orderBy: 'order'"
+                    (opened)="panelOpenState = true"
+                    (closed)="panelOpenState = false"
+                  >
                     <mat-expansion-panel-header>
                       <mat-panel-title>
-                        <strong>{{category.title}}</strong>
+                        <strong>{{ category.title }}</strong>
                       </mat-panel-title>
                     </mat-expansion-panel-header>
-                    <div *ngFor="let size of category.sizes | orderBy:'order'">
-                      <h4>{{size.title}}</h4>
+                    <div *ngFor="let size of category.sizes | orderBy: 'order'">
+                      <h4>{{ size.title }}</h4>
                       <button
-                          *ngFor="let value of size.values | orderBy:'order'"
-                          mat-button
-                          color="primary"
-                          [ngClass]="user.personalizationData[type.id][category.id][size.id].includes(value.id)
+                        *ngFor="let value of size.values | orderBy: 'order'"
+                        mat-button
+                        color="primary"
+                        [ngClass]="
+                          user.personalizationData[type.id][category.id][
+                            size.id
+                          ].includes(value.id)
                             ? 'mat-raised-button'
-                            : 'mat-stroked-button'"
-                          class="personalization-data-button"
-                          (click)="toggleSelectPersonalizationData({
+                            : 'mat-stroked-button'
+                        "
+                        class="personalization-data-button"
+                        (click)="
+                          toggleSelectPersonalizationData({
                             type: type,
                             category: category,
                             size: size,
                             value: value
-                          })"
+                          })
+                        "
                       >
-                        {{value.title}}
+                        {{ value.title }}
                       </button>
                     </div>
                   </mat-expansion-panel>
@@ -180,45 +276,48 @@
       <mat-tab label="My Wishlist">
         <h2 class="tab-header">My Wishlist</h2>
         <div
-            class="wishlist-item"
-            fxLayout="column"
-            fxLayout.gt-xs="row"
-            fxLayoutGap="16px"
-            *ngFor="let item of wishList"
+          class="wishlist-item"
+          fxLayout="column"
+          fxLayout.gt-xs="row"
+          fxLayoutGap="16px"
+          *ngFor="let item of wishList"
         >
           <a
-              [href]="item.buyUrl"
-              target="_blank"
-              class="wishlist-item__image-container"
-              fxFlex="grow"
-              fxFlex.gt-xs="auto"
+            [href]="item.buyUrl"
+            target="_blank"
+            class="wishlist-item__image-container"
+            fxFlex="grow"
+            fxFlex.gt-xs="auto"
           >
             <img
-                class="wishlist-item__img"
-                *ngIf="item.imageUrl"
-                [src]="item.imageUrl"
-                [alt]="item.title">
+              class="wishlist-item__img"
+              *ngIf="item.imageUrl"
+              [src]="item.imageUrl"
+              [alt]="item.title"
+            />
             <span
-                mat-icon-button
-                class="wishlist-item__delete-btn"
-                (click)="deleteItemFromWishList($event, item.id)"
+              mat-icon-button
+              class="wishlist-item__delete-btn"
+              (click)="deleteItemFromWishList($event, item.id)"
             >
               <mat-icon>delete</mat-icon>
             </span>
           </a>
           <div fxFlex="auto" fxFlex.gt-xs="grow">
             <a
-                [href]="item.buyUrl" 
-                target="_blank"
-                class="wishlist-item__title"
-                matTooltip="{{item.title}}"
-                [matTooltipPosition]="'above'"
+              [href]="item.buyUrl"
+              target="_blank"
+              class="wishlist-item__title"
+              matTooltip="{{ item.title }}"
+              [matTooltipPosition]="'above'"
             >
-              {{item.title}}
+              {{ item.title }}
             </a>
             <div class="wishlist-item__price">
-              {{item.price}}
-              <span *ngIf="item.oldPrice" class="wishlist-item__price__old">{{item.oldPrice}}</span>
+              {{ item.price }}
+              <span *ngIf="item.oldPrice" class="wishlist-item__price__old">{{
+                item.oldPrice
+              }}</span>
             </div>
           </div>
         </div>
@@ -227,15 +326,16 @@
         <h2 class="tab-header">FAQ</h2>
         <mat-accordion>
           <mat-expansion-panel
-              *ngFor="let faqItem of faqList"
-              (opened)="panelOpenState = true"
-              (closed)="panelOpenState = false">
+            *ngFor="let faqItem of faqList"
+            (opened)="panelOpenState = true"
+            (closed)="panelOpenState = false"
+          >
             <mat-expansion-panel-header>
               <mat-panel-title>
-                {{faqItem.question}}
+                {{ faqItem.question }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <p>{{faqItem.answer}}</p>
+            <p>{{ faqItem.answer }}</p>
           </mat-expansion-panel>
         </mat-accordion>
       </mat-tab>

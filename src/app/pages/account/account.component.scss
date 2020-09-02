@@ -18,18 +18,41 @@ $avatar-size-desktop: 300px;
   }
 
   .input-file-cropper {
-    max-width: $avatar-size-default;
+    width: $avatar-size-default;
     max-height: $avatar-size-default;
 
     @media (min-width: 768px) {
-      max-width: $avatar-size-desktop;
+      width: $avatar-size-desktop;
       max-height: $avatar-size-desktop;
+    }
+
+    &__container {
+      display: flex;
+      position: relative;
+      align-items: center;
+      justify-content: center;
+
+      &__submitting {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+    }
+
+    &__spinner {
+      position: absolute;
     }
   }
 
   .input-file-image-container {
     position: relative;
     display: flex;
+    width: $avatar-size-default;
+    max-height: $avatar-size-default;
+
+    @media (min-width: 768px) {
+      width: $avatar-size-desktop;
+      max-height: $avatar-size-desktop;
+    }
 
     input[type="file"] {
       position: absolute;
@@ -48,13 +71,7 @@ $avatar-size-desktop: 300px;
     border-radius: 8px;
     width: 100%;
     height: auto;
-    max-width: $avatar-size-default;
-    max-height: $avatar-size-default;
-
-    @media (min-width: 768px) {
-      max-width: $avatar-size-desktop;
-      max-height: $avatar-size-desktop;
-    }
+    max-height: inherit;
   }
 
   .submit-area {
