@@ -55,7 +55,7 @@
 
   .mat-checkbox {
     .mat-checkbox-frame {
-      border: 1.5px solid $color-lightgray;
+      border: 2px solid $color-lightgray;
       border-radius: 4px;
       margin-right: 12px;
       width: 18px;
@@ -63,7 +63,7 @@
     }
 
     .mat-checkbox-inner-container {
-      margin-right: 14px;
+      margin: 2px $spacing/2 auto auto;
     }
 
     &.mat-checkbox-checked.mat-accent {
@@ -80,7 +80,17 @@
       .mat-checkbox-label {
         line-height: 16px;
         font-size: 11px;
+        white-space: initial;
       }
+    }
+  }
+
+  .checkbox-label {
+    font-size: 12px;
+
+    .mat-error {
+      font-size: 87.5%;
+      padding: 0 1em;
     }
   }
 
