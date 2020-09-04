@@ -11,6 +11,7 @@ import { NotifyService } from './notify.service';
 
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
 
 export interface User {
   displayName?: string;
@@ -245,6 +246,7 @@ export class AuthService {
       firstName: user.firstName || '',
       lastName: user.lastName || '',
       photoURL: user.photoURL || '',
+      projectName: user.projectName || environment.projectName,
       ui: this.currentUser && this.currentUser.ui ? this.currentUser.ui : {},
       isAnonymous: user.isAnonymous,
       extension: {

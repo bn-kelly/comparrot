@@ -75,6 +75,10 @@ export class LayoutComponent implements OnInit {
       });
 
     this.auth.user.subscribe(user => {
+      if (!user || user.isAnonymous) {
+        this.showConfigPanel = false;
+      }
+
       if (!user) {
         Array.from(document.getElementsByTagName('link')).forEach(link => {
           if (link.getAttribute('rel') === 'icon') {
@@ -90,10 +94,8 @@ export class LayoutComponent implements OnInit {
             script.innerHTML = '';
           }
         });
-      }
 
-      if (!user || user.isAnonymous) {
-        this.showConfigPanel = false;
+        return;
       }
 
       const { uid, isAdmin, projectName } = user;

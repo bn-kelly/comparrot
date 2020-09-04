@@ -1,7 +1,8 @@
 export const environment = {
   production: true,
   googleMapsApiKey: '',
-  backend: '', // Put your backend here
+  backend: '',
+  projectName: 'comparrot',
   firebase: {
     apiKey: 'AIzaSyBewBHnHgGVKG-c6u42T0BFeDLy_l2ZKM8',
     authDomain: 'coingenius-253507.firebaseapp.com',
