@@ -12,7 +12,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { ThemeService } from '../../../../@fury/services/theme.service';
 import { Project } from '../../../layout/project.model';
 
-type UserFields = 'name' | 'email' | 'password' | 'passwordConfirm';
+type UserFields = 'name' | 'email' | 'password' | 'passwordConfirm' | 'acceptTerms';
 type FormErrors = { [u in UserFields]: string };
 
 @Component({
@@ -29,6 +29,7 @@ export class RegisterComponent implements OnInit {
     email: '',
     password: '',
     passwordConfirm: '',
+    acceptTerms: '',
   };
   validationMessages = {
     name: {
@@ -51,6 +52,7 @@ export class RegisterComponent implements OnInit {
   logoUrl: string;
   project: Project;
   themeName: string;
+  submitted = false;
 
   constructor(
     private router: Router,
@@ -131,6 +133,10 @@ export class RegisterComponent implements OnInit {
   }
 
   signup() {
+    this.submitted = true;
+    if (this.form.invalid) {
+      return;
+    }
     this.auth
       .emailSignUp(this.form.value['email'], this.form.value['password'])
       .then(response => {
@@ -155,6 +161,7 @@ export class RegisterComponent implements OnInit {
       email: ['', Validators.required],
       password: ['', Validators.required],
       passwordConfirm: ['', Validators.required],
+      acceptTerms: [false, Validators.requiredTrue],
     });
 
     this.form.valueChanges.subscribe(() => this.onValueChanged());

@@ -103,16 +103,19 @@
         </mat-form-field>
       </div>
 
-      <div fxLayout="row" fxLayoutAlign="center center">
-        <mat-checkbox class="caption"
-          >ToS + Privacy Policy acceptance text goes <br /><a
-            target="_blank"
-            href="https://comparrot.io/terms.html"
-            >here.</a
-          >
-          Be sure to accept the terms yo.</mat-checkbox
-        >
+      <div fxLayout="row" fxLayoutAlign="center">
+        <mat-checkbox class="caption" formControlName="acceptTerms"></mat-checkbox>
+        <div class="checkbox-label">
+          <label>
+            By continuing, you agree to Comparrot's 
+            <a target="_blank" href="https://comparrot.io/terms.html">Terms of Service</a> 
+            and confirm that you have read our 
+            <a target="_blank" href="https://comparrot.io/privacy.html">Privacy Policy</a>
+          </label>
+          <mat-error *ngIf="form.get('acceptTerms').errors && submitted">Accept ToS & PP is required</mat-error>
+        </div>
       </div>
+      
       <button
         type="submit"
         class="form-button-signup"
