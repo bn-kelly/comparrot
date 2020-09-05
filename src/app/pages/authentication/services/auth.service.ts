@@ -38,6 +38,7 @@ export interface User {
   uid: string;
   isAnonymous: boolean;
   isAdmin?: boolean;
+  isBot?: boolean;
   emailAlerts?: number[];
   categoriesOfInterest?: number[];
   wishList?: string[];
@@ -59,6 +60,7 @@ export interface Credential {
   projectName?: string;
   isAnonymous: boolean;
   isAdmin?: boolean;
+  isBot?: boolean;
   emailAlerts?: number[];
   categoriesOfInterest?: number[];
   wishList?: string[];

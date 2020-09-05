@@ -12,7 +12,12 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { ThemeService } from '../../../../@fury/services/theme.service';
 import { Project } from '../../../layout/project.model';
 
-type UserFields = 'name' | 'email' | 'password' | 'passwordConfirm' | 'acceptTerms';
+type UserFields =
+  | 'name'
+  | 'email'
+  | 'password'
+  | 'passwordConfirm'
+  | 'acceptTerms';
 type FormErrors = { [u in UserFields]: string };
 
 @Component({
