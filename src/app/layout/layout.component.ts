@@ -25,6 +25,7 @@ export class LayoutComponent implements OnInit {
   sidenavExpanded$ = this.sidenavService.expanded$;
   quickPanelOpen: boolean;
   showConfigPanel: boolean;
+  productsProcessing = [];
   vendors: Vendor[];
   isExtension: boolean;
 
@@ -98,7 +99,7 @@ export class LayoutComponent implements OnInit {
         return;
       }
 
-      const { uid, isAdmin, projectName } = user;
+      const { uid, isAdmin, projectName, isBot } = user;
 
       this.showConfigPanel = !!isAdmin;
 
@@ -189,10 +190,32 @@ export class LayoutComponent implements OnInit {
               .collection('allProducts')
               .doc(urlHash)
               .set(allProductsData, { merge: true });
+
+            if (
+              isBot &&
+              this.isExtension &&
+              !this.productsProcessing.find(
+                item => item.title === product.title,
+              )
+            ) {
+              this.tryToScrapeData({ product });
+            }
           }
         });
       }
     });
+  }
+
+  tryToScrapeData({ product }) {
+    this.productsProcessing.push(product);
+
+    this.vendors
+      .filter(item => item.url.split('.')[0] !== product.vendor)
+      .forEach(vendor => {
+        window.chrome.tabs.create({
+          url: `${vendor.searchUrl}${encodeURIComponent(product.title)}`,
+        });
+      });
   }
 
   openQuickPanel() {
