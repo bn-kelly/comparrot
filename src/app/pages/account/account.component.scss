@@ -73,6 +73,31 @@ $avatar-size-desktop: 300px;
     height: auto;
     max-height: inherit;
   }
+  
+  .mat-form-field-wrapper {
+    color: $form-color-text;
+    
+    .mat-form-field-flex {
+      background-color: $color-lightgray;
+      border-radius: 10px;
+      padding: 0.55em 0.75em 0 1.35em;
+    }
+
+    .mat-input-element {
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .mat-form-field-underline {      
+      &, &::before {
+      display: none;
+      }
+    }
+  }
+
+  .mat-button.mat-primary {
+    color: $color-accent;
+  }
 
   .submit-area {
     &__message {

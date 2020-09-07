@@ -122,12 +122,12 @@
                 </div>
               </div>
 
-              <div fxLayout="column" fxLayout.gt-xs="row" fxLayoutGap="16px">
+              <div fxLayout="column" fxLayout.gt-xs="row" fxLayoutGap="16px" fxLayoutAlign="center">
                 <div fxLayout="column">
                   <button
                     type="submit"
                     color="primary"
-                    mat-raised-button
+                    mat-button
                     [disabled]="areGeneralProfileFormButtonsDisabled()"
                   >
                     UPDATE
@@ -138,7 +138,7 @@
                     (click)="resetGeneralProfile()"
                     type="button"
                     color="primary"
-                    mat-stroked-button
+                    mat-button
                     [disabled]="areGeneralProfileFormButtonsDisabled()"
                   >
                     RESET
