@@ -60,6 +60,10 @@
     .mat-form-field-underline::before {
       display: none;
     }
+
+    .mat-form-field-subscript-wrapper {
+      margin-top: 0;
+    }
   }
 
   .mat-checkbox {

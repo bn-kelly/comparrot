@@ -40,13 +40,13 @@ export class LoginComponent implements OnInit {
   };
   validationMessages = {
     email: {
-      required: 'Email is required.',
+      required: 'Please enter your email',
       email: 'Email must be a valid email',
     },
     password: {
-      required: 'Password is required.',
+      required: 'Please enter your password',
       pattern: 'Password must be include at one letter and one number.',
-      minlength: 'Password must be at least 4 characters long.',
+      minlength: 'Password must be at least 6 characters long.',
       maxlength: 'Password cannot be more than 40 characters long.',
     },
   };
@@ -159,7 +159,7 @@ export class LoginComponent implements OnInit {
 
         if (['auth/wrong-password', 'auth/too-many-requests'].includes(code)) {
           this.form.controls.password.setErrors({ password: message });
-          this.formErrors.password = message;
+          this.formErrors.password = 'Wrong username or password';
         }
       });
   }

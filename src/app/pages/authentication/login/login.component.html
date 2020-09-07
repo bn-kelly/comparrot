@@ -21,16 +21,16 @@
       <div fxFlex="auto" fxLayout="column">
         <h4>Login to Comparrot</h4>
         <mat-form-field fxFlex="grow">
-          <mat-label>Enter Your Email</mat-label>
+          <mat-label>Email</mat-label>
           <input matInput required formControlName="email" />
           <mat-error *ngIf="formErrors.email">{{ formErrors.email }}</mat-error>
           <mat-error
             *ngIf="form.get('email').hasError('required') && !formErrors.email"
-            >We need an email address to log you in</mat-error
+            >Please enter your email</mat-error
           >
         </mat-form-field>
         <mat-form-field fxFlex="grow">
-          <mat-label>Enter Your Password</mat-label>
+          <mat-label>Password</mat-label>
           <input
             matInput
             [type]="inputType"
@@ -54,7 +54,7 @@
             *ngIf="
               form.get('password').hasError('required') && !formErrors.password
             "
-            >We need a password to log you in</mat-error
+            >Please enter your password</mat-error
           >
         </mat-form-field>
       </div>
