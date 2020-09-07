@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnDestroy, OnInit } from '@angular/core';
+import { Component, ViewChild, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -18,6 +18,7 @@ type FormErrors = { [u in Fields]: string };
   selector: 'fury-account-settings-component',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class AccountComponent implements OnInit, OnDestroy {
   @ViewChild(MatAccordion) accordion: MatAccordion;
