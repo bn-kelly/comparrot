@@ -1,0 +1,45 @@
+@import "src/styles/var";
+
+fury-contact-us {
+  .contact-us-header {
+    font-weight: 600;
+    font-size: 2rem;
+    line-height: 2.1rem;
+    margin-top: $spacing;
+    margin-bottom: 19px;
+  }
+
+  .mat-form-field-wrapper {
+    padding-bottom: 0;
+    .mat-form-field-flex {
+      background-color: $color-lightgray;
+      border-radius: 10px;
+    }
+
+    .mat-input-element {
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .mat-form-field-label {
+      color: $form-color-text;
+    }
+
+    .mat-form-field-underline {      
+      &, &::before {
+      display: none;
+      }
+    }
+  }
+
+  .form-button {
+    background: $color-primary;
+    border-radius: 25px;
+    width: 11rem;
+    align-self: flex-end;
+    text-transform: uppercase;
+  }
+
+  .success { color:green; }
+  .contact-message { text-align: center; }
+}
