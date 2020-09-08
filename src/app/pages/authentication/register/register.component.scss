@@ -11,6 +11,10 @@
 
   @include media-xs {
     width: 300px;
+  }  
+  
+  &.card-register {
+    margin-top: calc(-(100vh - 927px));
   }
 
   .header {
@@ -32,6 +36,8 @@
 
 .form-signup {
   .mat-form-field-wrapper {
+    color: $form-color-text;
+
     .mat-form-field-flex {
       background-color: $color-lightgray;
       border-radius: 10px;
@@ -43,13 +49,10 @@
       line-height: 20px;
     }
 
-    .mat-form-field-label {
-      color: #153141;
-    }
-
-    .mat-form-field-underline,
-    .mat-form-field-underline::before {
+    .mat-form-field-underline {      
+      &, &::before {
       display: none;
+      }
     }
   }
 
