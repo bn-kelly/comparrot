@@ -16,6 +16,8 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardService } from './dashboard.service';
 import { FurySharedModule } from '../../../@fury/fury-shared.module';
+import { SelectTimeframesComponent } from './select-timeframes/select-timeframes.component';
+import { TimeframeFilterPipe } from './select-timeframes/timeframe-filter.pipe';
 
 @NgModule({
   imports: [
@@ -37,7 +39,11 @@ import { FurySharedModule } from '../../../@fury/fury-shared.module';
     MapsWidgetModule,
     MarketWidgetModule,
   ],
-  declarations: [DashboardComponent],
+  declarations: [
+    DashboardComponent,
+    SelectTimeframesComponent,
+    TimeframeFilterPipe,
+  ],
   providers: [DashboardService],
 })
 export class DashboardModule {}
