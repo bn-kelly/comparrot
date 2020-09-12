@@ -11,6 +11,7 @@ import { AuthService } from '../services/auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ThemeService } from '../../../../@fury/services/theme.service';
 import { Project } from '../../../layout/project.model';
+import { ConfirmedValidator } from './confirmed.validator';
 
 type UserFields =
   | 'name'
@@ -47,8 +48,12 @@ export class RegisterComponent implements OnInit {
     password: {
       required: 'Password is required.',
       pattern: 'Password must be include at one letter and one number.',
-      minlength: 'Password must be at least 4 characters long.',
+      minlength: 'Password must be at least 6 characters long.',
       maxlength: 'Password cannot be more than 40 characters long.',
+    },
+    passwordConfirm: {
+      required: 'Password confirm is required.',
+      confirmedValidator: 'Password and Confirm Password must be match.',
     },
   };
 
@@ -153,6 +158,11 @@ export class RegisterComponent implements OnInit {
           this.formErrors.password = message;
         }
 
+        if (['auth/weak-password'].includes(code)) {
+          this.form.controls.password.setErrors({ password: message });
+          this.formErrors.password = message;
+        }
+
         if (['auth/email-already-in-use'].includes(code)) {
           this.form.controls.email.setErrors({ email: message });
           this.formErrors.email = message;
@@ -161,13 +171,26 @@ export class RegisterComponent implements OnInit {
   }
 
   buildForm() {
-    this.form = this.fb.group({
-      name: ['', Validators.required],
-      email: ['', Validators.required],
-      password: ['', Validators.required],
-      passwordConfirm: ['', Validators.required],
-      acceptTerms: [false, Validators.requiredTrue],
-    });
+    this.form = this.fb.group(
+      {
+        name: ['', Validators.required],
+        email: ['', Validators.required],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.pattern('^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$'),
+            Validators.minLength(6),
+            Validators.maxLength(40),
+          ],
+        ],
+        passwordConfirm: ['', Validators.required],
+        acceptTerms: [false, Validators.requiredTrue],
+      },
+      {
+        validator: ConfirmedValidator('password', 'passwordConfirm'),
+      },
+    );
 
     this.form.valueChanges.subscribe(() => this.onValueChanged());
     this.onValueChanged(); // reset validation messages
@@ -182,7 +205,7 @@ export class RegisterComponent implements OnInit {
     for (const field in this.formErrors) {
       if (
         Object.prototype.hasOwnProperty.call(this.formErrors, field) &&
-        ['name', 'email', 'password'].includes(field)
+        ['name', 'email', 'password', 'passwordConfirm'].includes(field)
       ) {
         // clear previous error message (if any)
         this.formErrors[field] = '';
