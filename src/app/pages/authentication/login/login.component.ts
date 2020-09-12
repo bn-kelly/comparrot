@@ -45,9 +45,6 @@ export class LoginComponent implements OnInit {
     },
     password: {
       required: 'Please enter your password',
-      pattern: 'Password must be include at one letter and one number.',
-      minlength: 'Password must be at least 6 characters long.',
-      maxlength: 'Password cannot be more than 40 characters long.',
     },
   };
 
@@ -173,14 +170,7 @@ export class LoginComponent implements OnInit {
   buildForm() {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: [
-        '',
-        [
-          Validators.pattern('^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$'),
-          Validators.minLength(6),
-          Validators.maxLength(25),
-        ],
-      ],
+      password: ['', Validators.required],
     });
 
     this.form.valueChanges.subscribe(() => this.onValueChanged());
