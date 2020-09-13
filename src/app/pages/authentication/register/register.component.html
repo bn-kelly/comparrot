@@ -24,7 +24,7 @@
       </div>
       <div fxFlex="auto" fxLayout="column">
         <mat-form-field fxFlex="grow">
-          <mat-label>Enter your Name</mat-label>
+          <mat-label>Name</mat-label>
           <input matInput required formControlName="name" />
           <mat-error *ngIf="formErrors.name">{{ formErrors.name }}</mat-error>
           <mat-error
@@ -34,7 +34,7 @@
         </mat-form-field>
 
         <mat-form-field fxFlex="grow">
-          <mat-label>Enter your Email Address</mat-label>
+          <mat-label>Email</mat-label>
           <input matInput required formControlName="email" />
           <mat-error *ngIf="formErrors.email">{{ formErrors.email }}</mat-error>
           <mat-error
@@ -73,7 +73,7 @@
         </mat-form-field>
 
         <mat-form-field fxFlex="grow">
-          <mat-label>Password (Confirm)</mat-label>
+          <mat-label>Confirm password</mat-label>
           <input
             matInput
             [type]="inputType"
