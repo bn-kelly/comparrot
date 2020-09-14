@@ -14,7 +14,7 @@
   }  
   
   &.card-register {
-    margin-top: calc(-(100vh - 927px));
+    margin-top: calc(-1*(100vh - 927px));
   }
 
   .header {
@@ -36,6 +36,8 @@
 
 .form-signup {
   .mat-form-field-wrapper {
+    color: $form-color-text;
+
     .mat-form-field-flex {
       background-color: $color-lightgray;
       border-radius: 10px;
