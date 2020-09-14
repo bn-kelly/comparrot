@@ -1,4 +1,10 @@
-import { Component, ViewChild, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -162,8 +168,8 @@ export class AccountComponent implements OnInit, OnDestroy {
           .valueChanges()
           .subscribe((offers: Offer[]) => {
             this.wishList = offers.filter(offer =>
-              this.user.wishList.includes(offer.id),
-            );
+              this.user.wishList.includes(offer.id))
+              .sort((a, b) => b.created - a.created);
           });
       }
 

@@ -43,6 +43,9 @@ export interface User {
   categoriesOfInterest?: number[];
   wishList?: string[];
   personalizationData?: any;
+  filters?: {
+    offersDefaultSelected?: number;
+  };
 }
 
 export interface Credential {

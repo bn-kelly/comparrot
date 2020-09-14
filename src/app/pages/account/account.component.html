@@ -5,9 +5,6 @@
   fxLayout.gt-sm="row"
 >
   <div class="content" fxFlex>
-    <div class="header">
-      <div class="title">Account</div>
-    </div>
 
     <mat-tab-group
       class="tabs fury-tabs"
@@ -162,29 +159,6 @@
 
         <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="16px">
           <div fxFlex="grow">
-            <h3>Alerts</h3>
-            <p class="padding-bottom">
-              General email alerts, we promise we won’t spam you!
-            </p>
-            <div
-              fxLayout="column"
-              fxLayoutGap="8px"
-              class="padding-horizontal"
-              *ngIf="user && user.emailAlerts"
-            >
-              <mat-slide-toggle
-                *ngFor="let alert of emailAlerts"
-                [checked]="user.emailAlerts.includes(alert.id)"
-                (change)="
-                  emailAlertChange({ id: alert.id, checked: $event.checked })
-                "
-                color="primary"
-              >
-                {{ alert.description }}
-              </mat-slide-toggle>
-            </div>
-          </div>
-          <div fxFlex="grow">
             <h3>Categories of Interest</h3>
             <p class="padding-bottom">
               If we find some great deals in categories you like we’ll update
@@ -212,6 +186,29 @@
                 />
                 {{ category.value }}
               </button>
+            </div>
+          </div>
+          <div fxFlex="grow">
+            <h3>Alerts</h3>
+            <p class="padding-bottom">
+              General email alerts, we promise we won’t spam you!
+            </p>
+            <div
+              fxLayout="column"
+              fxLayoutGap="8px"
+              class="padding-horizontal"
+              *ngIf="user && user.emailAlerts"
+            >
+              <mat-slide-toggle
+                *ngFor="let alert of emailAlerts"
+                [checked]="user.emailAlerts.includes(alert.id)"
+                (change)="
+                  emailAlertChange({ id: alert.id, checked: $event.checked })
+                "
+                color="primary"
+              >
+                {{ alert.description }}
+              </mat-slide-toggle>
             </div>
           </div>
         </div>
@@ -339,6 +336,9 @@
             <p>{{ faqItem.answer }}</p>
           </mat-expansion-panel>
         </mat-accordion>
+      </mat-tab>
+      <mat-tab label="Contact Us">
+        <fury-contact-us></fury-contact-us>
       </mat-tab>
     </mat-tab-group>
   </div>

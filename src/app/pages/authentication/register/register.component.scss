@@ -49,10 +49,18 @@
       line-height: 20px;
     }
 
+    .mat-form-field-label {
+      color: $form-color-text;
+    }
+
     .mat-form-field-underline {      
       &, &::before {
       display: none;
       }
+    }
+
+    .mat-form-field-subscript-wrapper {
+      margin-top: 0;
     }
   }
 

@@ -53,12 +53,13 @@
     }
 
     .mat-form-field-label {
-      color: #153141;
+      color: $form-color-text;
     }
 
-    .mat-form-field-underline,
-    .mat-form-field-underline::before {
+    .mat-form-field-underline {      
+      &, &::before {
       display: none;
+      }
     }
 
     .mat-form-field-subscript-wrapper {
@@ -68,7 +69,7 @@
 
   .mat-checkbox {
     .mat-checkbox-frame {
-      border: 1.5px solid $color-lightgray;
+      border: 2px solid $color-lightgray;
       border-radius: 4px;
       margin-right: 12px;
       width: 18px;

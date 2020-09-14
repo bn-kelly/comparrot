@@ -1,0 +1,8 @@
+<mat-form-field appearance="fill">
+  <mat-label>show for</mat-label>
+  <mat-select [value]="defaultSelected" (selectionChange)="onChange($event.value)">
+    <mat-option *ngFor="let timeframe of timeFrames" [value]="timeframe.value">
+      {{timeframe.viewValue}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

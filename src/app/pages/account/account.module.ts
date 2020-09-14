@@ -10,6 +10,8 @@ import { OrderByPipe } from '../../pipes/order-by.pipe';
 import { AccountRoutingModule } from './account-routing.module';
 import { AccountComponent } from './account.component';
 
+import { TabsModule } from './tabs/tabs.module';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -19,6 +21,7 @@ import { AccountComponent } from './account.component';
     ReactiveFormsModule,
     ImageCropperModule,
     MatExpansionModule,
+    TabsModule,
   ],
   declarations: [AccountComponent, OrderByPipe],
 })
