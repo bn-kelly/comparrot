@@ -29,7 +29,7 @@
           <mat-error *ngIf="formErrors.name">{{ formErrors.name }}</mat-error>
           <mat-error
             *ngIf="form.get('name').hasError('required') && !formErrors.name"
-            >Please provide your name</mat-error
+            >Please enter your name</mat-error
           >
         </mat-form-field>
 
@@ -39,7 +39,7 @@
           <mat-error *ngIf="formErrors.email">{{ formErrors.email }}</mat-error>
           <mat-error
             *ngIf="form.get('email').hasError('required') && !formErrors.email"
-            >Please provide your email</mat-error
+            >Please enter your email</mat-error
           >
         </mat-form-field>
 
@@ -68,7 +68,7 @@
             *ngIf="
               form.get('password').hasError('required') && !formErrors.password
             "
-            >Please provide your password</mat-error
+            >Please enter your password</mat-error
           >
         </mat-form-field>
 
@@ -98,7 +98,7 @@
               form.get('passwordConfirm').hasError('required') &&
               !formErrors.passwordConfirm
             "
-            >Please repeat your password</mat-error
+            >Those passwords didn't match. Please try again</mat-error
           >
         </mat-form-field>
       </div>
