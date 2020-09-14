@@ -39,21 +39,21 @@ export class RegisterComponent implements OnInit {
   };
   validationMessages = {
     name: {
-      required: 'Name is required',
+      required: 'Please enter your name',
     },
     email: {
-      required: 'Email is required.',
+      required: 'Please enter your email',
       email: 'Email must be a valid email',
     },
     password: {
-      required: 'Password is required.',
+      required: 'Please enter your password',
       pattern: 'Password must be include at one letter and one number.',
       minlength: 'Password must be at least 6 characters long.',
-      maxlength: 'Password cannot be more than 40 characters long.',
+      maxlength: 'Password cannot be more than 25 characters long.',
     },
     passwordConfirm: {
-      required: 'Password confirm is required.',
-      confirmedValidator: 'Password and Confirm Password must be match.',
+      required: 'Please confirm your password',
+      confirmedValidator: 'Those passwords didn\'t match. Please try again',
     },
   };
 
@@ -181,7 +181,7 @@ export class RegisterComponent implements OnInit {
             Validators.required,
             Validators.pattern('^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$'),
             Validators.minLength(6),
-            Validators.maxLength(40),
+            Validators.maxLength(25),
           ],
         ],
         passwordConfirm: ['', Validators.required],
