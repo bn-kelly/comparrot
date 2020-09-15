@@ -144,7 +144,7 @@ export class LoginComponent implements OnInit {
     }
 
     this.auth
-      .emailLogin(this.form.value['email'], this.form.value['password'])
+      .phoneOrEmailLogin(this.form.value['email'], this.form.value['password'])
       .then(response => {
         const data: any = response ? { ...response } : {};
         const { code, message } = data;

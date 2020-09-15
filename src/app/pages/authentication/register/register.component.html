@@ -24,12 +24,22 @@
       </div>
       <div fxFlex="auto" fxLayout="column">
         <mat-form-field fxFlex="grow">
-          <mat-label>Name</mat-label>
-          <input matInput required formControlName="name" />
-          <mat-error *ngIf="formErrors.name">{{ formErrors.name }}</mat-error>
+          <mat-label>Firstname</mat-label>
+          <input matInput required formControlName="firstname" />
+          <mat-error *ngIf="formErrors.firstname">{{ formErrors.firstname }}</mat-error>
           <mat-error
-            *ngIf="form.get('name').hasError('required') && !formErrors.name"
-            >Please enter your name</mat-error
+              *ngIf="form.get('firstname').hasError('required') && !formErrors.firstname"
+          >Please enter your Firstname</mat-error
+          >
+        </mat-form-field>
+
+        <mat-form-field fxFlex="grow">
+          <mat-label>Lastname</mat-label>
+          <input matInput required formControlName="lastname" />
+          <mat-error *ngIf="formErrors.lastname">{{ formErrors.lastname }}</mat-error>
+          <mat-error
+              *ngIf="form.get('lastname').hasError('required') && !formErrors.lastname"
+          >Please enter your Lastname</mat-error
           >
         </mat-form-field>
 
