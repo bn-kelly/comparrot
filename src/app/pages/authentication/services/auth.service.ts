@@ -18,6 +18,7 @@ export interface User {
   firstName?: string;
   lastName?: string;
   email?: string;
+  emailVerified?: boolean;
   photoURL?: string;
   ui: {
     navigation: 'side' | 'top';
@@ -51,6 +52,7 @@ export interface User {
 export interface Credential {
   uid: string;
   email?: string;
+  emailVerified?: boolean;
   displayName?: string;
   firstName?: string;
   lastName?: string;
@@ -171,21 +173,25 @@ export class AuthService {
       });
   }
 
-  //// Email/Password Auth ////
+  //// PhoneOrEmail/Password Auth ////
 
-  emailSignUp(email: string, password: string) {
+  phoneOrEmailSignUp({ email, password, firstName, lastName }: any) {
     return this.afAuth
       .createUserWithEmailAndPassword(email, password)
       .then(credential => {
         this.notify.update('Welcome new user!', 'success');
-        this.updateUserData(credential.user);
+        this.updateUserData({
+          ...credential.user,
+          firstName,
+          lastName,
+        });
         this.sendVerificationMail();
         this.router.navigate(['/verify-email']);
       })
       .catch(error => this.handleError(error));
   }
 
-  emailLogin(email: string, password: string) {
+  phoneOrEmailLogin(email: string, password: string) {
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
       .then(result => {
@@ -207,7 +213,7 @@ export class AuthService {
       .catch(error => this.handleError(error));
   }
 
-  // Send email verfificaiton when new user sign up
+  // Send email verification when new user is signed up
   async sendVerificationMail() {
     if (!this.currentUser.emailVerified) {
       return (await this.afAuth.currentUser).sendEmailVerification();
@@ -254,6 +260,7 @@ export class AuthService {
       projectName: user.projectName || environment.projectName,
       ui: this.currentUser && this.currentUser.ui ? this.currentUser.ui : {},
       isAnonymous: user.isAnonymous,
+      emailVerified: user.emailVerified || false,
       extension: {
         show:
           user.extension && user.extension.show ? user.extension.show : false,

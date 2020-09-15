@@ -14,7 +14,8 @@ import { Project } from '../../../layout/project.model';
 import { ConfirmedValidator } from './confirmed.validator';
 
 type UserFields =
-  | 'name'
+  | 'firstname'
+  | 'lastname'
   | 'email'
   | 'password'
   | 'passwordConfirm'
@@ -31,15 +32,19 @@ type FormErrors = { [u in UserFields]: string };
 export class RegisterComponent implements OnInit {
   form: FormGroup;
   formErrors: FormErrors = {
-    name: '',
+    firstname: '',
+    lastname: '',
     email: '',
     password: '',
     passwordConfirm: '',
     acceptTerms: '',
   };
   validationMessages = {
-    name: {
-      required: 'Please enter your name',
+    firstname: {
+      required: 'Please enter your firstname',
+    },
+    lastname: {
+      required: 'Please enter your lastname',
     },
     email: {
       required: 'Please enter your email',
@@ -53,7 +58,7 @@ export class RegisterComponent implements OnInit {
     },
     passwordConfirm: {
       required: 'Please confirm your password',
-      confirmedValidator: "Those passwords didn't match. Please try again",
+      confirmedValidator: `Those passwords didn't match. Please try again`,
     },
   };
 
@@ -147,8 +152,14 @@ export class RegisterComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
+
     this.auth
-      .emailSignUp(this.form.value['email'], this.form.value['password'])
+      .phoneOrEmailSignUp({
+        email: this.form.value['email'],
+        password: this.form.value['password'],
+        firstName: this.form.value['firstname'],
+        lastName: this.form.value['lastname'],
+      })
       .then(response => {
         const data: any = response ? { ...response } : {};
         const { code, message } = data;
@@ -173,7 +184,8 @@ export class RegisterComponent implements OnInit {
   buildForm() {
     this.form = this.fb.group(
       {
-        name: ['', Validators.required],
+        firstname: ['', Validators.required],
+        lastname: ['', Validators.required],
         email: ['', Validators.required],
         password: [
           '',
