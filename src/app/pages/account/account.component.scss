@@ -10,11 +10,55 @@ $avatar-size-desktop: 300px;
     margin-bottom: $spacing;
   }
 
+  .fury-tabs {
+    .mat-tab-header {
+      border-bottom: 0px;
+    }
+
+    .mat-tab-labels {
+      background: transparent;
+
+      .mat-tab-label {
+        min-width: 50px;
+        padding: 0 $padding-sm;
+        color: $form-color-text;
+
+        &.mat-tab-label-active {
+          color: $color-accent;
+        }
+
+        .mat-ripple-element {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .mat-tab-group.mat-primary {
+    .mat-ink-bar {
+      background-color: $color-accent;
+      bottom: 12px;
+      &:before,
+      &:after {
+          content: "";
+          height: 2px;
+          width: 12px;
+          background-color: #FAFAFA;
+          position: absolute;
+          left: 0;
+      }
+      &:after {
+          left: initial;
+          right: 0;
+      }
+    }
+  }
+
   .tab-header {
     font-weight: 600;
     font-size: 2rem;
     line-height: 2.1rem;
-    margin: $spacing*2 0 $spacing;
+    margin: $spacing 0;
   }
 
   .input-file-cropper {
