@@ -53,7 +53,7 @@ export class RegisterComponent implements OnInit {
     },
     passwordConfirm: {
       required: 'Please confirm your password',
-      confirmedValidator: 'Those passwords didn\'t match. Please try again',
+      confirmedValidator: "Those passwords didn't match. Please try again",
     },
   };
 
