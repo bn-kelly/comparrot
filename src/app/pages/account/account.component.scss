@@ -273,7 +273,28 @@ $avatar-size-desktop: 300px;
     }
   }
 
-  .personalization-data-button {
-    margin: 0 $padding-xs $padding-xs 0;
+  .personalization-data {
+    &__panel-header {
+      height: auto !important;
+    }
+
+    &__panel-title {
+      flex-direction: column;
+    }
+
+    &__category-title {
+      margin-top: $padding-xs;
+    }
+
+    &__category-description {
+      font-style: italic;
+      font-size: 1rem;
+      color: $color-accent;
+      margin: $padding-xs 0;
+    }
+
+    &__category-button {
+      margin: 0 $padding-xs $padding-xs 0;
+    }
   }
 }

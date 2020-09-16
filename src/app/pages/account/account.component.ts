@@ -40,6 +40,7 @@ export class AccountComponent implements OnInit, OnDestroy {
   emailAlerts: EmailAlert[];
   categoriesOfInterest: CategoryOfInterest[];
   personalizationData: PersonalizationData;
+  categorySizesDivider = ', ';
   faqList: FAQ[];
   wishList: Offer[];
   user: User;
@@ -153,7 +154,52 @@ export class AccountComponent implements OnInit, OnDestroy {
             {},
           );
 
+          const categoriesDescriptions = this.personalizationData.data.reduce(
+            (typesAcc, type) => {
+              typesAcc = {
+                ...typesAcc,
+                [type.id]: type.categories.reduce((categoriesAcc, category) => {
+                  categoriesAcc = {
+                    ...categoriesAcc,
+                    [category.id]:
+                      this.user.personalizationData &&
+                      this.user.personalizationData[type.id] &&
+                      this.user.personalizationData[type.id][category.id]
+                        ? category.sizes.reduce((result, size) => {
+                            const values = this.user.personalizationData[
+                              type.id
+                            ][category.id][size.id]
+                              ? size.values
+                                  .filter(value =>
+                                    this.user.personalizationData[type.id][
+                                      category.id
+                                    ][size.id].includes(value.id),
+                                  )
+                                  .map(value => value.title)
+                              : [];
+
+                            result = result
+                              ? [
+                                  ...result.split(this.categorySizesDivider),
+                                  ...values,
+                                ].join(this.categorySizesDivider)
+                              : values.join(this.categorySizesDivider);
+
+                            return result;
+                          }, '')
+                        : '',
+                  };
+                  return categoriesAcc;
+                }, {}),
+              };
+
+              return typesAcc;
+            },
+            {},
+          );
+
           this.updateUserPersonalizationData(userPersonalizationData);
+          this.updateUserCategoriesDescriptions(categoriesDescriptions);
         }
       });
 
@@ -371,7 +417,36 @@ export class AccountComponent implements OnInit, OnDestroy {
           },
         };
 
+    const categoriesDescriptions = {
+      ...this.user.categoriesDescriptions,
+      [type.id]: {
+        ...this.user.categoriesDescriptions[type.id],
+        [category.id]: this.toggleCategorySizes({
+          typeId: type.id,
+          categoryId: category.id,
+          sizeValueTitle: value.title,
+        }),
+      },
+    };
+
     this.updateUserPersonalizationData(personalizationData);
+    this.updateUserCategoriesDescriptions(categoriesDescriptions);
+  }
+
+  toggleCategorySizes({ typeId, categoryId, sizeValueTitle }) {
+    const values = this.user.categoriesDescriptions[typeId][categoryId].split(
+      this.categorySizesDivider,
+    );
+
+    const isValueExist = values.includes(sizeValueTitle);
+
+    return isValueExist
+      ? values
+          .filter(value => value !== sizeValueTitle)
+          .join(this.categorySizesDivider)
+      : [...values.filter(Boolean), sizeValueTitle].join(
+          this.categorySizesDivider,
+        );
   }
 
   updateUserEmailAlerts(emailAlerts = []) {
@@ -390,6 +465,13 @@ export class AccountComponent implements OnInit, OnDestroy {
       .collection('users')
       .doc(this.user.uid)
       .update({ personalizationData });
+  }
+
+  updateUserCategoriesDescriptions(categoriesDescriptions) {
+    this.afs
+      .collection('users')
+      .doc(this.user.uid)
+      .update({ categoriesDescriptions });
   }
 
   deleteItemFromWishList(event, id) {
