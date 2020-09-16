@@ -44,6 +44,7 @@ export interface User {
   categoriesOfInterest?: number[];
   wishList?: string[];
   personalizationData?: any;
+  categoriesDescriptions?: any;
   filters?: {
     offersDefaultSelected?: number;
   };
@@ -70,6 +71,7 @@ export interface Credential {
   categoriesOfInterest?: number[];
   wishList?: string[];
   personalizationData?: any;
+  categoriesDescriptions?: any;
 }
 
 @Injectable()

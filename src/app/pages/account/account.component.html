@@ -5,7 +5,6 @@
   fxLayout.gt-sm="row"
 >
   <div class="content" fxFlex>
-
     <mat-tab-group
       class="tabs fury-tabs"
       animationDuration="0ms"
@@ -119,7 +118,12 @@
                 </div>
               </div>
 
-              <div fxLayout="column" fxLayout.gt-xs="row" fxLayoutGap="16px" fxLayoutAlign="center">
+              <div
+                fxLayout="column"
+                fxLayout.gt-xs="row"
+                fxLayoutGap="16px"
+                fxLayoutAlign="center"
+              >
                 <div fxLayout="column">
                   <button
                     type="submit"
@@ -232,9 +236,21 @@
                     (opened)="panelOpenState = true"
                     (closed)="panelOpenState = false"
                   >
-                    <mat-expansion-panel-header>
-                      <mat-panel-title>
-                        <strong>{{ category.title }}</strong>
+                    <mat-expansion-panel-header
+                      class="personalization-data__panel-header"
+                    >
+                      <mat-panel-title
+                        class="personalization-data__panel-title"
+                      >
+                        <div class="personalization-data__category-title">
+                          <strong>{{ category.title }}</strong>
+                        </div>
+                        <div class="personalization-data__category-description">
+                          {{
+                            user.categoriesDescriptions[type.id][category.id] ||
+                              'No selected sizes'
+                          }}
+                        </div>
                       </mat-panel-title>
                     </mat-expansion-panel-header>
                     <div *ngFor="let size of category.sizes | orderBy: 'order'">
@@ -250,7 +266,7 @@
                             ? 'mat-raised-button'
                             : 'mat-stroked-button'
                         "
-                        class="personalization-data-button"
+                        class="personalization-data__category-button"
                         (click)="
                           toggleSelectPersonalizationData({
                             type: type,
