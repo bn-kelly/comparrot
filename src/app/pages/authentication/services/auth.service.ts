@@ -77,6 +77,7 @@ export class AuthService {
   user: Observable<User | null>;
   uid: string;
   currentUser: any;
+  authState: any = null;
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -118,9 +119,12 @@ export class AuthService {
           });
       }
     });
+
+    this.afAuth.authState.subscribe(authState => {
+      this.authState = authState;
+    });
   }
 
-  ////// OAuth Methods /////
   id() {
     const provider = new auth.GoogleAuthProvider();
     return this.oAuthLogin(provider);
@@ -156,8 +160,6 @@ export class AuthService {
       .catch(error => this.handleError(error));
   }
 
-  //// Anonymous Auth ////
-
   anonymousLogin() {
     return this.afAuth
       .signInAnonymously()
@@ -172,8 +174,6 @@ export class AuthService {
         this.router.navigate(['/login']);
       });
   }
-
-  //// PhoneOrEmail/Password Auth ////
 
   phoneOrEmailSignUp({ email, password, firstName, lastName }: any) {
     return this.afAuth
@@ -213,19 +213,25 @@ export class AuthService {
       .catch(error => this.handleError(error));
   }
 
-  // Send email verification when new user is signed up
   async sendVerificationMail() {
     if (!this.currentUser.emailVerified) {
       return (await this.afAuth.currentUser).sendEmailVerification();
     }
   }
 
-  // Sends email allowing user to reset password
   resetPassword(email: string) {
     return this.afAuth
       .sendPasswordResetEmail(email)
       .then(() => this.notify.update('Password update email sent', 'info'))
       .catch(error => this.handleError(error));
+  }
+
+  isAuthenticated(): boolean {
+    return this.authState !== null;
+  }
+
+  isEmailVerified(): boolean {
+    return this.isAuthenticated ? this.authState.emailVerified : false;
   }
 
   signOut() {
@@ -238,13 +244,11 @@ export class AuthService {
     });
   }
 
-  // If error, console log and notify user
   private handleError(error: Error) {
     this.notify.update(error.message, 'error');
     return error;
   }
 
-  // Sets user data to firestore after succesful login
   public updateUserData(user: Credential) {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(
       `users/${user.uid}`,

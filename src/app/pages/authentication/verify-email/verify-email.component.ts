@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
 
 import { AuthService } from '../services/auth.service';
 import { ThemeService } from '../../../../@fury/services/theme.service';
@@ -19,11 +20,15 @@ export class VerifyEmailComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private afs: AngularFirestore,
+    private router: Router,
     private themeService: ThemeService,
   ) {}
 
   ngOnInit() {
-    this.user = this.authService.currentUser;
+    const authService = this.authService;
+    this.user = authService.currentUser;
+    const user = this.user;
+    const router = this.router;
 
     const isExtension = !!window.chrome && !!window.chrome.extension;
 
@@ -31,6 +36,19 @@ export class VerifyEmailComponent implements OnInit {
       this.themeName = currentTheme.replace('fury-', '');
       this.handleLogoUrl();
     });
+
+    const checkIfEmailIsVerified = () => {
+      const interval = setInterval(async () => {
+        await user.reload();
+        const isEmailVerified = await authService.isEmailVerified();
+        if (isEmailVerified) {
+          clearInterval(interval);
+          await router.navigate(['/']);
+        }
+      }, 1000);
+    };
+
+    checkIfEmailIsVerified();
 
     this.authService.user.subscribe(user => {
       if (user && user.projectName) {
