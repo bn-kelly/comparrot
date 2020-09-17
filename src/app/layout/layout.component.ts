@@ -7,7 +7,10 @@ import { filter, map, startWith } from 'rxjs/operators';
 import { ThemeService } from '../../@fury/services/theme.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { checkRouterChildsData } from '../../@fury/utils/check-router-childs-data';
-import { AuthService } from '../pages/authentication/services/auth.service';
+import {
+  AuthService,
+  User,
+} from '../pages/authentication/services/auth.service';
 import { Vendor } from './vendor.model';
 import { Project } from './project.model';
 
@@ -25,6 +28,8 @@ export class LayoutComponent implements OnInit {
   sidenavExpanded$ = this.sidenavService.expanded$;
   quickPanelOpen: boolean;
   showConfigPanel: boolean;
+  scrapedUrls: string[] = [];
+  user: User;
   vendors: Vendor[];
   isExtension: boolean;
 
@@ -75,6 +80,8 @@ export class LayoutComponent implements OnInit {
       });
 
     this.auth.user.subscribe(user => {
+      this.user = user;
+
       if (!user || user.isAnonymous) {
         this.showConfigPanel = false;
       }
@@ -157,40 +164,61 @@ export class LayoutComponent implements OnInit {
 
       if (this.isExtension && !!uid) {
         window.chrome.tabs.getSelected(null, tab => {
+          // TODO: remove when 174512601 is done
+          console.info('this.scrapedUrls');
+          console.info(this.scrapedUrls);
+          if (this.scrapedUrls.includes(tab.url)) {
+            return;
+          }
+          // TODO: remove when 174512601 is done
+          console.info('--- layout try-to-scrape-data ---');
           window.chrome.tabs.sendMessage(tab.id, {
             action: 'try-to-scrape-data',
             url: tab.url,
             vendors: this.vendors,
           });
+          this.scrapedUrls.push(tab.url);
         });
+      }
+    });
 
-        window.chrome.extension.onMessage.addListener(message => {
-          if (message.action === 'save-product-to-db') {
-            const { product } = message;
-            const urlHash = sha1(product.url);
+    const thisUser = this.user;
+    const thisAfs = this.afs;
 
-            const productsData = {
-              ...product,
-            };
+    window.chrome.extension.onMessage.addListener(function saveProductToDB(
+      message,
+    ) {
+      window.chrome.extension.onMessage.removeListener(saveProductToDB);
+      // TODO: remove when 174512601 is done
+      console.info('--- layout save-product-to-db ---');
+      if (!thisUser || !thisUser.uid) {
+        return;
+      }
 
-            this.afs
-              .collection('products')
-              .doc(uid)
-              .collection('latest')
-              .doc(urlHash)
-              .set(productsData, { merge: true });
+      if (message.action === 'save-product-to-db') {
+        const { product } = message;
+        const urlHash = sha1(product.url);
 
-            const allProductsData = {
-              ...productsData,
-              user: uid,
-            };
+        const productsData = {
+          ...product,
+        };
 
-            this.afs
-              .collection('allProducts')
-              .doc(urlHash)
-              .set(allProductsData, { merge: true });
-          }
-        });
+        thisAfs
+          .collection('products')
+          .doc(thisUser.uid)
+          .collection('latest')
+          .doc(urlHash)
+          .set(productsData, { merge: true });
+
+        const allProductsData = {
+          ...productsData,
+          user: thisUser.uid,
+        };
+
+        thisAfs
+          .collection('allProducts')
+          .doc(urlHash)
+          .set(allProductsData, { merge: true });
       }
     });
   }
