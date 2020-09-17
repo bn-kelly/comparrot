@@ -109,6 +109,8 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
 };
 
 const saveProductToDB = product => {
+  // TODO: remove when 174512601 is done
+  console.info('--- content save-product-to-db ---');
   chrome.runtime.sendMessage({
     action: 'save-product-to-db',
     product,
