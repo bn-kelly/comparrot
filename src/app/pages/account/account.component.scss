@@ -139,8 +139,10 @@ $avatar-size-desktop: 300px;
     }
   }
 
-  .mat-button.mat-primary {
-    color: $color-accent;
+  .mat-button {
+    &.form-profile-btn {
+      color: $color-accent;
+    }
   }
 
   .submit-area {
