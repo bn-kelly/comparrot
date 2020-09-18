@@ -1,5 +1,6 @@
 import sha1 from 'sha1';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SidebarDirective } from '../../@fury/shared/sidebar/sidebar.directive';
 import { SidenavService } from './sidenav/sidenav.service';
@@ -7,10 +8,7 @@ import { filter, map, startWith } from 'rxjs/operators';
 import { ThemeService } from '../../@fury/services/theme.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { checkRouterChildsData } from '../../@fury/utils/check-router-childs-data';
-import {
-  AuthService,
-  User,
-} from '../pages/authentication/services/auth.service';
+import { AuthService } from '../pages/authentication/services/auth.service';
 import { Vendor } from './vendor.model';
 import { Project } from './project.model';
 
@@ -29,7 +27,6 @@ export class LayoutComponent implements OnInit {
   quickPanelOpen: boolean;
   showConfigPanel: boolean;
   scrapedUrls: string[] = [];
-  user: User;
   vendors: Vendor[];
   isExtension: boolean;
 
@@ -62,6 +59,7 @@ export class LayoutComponent implements OnInit {
 
   constructor(
     private afs: AngularFirestore,
+    private afAuth: AngularFireAuth,
     public auth: AuthService,
     private sidenavService: SidenavService,
     private themeService: ThemeService,
@@ -80,8 +78,6 @@ export class LayoutComponent implements OnInit {
       });
 
     this.auth.user.subscribe(user => {
-      this.user = user;
-
       if (!user || user.isAnonymous) {
         this.showConfigPanel = false;
       }
@@ -182,44 +178,46 @@ export class LayoutComponent implements OnInit {
       }
     });
 
-    const thisUser = this.user;
-    const thisAfs = this.afs;
-
-    window.chrome.extension.onMessage.addListener(function saveProductToDB(
-      message,
-    ) {
-      window.chrome.extension.onMessage.removeListener(saveProductToDB);
-      // TODO: remove when 174512601 is done
-      console.info('--- layout save-product-to-db ---');
-      if (!thisUser || !thisUser.uid) {
+    this.afAuth.onAuthStateChanged(user => {
+      if (!user || !user.uid) {
         return;
       }
 
-      if (message.action === 'save-product-to-db') {
-        const { product } = message;
-        const urlHash = sha1(product.url);
+      const afs = this.afs;
 
-        const productsData = {
-          ...product,
-        };
+      window.chrome.extension.onMessage.addListener(function saveProductToDB(
+        message,
+      ) {
+        window.chrome.extension.onMessage.removeListener(saveProductToDB);
+        if (message.action === 'save-product-to-db') {
+          // TODO: remove when 174512601 is done
+          console.info('--- layout save-product-to-db ---');
 
-        thisAfs
-          .collection('products')
-          .doc(thisUser.uid)
-          .collection('latest')
-          .doc(urlHash)
-          .set(productsData, { merge: true });
+          const { product } = message;
+          const urlHash = sha1(product.url);
 
-        const allProductsData = {
-          ...productsData,
-          user: thisUser.uid,
-        };
+          const productsData = {
+            ...product,
+          };
 
-        thisAfs
-          .collection('allProducts')
-          .doc(urlHash)
-          .set(allProductsData, { merge: true });
-      }
+          afs
+            .collection('products')
+            .doc(user.uid)
+            .collection('latest')
+            .doc(urlHash)
+            .set(productsData, { merge: true });
+
+          const allProductsData = {
+            ...productsData,
+            user: user.uid,
+          };
+
+          afs
+            .collection('allProducts')
+            .doc(urlHash)
+            .set(allProductsData, { merge: true });
+        }
+      });
     });
   }
 
