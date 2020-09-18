@@ -4,6 +4,16 @@
   display: block;
   height: 100%;
   width: 100%;
+
+  &.background-pattern {
+    background: linear-gradient(
+      to bottom, 
+      rgba(103,223,242,1) 0%, 
+      rgba(102,190,235,1) 37%, 
+      rgba(69,140,216,1) 69%, 
+      rgba(62,134,208,1) 78%, 
+      rgba(50,123,207,1) 100%);
+  }
 }
 
 .card {
@@ -16,6 +26,13 @@
   .header {
     border-top-left-radius: $border-radius;
     border-top-right-radius: $border-radius;
+  }
+
+  &.elevation {
+    box-shadow: 
+    0px 4px 5px -2px rgba(82, 63, 104, 0.36), 
+    0px 7px 10px 1px rgba(82, 63, 104, 0.342), 
+    0px 2px 16px 1px rgba(82, 63, 104, 0.336);
   }
 }
 
