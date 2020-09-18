@@ -2,19 +2,19 @@
 
 .page {
   display: block;
-  height: 100%;
   width: 100%;
-}
+
+  &.page-register {
+    height: auto;
+    padding: $padding-xl 0;
+  }
+} 
 
 .card {
   width: 380px;
 
   @include media-xs {
     width: 300px;
-  }  
-  
-  &.card-register {
-    margin-top: calc(-1*(100vh - 927px));
   }
 
   .header {
