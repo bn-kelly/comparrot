@@ -19,7 +19,7 @@
       [formGroup]="form"
     >
       <div fxFlex="auto" fxLayout="column">
-        <h4>Login to Comparrot</h4>
+        <h4>Login to <span class="project-name">{{ project.name }}</span></h4>
         <mat-form-field fxFlex="grow">
           <mat-label>Email</mat-label>
           <input matInput required formControlName="email" />

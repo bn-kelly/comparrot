@@ -9,4 +9,9 @@ export class Project {
   favicon?: string;
   name: string;
   faq: [];
+  links: {
+    termsOfService: string;
+    privacyPolicy: string;
+  };
+  contactUsEmails: string[];
 }

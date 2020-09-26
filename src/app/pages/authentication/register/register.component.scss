@@ -34,6 +34,10 @@
   background-size: contain;
 }
 
+.project-name {
+  text-transform: capitalize;
+}
+
 .form-signup {
   .mat-form-field-wrapper {
     color: $form-color-text;

@@ -117,10 +117,10 @@
         <mat-checkbox class="caption" formControlName="acceptTerms"></mat-checkbox>
         <div class="checkbox-label">
           <label>
-            By continuing, you agree to Comparrot's 
-            <a target="_blank" href="https://comparrot.io/terms.html">Terms of Service</a> 
+            By continuing, you agree to <span class="project-name">{{ project.name }}</span>'s
+            <a target="_blank" href="{{ project.links.termsOfService }}">Terms of Service</a>
             and confirm that you have read our 
-            <a target="_blank" href="https://comparrot.io/privacy.html">Privacy Policy</a>
+            <a target="_blank" href="{{ project.links.privacyPolicy }}">Privacy Policy</a>
           </label>
           <mat-error *ngIf="form.get('acceptTerms').errors && submitted">Accept ToS & PP is required</mat-error>
         </div>
