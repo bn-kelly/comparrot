@@ -100,6 +100,7 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
           price,
           image,
           url,
+          created: Date.now(),
           vendor: vendor.url.split('.')[0],
         };
         saveProductToDB(product);
