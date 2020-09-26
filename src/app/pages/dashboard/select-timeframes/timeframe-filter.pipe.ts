@@ -12,8 +12,6 @@ export class TimeframeFilterPipe implements PipeTransform {
       return value;
     }
     const dateFrom = moment().subtract(timeFrame, 'd').valueOf();
-    return value.filter(
-      offer => (offer.timestamp || offer.created) >= dateFrom,
-    );
+    return value.filter(offer => offer.created >= dateFrom);
   }
 }

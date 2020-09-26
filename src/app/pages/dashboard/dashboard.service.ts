@@ -74,7 +74,7 @@ export class DashboardService {
     return this.afs
       .collection('offers')
       .doc(user.uid)
-      .collection('latest', ref => ref.orderBy('timestamp', 'desc')) // timestamp - until the backend is moved to the "created" field.
+      .collection('latest', ref => ref.orderBy('created', 'desc'))
       .valueChanges()
       .pipe() as Observable<Offer[]>;
   }

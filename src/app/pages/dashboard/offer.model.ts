@@ -8,5 +8,4 @@ export class Offer {
   buyUrl: string;
   vendor: string;
   created?: number;
-  timestamp?: number;
 }

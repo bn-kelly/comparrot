@@ -163,7 +163,10 @@ export class LayoutComponent implements OnInit {
           // TODO: remove when 174512601 is done
           console.info('this.scrapedUrls');
           console.info(this.scrapedUrls);
-          if (this.scrapedUrls.includes(tab.url)) {
+          if (
+            Array.isArray(this.scrapedUrls) &&
+            this.scrapedUrls.includes(tab.url)
+          ) {
             return;
           }
           // TODO: remove when 174512601 is done
