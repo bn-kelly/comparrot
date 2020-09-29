@@ -12,6 +12,7 @@
       ></div>
     </div>
     <form
+      *ngIf="!verificationId"
       (ngSubmit)="login()"
       class="form-login padding"
       fxLayout="column"
@@ -19,15 +20,30 @@
       [formGroup]="form"
     >
       <div fxFlex="auto" fxLayout="column">
-        <h4>Login to <span class="project-name">{{ project.name }}</span></h4>
+        <h4>
+          Login to
+          <span class="project-name" *ngIf="project">{{ project.name }}</span>
+        </h4>
         <mat-form-field fxFlex="grow">
-          <mat-label>Email</mat-label>
-          <input matInput required formControlName="email" />
-          <mat-error *ngIf="formErrors.email">{{ formErrors.email }}</mat-error>
+          <mat-label>
+            {{ isPhoneAuthAllowed ? 'Email or Phone' : 'Email' }}
+          </mat-label>
+          <input matInput required formControlName="emailOrPhone" />
+          <mat-error *ngIf="formErrors.emailOrPhone">
+            {{ formErrors.emailOrPhone }}
+          </mat-error>
           <mat-error
-            *ngIf="form.get('email').hasError('required') && !formErrors.email"
-            >Please enter your email</mat-error
+            *ngIf="
+              form.get('emailOrPhone').hasError('required') &&
+              !formErrors.emailOrPhone
+            "
           >
+            {{
+              isPhoneAuthAllowed
+                ? 'Please enter your email or phone number'
+                : 'Please enter your email'
+            }}
+          </mat-error>
         </mat-form-field>
         <mat-form-field fxFlex="grow">
           <mat-label>Password</mat-label>
@@ -47,24 +63,28 @@
             <mat-icon *ngIf="visible">visibility</mat-icon>
             <mat-icon *ngIf="!visible">visibility_off</mat-icon>
           </button>
-          <mat-error *ngIf="formErrors.password">{{
-            formErrors.password
-          }}</mat-error>
+          <mat-error *ngIf="formErrors.password">
+            {{ formErrors.password }}
+          </mat-error>
           <mat-error
             *ngIf="
               form.get('password').hasError('required') && !formErrors.password
             "
-            >Please enter your password</mat-error
           >
+            Please enter your password
+          </mat-error>
         </mat-form-field>
       </div>
 
       <div fxLayout="row" fxLayoutAlign="space-between center">
         <mat-checkbox class="caption">Keep me logged in</mat-checkbox>
-        <a class="caption" [routerLink]="['/forgot-password']"
-          >Forgot Password?</a
-        >
+        <a class="caption" [routerLink]="['/forgot-password']">
+          Forgot Password?
+        </a>
       </div>
+
+      <div id="recaptcha-container"></div>
+
       <button
         class="form-button-login"
         type="submit"
@@ -78,5 +98,41 @@
       </p>
       <fury-oauth-component></fury-oauth-component>
     </form>
+    <div *ngIf="verificationId" class="padding text-center">
+      <h4>Thank You for Registering</h4>
+      <p>
+        The verification code has been sent to
+        <strong>{{ emailOrPhone }}</strong>
+      </p>
+      <p>Please enter the code from the SMS to continue.</p>
+
+      <code-input
+        class="code-input"
+        [isCodeHidden]="false"
+        [isNonDigitsCode]="false"
+        [codeLength]="6"
+        [initialFocusField]="0"
+        (codeChanged)="onPhoneVerificationChanged()"
+        (codeCompleted)="onPhoneVerificationCodeCompleted($event)"
+      >
+      </code-input>
+      <mat-error *ngIf="phoneVerificationError" class="code-input-error">
+        {{ phoneVerificationError }}
+      </mat-error>
+
+      <div class="padding">
+        <div id="recaptcha-container-code-confirmation"></div>
+      </div>
+
+      <div class="padding">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="resendConfirmationCode()"
+        >
+          Resend confirmation code
+        </button>
+      </div>
+    </div>
   </div>
 </div>

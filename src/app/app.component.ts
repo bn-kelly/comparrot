@@ -11,6 +11,7 @@ import { SplashScreenService } from '../@fury/services/splash-screen.service';
 declare global {
   interface Window {
     chrome: any;
+    recaptchaVerifier: any;
   }
 }
 

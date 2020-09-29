@@ -50,7 +50,7 @@ import { CoreModule } from './pages/authentication/services/core.module';
     // ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
 
     CoreModule,
-    AngularFireModule.initializeApp(environment.firebase, 'spark'),
+    AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireStorageModule,

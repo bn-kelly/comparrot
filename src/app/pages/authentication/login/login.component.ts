@@ -12,9 +12,12 @@ import { AuthService } from '../services/auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ThemeService } from '../../../../@fury/services/theme.service';
 import { Project } from '../../../layout/project.model';
+import { emailOrPasswordPattern } from '../constants';
 
-type UserFields = 'email' | 'password';
+type UserFields = 'emailOrPhone' | 'password';
 type FormErrors = { [u in UserFields]: string };
+
+const isPhoneAuthAllowed = location.protocol.startsWith('http');
 
 @Component({
   selector: 'fury-login',
@@ -25,6 +28,12 @@ type FormErrors = { [u in UserFields]: string };
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;
+  emailOrPhone: '';
+  password: '';
+  isPhoneAuthAllowed: boolean;
+  verificationId: '';
+  phoneConfirmationResult: any;
+  phoneVerificationError: '';
   inputType = 'password';
   visible = false;
   logoUrl: string;
@@ -35,13 +44,17 @@ export class LoginComponent implements OnInit {
   newUser = true; // to toggle login or signup form
   passReset = false; // set to true when password reset is triggered
   formErrors: FormErrors = {
-    email: '',
+    emailOrPhone: '',
     password: '',
   };
   validationMessages = {
-    email: {
-      required: 'Please enter your email',
-      email: 'Email must be a valid email',
+    emailOrPhone: {
+      required: `Please enter your email${
+        isPhoneAuthAllowed ? ' or phone number' : ''
+      }`,
+      emailOrPhone: `Must be a valid email${
+        isPhoneAuthAllowed ? ' or phone number' : ''
+      }`,
     },
     password: {
       required: 'Please enter your password',
@@ -60,6 +73,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     const isExtension = !!window.chrome && !!window.chrome.extension;
+    this.isPhoneAuthAllowed = isPhoneAuthAllowed;
 
     this.buildForm();
 
@@ -143,33 +157,105 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+    this.emailOrPhone = this.form.value['emailOrPhone'];
+    this.password = this.form.value['password'];
+
     this.auth
-      .phoneOrEmailLogin(this.form.value['email'], this.form.value['password'])
+      .phoneOrEmailLogin(this.emailOrPhone, this.password)
       .then(response => {
         const data: any = response ? { ...response } : {};
-        const { code, message } = data;
+        const { code, message, verificationId } = data;
 
-        if (['auth/user-not-found'].includes(code)) {
-          this.form.controls.email.setErrors({ email: message });
-          this.formErrors.email = message;
+        if (verificationId) {
+          this.verificationId = verificationId;
+          this.phoneConfirmationResult = response;
         }
 
         if (['auth/wrong-password', 'auth/too-many-requests'].includes(code)) {
           this.form.controls.password.setErrors({ password: message });
-          this.formErrors.password = 'Wrong username or password';
+          this.formErrors.password = message;
+        }
+
+        if (['auth/user-not-found'].includes(code)) {
+          this.form.controls.emailOrPhone.setErrors({ emailOrPhone: message });
+          this.formErrors.emailOrPhone = message;
+        }
+      });
+  }
+
+  onPhoneVerificationChanged() {
+    this.phoneVerificationError = '';
+  }
+
+  onPhoneVerificationCodeCompleted(confirmationCode) {
+    this.phoneConfirmationResult
+      .confirm(confirmationCode)
+      .then(response => {
+        if (response && response.user && response.user.uid) {
+          let userDoc = null;
+
+          const processUserData = () => {
+            const interval = setInterval(async () => {
+              await this.auth
+                .getUserDocByUid(response.user.uid)
+                .subscribe(doc => {
+                  userDoc = doc.data() || {};
+                });
+              if (userDoc) {
+                clearInterval(interval);
+                await this.auth.updateUserData({
+                  ...response.user,
+                  ...userDoc,
+                });
+                await this.router.navigate(['/']);
+              }
+            }, 100);
+          };
+
+          processUserData();
+        }
+      })
+      .catch(error => {
+        const { code, message } = error;
+
+        if (['auth/invalid-verification-code'].includes(code)) {
+          this.phoneVerificationError = message;
+        }
+      });
+  }
+
+  resendConfirmationCode() {
+    const recaptchaElementId = 'recaptcha-container-code-confirmation';
+
+    this.auth
+      .signInWithPhoneNumber(this.emailOrPhone, recaptchaElementId)
+      .then((response: any) => {
+        this.verificationId = response.verificationId;
+        this.phoneConfirmationResult = response;
+        const recaptchaElement = document.getElementById(recaptchaElementId);
+        if (recaptchaElement) {
+          recaptchaElement.innerHTML = '';
         }
       });
   }
 
   resetPassword() {
     this.auth
-      .resetPassword(this.form.value['email'])
+      .resetPassword(this.form.value['emailOrPhone'])
       .then(() => (this.passReset = true));
   }
 
   buildForm() {
     this.form = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      emailOrPhone: [
+        '',
+        [
+          Validators.required,
+          this.isPhoneAuthAllowed
+            ? Validators.pattern(emailOrPasswordPattern)
+            : Validators.email,
+        ],
+      ],
       password: ['', Validators.required],
     });
 
@@ -186,7 +272,7 @@ export class LoginComponent implements OnInit {
     for (const field in this.formErrors) {
       if (
         Object.prototype.hasOwnProperty.call(this.formErrors, field) &&
-        ['email', 'password'].includes(field)
+        ['emailOrPhone', 'password'].includes(field)
       ) {
         // clear previous error message (if any)
         this.formErrors[field] = '';

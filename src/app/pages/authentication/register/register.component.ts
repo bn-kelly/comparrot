@@ -11,16 +11,19 @@ import { AuthService } from '../services/auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ThemeService } from '../../../../@fury/services/theme.service';
 import { Project } from '../../../layout/project.model';
-import { ConfirmedValidator } from './confirmed.validator';
+import { MatchingValidator } from './matching.validator';
+import { emailOrPasswordPattern } from '../constants';
 
 type UserFields =
   | 'firstname'
   | 'lastname'
-  | 'email'
+  | 'emailOrPhone'
   | 'password'
   | 'passwordConfirm'
   | 'acceptTerms';
 type FormErrors = { [u in UserFields]: string };
+
+const isPhoneAuthAllowed = location.protocol.startsWith('http');
 
 @Component({
   selector: 'fury-register',
@@ -31,10 +34,18 @@ type FormErrors = { [u in UserFields]: string };
 })
 export class RegisterComponent implements OnInit {
   form: FormGroup;
+  firstName: '';
+  lastName: '';
+  emailOrPhone: '';
+  password: '';
+  isPhoneAuthAllowed: boolean;
+  verificationId: '';
+  phoneConfirmationResult: any;
+  phoneVerificationError: '';
   formErrors: FormErrors = {
     firstname: '',
     lastname: '',
-    email: '',
+    emailOrPhone: '',
     password: '',
     passwordConfirm: '',
     acceptTerms: '',
@@ -46,9 +57,13 @@ export class RegisterComponent implements OnInit {
     lastname: {
       required: 'Please enter your lastname',
     },
-    email: {
-      required: 'Please enter your email',
-      email: 'Email must be a valid email',
+    emailOrPhone: {
+      required: `Please enter your email${
+        isPhoneAuthAllowed ? ' or phone number' : ''
+      }`,
+      emailOrPhone: `Must be a valid email${
+        isPhoneAuthAllowed ? ' or phone number' : ''
+      }`,
     },
     password: {
       required: 'Please enter your password',
@@ -58,7 +73,7 @@ export class RegisterComponent implements OnInit {
     },
     passwordConfirm: {
       required: 'Please confirm your password',
-      confirmedValidator: `Those passwords didn't match. Please try again`,
+      matchingValidator: `Those passwords didn't match. Please try again`,
     },
   };
 
@@ -80,6 +95,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     const isExtension = !!window.chrome && !!window.chrome.extension;
+    this.isPhoneAuthAllowed = isPhoneAuthAllowed;
 
     this.buildForm();
 
@@ -153,16 +169,26 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
+    this.firstName = this.form.value['firstname'];
+    this.lastName = this.form.value['lastname'];
+    this.emailOrPhone = this.form.value['emailOrPhone'];
+    this.password = this.form.value['password'];
+
     this.auth
       .phoneOrEmailSignUp({
-        email: this.form.value['email'],
-        password: this.form.value['password'],
-        firstName: this.form.value['firstname'],
-        lastName: this.form.value['lastname'],
+        emailOrPhone: this.emailOrPhone,
+        password: this.password,
+        firstName: this.firstName,
+        lastName: this.lastName,
       })
       .then(response => {
         const data: any = response ? { ...response } : {};
-        const { code, message } = data;
+        const { code, message, verificationId } = data;
+
+        if (verificationId) {
+          this.verificationId = verificationId;
+          this.phoneConfirmationResult = response;
+        }
 
         if (['auth/wrong-password', 'auth/too-many-requests'].includes(code)) {
           this.form.controls.password.setErrors({ password: message });
@@ -175,8 +201,66 @@ export class RegisterComponent implements OnInit {
         }
 
         if (['auth/email-already-in-use'].includes(code)) {
-          this.form.controls.email.setErrors({ email: message });
-          this.formErrors.email = message;
+          this.form.controls.emailOrPhone.setErrors({ emailOrPhone: message });
+          this.formErrors.emailOrPhone = message;
+        }
+      });
+  }
+
+  onPhoneVerificationChanged() {
+    this.phoneVerificationError = '';
+  }
+
+  onPhoneVerificationCodeCompleted(confirmationCode) {
+    this.phoneConfirmationResult
+      .confirm(confirmationCode)
+      .then(response => {
+        if (response && response.user && response.user.uid) {
+          let userDoc = null;
+
+          const processUserData = () => {
+            const interval = setInterval(async () => {
+              await this.auth
+                .getUserDocByUid(response.user.uid)
+                .subscribe(doc => {
+                  userDoc = doc.data() || {};
+                });
+              if (userDoc) {
+                clearInterval(interval);
+                await this.auth.updateUserData({
+                  ...response.user,
+                  ...userDoc,
+                  firstName: userDoc.firstName || this.firstName,
+                  lastName: userDoc.firstName || this.lastName,
+                });
+                await this.router.navigate(['/']);
+              }
+            }, 100);
+          };
+
+          processUserData();
+        }
+      })
+      .catch(error => {
+        const { code, message } = error;
+
+        if (['auth/invalid-verification-code'].includes(code)) {
+          this.phoneVerificationError = message;
+        }
+      });
+  }
+
+  resendConfirmationCode() {
+    const recaptchaElementId = 'recaptcha-container-code-confirmation';
+
+    this.auth
+      .signInWithPhoneNumber(this.emailOrPhone, recaptchaElementId)
+      .then((response: any) => {
+        this.verificationId = response.verificationId;
+        this.phoneConfirmationResult = response;
+        const recaptchaElement = document.getElementById(recaptchaElementId);
+        if (recaptchaElement) {
+          recaptchaElement.innerHTML = '';
         }
       });
   }
@@ -186,7 +270,15 @@ export class RegisterComponent implements OnInit {
       {
         firstname: ['', Validators.required],
         lastname: ['', Validators.required],
-        email: ['', Validators.required],
+        emailOrPhone: [
+          '',
+          [
+            Validators.required,
+            this.isPhoneAuthAllowed
+              ? Validators.pattern(emailOrPasswordPattern)
+              : Validators.email,
+          ],
+        ],
         password: [
           '',
           [
@@ -200,7 +292,7 @@ export class RegisterComponent implements OnInit {
         acceptTerms: [false, Validators.requiredTrue],
       },
       {
-        validator: ConfirmedValidator('password', 'passwordConfirm'),
+        validator: MatchingValidator('password', 'passwordConfirm'),
       },
     );
 
@@ -217,7 +309,7 @@ export class RegisterComponent implements OnInit {
     for (const field in this.formErrors) {
       if (
         Object.prototype.hasOwnProperty.call(this.formErrors, field) &&
-        ['name', 'email', 'password', 'passwordConfirm'].includes(field)
+        ['name', 'emailOrPhone', 'password', 'passwordConfirm'].includes(field)
       ) {
         // clear previous error message (if any)
         this.formErrors[field] = '';

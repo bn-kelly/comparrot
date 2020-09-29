@@ -15,6 +15,7 @@ import { environment } from '../../../../environments/environment';
 
 export interface User {
   displayName?: string;
+  phoneNumber?: string;
   firstName?: string;
   lastName?: string;
   email?: string;
@@ -55,6 +56,7 @@ export interface Credential {
   email?: string;
   emailVerified?: boolean;
   displayName?: string;
+  phoneNumber?: string;
   firstName?: string;
   lastName?: string;
   photoURL?: string;
@@ -104,21 +106,15 @@ export class AuthService {
         this.anonymousLogin();
       } else {
         this.uid = user.uid;
-        this.afs
-          .collection('users')
-          .doc(user.uid)
-          .get()
-          .subscribe(doc => {
-            const data = doc.data();
-            if (data) {
-              const dataToUpdate = user.isAnonymous
-                ? user
-                : { ...user, ...data };
-              this.currentUser = dataToUpdate;
+        this.getUserDocByUid(user.uid).subscribe(doc => {
+          const data = doc.data();
+          if (data) {
+            const dataToUpdate = user.isAnonymous ? user : { ...user, ...data };
+            this.currentUser = dataToUpdate;
 
-              this.updateUserData(dataToUpdate);
-            }
-          });
+            this.updateUserData(dataToUpdate);
+          }
+        });
       }
     });
 
@@ -177,42 +173,69 @@ export class AuthService {
       });
   }
 
-  phoneOrEmailSignUp({ email, password, firstName, lastName }: any) {
+  signInWithPhoneNumber(phoneNumber: string, recaptchaContainerId?: string) {
+    window.recaptchaVerifier = new auth.RecaptchaVerifier(
+      recaptchaContainerId || 'recaptcha-container',
+    );
+
+    window.recaptchaVerifier.render();
+
+    const appVerifier = window.recaptchaVerifier;
     return this.afAuth
-      .createUserWithEmailAndPassword(email, password)
-      .then(credential => {
-        this.notify.update('Welcome new user!', 'success');
-        this.updateUserData({
-          ...credential.user,
-          firstName,
-          lastName,
-        });
-        this.sendVerificationMail();
-        this.router.navigate(['/verify-email']);
-      })
+      .signInWithPhoneNumber(phoneNumber, appVerifier)
+      .then(confirmationResult => confirmationResult)
       .catch(error => this.handleError(error));
   }
 
-  phoneOrEmailLogin(email: string, password: string) {
-    return this.afAuth
-      .signInWithEmailAndPassword(email, password)
-      .then(result => {
-        if (!result || !result.user) {
-          return;
-        }
-        if (result.user.emailVerified) {
-          this.notify.update('Welcome back!', 'success');
-          this.router.navigate(['/']);
-        } else {
+  phoneOrEmailSignUp({
+    emailOrPhone,
+    password,
+    firstName,
+    lastName,
+  }: any): Promise<any> {
+    if (emailOrPhone.includes('@')) {
+      return this.afAuth
+        .createUserWithEmailAndPassword(emailOrPhone, password)
+        .then(credential => {
+          this.notify.update('Welcome new user!', 'success');
+          this.updateUserData({
+            ...credential.user,
+            firstName,
+            lastName,
+          });
           this.sendVerificationMail();
-          this.notify.update(
-            'Please validate your email address. Kindly check your inbox.',
-            'error',
-          );
           this.router.navigate(['/verify-email']);
-        }
-      })
-      .catch(error => this.handleError(error));
+        })
+        .catch(error => this.handleError(error));
+    }
+
+    return this.signInWithPhoneNumber(emailOrPhone);
+  }
+
+  phoneOrEmailLogin(emailOrPhone: string, password: string): Promise<any> {
+    if (emailOrPhone.includes('@')) {
+      return this.afAuth
+        .signInWithEmailAndPassword(emailOrPhone, password)
+        .then(result => {
+          if (!result || !result.user) {
+            return;
+          }
+          if (result.user.emailVerified) {
+            this.notify.update('Welcome back!', 'success');
+            this.router.navigate(['/']);
+          } else {
+            this.sendVerificationMail();
+            this.notify.update(
+              'Please validate your email address. Kindly check your inbox.',
+              'error',
+            );
+            this.router.navigate(['/verify-email']);
+          }
+        })
+        .catch(error => this.handleError(error));
+    }
+
+    return this.signInWithPhoneNumber(emailOrPhone);
   }
 
   async sendVerificationMail() {
@@ -251,6 +274,13 @@ export class AuthService {
     return error;
   }
 
+  public getUserDocByUid(uid: string) {
+    if (!uid) {
+      return;
+    }
+    return this.afs.collection('users').doc(uid).get();
+  }
+
   public updateUserData(user: Credential) {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(
       `users/${user.uid}`,
@@ -260,6 +290,7 @@ export class AuthService {
       uid: user.uid,
       email: user.email || '',
       displayName: user.displayName || '',
+      phoneNumber: user.phoneNumber || '',
       firstName: user.firstName || '',
       lastName: user.lastName || '',
       photoURL: user.photoURL || '',

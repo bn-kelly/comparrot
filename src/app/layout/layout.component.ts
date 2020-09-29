@@ -188,39 +188,41 @@ export class LayoutComponent implements OnInit {
 
       const afs = this.afs;
 
-      window.chrome.extension.onMessage.addListener(function saveProductToDB(
-        message,
-      ) {
-        window.chrome.extension.onMessage.removeListener(saveProductToDB);
-        if (message.action === 'save-product-to-db') {
-          // TODO: remove when 174512601 is done
-          console.info('--- layout save-product-to-db ---');
+      if (this.isExtension) {
+        window.chrome.extension.onMessage.addListener(function saveProductToDB(
+          message,
+        ) {
+          window.chrome.extension.onMessage.removeListener(saveProductToDB);
+          if (message.action === 'save-product-to-db') {
+            // TODO: remove when 174512601 is done
+            console.info('--- layout save-product-to-db ---');
 
-          const { product } = message;
-          const urlHash = sha1(product.url);
+            const { product } = message;
+            const urlHash = sha1(product.url);
 
-          const productsData = {
-            ...product,
-          };
+            const productsData = {
+              ...product,
+            };
 
-          afs
-            .collection('products')
-            .doc(user.uid)
-            .collection('latest')
-            .doc(urlHash)
-            .set(productsData, { merge: true });
+            afs
+              .collection('products')
+              .doc(user.uid)
+              .collection('latest')
+              .doc(urlHash)
+              .set(productsData, { merge: true });
 
-          const allProductsData = {
-            ...productsData,
-            user: user.uid,
-          };
+            const allProductsData = {
+              ...productsData,
+              user: user.uid,
+            };
 
-          afs
-            .collection('allProducts')
-            .doc(urlHash)
-            .set(allProductsData, { merge: true });
-        }
-      });
+            afs
+              .collection('allProducts')
+              .doc(urlHash)
+              .set(allProductsData, { merge: true });
+          }
+        });
+      }
     });
   }
 

@@ -227,15 +227,15 @@ export class AccountComponent implements OnInit, OnDestroy {
           .subscribe((project: Project) => {
             this.faqList = project.faq || [];
           });
+
+        this.initialGeneralProfileFormData = {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          photoURL: user.photoURL,
+        };
       } else {
         this.faqList = [];
       }
-
-      this.initialGeneralProfileFormData = {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        photoURL: user.photoURL,
-      };
       this.buildForm(this.user);
     });
     this.toggleExpandIframe(true);
@@ -246,6 +246,9 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   buildForm(user) {
+    if (!user) {
+      return;
+    }
     this.form = this.fb.group({
       firstName: [
         user.firstName,

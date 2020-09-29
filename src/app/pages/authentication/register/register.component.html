@@ -1,5 +1,5 @@
 <div
-  class="background-pattern page page-register"
+  class="page page-register background-pattern"
   fxLayout="column"
   fxLayoutAlign="center center"
 >
@@ -12,6 +12,7 @@
       ></div>
     </div>
     <form
+      *ngIf="!verificationId"
       (ngSubmit)="signup()"
       class="form-signup padding"
       fxLayout="column"
@@ -24,33 +25,56 @@
       </div>
       <div fxFlex="auto" fxLayout="column">
         <mat-form-field fxFlex="grow">
-          <mat-label>Firstname</mat-label>
+          <mat-label>First name</mat-label>
           <input matInput required formControlName="firstname" />
-          <mat-error *ngIf="formErrors.firstname">{{ formErrors.firstname }}</mat-error>
+          <mat-error *ngIf="formErrors.firstname">
+            {{ formErrors.firstname }}
+          </mat-error>
           <mat-error
-              *ngIf="form.get('firstname').hasError('required') && !formErrors.firstname"
-          >Please enter your Firstname</mat-error
+            *ngIf="
+              form.get('firstname').hasError('required') &&
+              !formErrors.firstname
+            "
           >
+            Please enter your first name
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field fxFlex="grow">
-          <mat-label>Lastname</mat-label>
+          <mat-label>Last name</mat-label>
           <input matInput required formControlName="lastname" />
-          <mat-error *ngIf="formErrors.lastname">{{ formErrors.lastname }}</mat-error>
+          <mat-error *ngIf="formErrors.lastname">
+            {{ formErrors.lastname }}
+          </mat-error>
           <mat-error
-              *ngIf="form.get('lastname').hasError('required') && !formErrors.lastname"
-          >Please enter your Lastname</mat-error
+            *ngIf="
+              form.get('lastname').hasError('required') && !formErrors.lastname
+            "
           >
+            Please enter your last name
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field fxFlex="grow">
-          <mat-label>Email</mat-label>
-          <input matInput required formControlName="email" />
-          <mat-error *ngIf="formErrors.email">{{ formErrors.email }}</mat-error>
+          <mat-label>
+            {{ isPhoneAuthAllowed ? 'Email or Phone' : 'Email' }}
+          </mat-label>
+          <input matInput required formControlName="emailOrPhone" />
+          <mat-error *ngIf="formErrors.emailOrPhone">
+            {{ formErrors.emailOrPhone }}
+          </mat-error>
           <mat-error
-            *ngIf="form.get('email').hasError('required') && !formErrors.email"
-            >Please enter your email</mat-error
+            *ngIf="
+              form.get('emailOrPhone').hasError('required') &&
+              !formErrors.emailOrPhone
+            "
           >
+            {{
+              isPhoneAuthAllowed
+                ? 'Please enter your email or phone number'
+                : 'Please enter your email'
+            }}
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field fxFlex="grow">
@@ -71,15 +95,16 @@
             <mat-icon *ngIf="visible">visibility</mat-icon>
             <mat-icon *ngIf="!visible">visibility_off</mat-icon>
           </button>
-          <mat-error *ngIf="formErrors.password">{{
-            formErrors.password
-          }}</mat-error>
+          <mat-error *ngIf="formErrors.password"
+            >{{ formErrors.password }}
+          </mat-error>
           <mat-error
             *ngIf="
               form.get('password').hasError('required') && !formErrors.password
             "
-            >Please enter your password</mat-error
           >
+            Please enter your password
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field fxFlex="grow">
@@ -100,32 +125,56 @@
             <mat-icon *ngIf="visible">visibility</mat-icon>
             <mat-icon *ngIf="!visible">visibility_off</mat-icon>
           </button>
-          <mat-error *ngIf="formErrors.passwordConfirm">{{
-            formErrors.passwordConfirm
-          }}</mat-error>
+          <mat-error *ngIf="formErrors.passwordConfirm">
+            {{ formErrors.passwordConfirm }}
+          </mat-error>
           <mat-error
             *ngIf="
               form.get('passwordConfirm').hasError('required') &&
               !formErrors.passwordConfirm
             "
-            >Those passwords didn't match. Please try again</mat-error
           >
+            Those passwords didn't match. Please try again
+          </mat-error>
         </mat-form-field>
       </div>
 
       <div fxLayout="row" fxLayoutAlign="center">
-        <mat-checkbox class="caption" formControlName="acceptTerms"></mat-checkbox>
+        <mat-checkbox
+          class="caption"
+          formControlName="acceptTerms"
+        ></mat-checkbox>
         <div class="checkbox-label">
           <label>
-            By continuing, you agree to <span class="project-name">{{ project.name }}</span>'s
-            <a target="_blank" href="{{ project.links.termsOfService }}">Terms of Service</a>
-            and confirm that you have read our 
-            <a target="_blank" href="{{ project.links.privacyPolicy }}">Privacy Policy</a>
+            By continuing, you agree to
+            <span class="project-name" *ngIf="project">
+              {{ project.name }}
+            </span>
+            's
+            <a
+              *ngIf="project && project.links"
+              target="_blank"
+              href="{{ project.links.termsOfService }}"
+            >
+              Terms of Service
+            </a>
+            and confirm that you have read our
+            <a
+              *ngIf="project && project.links"
+              target="_blank"
+              href="{{ project.links.privacyPolicy }}"
+            >
+              Privacy Policy
+            </a>
           </label>
-          <mat-error *ngIf="form.get('acceptTerms').errors && submitted">Accept ToS & PP is required</mat-error>
+          <mat-error *ngIf="form.get('acceptTerms').errors && submitted">
+            Accept ToS & PP is required
+          </mat-error>
         </div>
       </div>
-      
+
+      <div id="recaptcha-container"></div>
+
       <button
         type="submit"
         class="form-button-signup"
@@ -138,5 +187,41 @@
         Already have an account? <a [routerLink]="['/login']">Login</a>
       </p>
     </form>
+    <div *ngIf="verificationId" class="padding text-center">
+      <h4>Thank You for Registering</h4>
+      <p>
+        The verification code has been sent to
+        <strong>{{ emailOrPhone }}</strong>
+      </p>
+      <p>Please enter the code from the SMS to continue.</p>
+
+      <code-input
+        class="code-input"
+        [isCodeHidden]="false"
+        [isNonDigitsCode]="false"
+        [codeLength]="6"
+        [initialFocusField]="0"
+        (codeChanged)="onPhoneVerificationChanged()"
+        (codeCompleted)="onPhoneVerificationCodeCompleted($event)"
+      >
+      </code-input>
+      <mat-error *ngIf="phoneVerificationError" class="code-input-error">
+        {{ phoneVerificationError }}
+      </mat-error>
+
+      <div class="padding">
+        <div id="recaptcha-container-code-confirmation"></div>
+      </div>
+
+      <div class="padding">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="resendConfirmationCode()"
+        >
+          Resend confirmation code
+        </button>
+      </div>
+    </div>
   </div>
 </div>
