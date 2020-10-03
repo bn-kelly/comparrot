@@ -192,27 +192,16 @@ export class LoginComponent implements OnInit {
       .confirm(confirmationCode)
       .then(response => {
         if (response && response.user && response.user.uid) {
-          let userDoc = null;
-
-          const processUserData = () => {
-            const interval = setInterval(async () => {
-              await this.auth
-                .getUserDocByUid(response.user.uid)
-                .subscribe(doc => {
-                  userDoc = doc.data() || {};
-                });
-              if (userDoc) {
-                clearInterval(interval);
-                await this.auth.updateUserData({
-                  ...response.user,
-                  ...userDoc,
-                });
-                await this.router.navigate(['/']);
-              }
-            }, 100);
-          };
-
-          processUserData();
+          this.auth
+            .getUserDocByUid(response.user.uid)
+            .then(doc => doc.data() || {})
+            .then(userDoc => {
+              this.auth.updateUserData({
+                ...response.user,
+                ...userDoc,
+              });
+              this.router.navigate(['/']);
+            });
         }
       })
       .catch(error => {

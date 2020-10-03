@@ -189,39 +189,62 @@ export class LayoutComponent implements OnInit {
       const afs = this.afs;
 
       if (this.isExtension) {
-        window.chrome.extension.onMessage.addListener(function saveProductToDB(
-          message,
-        ) {
-          window.chrome.extension.onMessage.removeListener(saveProductToDB);
-          if (message.action === 'save-product-to-db') {
-            // TODO: remove when 174512601 is done
-            console.info('--- layout save-product-to-db ---');
+        window.chrome.extension.onMessage.addListener(
+          async function saveProductToDB(message) {
+            window.chrome.extension.onMessage.removeListener(saveProductToDB);
+            if (message.action === 'save-product-to-db') {
+              // TODO: remove when 174512601 is done
+              console.info('--- layout save-product-to-db ---');
 
-            const { product } = message;
-            const urlHash = sha1(product.url);
+              const { product } = message;
+              const urlHash = sha1(product.url);
 
-            const productsData = {
-              ...product,
-            };
+              await afs
+                .collection('products')
+                .doc(urlHash)
+                .get()
+                .toPromise()
+                .then((response: any) => {
+                  const data = response.data();
+                  return data && Array.isArray(data.users) ? data.users : [];
+                })
+                .then(users => {
+                  const userToSave = {
+                    user: user.uid,
+                    created: product.created,
+                  };
 
-            afs
-              .collection('products')
-              .doc(user.uid)
-              .collection('latest')
-              .doc(urlHash)
-              .set(productsData, { merge: true });
+                  const isExistingUser = !!users.find(
+                    item => item.user === user.uid,
+                  );
+                  const productsData = {
+                    ...product,
+                    users: isExistingUser
+                      ? users.reduce((result, item) => {
+                          result.push(
+                            item.user === user.uid ? userToSave : item,
+                          );
+                          return result;
+                        }, [])
+                      : [...users, userToSave],
+                  };
 
-            const allProductsData = {
-              ...productsData,
-              user: user.uid,
-            };
+                  afs
+                    .collection('products')
+                    .doc(urlHash)
+                    .set(productsData, { merge: true });
 
-            afs
-              .collection('allProducts')
-              .doc(urlHash)
-              .set(allProductsData, { merge: true });
-          }
-        });
+                  afs.collection('visits').add({
+                    user: user.uid,
+                    url: product.url,
+                    created: product.created,
+                    product: urlHash,
+                    scraped: 0,
+                  });
+                });
+            }
+          },
+        );
       }
     });
   }

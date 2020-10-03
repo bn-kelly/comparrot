@@ -171,13 +171,17 @@
             </p>
             <div
               class="categories-container"
-              *ngIf="user && user.categoriesOfInterest"
+              *ngIf="
+                user &&
+                user.categoriesOfInterest &&
+                user.categoriesOfInterest[projectName]
+              "
             >
               <button
                 *ngFor="let category of categoriesOfInterest"
                 mat-raised-button
                 [color]="
-                  user.categoriesOfInterest.includes(category.id)
+                  user.categoriesOfInterest[projectName].includes(category.id)
                     ? 'primary'
                     : 'default'
                 "
@@ -206,7 +210,7 @@
             >
               <mat-slide-toggle
                 *ngFor="let alert of emailAlerts"
-                [checked]="user.emailAlerts.includes(alert.id)"
+                [checked]="user.emailAlerts[projectName].includes(alert.id)"
                 (change)="
                   emailAlertChange({ id: alert.id, checked: $event.checked })
                 "
@@ -218,7 +222,9 @@
           </div>
         </div>
       </mat-tab>
-      <mat-tab label="Personalization">
+      <mat-tab
+        label="Personalization"
+      >
         <ng-template matTabContent>
           <h2 class="tab-header">Personalization</h2>
           <p>Please choose your sizes, so we can provide accurate results🙂</p>
@@ -228,7 +234,10 @@
             *ngIf="index === 1"
           >
             <mat-tab
-              *ngFor="let type of personalizationData.data | orderBy: 'order'"
+              *ngFor="
+                let type of personalizationData.types
+                  | orderBy: 'order'
+              "
               label="{{ type.title }}"
             >
               <div class="tab-content">
@@ -249,8 +258,9 @@
                         </div>
                         <div class="personalization-data__category-description">
                           {{
-                            user.categoriesDescriptions[type.id][category.id] ||
-                              'No selected sizes'
+                            user.categoriesDescriptions[projectName][type.id][
+                              category.id
+                            ] || 'No selected sizes'
                           }}
                         </div>
                       </mat-panel-title>
@@ -262,9 +272,9 @@
                         mat-button
                         color="primary"
                         [ngClass]="
-                          user.personalizationData[type.id][category.id][
-                            size.id
-                          ].includes(value.id)
+                          user.personalizationData[projectName][type.id][
+                            category.id
+                          ][size.id].includes(value.id)
                             ? 'mat-raised-button'
                             : 'mat-stroked-button'
                         "

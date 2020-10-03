@@ -11,8 +11,10 @@ export interface TimeFrame {
 }
 
 export interface OffersFilter {
-  defaultSelectedValue: number;
-  timeFrames: TimeFrame[];
+  offerFilters: {
+    defaultSelectedValue: number;
+    timeFrames: TimeFrame[];
+  };
 }
 
 @Injectable({
@@ -28,8 +30,8 @@ export class SelectTimeframesService {
 
   getOffersFilter(): Observable<OffersFilter> {
     return this.afs
-      .collection('filters')
-      .doc('offers')
+      .collection('settings')
+      .doc(this.user.projectName)
       .valueChanges() as Observable<OffersFilter>;
   }
 

@@ -1,4 +1,5 @@
 export class Vendor {
+  name: string;
   searchUrl: string;
   selectors: {
     image: string | string[];

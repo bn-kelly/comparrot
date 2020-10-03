@@ -77,9 +77,15 @@ const toggleExpandIframeWidth = isOpen => {
 const tryToScrapeDataByVendor = (url, vendors = []) => {
   vendors.forEach(vendor => {
     if (url.includes(vendor.url)) {
-      const productTitleElement = getElementBySelector(vendor.selectors.title);
-      const productPriceElement = getElementBySelector(vendor.selectors.price);
-      const productImageElement = getElementBySelector(vendor.selectors.image);
+      const productTitleElement = getElementBySelector(
+        vendor.selectors.product.title,
+      );
+      const productPriceElement = getElementBySelector(
+        vendor.selectors.product.price,
+      );
+      const productImageElement = getElementBySelector(
+        vendor.selectors.product.image,
+      );
 
       const shouldSaveProductToDB = !!productTitleElement;
 
@@ -95,13 +101,24 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
           ? getNumericPriceFromString(originalPrice.split(priceDivider)[0])
           : getNumericPriceFromString(originalPrice);
 
-        const product = {
+        const productData = {
           title,
           price,
           image,
           url,
           created: Date.now(),
-          vendor: vendor.url.split('.')[0],
+        };
+
+        const vendorsData = vendors.reduce((result, vendorItem) => {
+          result[vendorItem.name] =
+            vendorItem.name === vendor.name ? { ...productData } : false;
+          return result;
+        }, {});
+
+        const product = {
+          ...productData,
+          ...vendorsData,
+          vendor: vendor.name,
         };
         saveProductToDB(product);
       }

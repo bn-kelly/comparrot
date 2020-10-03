@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import {
+  OffersFilter,
   SelectTimeframesService,
   TimeFrame,
 } from './select-timeframes.service';
+import { AuthService } from '../../authentication/services/auth.service';
 
 @Component({
   selector: 'fury-select-timeframes',
@@ -16,21 +18,29 @@ export class SelectTimeframesComponent implements OnInit {
   timeFrames: TimeFrame[];
   defaultSelected = 0;
 
-  constructor(private sts: SelectTimeframesService) {}
+  constructor(
+    private sts: SelectTimeframesService,
+    private auth: AuthService,
+  ) {}
 
   ngOnInit(): void {
-    this.sts.getOffersFilter().subscribe(offersFilter => {
-      this.timeFrames = offersFilter.timeFrames.sort(
-        (a, b) => a.order - b.order,
-      );
-      const defaultSelectedUser = this.sts.getDefaultSelectedUser();
+    this.auth.user.subscribe(user => {
+      if (user) {
+        this.sts.getOffersFilter().subscribe((response: OffersFilter) => {
+          const { offerFilters } = response;
+          this.timeFrames = offerFilters.timeFrames.sort(
+            (a, b) => a.order - b.order,
+          );
+          const defaultSelectedUser = this.sts.getDefaultSelectedUser();
 
-      this.defaultSelected =
-        defaultSelectedUser > 0
-          ? defaultSelectedUser
-          : offersFilter.defaultSelectedValue;
+          this.defaultSelected =
+            defaultSelectedUser > 0
+              ? defaultSelectedUser
+              : offerFilters.defaultSelectedValue;
 
-      this.selectedValues$ = new BehaviorSubject(this.defaultSelected);
+          this.selectedValues$ = new BehaviorSubject(this.defaultSelected);
+        });
+      }
     });
   }
 

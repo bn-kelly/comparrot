@@ -1,5 +1,5 @@
 export class PersonalizationData {
-  data: {
+  types: {
     id: number;
     order: number;
     title: string;

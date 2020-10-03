@@ -41,8 +41,8 @@ export interface User {
   isAnonymous: boolean;
   isAdmin?: boolean;
   isBot?: boolean;
-  emailAlerts?: number[];
-  categoriesOfInterest?: number[];
+  emailAlerts?: any;
+  categoriesOfInterest?: any;
   wishList?: string[];
   personalizationData?: any;
   categoriesDescriptions?: any;
@@ -69,8 +69,8 @@ export interface Credential {
   isAnonymous: boolean;
   isAdmin?: boolean;
   isBot?: boolean;
-  emailAlerts?: number[];
-  categoriesOfInterest?: number[];
+  emailAlerts?: any;
+  categoriesOfInterest?: any;
   wishList?: string[];
   personalizationData?: any;
   categoriesDescriptions?: any;
@@ -106,7 +106,7 @@ export class AuthService {
         this.anonymousLogin();
       } else {
         this.uid = user.uid;
-        this.getUserDocByUid(user.uid).subscribe(doc => {
+        this.getUserDocByUid(user.uid).then(doc => {
           const data = doc.data();
           if (data) {
             const dataToUpdate = user.isAnonymous ? user : { ...user, ...data };
@@ -278,7 +278,7 @@ export class AuthService {
     if (!uid) {
       return;
     }
-    return this.afs.collection('users').doc(uid).get();
+    return this.afs.collection('users').doc(uid).get().toPromise();
   }
 
   public updateUserData(user: Credential) {
