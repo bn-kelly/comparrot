@@ -157,6 +157,15 @@ export class DashboardComponent implements OnInit {
     }px)`;
   }
 
+  deleteOffer(id) {
+    this.afs
+      .collection('offers')
+      .doc(this.user.uid)
+      .collection('latest')
+      .doc(id)
+      .delete();
+  }
+
   onBuyButtonClick(event, url) {
     if (this.isExtension) {
       event.preventDefault();

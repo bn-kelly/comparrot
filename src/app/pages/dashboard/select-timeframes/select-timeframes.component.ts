@@ -27,6 +27,9 @@ export class SelectTimeframesComponent implements OnInit {
     this.auth.user.subscribe(user => {
       if (user) {
         this.sts.getOffersFilter().subscribe((response: OffersFilter) => {
+          if (!response) {
+            return;
+          }
           const { offerFilters } = response;
           this.timeFrames = offerFilters.timeFrames.sort(
             (a, b) => a.order - b.order,

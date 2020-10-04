@@ -52,6 +52,13 @@
             [src]="offer.imageUrl"
             [alt]="offer.title"
           />
+          <span
+            mat-icon-button
+            class="offer__product-delete"
+            (click)="deleteOffer(offer.id)"
+          >
+            <mat-icon>highlight_off</mat-icon>
+          </span>
         </div>
         <mat-card-title
           class="offer__title"

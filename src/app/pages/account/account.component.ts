@@ -139,7 +139,7 @@ export class AccountComponent implements OnInit, OnDestroy {
 
             if (
               !this.user.personalizationData ||
-              this.user.personalizationData[this.projectName] ||
+              !this.user.personalizationData[this.projectName] ||
               (!Array.isArray(
                 this.user.personalizationData[this.projectName].types,
               ) &&
@@ -157,6 +157,7 @@ export class AccountComponent implements OnInit, OnDestroy {
                           [category.id]: category.sizes.reduce(
                             (sizesAcc, size) => {
                               const values =
+                                this.user.personalizationData &&
                                 this.user.personalizationData[
                                   this.projectName
                                 ] &&
@@ -205,6 +206,7 @@ export class AccountComponent implements OnInit, OnDestroy {
                         categoriesAcc = {
                           ...categoriesAcc,
                           [category.id]:
+                            this.user.personalizationData &&
                             this.user.personalizationData[this.projectName] &&
                             this.user.personalizationData[this.projectName][
                               type.id
@@ -213,19 +215,21 @@ export class AccountComponent implements OnInit, OnDestroy {
                               type.id
                             ][category.id]
                               ? category.sizes.reduce((result, size) => {
-                                  const values = this.user.personalizationData[
-                                    this.projectName
-                                  ][type.id][category.id][size.id]
-                                    ? size.values
-                                        .filter(value =>
-                                          this.user.personalizationData[
-                                            this.projectName
-                                          ][type.id][category.id][
-                                            size.id
-                                          ].includes(value.id),
-                                        )
-                                        .map(value => value.title)
-                                    : [];
+                                  const values =
+                                    this.user.personalizationData &&
+                                    this.user.personalizationData[
+                                      this.projectName
+                                    ][type.id][category.id][size.id]
+                                      ? size.values
+                                          .filter(value =>
+                                            this.user.personalizationData[
+                                              this.projectName
+                                            ][type.id][category.id][
+                                              size.id
+                                            ].includes(value.id),
+                                          )
+                                          .map(value => value.title)
+                                      : [];
 
                                   result = result
                                     ? [

@@ -67,6 +67,20 @@
       width: 21px;
       max-height: 21px;
     }
+
+    &-delete {
+      position: absolute;
+      color: $color-accent;
+      top: $padding-xs * 1.5;
+      right: $padding-xs * 1.5;
+      padding: 0;
+      min-width: 0;
+      line-height: 1;
+
+      &:hover, &:focus {
+        cursor: pointer;
+      }
+    }
   }
 
   &__img {
