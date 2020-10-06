@@ -1,3 +1,4 @@
+import { auth } from 'firebase';
 import {
   ChangeDetectorRef,
   Component,
@@ -14,7 +15,7 @@ import { ThemeService } from '../../../../@fury/services/theme.service';
 import { Project } from '../../../layout/project.model';
 import { emailOrPasswordPattern } from '../constants';
 
-type UserFields = 'emailOrPhone' | 'password';
+type UserFields = 'emailOrPhone' | 'password' | 'rememberMe';
 type FormErrors = { [u in UserFields]: string };
 
 const isPhoneAuthAllowed = location.protocol.startsWith('http');
@@ -30,6 +31,7 @@ export class LoginComponent implements OnInit {
   form: FormGroup;
   emailOrPhone: '';
   password: '';
+  rememberMe: false;
   isPhoneAuthAllowed: boolean;
   verificationId: '';
   phoneConfirmationResult: any;
@@ -46,6 +48,7 @@ export class LoginComponent implements OnInit {
   formErrors: FormErrors = {
     emailOrPhone: '',
     password: '',
+    rememberMe: '',
   };
   validationMessages = {
     emailOrPhone: {
@@ -67,7 +70,7 @@ export class LoginComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private snackbar: MatSnackBar,
     private afs: AngularFirestore,
-    private auth: AuthService,
+    private authService: AuthService,
     private themeService: ThemeService,
   ) {}
 
@@ -82,7 +85,7 @@ export class LoginComponent implements OnInit {
       this.handleLogoUrl();
     });
 
-    this.auth.user.subscribe(user => {
+    this.authService.user.subscribe(user => {
       if (user && user.projectName) {
         this.afs
           .collection('projects')
@@ -152,6 +155,10 @@ export class LoginComponent implements OnInit {
     this.newUser = !this.newUser;
   }
 
+  rememberUser() {
+    auth().setPersistence(auth.Auth.Persistence.LOCAL);
+  }
+
   login() {
     if (!this.form.valid) {
       return;
@@ -159,8 +166,9 @@ export class LoginComponent implements OnInit {
 
     this.emailOrPhone = this.form.value['emailOrPhone'];
     this.password = this.form.value['password'];
+    this.rememberMe = this.form.value['rememberMe'];
 
-    this.auth
+    this.authService
       .phoneOrEmailLogin(this.emailOrPhone, this.password)
       .then(response => {
         const data: any = response ? { ...response } : {};
@@ -180,6 +188,10 @@ export class LoginComponent implements OnInit {
           this.form.controls.emailOrPhone.setErrors({ emailOrPhone: message });
           this.formErrors.emailOrPhone = message;
         }
+
+        if (!response && this.rememberMe) {
+          this.rememberUser();
+        }
       });
   }
 
@@ -192,11 +204,14 @@ export class LoginComponent implements OnInit {
       .confirm(confirmationCode)
       .then(response => {
         if (response && response.user && response.user.uid) {
-          this.auth
+          if (this.rememberMe) {
+            this.rememberUser();
+          }
+          this.authService
             .getUserDocByUid(response.user.uid)
             .then(doc => doc.data() || {})
             .then(userDoc => {
-              this.auth.updateUserData({
+              this.authService.updateUserData({
                 ...response.user,
                 ...userDoc,
               });
@@ -216,7 +231,7 @@ export class LoginComponent implements OnInit {
   resendConfirmationCode() {
     const recaptchaElementId = 'recaptcha-container-code-confirmation';
 
-    this.auth
+    this.authService
       .signInWithPhoneNumber(this.emailOrPhone, recaptchaElementId)
       .then((response: any) => {
         this.verificationId = response.verificationId;
@@ -229,7 +244,7 @@ export class LoginComponent implements OnInit {
   }
 
   resetPassword() {
-    this.auth
+    this.authService
       .resetPassword(this.form.value['emailOrPhone'])
       .then(() => (this.passReset = true));
   }
@@ -246,6 +261,7 @@ export class LoginComponent implements OnInit {
         ],
       ],
       password: ['', Validators.required],
+      rememberMe: false,
     });
 
     this.form.valueChanges.subscribe(() => this.onValueChanged());

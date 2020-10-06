@@ -77,7 +77,9 @@
       </div>
 
       <div fxLayout="row" fxLayoutAlign="space-between center">
-        <mat-checkbox class="caption">Keep me logged in</mat-checkbox>
+        <mat-checkbox class="caption" formControlName="rememberMe">
+          Keep me logged in
+        </mat-checkbox>
         <a class="caption" [routerLink]="['/forgot-password']">
           Forgot Password?
         </a>
