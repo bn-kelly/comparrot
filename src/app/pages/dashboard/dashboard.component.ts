@@ -190,7 +190,9 @@ export class DashboardComponent implements OnInit {
     }
     this.dashboardService.getOffersByUser(user).subscribe((offers: Offer[]) => {
       this.offers =
-        user.isAnonymous && offers.length ? [offers[0]] : offers || [];
+        user.isAnonymous && offers.length
+          ? [offers.sort((a, b) => b.created - a.created)[0]]
+          : offers.sort((a, b) => b.created - a.created) || [];
       if (!this.isLoggedIn && !this.offers.length && this.isExtension) {
         this.router.navigate(['/login']);
       }
