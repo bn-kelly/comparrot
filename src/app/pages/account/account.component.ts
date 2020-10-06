@@ -122,10 +122,7 @@ export class AccountComponent implements OnInit, OnDestroy {
               ) &&
                 Array.isArray(this.categoriesOfInterest))
             ) {
-              const userCategoriesOfInterest = this.categoriesOfInterest.map(
-                category => category.id,
-              );
-              this.updateUserCategoriesOfInterest(userCategoriesOfInterest);
+              this.updateUserCategoriesOfInterest([]);
             }
 
             if (
