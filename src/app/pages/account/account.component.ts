@@ -421,7 +421,9 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   toggleSelectCategoryOfInterest(id) {
-    const categoriesOfInterest = this.user.categoriesOfInterest.includes(id)
+    const categoriesOfInterest = this.user.categoriesOfInterest[
+      this.projectName
+    ].includes(id)
       ? this.user.categoriesOfInterest[this.projectName].filter(
           category => category !== id,
         )
