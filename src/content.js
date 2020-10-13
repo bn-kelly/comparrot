@@ -77,6 +77,7 @@ const toggleExpandIframeWidth = isOpen => {
 const tryToScrapeDataByVendor = (url, vendors = []) => {
   vendors.forEach(vendor => {
     if (url.includes(vendor.url)) {
+      // Scraping Product
       const productTitleElement = getElementBySelector(
         vendor.selectors.product.title,
       );
@@ -86,26 +87,38 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
       const productImageElement = getElementBySelector(
         vendor.selectors.product.image,
       );
+      const vendorInnerCodeElement = getElementBySelector(
+        vendor.selectors.product.innerCode.selector,
+      );
 
       const shouldSaveProductToDB = !!productTitleElement;
 
       if (shouldSaveProductToDB) {
         const priceDivider = ' - ';
-        const title = productTitleElement.innerText;
+        const title = productTitleElement.innerText.trim();
         const originalPrice = productPriceElement
-          ? productPriceElement.innerText
+          ? productPriceElement.innerText.trim()
           : '';
+
         const image = productImageElement ? productImageElement.src : '';
 
         const price = originalPrice.includes(priceDivider)
-          ? getNumericPriceFromString(originalPrice.split(priceDivider)[0])
-          : getNumericPriceFromString(originalPrice);
+          ? getNumberFromString(originalPrice.split(priceDivider)[0])
+          : getNumberFromString(originalPrice);
+
+        const vendorInnerCode = vendorInnerCodeElement
+          ? getVendorInnerCode(
+              vendorInnerCodeElement,
+              vendor.selectors.product.innerCode,
+            )
+          : '';
 
         const productData = {
           title,
-          price,
           image,
+          price,
           url,
+          vendorInnerCode,
           created: Date.now(),
         };
 
@@ -120,7 +133,92 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
           ...vendorsData,
           vendor: vendor.name,
         };
+
         saveProductToDB(product);
+      }
+
+      // Scraping Cart
+      const cartItemsWrapper = getElementBySelector(
+        vendor.selectors.cart.itemsWrapper,
+      );
+      const cartItems = getChildrenOfElementBySelector(
+        cartItemsWrapper,
+        vendor.selectors.cart.item,
+      );
+      const shouldScrapeCart =
+        !!cartItemsWrapper && cartItems && !!cartItems.length;
+
+      if (shouldScrapeCart) {
+        const cartData = [...cartItems].reduce(
+          (result, item) => {
+            const itemTitle = getFirstChildOfElementBySelector(
+              item,
+              vendor.selectors.cart.itemTitle,
+            );
+            const title = itemTitle ? itemTitle.innerText.trim() : '';
+            const itemImage = getFirstChildOfElementBySelector(
+              item,
+              vendor.selectors.cart.itemImage,
+            );
+            const image = itemImage
+              ? itemImage.src
+                ? itemImage.src.trim()
+                : itemImage.srcset
+                ? itemImage.srcset.trim()
+                : ''
+              : '';
+            const itemQuantity = getFirstChildOfElementBySelector(
+              item,
+              vendor.selectors.cart.itemQuantity,
+            );
+            const quantity = itemQuantity
+              ? getNumberFromString(itemQuantity.innerText.trim())
+              : '';
+            const itemPrice = getFirstChildOfElementBySelector(
+              item,
+              vendor.selectors.cart.itemPrice,
+            );
+            const price = itemPrice
+              ? getNumberFromString(itemPrice.innerText.trim())
+              : '';
+            const vendorInnerCode = getVendorInnerCode(
+              item,
+              vendor.selectors.cart.innerCode,
+            );
+
+            if (!result.totalPrice) {
+              const totalPriceElement = getElementBySelector(
+                vendor.selectors.cart.totalPrice,
+              );
+              const totalPrice = totalPriceElement
+                ? getNumberFromString(totalPriceElement.innerHTML.trim())
+                : 0;
+
+              result.totalPrice = totalPrice;
+            }
+
+            result.items.push({
+              title,
+              image,
+              quantity,
+              price,
+              vendorInnerCode,
+            });
+            result.totalQuantity = +result.totalQuantity + +quantity;
+            return result;
+          },
+          { items: [], totalQuantity: 0, totalPrice: 0 },
+        );
+
+        const cart = {
+          ...cartData,
+          created: Date.now(),
+          vendor: vendor.name,
+        };
+
+        if (!!cart.items.length) {
+          saveCartToDB(cart);
+        }
       }
     }
   });
@@ -132,6 +230,13 @@ const saveProductToDB = product => {
   chrome.runtime.sendMessage({
     action: 'save-product-to-db',
     product,
+  });
+};
+
+const saveCartToDB = cart => {
+  chrome.runtime.sendMessage({
+    action: 'save-cart-to-db',
+    cart,
   });
 };
 
@@ -148,7 +253,62 @@ const getElementBySelector = (selector = '') => {
           .filter(Boolean)[0];
 };
 
-const getNumericPriceFromString = (price = '') =>
+const getChildrenOfElementBySelector = (element = Element, selector = '') => {
+  if (!element || typeof element.querySelectorAll !== 'function') {
+    return element;
+  }
+  return typeof selector === 'string'
+    ? element.querySelectorAll(selector)
+    : Array.isArray(selector) &&
+        selector
+          .map(item => {
+            return typeof item === 'string'
+              ? element.querySelectorAll(item)
+              : null;
+          })
+          .filter(list => !!list.length)[0];
+};
+
+const getFirstChildOfElementBySelector = (element = Element, selector = '') => {
+  if (!element || typeof element.querySelector !== 'function') {
+    return element;
+  }
+  return typeof selector === 'string'
+    ? element.querySelector(selector)
+    : Array.isArray(selector) &&
+        selector
+          .map(item => {
+            return typeof item === 'string'
+              ? element.querySelector(item)
+              : null;
+          })
+          .filter(Boolean)[0];
+};
+
+const getVendorInnerCode = (product = Element, innerCode = {}) => {
+  if (innerCode.attribute === 'dataset' && !innerCode.selector) {
+    return product[innerCode.attribute][innerCode.name];
+  }
+
+  if (innerCode.attribute === 'dataset' && innerCode.selector) {
+    const element = getChildrenOfElementBySelector(product, innerCode.selector);
+    return element && element[0]
+      ? element[0][innerCode.attribute][innerCode.name]
+      : '';
+  }
+
+  if (innerCode.attribute === 'regex') {
+    const regex = new RegExp(innerCode.regex, 'ig');
+    const foundData = product.innerText.match(regex);
+    return foundData && Array.isArray(foundData) && foundData[0]
+      ? foundData[0].replace(innerCode.replace, '')
+      : '';
+  }
+
+  return product[innerCode.attribute];
+};
+
+const getNumberFromString = (price = '') =>
   Number(price.replace(/[^0-9\.-]+/g, ''));
 
 if (!location.ancestorOrigins.contains(extensionOrigin)) {

@@ -48,8 +48,8 @@
           </div>
           <img
             class="offer__img"
-            *ngIf="offer.imageUrl"
-            [src]="offer.imageUrl"
+            *ngIf="offer.imageUrl || offer.image"
+            [src]="offer.imageUrl ||offer.image"
             [alt]="offer.title"
           />
           <span

@@ -1,6 +1,7 @@
 export class Offer {
   id: string;
-  imageUrl: string;
+  image?: string;
+  imageUrl?: string;
   title: string;
   price: string;
   oldPrice?: string;

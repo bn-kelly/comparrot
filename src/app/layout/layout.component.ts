@@ -197,11 +197,14 @@ export class LayoutComponent implements OnInit {
               console.info('--- layout save-product-to-db ---');
 
               const { product } = message;
-              const urlHash = sha1(product.url);
+
+              const doc = product.vendorInnerCode
+                ? product.vendorInnerCode
+                : sha1(product.url);
 
               await afs
                 .collection('products')
-                .doc(urlHash)
+                .doc(doc)
                 .get()
                 .toPromise()
                 .then((response: any) => {
@@ -231,20 +234,43 @@ export class LayoutComponent implements OnInit {
 
                   afs
                     .collection('products')
-                    .doc(urlHash)
+                    .doc(doc)
                     .set(productsData, { merge: true });
 
                   afs.collection('visits').add({
                     user: user.uid,
                     url: product.url,
                     created: product.created,
-                    product: urlHash,
+                    product: doc,
                     scraped: 0,
                   });
                 });
             }
           },
         );
+
+        window.chrome.extension.onMessage.addListener(function saveCartToDB(
+          message,
+        ) {
+          window.chrome.extension.onMessage.removeListener(saveCartToDB);
+          if (message.action === 'save-cart-to-db') {
+            const { cart } = message;
+
+            const hash = sha1(
+              cart.items.reduce((result, item) => {
+                result = result + item.vendorInnerCode;
+                return result;
+              }, ''),
+            );
+
+            afs
+              .collection('carts')
+              .doc(user.uid)
+              .collection(cart.vendor)
+              .doc(hash)
+              .set(cart, { merge: true });
+          }
+        });
       }
     });
   }
