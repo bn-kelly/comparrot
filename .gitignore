@@ -3,6 +3,8 @@ dist
 node_modules
 yarn-error.log
 .angulardoc.json
+comparrot.pem
+comparrot.crx
 
 .idea/
 .vscode/
