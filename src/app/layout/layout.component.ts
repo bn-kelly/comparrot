@@ -1,4 +1,5 @@
 import sha1 from 'sha1';
+import * as moment from 'moment';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -269,6 +270,31 @@ export class LayoutComponent implements OnInit {
               .collection(cart.vendor)
               .doc(hash)
               .set(cart, { merge: true });
+          }
+        });
+
+        window.chrome.extension.onMessage.addListener(message => {
+          if (message.action === 'save-registry-list-to-db') {
+            const { items } = message;
+
+            items.forEach(item => {
+              const { id, date } = item;
+              const unixDate = moment(date).unix() * 1000;
+              const data = {
+                ...item,
+                unixDate,
+              };
+              afs.collection('registries').doc(id).set(data, { merge: true });
+            });
+          }
+
+          if (message.action === 'save-registry-result-to-db') {
+            const { id, items } = message;
+
+            afs
+              .collection('registries')
+              .doc(id)
+              .set({ items }, { merge: true });
           }
         });
       }

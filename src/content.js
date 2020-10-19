@@ -8,6 +8,9 @@ const expandedClassName = 'expanded';
 const remove = 'remove';
 const add = 'add';
 
+//registry types
+const baby = 'baby';
+
 const getIframe = () => document.getElementById(iframeID);
 
 const inIframe = () => {
@@ -141,7 +144,7 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
       const cartItemsWrapper = getElementBySelector(
         vendor.selectors.cart.itemsWrapper,
       );
-      const cartItems = getChildrenOfElementBySelector(
+      const cartItems = getDescendantsOfElementBySelector(
         cartItemsWrapper,
         vendor.selectors.cart.item,
       );
@@ -151,12 +154,12 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
       if (shouldScrapeCart) {
         const cartData = [...cartItems].reduce(
           (result, item) => {
-            const itemTitle = getFirstChildOfElementBySelector(
+            const itemTitle = getFirstDescendantOfElementBySelector(
               item,
               vendor.selectors.cart.itemTitle,
             );
             const title = itemTitle ? itemTitle.innerText.trim() : '';
-            const itemImage = getFirstChildOfElementBySelector(
+            const itemImage = getFirstDescendantOfElementBySelector(
               item,
               vendor.selectors.cart.itemImage,
             );
@@ -167,14 +170,14 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
                 ? itemImage.srcset.trim()
                 : ''
               : '';
-            const itemQuantity = getFirstChildOfElementBySelector(
+            const itemQuantity = getFirstDescendantOfElementBySelector(
               item,
               vendor.selectors.cart.itemQuantity,
             );
             const quantity = itemQuantity
               ? getNumberFromString(itemQuantity.innerText.trim())
               : '';
-            const itemPrice = getFirstChildOfElementBySelector(
+            const itemPrice = getFirstDescendantOfElementBySelector(
               item,
               vendor.selectors.cart.itemPrice,
             );
@@ -220,6 +223,200 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
           saveCartToDB(cart);
         }
       }
+
+      // Scraping Baby Registry List
+      const babyRegistryListTriggerContainer = getElementBySelector(
+        vendor.selectors.registries.baby.list.triggers.container,
+      );
+
+      const shouldRunBabyRegistryListTrigger = !!babyRegistryListTriggerContainer;
+
+      if (shouldRunBabyRegistryListTrigger) {
+        const config = { attributes: false, childList: true, subtree: true };
+
+        const callback = function () {
+          const babyRegistryListItems = getDescendantsOfElementBySelector(
+            babyRegistryListTriggerContainer,
+            vendor.selectors.registries.baby.list.item,
+          );
+
+          const shouldScrapeBabyRegistryList =
+            !!babyRegistryListItems && !!babyRegistryListItems.length;
+
+          if (shouldScrapeBabyRegistryList) {
+            const babyRegistryListData = [...babyRegistryListItems].reduce(
+              (result, item) => {
+                const itemName = getFirstDescendantOfElementBySelector(
+                  item,
+                  vendor.selectors.registries.baby.list.name,
+                );
+                const name = itemName ? itemName.innerText.trim() : '';
+
+                const itemLocation = getFirstDescendantOfElementBySelector(
+                  item,
+                  vendor.selectors.registries.baby.list.location,
+                );
+                const location = itemLocation
+                  ? itemLocation.innerText.trim()
+                  : '';
+
+                const itemDate = getFirstDescendantOfElementBySelector(
+                  item,
+                  vendor.selectors.registries.baby.list.date,
+                );
+                const date = itemDate ? itemDate.innerText.trim() : '';
+
+                const itemUrl = item.hasAttribute(
+                  vendor.selectors.registries.baby.list.url.attribute,
+                )
+                  ? item
+                  : getFirstDescendantOfElementBySelector(
+                      item,
+                      vendor.selectors.registries.baby.list.url.selector,
+                    );
+
+                const url = getUrl(
+                  itemUrl.getAttribute(
+                    vendor.selectors.registries.baby.list.url.attribute,
+                  ),
+                );
+
+                const id = getRegistryId(
+                  url,
+                  vendor.selectors.registries.baby.list.url.index,
+                  vendor.selectors.registries.baby.list.url.divider,
+                );
+
+                result.push({
+                  name,
+                  location,
+                  date,
+                  url,
+                  id,
+                  created: Date.now(),
+                  updated: 0,
+                  type: baby,
+                  vendor: vendor.name,
+                  scraped: false,
+                });
+                return result;
+              },
+              [],
+            );
+
+            if (!!babyRegistryListData.length) {
+              saveRegistryToDB(babyRegistryListData);
+            }
+          }
+        };
+
+        const observer = new MutationObserver(callback);
+
+        observer.observe(babyRegistryListTriggerContainer, config);
+      }
+
+      // Scraping Baby Registry List Item
+      const babyRegistryListItemsWrapper = getElementBySelector(
+        vendor.selectors.registries.baby.result.itemsWrapper,
+      );
+      const babyRegistryListItems = getDescendantsOfElementBySelector(
+        babyRegistryListItemsWrapper,
+        vendor.selectors.registries.baby.result.item,
+      );
+      const shouldScrapeBabyRegistryListItems =
+        !!babyRegistryListItemsWrapper &&
+        !!babyRegistryListItems &&
+        !!babyRegistryListItems.length;
+
+      if (shouldScrapeBabyRegistryListItems) {
+        const registryId = getRegistryId(
+          document.location.href,
+          vendor.selectors.registries.baby.result.registryId.index,
+        );
+
+        const babyRegistryResultData = [...babyRegistryListItems]
+          .reduce((result, item) => {
+            const itemTitle = getFirstDescendantOfElementBySelector(
+              item,
+              vendor.selectors.registries.baby.result.itemTitle,
+            );
+            const title = itemTitle ? itemTitle.innerText.trim() : '';
+
+            const priceDivider = ' - ';
+            const itemPrice = getFirstDescendantOfElementBySelector(
+              item,
+              vendor.selectors.registries.baby.result.itemPrice,
+            );
+            const originalPrice = itemPrice ? itemPrice.innerText.trim() : '';
+            const price = originalPrice.includes(priceDivider)
+              ? getNumberFromString(originalPrice.split(priceDivider)[0])
+              : getNumberFromString(originalPrice);
+
+            const itemPurchased = getFirstDescendantOfElementBySelector(
+              item,
+              vendor.selectors.registries.baby.result.itemPurchased,
+            );
+
+            const purchased = getInfoAboutPurchasedItems(
+              itemPurchased ? itemPurchased.innerText.trim() : '',
+            );
+
+            const ratingItem = getFirstDescendantOfElementBySelector(
+              item,
+              vendor.selectors.registries.baby.result.itemRating.selector,
+            );
+
+            const rating = getNumericRating(
+              ratingItem
+                ? ratingItem.getAttribute(
+                    vendor.selectors.registries.baby.result.itemRating
+                      .attribute,
+                  )
+                : '',
+              vendor.selectors.registries.baby.result.itemRating.regex,
+            );
+
+            const vendorInnerCode = getVendorInnerCode(
+              item,
+              vendor.selectors.registries.baby.result.innerCode,
+            );
+
+            const itemUrl = item.hasAttribute(
+              vendor.selectors.registries.baby.result.itemUrl.attribute,
+            )
+              ? item
+              : getFirstDescendantOfElementBySelector(
+                  item,
+                  vendor.selectors.registries.baby.result.itemUrl.selector,
+                );
+
+            const url = itemUrl
+              ? getUrl(
+                  itemUrl.getAttribute(
+                    vendor.selectors.registries.baby.result.itemUrl.attribute,
+                  ),
+                )
+              : '';
+
+            result.push({
+              title,
+              price,
+              purchased,
+              rating,
+              vendorInnerCode,
+              url,
+            });
+            return result;
+          }, [])
+          .filter(item => !!item.vendorInnerCode || item.url);
+
+        if (!!babyRegistryResultData.length) {
+          saveRegistryResultToDB({
+            id: registryId,
+            items: babyRegistryResultData,
+          });
+        }
+      }
     }
   });
 };
@@ -240,6 +437,21 @@ const saveCartToDB = cart => {
   });
 };
 
+const saveRegistryToDB = items => {
+  chrome.runtime.sendMessage({
+    action: 'save-registry-list-to-db',
+    items,
+  });
+};
+
+const saveRegistryResultToDB = ({ id, items }) => {
+  chrome.runtime.sendMessage({
+    action: 'save-registry-result-to-db',
+    id,
+    items,
+  });
+};
+
 const getElementBySelector = (selector = '') => {
   return typeof selector === 'string'
     ? document.querySelector(selector)
@@ -253,7 +465,10 @@ const getElementBySelector = (selector = '') => {
           .filter(Boolean)[0];
 };
 
-const getChildrenOfElementBySelector = (element = Element, selector = '') => {
+const getDescendantsOfElementBySelector = (
+  element = Element,
+  selector = '',
+) => {
   if (!element || typeof element.querySelectorAll !== 'function') {
     return element;
   }
@@ -269,7 +484,10 @@ const getChildrenOfElementBySelector = (element = Element, selector = '') => {
           .filter(list => !!list.length)[0];
 };
 
-const getFirstChildOfElementBySelector = (element = Element, selector = '') => {
+const getFirstDescendantOfElementBySelector = (
+  element = Element,
+  selector = '',
+) => {
   if (!element || typeof element.querySelector !== 'function') {
     return element;
   }
@@ -286,14 +504,17 @@ const getFirstChildOfElementBySelector = (element = Element, selector = '') => {
 };
 
 const getVendorInnerCode = (product = Element, innerCode = {}) => {
-  if (innerCode.attribute === 'dataset' && !innerCode.selector) {
-    return product[innerCode.attribute][innerCode.name];
-  }
-
-  if (innerCode.attribute === 'dataset' && innerCode.selector) {
-    const element = getChildrenOfElementBySelector(product, innerCode.selector);
+  if (innerCode.selector) {
+    const element = getDescendantsOfElementBySelector(
+      product,
+      innerCode.selector,
+    );
     return element && element[0]
-      ? element[0][innerCode.attribute][innerCode.name]
+      ? innerCode.subattribute
+        ? JSON.parse(element[0].getAttribute(innerCode.attribute))[
+            innerCode.subattribute
+          ]
+        : element[0].getAttribute(innerCode.attribute)
       : '';
   }
 
@@ -305,11 +526,67 @@ const getVendorInnerCode = (product = Element, innerCode = {}) => {
       : '';
   }
 
-  return product[innerCode.attribute];
+  return Array.isArray(innerCode.attribute)
+    ? innerCode.attribute.filter(attribute =>
+        product.getAttribute(attribute),
+      )[0]
+    : product.getAttribute(innerCode.attribute);
+};
+
+const getUrl = (url = '') => {
+  const regex = /^document.location.href='(.*)'/;
+  const matches = url.match(regex);
+  const origin = window.location.origin;
+
+  if (url.includes('document.location.href=')) {
+    return matches[1].includes(origin) ? matches[1] : `${origin}${matches[1]}`;
+  }
+
+  return url.includes(origin) ? url : `${origin}${url}`;
+};
+
+const getRegistryId = (url = '', index = 0, divider = '/') => {
+  const urlAsArray = url.split(divider);
+  return Array.isArray(urlAsArray) ? urlAsArray[index] || '' : '';
+};
+
+const getInfoAboutPurchasedItems = (text = '') => {
+  const regex = /[^\d]*(\d*)[^\d]*(\d*)[^\d]*/;
+  const matches = text.match(regex);
+  const defaultResult = {};
+  return Array.isArray(matches)
+    ? matches.filter(Boolean).reduce((result, item, index) => {
+        if (index === 1) {
+          result.purchased = +item;
+        }
+        if (index === 2) {
+          result.total = +item;
+          result.remaining = result.total - result.purchased;
+        }
+        return result;
+      }, defaultResult)
+    : defaultResult;
+};
+
+const getNumericRating = (text = '', regex = new RegExp('')) => {
+  const matches = text.match(regex);
+  const defaultResult = 0;
+  return Array.isArray(matches)
+    ? matches.filter(Boolean).reduce((result, item, index) => {
+        if (index === 1) {
+          result = +item;
+        }
+        if (index === 2) {
+          result = Number(`${result}.${item}`);
+        }
+
+        return result;
+      }, defaultResult)
+    : defaultResult;
 };
 
 const getNumberFromString = (price = '') =>
-  Number(price.replace(/[^0-9\.-]+/g, ''));
+  Number(price.replace(/[^0-9\.-]+/g, '')) || 0;
 
 if (!location.ancestorOrigins.contains(extensionOrigin)) {
   const iframe = document.createElement('iframe');

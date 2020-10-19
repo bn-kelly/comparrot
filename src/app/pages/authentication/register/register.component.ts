@@ -4,6 +4,7 @@ import {
   OnInit,
   ViewEncapsulation,
 } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.animation';
@@ -91,6 +92,7 @@ export class RegisterComponent implements OnInit {
     private afs: AngularFirestore,
     private auth: AuthService,
     private themeService: ThemeService,
+    public sanitizer: DomSanitizer,
   ) {}
 
   ngOnInit() {

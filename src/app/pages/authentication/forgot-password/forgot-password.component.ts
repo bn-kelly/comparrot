@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -39,6 +40,7 @@ export class ForgotPasswordComponent implements OnInit {
     private auth: AuthService,
     private themeService: ThemeService,
     private snackBar: MatSnackBar,
+    public sanitizer: DomSanitizer,
   ) {}
 
   ngOnInit() {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../services/auth.service';
@@ -22,6 +23,7 @@ export class VerifyEmailComponent implements OnInit {
     private afs: AngularFirestore,
     private router: Router,
     private themeService: ThemeService,
+    public sanitizer: DomSanitizer,
   ) {}
 
   ngOnInit() {

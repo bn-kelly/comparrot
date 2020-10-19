@@ -8,7 +8,7 @@
       <div
         class="logo"
         [routerLink]="['/']"
-        [ngStyle]="{ 'background-image': 'url(' + logoUrl + ')' }"
+        [style.background-image]="sanitizer.bypassSecurityTrustStyle('url(' + logoUrl + ')')"
       ></div>
     </div>
     <div class="padding content">

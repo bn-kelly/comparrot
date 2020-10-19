@@ -5,6 +5,7 @@ import {
   OnInit,
   ViewEncapsulation,
 } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -72,6 +73,7 @@ export class LoginComponent implements OnInit {
     private afs: AngularFirestore,
     private authService: AuthService,
     private themeService: ThemeService,
+    public sanitizer: DomSanitizer,
   ) {}
 
   ngOnInit() {
