@@ -408,7 +408,7 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
             });
             return result;
           }, [])
-          .filter(item => !!item.vendorInnerCode || item.url);
+          .filter(item => !!item.vendorInnerCode || !!item.url);
 
         if (!!babyRegistryResultData.length) {
           saveRegistryResultToDB({

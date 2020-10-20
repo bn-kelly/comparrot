@@ -290,11 +290,30 @@ export class LayoutComponent implements OnInit {
 
           if (message.action === 'save-registry-result-to-db') {
             const { id, items } = message;
+            const itemsData = items.reduce(
+              (result, item) => {
+                result.itemsTotal =
+                  +result.itemsTotal + +(item.purchased.total || 0);
+                result.itemsRemaining =
+                  +result.itemsRemaining + +(item.purchased.remaining || 0);
+                result.itemsPurchased =
+                  +result.itemsPurchased + +(item.purchased.purchased || 0);
 
-            afs
-              .collection('registries')
-              .doc(id)
-              .set({ items }, { merge: true });
+                return result;
+              },
+              {
+                itemsPurchased: 0,
+                itemsRemaining: 0,
+                itemsTotal: 0,
+              },
+            );
+
+            const data = {
+              items,
+              ...itemsData,
+            };
+
+            afs.collection('registries').doc(id).set(data, { merge: true });
           }
         });
       }
