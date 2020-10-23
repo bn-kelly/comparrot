@@ -376,6 +376,30 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
               vendor.selectors.registries.baby.result.itemRating.regex,
             );
 
+            const reviewsItem = getFirstDescendantOfElementBySelector(
+              item,
+              vendor.selectors.registries.baby.result.itemReviews,
+            );
+
+            const reviews = getNumberFromString(
+              reviewsItem ? reviewsItem.innerText.trim() : '',
+            );
+
+            const categoryItemClosest = item.closest(
+              vendor.selectors.registries.baby.result.itemCategory,
+            );
+            const categoryItemSiblings = getPreviousSiblings(item) || [];
+
+            const categoryItem =
+              categoryItemClosest ||
+              categoryItemSiblings.filter(sibling =>
+                sibling.matches(
+                  vendor.selectors.registries.baby.result.itemCategory,
+                ),
+              )[0];
+
+            const category = categoryItem ? categoryItem.innerText.trim() : '';
+
             const vendorInnerCode = getVendorInnerCode(
               item,
               vendor.selectors.registries.baby.result.innerCode,
@@ -399,10 +423,12 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
               : '';
 
             result.push({
+              category,
               title,
               price,
               purchased,
               rating,
+              reviews,
               vendorInnerCode,
               url,
             });
@@ -503,6 +529,15 @@ const getFirstDescendantOfElementBySelector = (
           .filter(Boolean)[0];
 };
 
+const getPreviousSiblings = elem => {
+  const siblings = [];
+
+  while ((elem = elem.previousElementSibling)) {
+    siblings.push(elem);
+  }
+  return siblings;
+};
+
 const getVendorInnerCode = (product = Element, innerCode = {}) => {
   if (innerCode.selector) {
     const element = getDescendantsOfElementBySelector(
@@ -515,7 +550,7 @@ const getVendorInnerCode = (product = Element, innerCode = {}) => {
             innerCode.subattribute
           ]
         : element[0].getAttribute(innerCode.attribute)
-      : '';
+      : product.getAttribute(innerCode.attribute) || '';
   }
 
   if (innerCode.attribute === 'regex') {
