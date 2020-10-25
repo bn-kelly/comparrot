@@ -84,30 +84,39 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
       const productTitleElement = getElementBySelector(
         vendor.selectors.product.title,
       );
-      const productPriceElement = getElementBySelector(
-        vendor.selectors.product.price,
-      );
-      const productImageElement = getElementBySelector(
-        vendor.selectors.product.image,
-      );
-      const vendorInnerCodeElement = getElementBySelector(
-        vendor.selectors.product.innerCode.selector,
-      );
 
       const shouldSaveProductToDB = !!productTitleElement;
 
       if (shouldSaveProductToDB) {
+        const productPriceElement = getElementBySelector(
+          vendor.selectors.product.price,
+        );
+
         const priceDivider = ' - ';
         const title = productTitleElement.innerText.trim();
         const originalPrice = productPriceElement
           ? productPriceElement.innerText.trim()
           : '';
 
-        const image = productImageElement ? productImageElement.src : '';
-
         const price = originalPrice.includes(priceDivider)
           ? getNumberFromString(originalPrice.split(priceDivider)[0])
           : getNumberFromString(originalPrice);
+
+        const productImageElement = getElementBySelector(
+          vendor.selectors.product.image,
+        );
+
+        const image = productImageElement ? productImageElement.src : '';
+
+        const vendorInnerCodeElement = getElementBySelector(
+          vendor.selectors.product.innerCode.selector,
+        );
+
+        const brandItem = getElementBySelector(
+          vendor.selectors.product.brand.selector,
+        );
+
+        const brand = getBrand(brandItem, vendor.selectors.product.brand);
 
         const vendorInnerCode = vendorInnerCodeElement
           ? getVendorInnerCode(
@@ -120,8 +129,9 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
           title,
           image,
           price,
-          url,
+          brand,
           vendorInnerCode,
+          url,
           created: Date.now(),
         };
 
@@ -538,7 +548,44 @@ const getPreviousSiblings = elem => {
   return siblings;
 };
 
+const getBrand = (product = Element, brand = {}) => {
+  if (!!brand.attribute && brand.attribute === 'regex') {
+    if (typeof brand.regex === 'string') {
+      const regex = new RegExp(brand.regex, 'ig');
+      const found = regex.exec(product.innerText);
+      return found && found.groups ? found.groups.brand : '';
+    } else {
+      return brand.regex.reduce((result, item) => {
+        const regex = new RegExp(item, 'ig');
+        const found = regex.exec(product.innerText);
+        if (found && found.groups && found.groups.brand) {
+          result = found.groups.brand;
+        }
+        return result;
+      }, '');
+    }
+  }
+
+  if (brand.selector && !!brand.attribute && brand.attribute !== 'regex') {
+    const element = getDescendantsOfElementBySelector(product, brand.selector);
+
+    return element && element[0]
+      ? element[0].getAttribute(brand.attribute)
+      : '';
+  }
+
+  return product.innerText || '';
+};
+
 const getVendorInnerCode = (product = Element, innerCode = {}) => {
+  if (innerCode.attribute === 'regex') {
+    const regex = new RegExp(innerCode.regex, 'ig');
+    const found = regex.exec(product.innerText);
+    return found && found.groups && found.groups.vendorInnerCode
+      ? found.groups.vendorInnerCode
+      : '';
+  }
+
   if (innerCode.selector) {
     const element = getDescendantsOfElementBySelector(
       product,
@@ -551,14 +598,6 @@ const getVendorInnerCode = (product = Element, innerCode = {}) => {
           ]
         : element[0].getAttribute(innerCode.attribute)
       : product.getAttribute(innerCode.attribute) || '';
-  }
-
-  if (innerCode.attribute === 'regex') {
-    const regex = new RegExp(innerCode.regex, 'ig');
-    const foundData = product.innerText.match(regex);
-    return foundData && Array.isArray(foundData) && foundData[0]
-      ? foundData[0].replace(innerCode.replace, '')
-      : '';
   }
 
   return Array.isArray(innerCode.attribute)
