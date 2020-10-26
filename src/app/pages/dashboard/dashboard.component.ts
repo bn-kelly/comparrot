@@ -22,6 +22,7 @@ import {
   User,
 } from '../../pages/authentication/services/auth.service';
 import { Offer } from './offer.model';
+import { Project } from '../../layout/project.model';
 
 @Component({
   selector: 'fury-dashboard',
@@ -32,6 +33,7 @@ export class DashboardComponent implements OnInit {
   private static isInitialLoad = true;
   isExtension: boolean;
   user: User;
+  projectName: string;
   isLoggedIn: boolean;
   offers: Offer[];
   salesData$: Observable<ChartData>;
@@ -225,7 +227,20 @@ export class DashboardComponent implements OnInit {
         return;
       }
 
-      const { isAnonymous } = user;
+      const { isAnonymous, projectName } = user;
+
+      if (!!projectName) {
+        this.afs
+          .collection('projects')
+          .doc(user.projectName)
+          .valueChanges()
+          .subscribe((project: Project) => {
+            this.projectName =
+              project && project.name
+                ? project.name.charAt(0).toUpperCase() + project.name.slice(1)
+                : '';
+          });
+      }
 
       this.isLoggedIn = !isAnonymous;
 

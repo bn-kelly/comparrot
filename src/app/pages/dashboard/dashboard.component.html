@@ -13,8 +13,8 @@
     <div *ngIf="!offers || (!!offers && !offers.length); else offerList">
       <mat-card>
         <h4>
-          To start using the application, start surfing many retailers web sites
-          we track
+          Welcome! Start shopping. {{projectName}} will display search results here as
+          you begin shopping 😊
         </h4>
       </mat-card>
     </div>
@@ -49,7 +49,7 @@
           <img
             class="offer__img"
             *ngIf="offer.imageUrl || offer.image"
-            [src]="offer.imageUrl ||offer.image"
+            [src]="offer.imageUrl || offer.image"
             [alt]="offer.title"
           />
           <span
