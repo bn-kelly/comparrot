@@ -467,12 +467,19 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
             }, [])
             .filter(item => !!item.vendorInnerCode || !!item.url);
 
-          if (!!babyRegistryResultData.length) {
-            saveRegistryResultToDB({
-              id: registryId,
-              items: babyRegistryResultData,
-            });
-          }
+          const data = {
+            id: registryId,
+            itemsQuantity: babyRegistryResultData.length,
+          };
+
+          const dataWithItems = babyRegistryResultData.length
+            ? {
+                ...data,
+                items: babyRegistryResultData,
+              }
+            : data;
+
+          saveRegistryResultToDB(dataWithItems);
         }
       };
 
@@ -512,11 +519,10 @@ const saveRegistryToDB = items => {
   });
 };
 
-const saveRegistryResultToDB = ({ id, items }) => {
+const saveRegistryResultToDB = (data = {}) => {
   chrome.runtime.sendMessage({
     action: 'save-registry-result-to-db',
-    id,
-    items,
+    ...data,
   });
 };
 

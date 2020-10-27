@@ -289,7 +289,7 @@ export class LayoutComponent implements OnInit {
           }
 
           if (message.action === 'save-registry-result-to-db') {
-            const { id, items } = message;
+            const { id, items, itemsQuantity } = message;
             const itemsData = items.reduce(
               (result, item) => {
                 result.itemsTotal =
@@ -310,6 +310,7 @@ export class LayoutComponent implements OnInit {
 
             const data = {
               items,
+              itemsQuantity,
               ...itemsData,
             };
 
