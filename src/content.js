@@ -108,15 +108,24 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
 
         const image = productImageElement ? productImageElement.src : '';
 
-        const vendorInnerCodeElement = getElementBySelector(
-          vendor.selectors.product.innerCode.selector,
-        );
-
         const brandItem = getElementBySelector(
           vendor.selectors.product.brand.selector,
         );
 
-        const brand = getBrand(brandItem, vendor.selectors.product.brand);
+        const brand = getAttribute(brandItem, vendor.selectors.product.brand);
+
+        const manufacturerItem = getElementBySelector(
+          vendor.selectors.product.manufacturer.selector,
+        );
+
+        const manufacturer = getAttribute(
+          manufacturerItem,
+          vendor.selectors.product.manufacturer,
+        );
+
+        const vendorInnerCodeElement = getElementBySelector(
+          vendor.selectors.product.innerCode.selector,
+        );
 
         const vendorInnerCode = vendorInnerCodeElement
           ? getVendorInnerCode(
@@ -130,6 +139,7 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
           image,
           price,
           brand,
+          manufacturer,
           vendorInnerCode,
           url,
           created: Date.now(),
@@ -570,33 +580,35 @@ const getPreviousSiblings = elem => {
   return siblings;
 };
 
-const getBrand = (product = Element, brand = {}) => {
-  if (!!brand.attribute && brand.attribute === 'regex') {
-    if (typeof brand.regex === 'string') {
-      const regex = new RegExp(brand.regex, 'ig');
-      const found = regex.exec(product.innerText);
-      return found && found.groups ? found.groups.brand : '';
+const getAttribute = (element = Element, data = {}) => {
+  if (!element) {
+    return '';
+  }
+  if (!!data.attribute && data.attribute === 'regex') {
+    const regexRule = 'igm';
+    if (typeof data.regex === 'string') {
+      const regex = new RegExp(data.regex, regexRule);
+      const found = regex.exec(element.innerText);
+      return found && found.groups ? found.groups.value : '';
     } else {
-      return brand.regex.reduce((result, item) => {
-        const regex = new RegExp(item, 'ig');
-        const found = regex.exec(product.innerText);
-        if (found && found.groups && found.groups.brand) {
-          result = found.groups.brand;
+      return data.regex.reduce((result, item) => {
+        const regex = new RegExp(item, regexRule);
+        const found = regex.exec(element.innerText);
+        if (found && found.groups && found.groups.value) {
+          result = found.groups.value;
         }
         return result;
       }, '');
     }
   }
 
-  if (brand.selector && !!brand.attribute && brand.attribute !== 'regex') {
-    const element = getDescendantsOfElementBySelector(product, brand.selector);
+  if (data.selector && !!data.attribute && data.attribute !== 'regex') {
+    const element = getDescendantsOfElementBySelector(element, data.selector);
 
-    return element && element[0]
-      ? element[0].getAttribute(brand.attribute)
-      : '';
+    return element && element[0] ? element[0].getAttribute(data.attribute) : '';
   }
 
-  return product.innerText || '';
+  return element.innerText || '';
 };
 
 const getVendorInnerCode = (product = Element, innerCode = {}) => {
@@ -675,15 +687,6 @@ const getUrl = (product = Element, itemUrl = {}) => {
   return Array.isArray(itemUrl.attribute)
     ? itemUrl.attribute.filter(attribute => product.getAttribute(attribute))[0]
     : product.getAttribute(itemUrl.attribute);
-  // const regex = /^document.location.href='(.*)'/;
-  // const matches = url.match(regex);
-  // const origin = window.location.origin;
-  //
-  // if (url.includes('document.location.href=')) {
-  //   return matches[1].includes(origin) ? matches[1] : `${origin}${matches[1]}`;
-  // }
-  //
-  // return url.includes(origin) ? url : `${origin}${url}`;
 };
 
 const getRegistryId = (url = '', index = 0, divider = '/') => {
