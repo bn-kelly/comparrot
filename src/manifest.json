@@ -1,10 +1,19 @@
 {
   "name": "Comparrot",
-  "version": "1.10.1",
+  "version": "1.11.0",
   "description": "Comparrot Chrome extension",
   "manifest_version": 2,
   "content_security_policy": "script-src 'self' https://apis.google.com; object-src 'self'",
   "permissions": ["tabs", "<all_urls>"],
+  "commands": {
+    "show-iframe": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+1",
+        "mac": "Command+Shift+1"
+      },
+      "description": "Show iframe with extension"
+    }
+  },
   "browser_action": {
     "default_popup": "index.html"
   },
