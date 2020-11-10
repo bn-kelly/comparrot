@@ -213,38 +213,47 @@ export class LayoutComponent implements OnInit {
                   return data && Array.isArray(data.users) ? data.users : [];
                 })
                 .then(users => {
-                  const userToSave = {
-                    user: user.uid,
-                    created: product.created,
-                  };
+                  const isBot = navigator.webdriver;
 
-                  const isExistingUser = !!users.find(
-                    item => item.user === user.uid,
-                  );
-                  const productsData = {
-                    ...product,
-                    users: isExistingUser
-                      ? users.reduce((result, item) => {
-                          result.push(
-                            item.user === user.uid ? userToSave : item,
-                          );
-                          return result;
-                        }, [])
-                      : [...users, userToSave],
-                  };
+                  if (isBot) {
+                    afs
+                      .collection('products')
+                      .doc(doc)
+                      .set(product, { merge: true });
+                  } else {
+                    const userToSave = {
+                      user: user.uid,
+                      created: product.created,
+                    };
 
-                  afs
-                    .collection('products')
-                    .doc(doc)
-                    .set(productsData, { merge: true });
+                    const isExistingUser = !!users.find(
+                      item => item.user === user.uid,
+                    );
+                    const productsData = {
+                      ...product,
+                      users: isExistingUser
+                        ? users.reduce((result, item) => {
+                            result.push(
+                              item.user === user.uid ? userToSave : item,
+                            );
+                            return result;
+                          }, [])
+                        : [...users, userToSave],
+                    };
 
-                  afs.collection('visits').add({
-                    user: user.uid,
-                    url: product.url,
-                    created: product.created,
-                    product: doc,
-                    scraped: 0,
-                  });
+                    afs
+                      .collection('products')
+                      .doc(doc)
+                      .set(productsData, { merge: true });
+
+                    afs.collection('visits').add({
+                      user: user.uid,
+                      url: product.url,
+                      created: product.created,
+                      product: doc,
+                      scraped: 0,
+                    });
+                  }
                 });
             }
           },
