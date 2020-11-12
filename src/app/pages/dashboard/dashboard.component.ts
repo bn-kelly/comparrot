@@ -223,7 +223,10 @@ export class DashboardComponent implements OnInit {
       this.user = user;
       if (!user) {
         this.isLoggedIn = false;
-        this.auth.anonymousLogin();
+        const isBot = navigator.webdriver;
+        if (!isBot) {
+          this.auth.anonymousLogin();
+        }
         return;
       }
 
