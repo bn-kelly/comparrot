@@ -102,12 +102,15 @@ export class AuthService {
     );
 
     this.afAuth.onAuthStateChanged(user => {
+      const isBot = navigator.webdriver;
       if (!user) {
-        const isBot = navigator.webdriver;
         if (!isBot) {
           this.anonymousLogin();
         }
       } else {
+        if (isBot) {
+          auth().signOut();
+        }
         this.uid = user.uid;
         this.getUserDocByUid(user.uid).then(doc => {
           const data = doc.data();

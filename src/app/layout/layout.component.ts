@@ -71,13 +71,6 @@ export class LayoutComponent implements OnInit {
   ngOnInit() {
     this.isExtension = !!window.chrome && !!window.chrome.extension;
 
-    this.afs
-      .collection('vendors')
-      .valueChanges()
-      .subscribe((vendors: Vendor[]) => {
-        this.vendors = vendors;
-      });
-
     this.auth.user.subscribe(user => {
       if (!user || user.isAnonymous) {
         this.showConfigPanel = false;
@@ -98,18 +91,14 @@ export class LayoutComponent implements OnInit {
             script.innerHTML = '';
           }
         });
-
-        return;
       }
 
-      const { uid, isAdmin, projectName } = user;
+      this.showConfigPanel = !!user && !!user.isAdmin;
 
-      this.showConfigPanel = !!isAdmin;
-
-      if (projectName && !this.isExtension) {
+      if (!!user && !!user.projectName && !this.isExtension) {
         this.afs
           .collection('projects')
-          .doc(projectName)
+          .doc(user.projectName)
           .valueChanges()
           .subscribe((project: Project) => {
             if (!project) {
@@ -159,36 +148,38 @@ export class LayoutComponent implements OnInit {
           });
       }
 
-      if (this.isExtension && !!uid) {
-        window.chrome.tabs.getSelected(null, tab => {
-          // TODO: remove when 174512601 is done
-          console.info('this.scrapedUrls');
-          console.info(this.scrapedUrls);
-          if (
-            Array.isArray(this.scrapedUrls) &&
-            this.scrapedUrls.includes(tab.url)
-          ) {
-            return;
-          }
-          // TODO: remove when 174512601 is done
-          console.info('--- layout try-to-scrape-data ---');
-          window.chrome.tabs.sendMessage(tab.id, {
-            action: 'try-to-scrape-data',
-            url: tab.url,
-            vendors: this.vendors,
+      if (this.isExtension) {
+        this.afs
+          .collection('vendors')
+          .valueChanges()
+          .subscribe((vendors: Vendor[]) => {
+            this.vendors = vendors;
+
+            window.chrome.tabs.getSelected(null, tab => {
+              // TODO: remove when 174512601 is done
+              console.info('this.scrapedUrls');
+              console.info(this.scrapedUrls);
+              if (
+                Array.isArray(this.scrapedUrls) &&
+                this.scrapedUrls.includes(tab.url)
+              ) {
+                return;
+              }
+              // TODO: remove when 174512601 is done
+              console.info('--- layout try-to-scrape-data ---');
+              window.chrome.tabs.sendMessage(tab.id, {
+                action: 'try-to-scrape-data',
+                url: tab.url,
+                vendors: this.vendors,
+              });
+              this.scrapedUrls.push(tab.url);
+            });
           });
-          this.scrapedUrls.push(tab.url);
-        });
       }
     });
 
     this.afAuth.onAuthStateChanged(user => {
-      if (!user || !user.uid) {
-        return;
-      }
-
       const afs = this.afs;
-
       if (this.isExtension) {
         window.chrome.extension.onMessage.addListener(
           async function saveProductToDB(message) {
@@ -220,7 +211,7 @@ export class LayoutComponent implements OnInit {
                       .collection('products')
                       .doc(doc)
                       .set(product, { merge: true });
-                  } else {
+                  } else if (!!user && !!user.uid) {
                     const userToSave = {
                       user: user.uid,
                       created: product.created,
@@ -263,7 +254,7 @@ export class LayoutComponent implements OnInit {
           message,
         ) {
           window.chrome.extension.onMessage.removeListener(saveCartToDB);
-          if (message.action === 'save-cart-to-db') {
+          if (message.action === 'save-cart-to-db' && !!user && !!user.uid) {
             const { cart } = message;
 
             const hash = sha1(
