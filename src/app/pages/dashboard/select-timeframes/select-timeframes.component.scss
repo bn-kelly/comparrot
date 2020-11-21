@@ -2,12 +2,10 @@
 
 fury-select-timeframes {
   margin: 0 !important;
-  background-color: white;
-  text-align: right;
-  border-bottom: 1px solid $color-lightgray;
+  display: flex;
+  justify-content: flex-end;
 
   .mat-form-field-wrapper {
-    padding: $padding-md;
     width: 13rem;
 
     .mat-form-field-flex {

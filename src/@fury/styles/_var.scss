@@ -105,6 +105,20 @@ $media-sm: "screen and (min-width: 599px) and (max-width: 959px)";
   }
 }
 
+$media-md: "screen and (min-width: 959px) and (max-width: 1199px)";
+@mixin media-md {
+  @media #{$media-md} {
+    @content;
+  }
+}
+
+$media-lg: "screen and (min-width: 1200px)";
+@mixin media-lg {
+  @media #{$media-lg} {
+    @content;
+  }
+}
+
 /**
   Inbox
  */

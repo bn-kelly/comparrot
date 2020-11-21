@@ -619,7 +619,7 @@ const getAttribute = (element = Element, data = {}) => {
 
 const getVendorInnerCode = (product = Element, innerCode = {}) => {
   if (innerCode.attribute === 'regex') {
-    const regex = new RegExp(innerCode.regex, 'ig');
+    const regex = new RegExp(innerCode.regex, 'igm');
     const found = regex.exec(product.innerText);
     return found && found.groups && found.groups.vendorInnerCode
       ? found.groups.vendorInnerCode
