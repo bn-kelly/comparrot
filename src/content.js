@@ -82,14 +82,14 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
     if (url.includes(vendor.url)) {
       // Scraping Product
       const productTitleElement = getElementBySelector(
-        vendor.selectors.product.title,
+        vendor?.selectors?.product?.title,
       );
 
       const shouldSaveProductToDB = !!productTitleElement;
 
       if (shouldSaveProductToDB) {
         const productPriceElement = getElementBySelector(
-          vendor.selectors.product.price,
+          vendor?.selectors?.product?.price,
         );
 
         const priceDivider = ' - ';
@@ -103,34 +103,37 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
           : getNumberFromString(originalPrice);
 
         const productImageElement = getElementBySelector(
-          vendor.selectors.product.image,
+          vendor?.selectors?.product?.image,
         );
 
         const image = productImageElement ? productImageElement.src : '';
 
         const brandItem = getElementBySelector(
-          vendor.selectors.product.brand.selector,
+          vendor?.selectors?.product?.brand?.selector,
         );
 
-        const brand = getAttribute(brandItem, vendor.selectors.product.brand);
+        const brand = getAttribute(
+          brandItem,
+          vendor?.selectors?.product?.brand,
+        );
 
         const manufacturerItem = getElementBySelector(
-          vendor.selectors.product.manufacturer.selector,
+          vendor?.selectors?.product?.manufacturer?.selector,
         );
 
         const manufacturer = getAttribute(
           manufacturerItem,
-          vendor.selectors.product.manufacturer,
+          vendor?.selectors?.product?.manufacturer,
         );
 
         const vendorInnerCodeElement = getElementBySelector(
-          vendor.selectors.product.innerCode.selector,
+          vendor?.selectors?.product?.innerCode?.selector,
         );
 
         const vendorInnerCode = vendorInnerCodeElement
           ? getVendorInnerCode(
               vendorInnerCodeElement,
-              vendor.selectors.product.innerCode,
+              vendor?.selectors?.product?.innerCode,
             )
           : '';
 
@@ -162,11 +165,11 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
 
       // Scraping Cart
       const cartItemsWrapper = getElementBySelector(
-        vendor.selectors.cart.itemsWrapper,
+        vendor?.selectors?.cart?.itemsWrapper,
       );
       const cartItems = getDescendantsOfElementBySelector(
         cartItemsWrapper,
-        vendor.selectors.cart.item,
+        vendor?.selectors?.cart?.item,
       );
       const shouldScrapeCart =
         !!cartItemsWrapper && cartItems && !!cartItems.length;
@@ -176,12 +179,12 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
           (result, item) => {
             const itemTitle = getFirstDescendantOfElementBySelector(
               item,
-              vendor.selectors.cart.itemTitle,
+              vendor?.selectors?.cart?.itemTitle,
             );
             const title = itemTitle ? itemTitle.innerText.trim() : '';
             const itemImage = getFirstDescendantOfElementBySelector(
               item,
-              vendor.selectors.cart.itemImage,
+              vendor?.selectors?.cart?.itemImage,
             );
             const image = itemImage
               ? itemImage.src
@@ -192,26 +195,26 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
               : '';
             const itemQuantity = getFirstDescendantOfElementBySelector(
               item,
-              vendor.selectors.cart.itemQuantity,
+              vendor?.selectors?.cart?.itemQuantity,
             );
             const quantity = itemQuantity
               ? getNumberFromString(itemQuantity.innerText.trim())
               : '';
             const itemPrice = getFirstDescendantOfElementBySelector(
               item,
-              vendor.selectors.cart.itemPrice,
+              vendor?.selectors?.cart?.itemPrice,
             );
             const price = itemPrice
               ? getNumberFromString(itemPrice.innerText.trim())
               : '';
             const vendorInnerCode = getVendorInnerCode(
               item,
-              vendor.selectors.cart.innerCode,
+              vendor?.selectors?.cart?.innerCode,
             );
 
             if (!result.totalPrice) {
               const totalPriceElement = getElementBySelector(
-                vendor.selectors.cart.totalPrice,
+                vendor?.selectors?.cart?.totalPrice,
               );
               const totalPrice = totalPriceElement
                 ? getNumberFromString(totalPriceElement.innerHTML.trim())
@@ -246,7 +249,7 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
 
       // Scraping Baby Registry List
       const babyRegistryListTriggerContainer = getElementBySelector(
-        vendor.selectors.registries.baby.list.triggers.container,
+        vendor?.selectors?.registries?.baby?.list?.triggers?.container,
       );
 
       const shouldRunBabyRegistryListTrigger = !!babyRegistryListTriggerContainer;
@@ -257,7 +260,7 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
         const callback = function () {
           const babyRegistryListItems = getDescendantsOfElementBySelector(
             babyRegistryListTriggerContainer,
-            vendor.selectors.registries.baby.list.item,
+            vendor?.selectors?.registries?.baby?.list?.item,
           );
 
           const shouldScrapeBabyRegistryList =
@@ -268,13 +271,13 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
               (result, item) => {
                 const itemName = getFirstDescendantOfElementBySelector(
                   item,
-                  vendor.selectors.registries.baby.list.name,
+                  vendor?.selectors?.registries?.baby?.list?.name,
                 );
                 const name = itemName ? itemName.innerText.trim() : '';
 
                 const itemLocation = getFirstDescendantOfElementBySelector(
                   item,
-                  vendor.selectors.registries.baby.list.location,
+                  vendor?.selectors?.registries?.baby?.list?.location,
                 );
                 const location = itemLocation
                   ? itemLocation.innerText.trim()
@@ -282,28 +285,28 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
 
                 const itemDate = getFirstDescendantOfElementBySelector(
                   item,
-                  vendor.selectors.registries.baby.list.date,
+                  vendor?.selectors?.registries?.baby?.list?.date,
                 );
                 const date = itemDate ? itemDate.innerText.trim() : '';
 
                 const itemUrl = item.hasAttribute(
-                  vendor.selectors.registries.baby.list.url.attribute,
+                  vendor?.selectors?.registries?.baby?.list?.url?.attribute,
                 )
                   ? item
                   : getFirstDescendantOfElementBySelector(
                       item,
-                      vendor.selectors.registries.baby.list.url.selector,
+                      vendor?.selectors?.registries?.baby?.list?.url?.selector,
                     );
 
                 const url = getUrl(
                   itemUrl,
-                  vendor.selectors.registries.baby.list.url,
+                  vendor?.selectors?.registries?.baby?.list?.url,
                 );
 
                 const id = getRegistryId(
                   url,
-                  vendor.selectors.registries.baby.list.url.index,
-                  vendor.selectors.registries.baby.list.url.divider,
+                  vendor?.selectors?.registries?.baby?.list?.url?.index,
+                  vendor?.selectors?.registries?.baby?.list?.url?.divider,
                 );
 
                 result.push({
@@ -336,21 +339,21 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
 
       // Scraping Baby Registry List Item
       const babyRegistryResultTriggerContainer =
-        vendor.selectors.registries.baby.result.triggers &&
-        vendor.selectors.registries.baby.result.triggers.container &&
+        vendor?.selectors?.registries?.baby?.result?.triggers &&
+        vendor?.selectors?.registries?.baby?.result?.triggers?.container &&
         getElementBySelector(
-          vendor.selectors.registries.baby.result.triggers.container,
+          vendor?.selectors?.registries?.baby?.result?.triggers?.container,
         );
 
       const shouldRunBabyRegistryResultTrigger = !!babyRegistryResultTriggerContainer;
 
       const babyRegistryResultCallback = function () {
         const babyRegistryListItemsWrapper = getElementBySelector(
-          vendor.selectors.registries.baby.result.itemsWrapper,
+          vendor?.selectors?.registries?.baby?.result?.itemsWrapper,
         );
         const babyRegistryListItems = getDescendantsOfElementBySelector(
           babyRegistryListItemsWrapper,
-          vendor.selectors.registries.baby.result.item,
+          vendor?.selectors?.registries?.baby?.result?.item,
         );
         const shouldScrapeBabyRegistryListItems =
           !!babyRegistryListItemsWrapper &&
@@ -360,21 +363,21 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
         if (shouldScrapeBabyRegistryListItems) {
           const registryId = getRegistryId(
             document.location.href,
-            vendor.selectors.registries.baby.result.registryId.index,
+            vendor?.selectors?.registries?.baby?.result?.registryId?.index,
           );
 
           const babyRegistryResultData = [...babyRegistryListItems]
             .reduce((result, item) => {
               const itemTitle = getFirstDescendantOfElementBySelector(
                 item,
-                vendor.selectors.registries.baby.result.itemTitle,
+                vendor?.selectors?.registries?.baby?.result?.itemTitle,
               );
               const title = itemTitle ? itemTitle.innerText.trim() : '';
 
               const priceDivider = ' - ';
               const itemPrice = getFirstDescendantOfElementBySelector(
                 item,
-                vendor.selectors.registries.baby.result.itemPrice,
+                vendor?.selectors?.registries?.baby?.result?.itemPrice,
               );
               const originalPrice = itemPrice ? itemPrice.innerText.trim() : '';
               const price = originalPrice.includes(priceDivider)
@@ -383,32 +386,33 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
 
               const itemPurchased = getFirstDescendantOfElementBySelector(
                 item,
-                vendor.selectors.registries.baby.result.itemPurchased,
+                vendor?.selectors?.registries?.baby?.result?.itemPurchased,
               );
 
               const purchased = getInfoAboutPurchasedItems(
                 itemPurchased ? itemPurchased.innerText.trim() : '',
-                vendor.selectors.registries.baby.result.itemPurchasedText,
+                vendor?.selectors?.registries?.baby?.result?.itemPurchasedText,
               );
 
               const ratingItem = getFirstDescendantOfElementBySelector(
                 item,
-                vendor.selectors.registries.baby.result.itemRating.selector,
+                vendor?.selectors?.registries?.baby?.result?.itemRating
+                  ?.selector,
               );
 
               const rating = getNumericRating(
                 ratingItem
                   ? ratingItem.getAttribute(
-                      vendor.selectors.registries.baby.result.itemRating
-                        .attribute,
+                      vendor?.selectors?.registries?.baby?.result?.itemRating
+                        ?.attribute,
                     )
                   : '',
-                vendor.selectors.registries.baby.result.itemRating.regex,
+                vendor?.selectors?.registries?.baby?.result?.itemRating?.regex,
               );
 
               const reviewsItem = getFirstDescendantOfElementBySelector(
                 item,
-                vendor.selectors.registries.baby.result.itemReviews,
+                vendor?.selectors?.registries?.baby?.result?.itemReviews,
               );
 
               const reviews = getNumberFromString(
@@ -416,7 +420,7 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
               );
 
               const categoryItemClosest = item.closest(
-                vendor.selectors.registries.baby.result.itemCategory,
+                vendor?.selectors?.registries.baby.result.itemCategory,
               );
               const categoryItemSiblings = getPreviousSiblings(item) || [];
 
@@ -424,7 +428,7 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
                 categoryItemClosest ||
                 categoryItemSiblings.filter(sibling =>
                   sibling.matches(
-                    vendor.selectors.registries.baby.result.itemCategory,
+                    vendor?.selectors?.registries?.baby?.result?.itemCategory,
                   ),
                 )[0];
 
@@ -434,22 +438,23 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
 
               const vendorInnerCode = getVendorInnerCode(
                 item,
-                vendor.selectors.registries.baby.result.innerCode,
+                vendor?.selectors?.registries?.baby?.result?.innerCode,
               );
 
               const itemUrl = item.hasAttribute(
-                vendor.selectors.registries.baby.result.itemUrl.attribute,
+                vendor?.selectors?.registries?.baby?.result?.itemUrl?.attribute,
               )
                 ? item
                 : getFirstDescendantOfElementBySelector(
                     item,
-                    vendor.selectors.registries.baby.result.itemUrl.selector,
+                    vendor?.selectors?.registries?.baby?.result?.itemUrl
+                      ?.selector,
                   );
 
               const url = itemUrl
                 ? getUrl(
                     itemUrl,
-                    vendor.selectors.registries.baby.result.itemUrl,
+                    vendor?.selectors?.registries?.baby?.result?.itemUrl,
                   )
                 : '';
 
@@ -527,6 +532,10 @@ const saveRegistryResultToDB = (data = {}) => {
 };
 
 const getElementBySelector = (selector = '') => {
+  if (!selector) {
+    return selector;
+  }
+
   return typeof selector === 'string'
     ? document.querySelector(selector)
     : Array.isArray(selector) &&
