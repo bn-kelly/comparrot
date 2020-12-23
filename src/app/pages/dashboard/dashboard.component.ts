@@ -201,6 +201,18 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  getDeals(user) {
+    if (!user) {
+      return;
+    }
+    this.dashboardService.getDeals(user).subscribe((offers: Offer[]) => {
+      this.offers = offers.sort((a, b) => b.created - a.created) || [];
+      if (!this.isLoggedIn && !this.offers.length && this.isExtension) {
+        this.router.navigate(['/login']);
+      }
+    });
+  }
+
   showExtension() {
     if (!window.chrome || !window.chrome.tabs) {
       return;
@@ -254,7 +266,11 @@ export class DashboardComponent implements OnInit {
           .update({ wishList: [] });
       }
 
-      this.getOffersByUser(user);
+      if (this.isExtension) {
+        this.getOffersByUser(user);
+      } else {
+        this.getDeals(user);
+      }
 
       const shouldShowExtension =
         user.extension && user.extension && user.extension.show;

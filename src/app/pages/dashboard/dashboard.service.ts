@@ -79,6 +79,17 @@ export class DashboardService {
       .pipe() as Observable<Offer[]>;
   }
 
+  getDeals(user) {
+    if (!user) {
+      return;
+    }
+
+    return this.afs
+      .collection('deals', ref => ref.orderBy('created', 'desc'))
+      .valueChanges()
+      .pipe() as Observable<Offer[]>;
+  }
+
   /**
    * Converting Data from Server to Chart compatible format
    * @returns {Chart.ChartData}
