@@ -103,14 +103,15 @@ export class AuthService {
 
     this.afAuth.onAuthStateChanged(user => {
       const isBot = navigator.webdriver;
-      if (!user) {
-        if (!isBot) {
-          this.anonymousLogin();
-        }
-      } else {
+      if (!user && !isBot) {
+        this.anonymousLogin();
+      }
+
+      if (user) {
         if (isBot) {
           auth().signOut();
         }
+
         this.uid = user.uid;
         this.getUserDocByUid(user.uid).then(doc => {
           const data = doc.data();
@@ -119,6 +120,7 @@ export class AuthService {
             this.currentUser = dataToUpdate;
 
             this.updateUserData(dataToUpdate);
+            this.router.navigate(['/']);
           }
         });
       }
