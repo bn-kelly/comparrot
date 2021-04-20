@@ -32,6 +32,10 @@ export class ToolbarUserComponent implements OnInit {
   }
 
   signOut() {
+    if (this.isExtension) {
+      window.localStorage.setItem('is-logged-out', 'true');
+    }
+
     this.auth.signOut().then(() => this.router.navigate(['/']));
     this.isOpen = false;
     this.userName = '';
