@@ -306,7 +306,10 @@ export class DashboardComponent implements OnInit {
           const iFrame = document.getElementById(
             'extension-iframe',
           ) as HTMLIFrameElement;
-          iFrame.contentWindow.postMessage('force-login', '*');
+
+          if (iFrame) {
+            iFrame.contentWindow.postMessage('force-login', '*');
+          }
         }
         this.getDeals(user);
       }
