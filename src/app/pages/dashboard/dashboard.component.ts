@@ -270,34 +270,27 @@ export class DashboardComponent implements OnInit {
       if (this.isExtension) {
         const isLoggedOut = window.localStorage.getItem('is-logged-out');
 
-        window.addEventListener('message', e => {
-          if (
-            e.data === 'force-login' &&
-            !this.isLoggedIn &&
-            isLoggedOut !== 'true'
-          ) {
-            window.chrome.tabs.getSelected(null, (tab: any) => {
-              window.chrome.tabs.sendMessage(
-                tab.id,
-                {
-                  action: 'get-user',
-                },
-                async (user: any) => {
-                  if (!user) {
-                    return;
-                  }
+        if (!this.isLoggedIn && isLoggedOut !== 'true') {
+          window.chrome.tabs.getSelected(null, (tab: any) => {
+            window.chrome.tabs.sendMessage(
+              tab.id,
+              {
+                action: 'get-user',
+              },
+              async (user: any) => {
+                if (!user) {
+                  return;
+                }
 
-                  const data: any = await this.auth.getCustomToken(user.uid);
+                const data: any = await this.auth.getCustomToken(user.uid);
 
-                  if (data.token) {
-                    window.localStorage.setItem('token', data.token);
-                    auth().signInWithCustomToken(data.token);
-                  }
-                },
-              );
-            });
-          }
-        });
+                if (data.token) {
+                  auth().signInWithCustomToken(data.token);
+                }
+              },
+            );
+          });
+        }
 
         this.getOffersByUser(user);
       } else {
