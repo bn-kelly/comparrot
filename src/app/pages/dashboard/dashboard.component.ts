@@ -1,4 +1,5 @@
 import * as firebase from 'firebase/app';
+import { auth } from 'firebase';
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
@@ -267,8 +268,42 @@ export class DashboardComponent implements OnInit {
       }
 
       if (this.isExtension) {
+        const isLoggedOut = window.localStorage.getItem('is-logged-out');
+
+        if (!this.isLoggedIn && isLoggedOut !== 'true') {
+          window.chrome.tabs.getSelected(null, (tab: any) => {
+            window.chrome.tabs.sendMessage(
+              tab.id,
+              {
+                action: 'get-user',
+              },
+              async (user: any) => {
+                if (!user) {
+                  return;
+                }
+
+                const data: any = await this.auth.getCustomToken(user.uid);
+
+                if (data.token) {
+                  auth().signInWithCustomToken(data.token);
+                }
+              },
+            );
+          });
+        }
+
         this.getOffersByUser(user);
       } else {
+        if (this.isLoggedIn) {
+          window.localStorage.setItem('user', JSON.stringify(user));
+          const iFrame = document.getElementById(
+            'extension-iframe',
+          ) as HTMLIFrameElement;
+
+          if (iFrame) {
+            iFrame.contentWindow.postMessage('force-login', '*');
+          }
+        }
         this.getDeals(user);
       }
 

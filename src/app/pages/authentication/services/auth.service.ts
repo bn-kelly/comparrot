@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { auth } from 'firebase';
@@ -88,6 +89,7 @@ export class AuthService {
     private afs: AngularFirestore,
     private router: Router,
     private notify: NotifyService,
+    private http: HttpClient,
   ) {
     this.user = this.afAuth.authState.pipe(
       switchMap(user => {
@@ -272,9 +274,15 @@ export class AuthService {
       this.afAuth.signOut().then(() => {
         // signed out
         this.anonymousLogin();
-        resolve();
+        resolve(true);
       });
     });
+  }
+
+  getCustomToken(uid: string) {
+    return this.http
+      .get(environment.cloudFunctions + '/createToken?uid=' + uid)
+      .toPromise();
   }
 
   private handleError(error: Error) {

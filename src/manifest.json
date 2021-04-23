@@ -4,7 +4,7 @@
   "description": "Comparrot Chrome extension",
   "manifest_version": 2,
   "content_security_policy": "script-src 'self' https://apis.google.com; object-src 'self'",
-  "permissions": ["tabs", "<all_urls>"],
+  "permissions": ["tabs", "storage", "<all_urls>"],
   "commands": {
     "show-iframe": {
       "suggested_key": {

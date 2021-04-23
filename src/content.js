@@ -754,6 +754,16 @@ const getNumericRating = (text = '', regex = new RegExp('')) => {
 const getNumberFromString = (price = '') =>
   Number(price.replace(/[^0-9\.-]+/g, '')) || 0;
 
+const getUser = () => {
+  const user = window.localStorage.getItem('user');
+
+  if (!user) {
+    return null;
+  }
+
+  return JSON.parse(user);
+};
+
 if (!location.ancestorOrigins.contains(extensionOrigin)) {
   const iframe = document.createElement('iframe');
   iframe.id = iframeID;
@@ -765,7 +775,7 @@ if (!location.ancestorOrigins.contains(extensionOrigin)) {
   }
 }
 
-chrome.extension.onMessage.addListener(function (msg) {
+chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
   switch (msg.action) {
     case 'toggle-show-iframe':
       toggleShowIframe();
@@ -785,6 +795,11 @@ chrome.extension.onMessage.addListener(function (msg) {
 
     case 'try-to-scrape-data':
       tryToScrapeDataByVendor(msg.url, msg.vendors);
+      break;
+
+    case 'get-user':
+      const user = getUser();
+      sendResponse(user);
       break;
 
     default:
