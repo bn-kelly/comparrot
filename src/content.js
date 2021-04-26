@@ -1,12 +1,9 @@
 const extensionOrigin = `chrome-extension://${chrome.runtime.id}`;
 
 /* Constant for messages */
-const ExtensionForceLogin = 'extension-force-login';
-const ExtensionForceLogout = 'extension-force-logout';
-// const SiteForceLogin = 'site-force-login';
-// const SiteForceLogout = 'site-force-logout';
-// const GetUser = 'get-user';
-// const GetCustomToken = 'get-custom-token';
+const SiteForceLogin = 'site-force-login';
+const SiteForceLogout = 'site-force-logout';
+const GetUserId = 'get-user-id';
 
 const iframeID = 'extension-iframe';
 const activeClassName = 'active';
@@ -540,7 +537,7 @@ const saveRegistryResultToDB = (data = {}) => {
 };
 
 const getElementBySelector = (selector = '') => {
-  if (!selector) {
+  if (!selector || selector === '') {
     return selector;
   }
 
@@ -549,7 +546,7 @@ const getElementBySelector = (selector = '') => {
     : Array.isArray(selector) &&
         selector
           .map(item => {
-            return typeof item === 'string'
+            return typeof item === 'string' && item !== ''
               ? document.querySelector(item)
               : null;
           })
@@ -763,34 +760,43 @@ const getNumberFromString = (price = '') =>
   Number(price.replace(/[^0-9\.-]+/g, '')) || 0;
 
 /**
- * Send a message to an iframe to login
- * @param {object} data
+ * Dispatch an event to make site to login
+ * @param {string} uid
  */
-const forceExtensionLogin = data => {
-  if (!data.detail) {
-    return;
-  }
-
-  chrome.runtime.sendMessage({
-    action: ExtensionForceLogin,
-    uid: data.detail,
-  });
+const dispatchSiteLogin = uid => {
+  postMessageToSite(SiteForceLogin, uid);
 };
 
 /**
- * Send a message to an iframe to logout
+ * Dispatch an event to make site to logout
  */
-const forceExtensionLogout = () => {
-  chrome.runtime.sendMessage({
-    action: ExtensionForceLogout,
-  });
+const dispatchSiteLogout = () => {
+  postMessageToSite(SiteForceLogout);
+};
+
+/**
+ * Dispatch an event to site
+ * @param {string} message
+ * @param {any} data
+ */
+const postMessageToSite = (message, data = null) => {
+  const event = new CustomEvent(message, { detail: data });
+  return window.dispatchEvent(event);
+};
+
+/**
+ * Get user id
+ */
+const getUserId = () => {
+  const uid = window.localStorage.getItem('uid');
+  return uid;
 };
 
 /**
  * Handle messages from background script and iframe
  * @param {string} msg
  */
-const handleMessage = msg => {
+const handleMessage = (msg, sender, sendResponse) => {
   switch (msg.action) {
     case 'toggle-show-iframe':
       toggleShowIframe();
@@ -812,6 +818,19 @@ const handleMessage = msg => {
       tryToScrapeDataByVendor(msg.url, msg.vendors);
       break;
 
+    case SiteForceLogin:
+      dispatchSiteLogin(msg.uid);
+      break;
+
+    case SiteForceLogout:
+      dispatchSiteLogout();
+      break;
+
+    case GetUserId:
+      const uid = getUserId();
+      sendResponse(uid);
+      break;
+
     default:
       break;
   }
@@ -823,8 +842,6 @@ const handleMessage = msg => {
 const initEvents = () => {
   chrome.extension.onMessage.addListener(handleMessage);
   document.body.addEventListener('click', hideIframe);
-  window.addEventListener(ExtensionForceLogin, forceExtensionLogin);
-  window.addEventListener(ExtensionForceLogout, forceExtensionLogout);
 };
 
 if (!location.ancestorOrigins.contains(extensionOrigin)) {

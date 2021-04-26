@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from '../../pages/authentication/services/auth.service';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { ExtensionService, SiteForceLogin } from '../../extension.service';
 
 @Component({
   selector: 'fury-oauth-component',
@@ -14,6 +15,7 @@ export class OAuthComponent {
     public afAuth: AngularFireAuth,
     public auth: AuthService,
     public router: Router,
+    private extension: ExtensionService,
   ) {}
 
   handleResponse = response => {
@@ -25,6 +27,17 @@ export class OAuthComponent {
       firstName: response.user.firstName || firstNameFromDisplayName || '',
       lastName: response.user.lastName || lastNameFromDisplayName || '',
     };
+
+    if (this.extension.isExtension) {
+      this.extension.sendMessage(
+        {
+          action: SiteForceLogin,
+          uid: data.uid,
+        },
+        null,
+      );
+    }
+
     this.auth.updateUserData(data);
     this.router.navigate(['/']);
   };

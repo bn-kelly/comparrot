@@ -16,11 +16,7 @@ import {
 import { RecentSalesWidgetOptions } from './widgets/recent-sales-widget/recent-sales-widget-options.interface';
 import { SalesSummaryWidgetOptions } from './widgets/sales-summary-widget/sales-summary-widget-options.interface';
 import { DashboardService } from './dashboard.service';
-import {
-  ExtensionService,
-  ExtensionForceLogin,
-  ExtensionForceLogout,
-} from '../../extension.service';
+import { ExtensionService, GetUserId } from '../../extension.service';
 import { ChartWidgetOptions } from '../../../@fury/shared/chart-widget/chart-widget-options.interface';
 import {
   AuthService,
@@ -239,6 +235,26 @@ export class DashboardComponent implements OnInit {
     this.salesData$ = this.dashboardService.getSales();
     this.auth.user.subscribe(user => {
       this.user = user;
+
+      if (this.extension.isExtension) {
+        this.extension.sendMessage(
+          {
+            action: GetUserId,
+          },
+          async uid => {
+            if (uid) {
+              const data: any = await this.auth.getCustomToken(uid);
+
+              if (data.token) {
+                this.auth.signInWithCustomToken(data.token);
+              }
+            } else {
+              this.auth.signOut();
+            }
+          },
+        );
+      }
+
       if (!user) {
         this.isLoggedIn = false;
         const isBot = navigator.webdriver;
@@ -273,36 +289,10 @@ export class DashboardComponent implements OnInit {
       }
 
       if (this.extension.isExtension) {
-        this.extension.handleMessage(
-          ExtensionForceLogin,
-          async ({ message }) => {
-            if (this.isLoggedIn || !message) {
-              return;
-            }
-
-            const data: any = await this.auth.getCustomToken(message.uid);
-
-            if (data.token) {
-              this.auth.signInWithCustomToken(data.token);
-            }
-          },
-        );
-
-        this.extension.handleMessage(ExtensionForceLogout, () => {
-          if (!this.isLoggedIn) {
-            return;
-          }
-
-          this.auth.signOut();
-        });
-
         this.getOffersByUser(user);
       } else {
         if (this.isLoggedIn) {
-          const event = new CustomEvent(ExtensionForceLogin, {
-            detail: user.uid,
-          });
-          window.dispatchEvent(event);
+          window.localStorage.setItem('uid', user.uid);
         }
         this.getDeals(user);
       }

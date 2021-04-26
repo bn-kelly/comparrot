@@ -44,9 +44,6 @@ export class ExtensionService {
   }
 }
 
-export const ExtensionForceLogin = 'extension-force-login';
-export const ExtensionForceLogout = 'extension-force-logout';
 export const SiteForceLogin = 'site-force-login';
 export const SiteForceLogout = 'site-force-logout';
-export const GetUser = 'get-user';
-export const GetCustomToken = 'get-custom-token';
+export const GetUserId = 'get-user-id';
