@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { AuthService } from '../../../pages/authentication/services/auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { ExtensionForceLogout } from '../../../extension.service';
 
 @Component({
   selector: 'fury-toolbar-user',
@@ -32,11 +33,11 @@ export class ToolbarUserComponent implements OnInit {
   }
 
   signOut() {
-    if (this.isExtension) {
-      window.localStorage.setItem('is-logged-out', 'true');
-    }
-
-    this.auth.signOut().then(() => this.router.navigate(['/']));
+    this.auth.signOut().then(() => {
+      const event = new CustomEvent(ExtensionForceLogout);
+      window.dispatchEvent(event);
+      this.router.navigate(['/']);
+    });
     this.isOpen = false;
     this.userName = '';
   }

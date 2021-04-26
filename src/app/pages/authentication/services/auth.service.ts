@@ -285,6 +285,10 @@ export class AuthService {
       .toPromise();
   }
 
+  signInWithCustomToken(token: string) {
+    auth().signInWithCustomToken(token);
+  }
+
   private handleError(error: Error) {
     this.notify.update(error.message, 'error');
     return error;

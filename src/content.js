@@ -1,5 +1,13 @@
 const extensionOrigin = `chrome-extension://${chrome.runtime.id}`;
 
+/* Constant for messages */
+const ExtensionForceLogin = 'extension-force-login';
+const ExtensionForceLogout = 'extension-force-logout';
+// const SiteForceLogin = 'site-force-login';
+// const SiteForceLogout = 'site-force-logout';
+// const GetUser = 'get-user';
+// const GetCustomToken = 'get-custom-token';
+
 const iframeID = 'extension-iframe';
 const activeClassName = 'active';
 const inactiveClassName = 'inactive';
@@ -754,28 +762,35 @@ const getNumericRating = (text = '', regex = new RegExp('')) => {
 const getNumberFromString = (price = '') =>
   Number(price.replace(/[^0-9\.-]+/g, '')) || 0;
 
-const getUser = () => {
-  const user = window.localStorage.getItem('user');
-
-  if (!user) {
-    return null;
+/**
+ * Send a message to an iframe to login
+ * @param {object} data
+ */
+const forceExtensionLogin = data => {
+  if (!data.detail) {
+    return;
   }
 
-  return JSON.parse(user);
+  chrome.runtime.sendMessage({
+    action: ExtensionForceLogin,
+    uid: data.detail,
+  });
 };
 
-if (!location.ancestorOrigins.contains(extensionOrigin)) {
-  const iframe = document.createElement('iframe');
-  iframe.id = iframeID;
-  // Must be declared at web_accessible_resources in manifest.json
-  iframe.src = chrome.runtime.getURL('index.html');
+/**
+ * Send a message to an iframe to logout
+ */
+const forceExtensionLogout = () => {
+  chrome.runtime.sendMessage({
+    action: ExtensionForceLogout,
+  });
+};
 
-  if (!inIframe()) {
-    document.body.appendChild(iframe);
-  }
-}
-
-chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
+/**
+ * Handle messages from background script and iframe
+ * @param {string} msg
+ */
+const handleMessage = msg => {
   switch (msg.action) {
     case 'toggle-show-iframe':
       toggleShowIframe();
@@ -797,14 +812,29 @@ chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
       tryToScrapeDataByVendor(msg.url, msg.vendors);
       break;
 
-    case 'get-user':
-      const user = getUser();
-      sendResponse(user);
-      break;
-
     default:
       break;
   }
-});
+};
 
-document.body.addEventListener('click', hideIframe);
+/**
+ * Initialize event handlers
+ */
+const initEvents = () => {
+  chrome.extension.onMessage.addListener(handleMessage);
+  document.body.addEventListener('click', hideIframe);
+  window.addEventListener(ExtensionForceLogin, forceExtensionLogin);
+  window.addEventListener(ExtensionForceLogout, forceExtensionLogout);
+};
+
+if (!location.ancestorOrigins.contains(extensionOrigin)) {
+  const iframe = document.createElement('iframe');
+  iframe.id = iframeID;
+  // Must be declared at web_accessible_resources in manifest.json
+  iframe.src = chrome.runtime.getURL('index.html');
+
+  if (!inIframe()) {
+    document.body.appendChild(iframe);
+    initEvents();
+  }
+}
