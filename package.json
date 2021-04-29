@@ -12,11 +12,6 @@
     "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
     "crx": "crx3 -p comparrot.pem ./dist -o comparrot.crx"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged --relative"
-    }
-  },
   "lint-staged": {
     "*.{js,ts}": [
       "npm run lint",
