@@ -62,7 +62,7 @@ const checkIsInWhitelisted = (whiteListedUrls, cb, currentUrl = null) => {
   };
   if(currentUrl === null) {
       if (typeof chrome.tabs !== "undefined") {
-          chrome.tabs.onActivated.addListener(function (activeInfo) {
+          chrome.tabs.onActivated.addListener(function () {
               chrome.tabs.query({
                   active: true,
                   currentWindow: true
@@ -71,7 +71,7 @@ const checkIsInWhitelisted = (whiteListedUrls, cb, currentUrl = null) => {
               });
           });
           chrome.tabs.onUpdated.addListener(
-              function (tabId, changeInfo, tab) {
+              function (tabId, changeInfo) {
                   if (changeInfo.status === 'loading' && changeInfo.url) {
                       chrome.tabs.query({
                           active: true,
