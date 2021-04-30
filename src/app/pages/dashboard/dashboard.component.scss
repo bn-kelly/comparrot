@@ -21,6 +21,9 @@
         line-height: 30px;
       }
     }
+    .mat-card {
+      box-shadow: none;
+    }
   }
 }
 
@@ -191,9 +194,9 @@
 
 
 .landing-ext-area{
-  width: 570px;
+  width: auto;
   height: auto;
-  padding:40px;
+  padding:10px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   // -webkit-border-radius:8px;
@@ -211,7 +214,7 @@
     padding: 20px;
     .landng-wlcme-title{
       width: 100%;;
-      font-size: 60px;
+      font-size: 25px;
       line-height: 1.2;
       font-family: Eina03,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
       font-weight: 900;
@@ -220,17 +223,17 @@
     }
   }
   .lndng-content-area{
-    padding: 20px;
+    padding: 10px;
     h3{
       color: #004aad;
       font-weight: bold;
-      font-size: 20px;
+      font-size: 16px;
       display: flex;
       align-items: center;
     }
     p{
       color: gray;
-      font-size: 20px;
+      font-size: 16px;
       font-weight: bold;
       line-height: 1.7;
       margin-bottom: 20px;
@@ -252,7 +255,7 @@
       }
     }
     img{
-      width: 30px;
+      width: 20px;
       height: auto;
     }
   }
