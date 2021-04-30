@@ -541,7 +541,7 @@ const getElementBySelector = (selector = '') => {
     : Array.isArray(selector) &&
         selector
           .map(item => {
-            return typeof item === 'string'
+            return typeof item === 'string' && item !== ''
               ? document.querySelector(item)
               : null;
           })
