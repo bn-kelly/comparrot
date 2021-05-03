@@ -11,11 +11,17 @@
     fxLayout.gt-lg="row"
   >
     <div *ngIf="!offers || (!!offers && !offers.length); else offerList">
-      <mat-card>
-        <h4>
-          Welcome! Start shopping. {{ projectName }} will display search results
-          here as you begin shopping 😊
-        </h4>
+      <mat-card class="landing-ext">
+        <div class="landing-ext-area">
+          <div class="landng-ext-header">
+            <div class="landng-welcome-title">Welcome <br>To {{ projectName }}!</div>
+          </div>
+          <div class="landng-content-area">
+            <h3>Look for the blue &nbsp; <img src=".\assets\img\icons\extension-active-128.png" alt="Comparrot logo"> &nbsp; to save</h3>
+            <p>If you're shopping on a site and the <img src=".\assets\img\icons\extension-active-128.png" alt="Comparrot logo"> is blue, that means you're on a site where Comparrot automatically finds the cheapest price.</p>
+            <p>If the <img src=".\assets\img\icons\extension-inactive-128.png" alt="Comparrot logo"> is gray, that means you're on a site that is unsupported.</p>
+          </div>
+        </div>
       </mat-card>
     </div>
     <ng-template #offerList>

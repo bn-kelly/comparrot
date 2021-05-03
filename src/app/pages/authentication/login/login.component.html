@@ -8,7 +8,7 @@
       <div
         class="logo"
         [routerLink]="['/']"
-        [style.background-image]="sanitizer.bypassSecurityTrustStyle('url(' + logoUrl + ')')"
+        [style.background-image]="logoUrl !== '' ? sanitizer.bypassSecurityTrustStyle('url(' + logoUrl + ')'): logoUrl"
       ></div>
     </div>
     <form
