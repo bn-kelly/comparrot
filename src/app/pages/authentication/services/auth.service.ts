@@ -122,7 +122,6 @@ export class AuthService {
           if (data) {
             const dataToUpdate = user.isAnonymous ? user : { ...user, ...data };
             this.currentUser = dataToUpdate;
-
             this.updateUserData(dataToUpdate);
             this.router.navigate(['/']);
           }
@@ -298,7 +297,7 @@ export class AuthService {
   }
 
   signInWithCustomToken(token: string) {
-    auth().signInWithCustomToken(token);
+    this.afAuth.signInWithCustomToken(token);
   }
 
   private handleError(error: Error) {
