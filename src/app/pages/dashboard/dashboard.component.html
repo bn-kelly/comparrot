@@ -10,8 +10,8 @@
     fxLayout="column"
     fxLayout.gt-lg="row"
   >
-    <div *ngIf="!offers || (!!offers && !offers.length); else offerList">
-      <mat-card class="landing-ext">
+    <div *ngIf="!offers || !offers.length; else offerList">
+      <mat-card *ngIf="offers" class="landing-ext">
         <div class="landing-ext-area">
           <div class="landng-ext-header">
             <div class="landng-welcome-title">Welcome <br>To {{ projectName }}!</div>
