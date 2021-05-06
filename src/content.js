@@ -1,5 +1,10 @@
 const extensionOrigin = `chrome-extension://${chrome.runtime.id}`;
 
+/* Constant for messages */
+const SiteForceLogin = 'site-force-login';
+const SiteForceLogout = 'site-force-logout';
+const GetUserId = 'get-user-id';
+
 const iframeID = 'extension-iframe';
 const activeClassName = 'active';
 const inactiveClassName = 'inactive';
@@ -532,7 +537,7 @@ const saveRegistryResultToDB = (data = {}) => {
 };
 
 const getElementBySelector = (selector = '') => {
-  if (!selector) {
+  if (!selector || selector === '') {
     return selector;
   }
 
@@ -754,28 +759,44 @@ const getNumericRating = (text = '', regex = new RegExp('')) => {
 const getNumberFromString = (price = '') =>
   Number(price.replace(/[^0-9\.-]+/g, '')) || 0;
 
-const getUser = () => {
-  const user = window.localStorage.getItem('user');
-
-  if (!user) {
-    return null;
-  }
-
-  return JSON.parse(user);
+/**
+ * Dispatch an event to make site to login
+ * @param {string} uid
+ */
+const dispatchSiteLogin = uid => {
+  postMessageToSite(SiteForceLogin, uid);
 };
 
-if (!location.ancestorOrigins.contains(extensionOrigin)) {
-  const iframe = document.createElement('iframe');
-  iframe.id = iframeID;
-  // Must be declared at web_accessible_resources in manifest.json
-  iframe.src = chrome.runtime.getURL('index.html');
+/**
+ * Dispatch an event to make site to logout
+ */
+const dispatchSiteLogout = () => {
+  postMessageToSite(SiteForceLogout);
+};
 
-  if (!inIframe()) {
-    document.body.appendChild(iframe);
-  }
-}
+/**
+ * Dispatch an event to site
+ * @param {string} message
+ * @param {any} data
+ */
+const postMessageToSite = (message, data = null) => {
+  const event = new CustomEvent(message, { detail: data });
+  return window.dispatchEvent(event);
+};
 
-chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
+/**
+ * Get user id
+ */
+const getUserId = () => {
+  const uid = window.localStorage.getItem('uid');
+  return uid;
+};
+
+/**
+ * Handle messages from background script and iframe
+ * @param {string} msg
+ */
+const handleMessage = (msg, sender, sendResponse) => {
   switch (msg.action) {
     case 'toggle-show-iframe':
       toggleShowIframe();
@@ -797,14 +818,40 @@ chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
       tryToScrapeDataByVendor(msg.url, msg.vendors);
       break;
 
-    case 'get-user':
-      const user = getUser();
-      sendResponse(user);
+    case SiteForceLogin:
+      dispatchSiteLogin(msg.uid);
+      break;
+
+    case SiteForceLogout:
+      dispatchSiteLogout();
+      break;
+
+    case GetUserId:
+      const uid = getUserId();
+      sendResponse(uid);
       break;
 
     default:
       break;
   }
-});
+};
 
-document.body.addEventListener('click', hideIframe);
+/**
+ * Initialize event handlers
+ */
+const initEvents = () => {
+  chrome.extension.onMessage.addListener(handleMessage);
+  document.body.addEventListener('click', hideIframe);
+};
+
+if (!location.ancestorOrigins.contains(extensionOrigin)) {
+  const iframe = document.createElement('iframe');
+  iframe.id = iframeID;
+  // Must be declared at web_accessible_resources in manifest.json
+  iframe.src = chrome.runtime.getURL('index.html');
+
+  if (!inIframe()) {
+    document.body.appendChild(iframe);
+    initEvents();
+  }
+}

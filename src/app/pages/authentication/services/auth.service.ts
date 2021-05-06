@@ -13,6 +13,7 @@ import { NotifyService } from './notify.service';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
+import { ExtensionService, SiteForceLogin } from '../../../extension.service';
 
 export interface User {
   displayName?: string;
@@ -90,6 +91,7 @@ export class AuthService {
     private router: Router,
     private notify: NotifyService,
     private http: HttpClient,
+    private extension: ExtensionService,
   ) {
     this.user = this.afAuth.authState.pipe(
       switchMap(user => {
@@ -120,7 +122,6 @@ export class AuthService {
           if (data) {
             const dataToUpdate = user.isAnonymous ? user : { ...user, ...data };
             this.currentUser = dataToUpdate;
-
             this.updateUserData(dataToUpdate);
             this.router.navigate(['/']);
           }
@@ -231,6 +232,16 @@ export class AuthService {
             return;
           }
           if (result.user.emailVerified) {
+            if (this.extension.isExtension) {
+              this.extension.sendMessage(
+                {
+                  action: SiteForceLogin,
+                  uid: result.user.uid,
+                },
+                null,
+              );
+            }
+
             this.notify.update('Welcome back!', 'success');
             this.router.navigate(['/']);
           } else {
@@ -283,6 +294,10 @@ export class AuthService {
     return this.http
       .get(environment.cloudFunctions + '/createToken?uid=' + uid)
       .toPromise();
+  }
+
+  signInWithCustomToken(token: string) {
+    this.afAuth.signInWithCustomToken(token);
   }
 
   private handleError(error: Error) {

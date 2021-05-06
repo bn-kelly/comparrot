@@ -1,5 +1,4 @@
 import * as firebase from 'firebase/app';
-import { auth } from 'firebase';
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
@@ -17,6 +16,7 @@ import {
 import { RecentSalesWidgetOptions } from './widgets/recent-sales-widget/recent-sales-widget-options.interface';
 import { SalesSummaryWidgetOptions } from './widgets/sales-summary-widget/sales-summary-widget-options.interface';
 import { DashboardService } from './dashboard.service';
+import { ExtensionService, GetUserId } from '../../extension.service';
 import { ChartWidgetOptions } from '../../../@fury/shared/chart-widget/chart-widget-options.interface';
 import {
   AuthService,
@@ -138,6 +138,7 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private auth: AuthService,
     private afs: AngularFirestore,
+    private extension: ExtensionService,
   ) {
     /**
      * Edge wrong drawing fix
@@ -234,6 +235,26 @@ export class DashboardComponent implements OnInit {
     this.salesData$ = this.dashboardService.getSales();
     this.auth.user.subscribe(user => {
       this.user = user;
+
+      if (this.extension.isExtension) {
+        this.extension.sendMessage(
+          {
+            action: GetUserId,
+          },
+          async uid => {
+            if (uid) {
+              const data: any = await this.auth.getCustomToken(uid);
+
+              if (data.token) {
+                this.auth.signInWithCustomToken(data.token);
+              }
+            } else {
+              this.auth.signOut();
+            }
+          },
+        );
+      }
+
       if (!user) {
         this.isLoggedIn = false;
         const isBot = navigator.webdriver;
@@ -267,42 +288,11 @@ export class DashboardComponent implements OnInit {
           .update({ wishList: [] });
       }
 
-      if (this.isExtension) {
-        const isLoggedOut = window.localStorage.getItem('is-logged-out');
-
-        if (!this.isLoggedIn && isLoggedOut !== 'true') {
-          window.chrome.tabs.getSelected(null, (tab: any) => {
-            window.chrome.tabs.sendMessage(
-              tab.id,
-              {
-                action: 'get-user',
-              },
-              async (user: any) => {
-                if (!user) {
-                  return;
-                }
-
-                const data: any = await this.auth.getCustomToken(user.uid);
-
-                if (data.token) {
-                  auth().signInWithCustomToken(data.token);
-                }
-              },
-            );
-          });
-        }
-
+      if (this.extension.isExtension) {
         this.getOffersByUser(user);
       } else {
         if (this.isLoggedIn) {
-          window.localStorage.setItem('user', JSON.stringify(user));
-          const iFrame = document.getElementById(
-            'extension-iframe',
-          ) as HTMLIFrameElement;
-
-          if (iFrame) {
-            iFrame.contentWindow.postMessage('force-login', '*');
-          }
+          window.localStorage.setItem('uid', user.uid);
         }
         this.getDeals(user);
       }
