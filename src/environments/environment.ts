@@ -16,5 +16,7 @@ export const environment = {
     projectId: 'botsparked',
     storageBucket: 'botsparked.appspot.com',
     messagingSenderId: '899772049124',
+    appId: '1:899772049124:web:25fbb72d06d4e05ab76ef1',
+    measurementId: 'G-8L7SE2P7GX',
   },
 };
