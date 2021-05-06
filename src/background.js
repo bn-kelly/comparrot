@@ -1,6 +1,82 @@
-chrome.browserAction.setPopup({
-  popup: '',
-});
+const LogoActivePath = 'assets/img/icons/extension-active-128.png';
+const LogoInactivePath = 'assets/img/icons/extension-inactive-128.png';
+const CheckVendorsInterval = 60 * 1000;
+const BaseUrl = 'https://us-central1-botsparked.cloudfunctions.net';
+
+/**
+ * Return active tab
+ */
+const getActiveTab = async () => {
+  return new Promise(resolve => {
+    chrome.tabs.query(
+      {
+        active: true,
+        currentWindow: true,
+      },
+      tabs => {
+        resolve(tabs[0]);
+      },
+    );
+  });
+};
+
+/**
+ * Set icon against a url
+ * @param {string} url
+ */
+const setIcon = url => {
+  chrome.storage.local.get(['vendors'], result => {
+    const vendors = result['vendors'];
+    if (!Array.isArray(vendors)) {
+      return;
+    }
+
+    const regexes = [/\\*\.?joincomparrot\.com\\*/];
+
+    for (const vendor of vendors) {
+      if (!vendor) {
+        continue;
+      }
+
+      const name = vendor.split('.')[0];
+      if (name === '') {
+        continue;
+      }
+
+      const regex = new RegExp(`\\\\*\\\.${name}\\\.\\\\*`);
+      regexes.push(regex);
+    }
+
+    const isSupported =
+      regexes.filter(regex => {
+        return regex.test(url);
+      }).length > 0;
+
+    if (isSupported) {
+      chrome.browserAction.setIcon({ path: LogoActivePath });
+    } else {
+      chrome.browserAction.setIcon({ path: LogoInactivePath });
+    }
+  });
+};
+
+/**
+ * Sync vendors between extension and database
+ */
+const syncVendors = () => {
+  fetch(`${BaseUrl}/getVendors`)
+    .then(response => response.json())
+    .then(async data => {
+      chrome.storage.local.set({
+        vendors: data.vendors,
+      });
+
+      const activeTab = await getActiveTab();
+      if (activeTab) {
+        setIcon(activeTab.url);
+      }
+    });
+};
 
 chrome.browserAction.onClicked.addListener(function (tab) {
   chrome.tabs.sendMessage(tab.id, {
@@ -36,126 +112,23 @@ chrome.runtime.onInstalled.addListener(function () {
   return false;
 });
 
-// Will change the logo disable/enable on supported sites
-const checkIsInWhitelisted = (whiteListedUrls, cb, currentUrl = null) => {
-  const matcher = (regex, str) => regex.test(str);
-  const examineCurrentUrl = strCurrentUrl => {
-    if (strCurrentUrl) {
-      let currentUrl = new URL(strCurrentUrl);
-      let currentHostName = currentUrl.hostname;
-      if (Array.isArray(whiteListedUrls)) {
-        const found = whiteListedUrls.filter(regEx => {
-          return matcher(regEx, currentHostName);
-        });
-        cb(found.length > 0);
-        return found.length > 0;
-      } else {
-        const found = matcher(whiteListedUrls, currentHostName);
-        cb(!!found);
-        return !!found;
-      }
-    } else {
-      cb(false);
-      return false;
-    }
-  };
-  if (currentUrl === null) {
-    if (typeof chrome.tabs !== 'undefined') {
-      chrome.tabs.onActivated.addListener(function () {
-        chrome.tabs.query(
-          {
-            active: true,
-            currentWindow: true,
-          },
-          function (tabs) {
-            examineCurrentUrl(tabs[0].url);
-          },
-        );
-      });
-      chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
-        if (changeInfo.status === 'loading' && changeInfo.url) {
-          chrome.tabs.query(
-            {
-              active: true,
-              currentWindow: true,
-            },
-            function (currentTabs) {
-              if (currentTabs[0].id === tabId) {
-                examineCurrentUrl(changeInfo.url);
-              }
-            },
-          );
-        }
-      });
-    } else {
-      examineCurrentUrl(window.location.href);
-    }
-  } else {
-    return examineCurrentUrl(currentUrl);
+chrome.tabs.onActivated.addListener(async function () {
+  const activeTab = await getActiveTab();
+  if (activeTab) {
+    setIcon(activeTab.url);
   }
-};
+});
 
-const icon = () => {
-  const supportedSites = [
-    /\\*\.6pm\.\\*!/,
-    /\\*\.abercrombie\.\\*!/,
-    /\\*\.acehardware\.\\*!/,
-    /\\*\.adidas\.\\*!/,
-    /\\*\.albertsons\.\\*!/,
-    /\\*\.allmodern\.\\*!/,
-    /\\*\.amazon\.\\*/,
-    /\\*\.apple\.\\*!/,
-    /\\*\.autozone\.\\*!/,
-    /\\*\.bedbathandbeyond\.\\*!/,
-    /\\*\.bestbuy\.\\*!/,
-    /\\*\.biglots\.\\*!/,
-    /\\*\.bloomingdales\.\\*!/,
-    /\\*\.costco\.\\*!/,
-    /\\*\.dickssportinggoods\.\\*!/,
-    /\\*\.ebay\.\\*!/,
-    /\\*\.finishline\.\\*!/,
-    /\\*\.footlocker\.\\*!/,
-    /\\*\.gamestop\.\\*!/,
-    /\\*\.gap\.\\*!/,
-    /\\*\.goat\.\\*!/,
-    /\\*\.hm\.\\*!/,
-    /\\*\.hobbylobby\.\\*!/,
-    /\\*\.homedepot\.\\*!/,
-    /\\*\.jcpenney\.\\*!/,
-    /\\*\.?joincomparrot\.com\\*/,
-    /\\*\.kohls\.\\*!/,
-    /\\*\.lowes\.\\*!/,
-    /\\*\.macys\.\\*!/,
-    /\\*\.menards\.\\*!/,
-    /\\*\.nike\.\\*!/,
-    /\\*\.nordstrom\.\\*!/,
-    /\\*\.nordstromrack\.\\*!/,
-    /\\*\.officedepot\.\\*!/,
-    /\\*\.petsmart\.\\*!/,
-    /\\*\.sears\.\\*!/,
-    /\\*\.sephora\.\\*!/,
-    /\\*\.shopify\.\\*!/,
-    /\\*\.shopify-v2\.\\*!/,
-    /\\*\.shopify-v3\.\\*!/,
-    /\\*\.staples\.\\*!/,
-    /\\*\.stockx\.\\*!/,
-    /\\*\.target\.\\*!/,
-    /\\*\.tjmaxx\.\\*!/,
-    /\\*\.ulta\.\\*!/,
-    /\\*\.walmart\.\\*!/,
-    /\\*\.wayfair\.\\*!/,
-    /\\*\.zappos\.\\*!/,
-  ];
-  const logoActivePath = 'assets/img/icons/extension-active-128.png';
-  const logoInactivePath = 'assets/img/icons/extension-inactive-128.png';
-  chrome.browserAction.setIcon({ path: logoInactivePath });
-
-  checkIsInWhitelisted(supportedSites, isSupported => {
-    if (isSupported) {
-      chrome.browserAction.setIcon({ path: logoActivePath });
-    } else {
-      chrome.browserAction.setIcon({ path: logoInactivePath });
+chrome.tabs.onUpdated.addListener(async function (tabId, changeInfo) {
+  if (changeInfo.url) {
+    const activeTab = await getActiveTab();
+    if (activeTab && activeTab.id === tabId) {
+      setIcon(changeInfo.url);
     }
-  });
-};
-icon();
+  }
+});
+
+chrome.browserAction.setPopup({ popup: '' });
+chrome.browserAction.setIcon({ path: LogoInactivePath });
+syncVendors();
+setInterval(syncVendors, CheckVendorsInterval);
