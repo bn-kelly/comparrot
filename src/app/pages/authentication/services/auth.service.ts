@@ -233,6 +233,7 @@ export class AuthService {
           }
           if (result.user.emailVerified) {
             if (this.extension.isExtension) {
+              window.localStorage.setItem('uid', result.user.uid);
               this.extension.sendMessage(
                 {
                   action: SiteForceLogin,
@@ -273,7 +274,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return this.authState !== null;
+    return this.authState !== null && !this.currentUser.isAnonymous;
   }
 
   isEmailVerified(): boolean {

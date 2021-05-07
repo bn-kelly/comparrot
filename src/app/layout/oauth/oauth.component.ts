@@ -29,6 +29,7 @@ export class OAuthComponent {
     };
 
     if (this.extension.isExtension) {
+      window.localStorage.setItem('uid', data.uid);
       this.extension.sendMessage(
         {
           action: SiteForceLogin,

@@ -46,4 +46,4 @@ export class ExtensionService {
 
 export const SiteForceLogin = 'site-force-login';
 export const SiteForceLogout = 'site-force-logout';
-export const GetUserId = 'get-user-id';
+export const SetUserId = 'set-user-id';

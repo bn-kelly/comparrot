@@ -36,6 +36,7 @@ export class ToolbarUserComponent implements OnInit {
   signOut() {
     this.auth.signOut().then(() => {
       if (this.extension.isExtension) {
+        window.localStorage.setItem('uid', null);
         this.extension.sendMessage(
           {
             action: SiteForceLogout,

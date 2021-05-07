@@ -16,7 +16,7 @@ import {
 import { RecentSalesWidgetOptions } from './widgets/recent-sales-widget/recent-sales-widget-options.interface';
 import { SalesSummaryWidgetOptions } from './widgets/sales-summary-widget/sales-summary-widget-options.interface';
 import { DashboardService } from './dashboard.service';
-import { ExtensionService, GetUserId } from '../../extension.service';
+import { ExtensionService, SetUserId } from '../../extension.service';
 import { ChartWidgetOptions } from '../../../@fury/shared/chart-widget/chart-widget-options.interface';
 import {
   AuthService,
@@ -227,32 +227,41 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  async signInWithUid() {
+    const uid = window.localStorage.getItem('uid');
+
+    if (!uid) {
+      return;
+    }
+
+    if (uid === 'null' && this.auth.isAuthenticated()) {
+      this.auth.signOut();
+      return;
+    }
+
+    if (uid !== 'null' && !this.auth.isAuthenticated()) {
+      const data: any = await this.auth.getCustomToken(uid);
+
+      if (data.token) {
+        this.auth.signInWithCustomToken(data.token);
+      }
+    }
+  }
+
   /**
    * Everything implemented here is purely for Demo-Demonstration and can be removed and replaced with your implementation
    */
   ngOnInit() {
     this.isExtension = !!window.chrome && !!window.chrome.extension;
     this.salesData$ = this.dashboardService.getSales();
-    this.auth.user.subscribe(user => {
+    this.auth.user.subscribe(async user => {
       this.user = user;
 
       if (this.extension.isExtension) {
-        this.extension.sendMessage(
-          {
-            action: GetUserId,
-          },
-          async uid => {
-            if (uid) {
-              const data: any = await this.auth.getCustomToken(uid);
-
-              if (data.token) {
-                this.auth.signInWithCustomToken(data.token);
-              }
-            } else {
-              this.auth.signOut();
-            }
-          },
-        );
+        this.signInWithUid();
+        this.extension.handleMessage(SetUserId, message => {
+          window.localStorage.setItem('uid', message.uid);
+        });
       }
 
       if (!user) {

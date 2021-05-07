@@ -3,7 +3,7 @@ const extensionOrigin = `chrome-extension://${chrome.runtime.id}`;
 /* Constant for messages */
 const SiteForceLogin = 'site-force-login';
 const SiteForceLogout = 'site-force-logout';
-const GetUserId = 'get-user-id';
+const SetUserId = 'set-user-id';
 
 const iframeID = 'extension-iframe';
 const activeClassName = 'active';
@@ -785,18 +785,20 @@ const postMessageToSite = (message, data = null) => {
 };
 
 /**
- * Get user id
+ * Send a message to chrome extension to set user id
  */
-const getUserId = () => {
-  const uid = window.localStorage.getItem('uid');
-  return uid;
+const setUserId = data => {
+  chrome.runtime.sendMessage({
+    action: SetUserId,
+    uid: data.detail,
+  });
 };
 
 /**
  * Handle messages from background script and iframe
  * @param {string} msg
  */
-const handleMessage = (msg, sender, sendResponse) => {
+const handleMessage = msg => {
   switch (msg.action) {
     case 'toggle-show-iframe':
       toggleShowIframe();
@@ -826,11 +828,6 @@ const handleMessage = (msg, sender, sendResponse) => {
       dispatchSiteLogout();
       break;
 
-    case GetUserId:
-      const uid = getUserId();
-      sendResponse(uid);
-      break;
-
     default:
       break;
   }
@@ -842,6 +839,7 @@ const handleMessage = (msg, sender, sendResponse) => {
 const initEvents = () => {
   chrome.extension.onMessage.addListener(handleMessage);
   document.body.addEventListener('click', hideIframe);
+  window.addEventListener(SetUserId, setUserId);
 };
 
 if (!location.ancestorOrigins.contains(extensionOrigin)) {
