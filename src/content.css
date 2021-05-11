@@ -1,15 +1,16 @@
 iframe#extension-iframe {
-  position: fixed;
-  right: 5px;
+  position: fixed !important;
+  right: 5px !important;
   top: -100%;
-  display: block;
-  width: 25%;
-  min-width: 342px;
-  height: calc(100% - 10px);
-  z-index: 100000;
-  border: 0;
-  border-radius: 24px;
-  will-change: transform, opacity, top;
+  display: block !important;
+  width: 25% !important;
+  min-width: 342px !important;
+  height: calc(100% - 10px) !important;
+  z-index: 100000 !important;
+  border: 0 !important;
+  border-radius: 24px !important;
+  will-change: transform, opacity, top !important;
+  opacity: 1 !important;
 }
 
 iframe#extension-iframe.active {

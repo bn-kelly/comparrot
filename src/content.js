@@ -833,6 +833,13 @@ const handleMessage = msg => {
   }
 };
 
+const addIframe = () => {
+  const iframe = document.createElement('iframe');
+  iframe.id = iframeID;
+  iframe.src = chrome.runtime.getURL('index.html');
+  document.body.appendChild(iframe);
+};
+
 /**
  * Initialize event handlers
  */
@@ -842,14 +849,7 @@ const initEvents = () => {
   window.addEventListener(SetUserId, setUserId);
 };
 
-if (!location.ancestorOrigins.contains(extensionOrigin)) {
-  const iframe = document.createElement('iframe');
-  iframe.id = iframeID;
-  // Must be declared at web_accessible_resources in manifest.json
-  iframe.src = chrome.runtime.getURL('index.html');
-
-  if (!inIframe()) {
-    document.body.appendChild(iframe);
-    initEvents();
-  }
+if (!location.ancestorOrigins.contains(extensionOrigin) && !inIframe()) {
+  addIframe();
+  initEvents();
 }
