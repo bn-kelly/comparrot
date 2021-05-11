@@ -840,6 +840,21 @@ const addIframe = () => {
   document.body.appendChild(iframe);
 };
 
+const replaceIframe = () => {
+  const observer = new MutationObserver(() => {
+    const iframe = document.querySelector('#minicartIFrame');
+    if (iframe) {
+      iframe.id = iframeID;
+      iframe.src = chrome.runtime.getURL('index.html');
+      observer.disconnect();
+    }
+  });
+  observer.observe(document.body, {
+    subtree: true,
+    childList: true,
+  });
+};
+
 /**
  * Initialize event handlers
  */
@@ -852,4 +867,10 @@ const initEvents = () => {
 if (!location.ancestorOrigins.contains(extensionOrigin) && !inIframe()) {
   addIframe();
   initEvents();
+
+  // Homedepot prevent injecting iframe
+  // Cause of this reason, replace site original iframe with extension iframe
+  if (location.href.includes('www.homedepot.com')) {
+    replaceIframe();
+  }
 }
