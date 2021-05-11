@@ -31,6 +31,10 @@ iframe#extension-iframe.expanded {
   width: calc(100% - 10px);
 }
 
+.exp_banner {
+  display: none !important;
+}
+
 @media screen and (min-width: 960px) {
   iframe#extension-iframe.expanded {
     width: calc(50% - 10px);
