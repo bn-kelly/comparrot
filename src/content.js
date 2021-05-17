@@ -1,10 +1,7 @@
 const extensionOrigin = `chrome-extension://${chrome.runtime.id}`;
-
-/* Constant for messages */
 const SiteForceLogin = 'site-force-login';
 const SiteForceLogout = 'site-force-logout';
 const SetUserId = 'set-user-id';
-
 const iframeID = 'extension-iframe';
 const activeClassName = 'active';
 const inactiveClassName = 'inactive';
@@ -833,6 +830,9 @@ const handleMessage = msg => {
   }
 };
 
+/**
+ * Create an iframe to show the extension UI
+ */
 const addIframe = () => {
   const iframe = document.createElement('iframe');
   iframe.id = iframeID;
@@ -840,6 +840,9 @@ const addIframe = () => {
   document.body.appendChild(iframe);
 };
 
+/**
+ * Replace an iframe to show the extension UI
+ */
 const replaceIframe = () => {
   const observer = new MutationObserver(() => {
     const iframe = document.querySelector('#minicartIFrame');
