@@ -87,9 +87,7 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
         vendor?.selectors?.product?.title,
       );
 
-      const shouldSaveProductToDB = !!productTitleElement;
-
-      if (shouldSaveProductToDB) {
+      if (!!productTitleElement) {
         const productPriceElement = getElementBySelector(
           vendor?.selectors?.product?.price,
         );
@@ -601,6 +599,7 @@ const getAttribute = (element = Element, data = {}) => {
   if (!element) {
     return '';
   }
+
   if (!!data.attribute && data.attribute === 'regex') {
     const regexRule = 'igm';
     if (typeof data.regex === 'string') {
