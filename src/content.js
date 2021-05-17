@@ -148,15 +148,8 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
           created: Date.now(),
         };
 
-        const vendorsData = vendors.reduce((result, vendorItem) => {
-          result[vendorItem.name] =
-            vendorItem.name === vendor.name ? { ...productData } : false;
-          return result;
-        }, {});
-
         const product = {
           ...productData,
-          ...vendorsData,
           vendor: vendor.name,
         };
 
@@ -502,7 +495,6 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
 };
 
 const saveProductToDB = product => {
-  // TODO: remove when 174512601 is done
   console.info('--- content save-product-to-db ---');
   chrome.runtime.sendMessage({
     action: 'save-product-to-db',
