@@ -154,6 +154,7 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
         };
 
         saveProductToDB(product);
+        sendMessage('perform-google-search', product);
       }
 
       // Scraping Cart
@@ -501,6 +502,13 @@ const saveProductToDB = product => {
     product,
   });
 };
+
+const sendMessage = (action, data) => {
+  chrome.runtime.sendMessage({
+    action,
+    data,
+  });
+}
 
 const saveCartToDB = cart => {
   chrome.runtime.sendMessage({
