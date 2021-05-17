@@ -1,11 +1,3 @@
-const LogoActivePath = 'assets/img/icons/extension-active-128.png';
-const LogoInactivePath = 'assets/img/icons/extension-inactive-128.png';
-const CheckVendorsInterval = 60 * 1000;
-const BaseUrl = 'https://us-central1-botsparked.cloudfunctions.net';
-const WelcomeUrl = 'https://joincomparrot.com/extension/welcome/';
-
-init();
-
 const init = () => {
   chrome.browserAction.setPopup({ popup: '' });
   chrome.browserAction.setIcon({ path: LogoInactivePath });
@@ -98,8 +90,12 @@ const syncVendors = () => {
     });
 };
 
-const searchGoogle = () => {
-  
+const searchGoogle = (product) => {
+  if (!product) {
+    return;
+  }
+
+  console.log('product', product);
 }
 
 const onBrowserActionClicked = (tab) => {
@@ -153,5 +149,9 @@ const onTabsUpdated = async (tabId, changeInfo) => {
 }
 
 const handleMessage = (request, sender, sendResponse) => {
-
+  if (request.action === PerformGoogleSearch) {
+    searchGoogle(request.data);
+  }
 }
+
+init();

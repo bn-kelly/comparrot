@@ -18,12 +18,18 @@
     "default_popup": "index.html"
   },
   "background": {
-    "scripts": ["background.js"]
+    "scripts": [
+      "constants.js",
+      "background.js"
+    ]
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"],
+      "js": [
+        "constants.js",
+        "content.js"
+      ],
       "css": ["content.css"],
       "run_at": "document_end"
     }

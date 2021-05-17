@@ -33,6 +33,7 @@
               "src/manifest.json",
               "src/background.js",
               "src/content.js",
+              "src/constants.js",
               "src/content.css"
             ],
             "styles": ["src/styles.scss"],

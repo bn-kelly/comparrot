@@ -1,18 +1,3 @@
-const extensionOrigin = `chrome-extension://${chrome.runtime.id}`;
-const SiteForceLogin = 'site-force-login';
-const SiteForceLogout = 'site-force-logout';
-const SetUserId = 'set-user-id';
-const iframeID = 'extension-iframe';
-const activeClassName = 'active';
-const inactiveClassName = 'inactive';
-const inClassName = 'in';
-const expandedClassName = 'expanded';
-const remove = 'remove';
-const add = 'add';
-
-//registry types
-const baby = 'baby';
-
 const getIframe = () => document.getElementById(iframeID);
 
 const inIframe = () => {
@@ -154,7 +139,7 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
         };
 
         saveProductToDB(product);
-        sendMessage('perform-google-search', product);
+        sendMessage(PerformGoogleSearch, product);
       }
 
       // Scraping Cart
@@ -496,7 +481,6 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
 };
 
 const saveProductToDB = product => {
-  console.info('--- content save-product-to-db ---');
   chrome.runtime.sendMessage({
     action: 'save-product-to-db',
     product,
