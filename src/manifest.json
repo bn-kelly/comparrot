@@ -4,7 +4,11 @@
   "description": "Comparrot automatically finds the cheapest prices in real-time as you shop!",
   "manifest_version": 2,
   "content_security_policy": "script-src 'self' https://apis.google.com; object-src 'self'",
-  "permissions": ["tabs", "storage", "<all_urls>"],
+  "permissions": [
+    "tabs", 
+    "storage", 
+    "<all_urls>"
+  ],
   "commands": {
     "show-iframe": {
       "suggested_key": {
@@ -19,22 +23,28 @@
   },
   "background": {
     "scripts": [
-      "constants.js",
-      "background.js"
+      "extension/constants.js",
+      "extension/background.js"
     ]
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": [
-        "constants.js",
-        "content.js"
+      "matches": [
+        "<all_urls>"
       ],
-      "css": ["content.css"],
+      "js": [
+        "extension/constants.js",
+        "extension/content.js"
+      ],
+      "css": [
+        "extension/content.css"
+      ],
       "run_at": "document_end"
     }
   ],
-  "web_accessible_resources": ["index.html"],
+  "web_accessible_resources": [
+    "index.html"
+  ],
   "icons": {
     "16": "assets/img/icons/16x16.png",
     "32": "assets/img/icons/32x32.png",

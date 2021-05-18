@@ -29,12 +29,9 @@
             },
             "assets": [
               "src/assets",
+              "src/extension",
               "src/favicon.ico",
-              "src/manifest.json",
-              "src/background.js",
-              "src/content.js",
-              "src/constants.js",
-              "src/content.css"
+              "src/manifest.json"
             ],
             "styles": ["src/styles.scss"],
             "scripts": [],
