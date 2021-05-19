@@ -22,6 +22,7 @@ const add = 'add';
 const baby = 'baby';
 
 const GoogleXPaths = {
+    g_prod_url: "https://www.google.com/shopping/product/xxxxx/offers?q=qqqqq&prds=cid:xxxxx,cond:1,scoring:tp",
     g_step1_href_xpath: "//div[contains(@class,'psmkhead')]/preceding-sibling::div//h3[@class='r']/a[contains(@href, '/shopping/product') and not(contains(@href,'product/1/')) and not(contains(@href,'product/1?'))]/@href|//div[@class='psjtitle']/a[contains(@href, '/shopping/product') and not(contains(@href,'product/1/')) and not(contains(@href,'product/1?'))]/@href|(//div[@class='psjtitle']/a[contains(@href, '/shopping/product') and not(contains(@href,'product/1/')) and not(contains(@href,'product/1?'))]/@href)|//div[(contains(@class,'_Ked') or contains(@class,'shop-result-group')) and count(div[contains(text(),'Results for')])=0 and count(div[contains(text(),'Other Matches')])=0 and count(div[contains(text(),'People also considered')])=0]//a[contains(@href, '/shopping/product') and not(contains(@href,'product/1/')) and not(contains(@href,'product/1?'))]/@href",
     g_step1_no_results_xpath: "string-length(//span[contains(., 'No results for') or contains(., 'Did you mean')]|//p[contains(.,'did not match')])",
     g_step1_price_xpath: "//div[(contains(@class,'_Ked') or contains(@class,'shop-result-group')) and count(div[contains(text(),'Results for')])=0]//span[@class='price']/b|//div[(contains(@class,'_Ked') or contains(@class,'shop-result-group')) and count(div[contains(text(),'Results for')])=0]//div[@data-sh-or='price']//div/span/span[1]",

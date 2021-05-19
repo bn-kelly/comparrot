@@ -67,7 +67,6 @@ const toggleExpandIframeWidth = isOpen => {
 const tryToScrapeDataByVendor = (url, vendors = []) => {
   vendors.forEach(vendor => {
     if (url.includes(vendor.url)) {
-      // Scraping Product
       const productTitleElement = getElementBySelector(
         vendor?.selectors?.product?.title,
       );
@@ -78,7 +77,7 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
         );
 
         const priceDivider = ' - ';
-        const title = productTitleElement.innerText.trim();
+        const title = productTitleElement.innerText.trim().replace(/(\r\n|\n|\r)/gm, ' ');
         const originalPrice = productPriceElement
           ? productPriceElement.innerText.trim()
           : '';
