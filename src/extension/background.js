@@ -90,12 +90,50 @@ const syncVendors = () => {
     });
 };
 
-const searchGoogle = (product) => {
+const getXPathString = (doc, xpath) => {
+  if (xpath === undefined || xpath === '') return '';
+  xpath = 'normalize-space(' + xpath + ')';
+  const result = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
+  return clean(result.stringValue);
+}
+
+const getXPathArray = (doc, xpath) => {
+  if (xpath === undefined || xpath === '') return '';
+  const result = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
+  return result;
+}
+
+/**
+ * Trip spaces and remove html entities
+ * @param {string} str 
+ */
+const clean = (str) => {
+  return str ? str.replace(/&nbsp;/g, '').replace(/&amp;/g, '').replace(/^\s+|\s+$/g, "") : '';
+}
+
+const searchGoogle = async (product) => {
   if (!product) {
     return;
   }
 
   console.log('product', product);
+  const url = `https://www.google.com/search?tbm=shop&tbs=vw:1,new:1,price:1,ppr_max:${product.price}&q=${product.title}`;
+  const response = await fetch(url);
+  const responseText = await response.text();
+  const doc = document.implementation.createHTMLDocument('');
+  doc.documentElement.innerHTML = DOMPurify.sanitize(responseText);
+
+  const noResults = getXPathString(doc, GoogleXPaths.g_step1_no_results_xpath);
+  console.log('noResults', noResults);
+  if (parseInt(noResults)) {
+    return;
+  }
+
+  const href = getXPathString(doc, GoogleXPaths.g_step1_href_xpath);
+  console.log('href', href);
+  if (href.length === 0) {
+    
+  }
 }
 
 const onBrowserActionClicked = (tab) => {

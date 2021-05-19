@@ -23,6 +23,8 @@
   },
   "background": {
     "scripts": [
+      "extension/vendor/lodash.min.js",
+      "extension/vendor/purify.min.js",
       "extension/constants.js",
       "extension/background.js"
     ]
