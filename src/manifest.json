@@ -25,7 +25,8 @@
     "scripts": [
       "extension/vendor/lodash.min.js",
       "extension/vendor/purify.min.js",
-      "extension/constants.js",
+      "extension/config.js",
+      "extension/global.js",
       "extension/background.js"
     ]
   },
@@ -35,7 +36,8 @@
         "<all_urls>"
       ],
       "js": [
-        "extension/constants.js",
+        "extension/config.js",
+        "extension/global.js",
         "extension/content.js"
       ],
       "css": [

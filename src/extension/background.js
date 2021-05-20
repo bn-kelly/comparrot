@@ -1,8 +1,8 @@
 const init = () => {
   chrome.browserAction.setPopup({ popup: '' });
   chrome.browserAction.setIcon({ path: LogoInactivePath });
-  syncVendors();
-  setInterval(syncVendors, CheckVendorsInterval);
+  syncRetailers();
+  setInterval(syncRetailers, CheckRetailersInterval);
   initEvents();
 };
 
@@ -16,72 +16,48 @@ const initEvents = () => {
 };
 
 /**
- * Return active tab
- */
-const getActiveTab = async () => {
-  return new Promise(resolve => {
-    chrome.tabs.query(
-      {
-        active: true,
-        currentWindow: true,
-      },
-      tabs => {
-        resolve(tabs[0]);
-      },
-    );
-  });
-};
-
-/**
  * Set icon against a url
  * @param {string} url
  */
-const setIcon = url => {
-  chrome.storage.local.get(['vendors'], result => {
-    const vendors = result['vendors'];
-    if (!Array.isArray(vendors)) {
-      return;
+const setIcon = async (url) => {
+  const retailers = await getStorageValue('retailers');
+
+  if (!Array.isArray(retailers)) {
+    return;
+  }
+
+  const regexes = [/\\*\.?joincomparrot\.com\\*/];
+
+  for (const retailer of retailers) {
+    if (!retailer.url || retailer.url === '') {
+      continue;
     }
 
-    const regexes = [/\\*\.?joincomparrot\.com\\*/];
+    const regex = new RegExp(`\\\\*\\\.${retailer.url}\\\\*`);
+    regexes.push(regex);
+  }
 
-    for (const vendor of vendors) {
-      if (!vendor) {
-        continue;
-      }
+  const isSupported =
+    regexes.filter(regex => {
+      return regex.test(url);
+    }).length > 0;
 
-      const name = vendor.split('.')[0];
-      if (name === '') {
-        continue;
-      }
-
-      const regex = new RegExp(`\\\\*\\\.${name}\\\.\\\\*`);
-      regexes.push(regex);
-    }
-
-    const isSupported =
-      regexes.filter(regex => {
-        return regex.test(url);
-      }).length > 0;
-
-    if (isSupported) {
-      chrome.browserAction.setIcon({ path: LogoActivePath });
-    } else {
-      chrome.browserAction.setIcon({ path: LogoInactivePath });
-    }
-  });
+  if (isSupported) {
+    chrome.browserAction.setIcon({ path: LogoActivePath });
+  } else {
+    chrome.browserAction.setIcon({ path: LogoInactivePath });
+  }
 };
 
 /**
- * Sync vendors between extension and database
+ * Sync retailers between extension and database
  */
-const syncVendors = () => {
-  fetch(`${BaseUrl}/getVendors`)
+const syncRetailers = () => {
+  fetch(`${BaseUrl}/retailers`)
     .then(response => response.json())
     .then(async data => {
-      chrome.storage.local.set({
-        vendors: data.vendors,
-      });
+      console.log(data.retailers);
+      setStorageValue({ retailers: data.retailers });
 
       const activeTab = await getActiveTab();
       if (activeTab) {
@@ -89,47 +65,6 @@ const syncVendors = () => {
       }
     });
 };
-
-const getXPathString = (doc, xpath) => {
-  if (xpath === undefined || xpath === '') return '';
-  xpath = 'normalize-space(' + xpath + ')';
-  const result = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
-  return clean(result.stringValue);
-}
-
-const getXPathArray = (doc, xpath) => {
-  if (xpath === undefined || xpath === '') return '';
-  const result = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
-  return result;
-}
-
-/**
- * Trip spaces and remove html entities
- * @param {string} str 
- */
-const clean = (str) => {
-  return str ? str.replace(/&nbsp;/g, '').replace(/&amp;/g, '').replace(/^\s+|\s+$/g, "") : '';
-}
-
-const extractGUrl = (url) => {
-  const vars = {};
-  url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
-    vars[key] = value;
-  });
-
-  // adurl exists
-  if (!(undefined === vars['adurl'])) {
-      // adurl is empty
-      if(vars["adurl"] === '') {
-          return url;
-      // adurl exists so let's return it
-      } else {
-          return vars['adurl'];
-      }
-  }
-
-  return url;
-}
 
 const searchGoogle = async (product) => {
   if (!product) {
@@ -139,12 +74,8 @@ const searchGoogle = async (product) => {
   console.log('product', product);
   const search = product.upc || product.title;
   const url = `https://www.google.com/search?tbm=shop&tbs=vw:1,new:1,price:1,ppr_max:${product.price}&q=${search}`;
-  const response = await fetch(url);
-  const responseText = await response.text();
-  const doc = document.implementation.createHTMLDocument('');
+  const doc = await getDocFromUrl(url);
   let data = [];
-
-  doc.documentElement.innerHTML = DOMPurify.sanitize(responseText);
 
   const noResults = getXPathString(doc, GoogleXPaths.g_step1_no_results_xpath);
   console.log('noResults', noResults);
@@ -198,7 +129,7 @@ const searchGoogle = async (product) => {
     for (let i=0; i<arrRetailers.length; i++) {
       data.push({
         name: clean(arrRetailers[i]),
-        url: arrUrls[i],
+        url: `https://www.google.com${arrUrls[i]}`,
         price: clean(arrPrices[i]),
         title: arrTitles[i],
       });
@@ -208,6 +139,21 @@ const searchGoogle = async (product) => {
     data = await getGooglePrices(id, search);
   }
 
+  for (let i=0; i<data.length; i++) {
+    const doc = await getDocFromUrl(data[i].url);
+    const retailers = await getStorageValue('retailers');
+    const retailer = retailers.find(r => {
+      return data[i].name === r.name;
+    });
+
+    if (!retailer) {
+      continue
+    }
+
+    const image = doc.querySelector(retailer.selectors?.product?.image[0]);
+    data[i].image = image ? image.getAttribute('src') : null;
+  }
+
   console.log('searchGoogle:data', data);
 }
 
@@ -215,12 +161,7 @@ const getGooglePrices = async (id, search) => {
   let url = GoogleXPaths.g_prod_url;
   url = url.replace(/xxxxx/g, id);
   url = url.replace(/qqqqq/g, search);
-
-  const response = await fetch(url);
-  const responseText = await response.text();
-  const doc = document.implementation.createHTMLDocument('');
-
-  doc.documentElement.innerHTML = DOMPurify.sanitize(responseText);
+  const doc = await getDocFromUrl(url);
 
   const arrRetailers = [];
   const arrUrls = [];
@@ -231,7 +172,7 @@ const getGooglePrices = async (id, search) => {
 
   while (node) {
     arrUrls.push(node.getAttribute('href'));
-    arrRetailers.push(node.textContent);
+    arrRetailers.push(node.childNodes[0].textContent);
     node = links.iterateNext();
   }
 
@@ -249,7 +190,7 @@ const getGooglePrices = async (id, search) => {
   for (let i=0; i<arrRetailers.length; i++) {
     data.push({
       name: clean(arrRetailers[i]),
-      url: extractGUrl(arrUrls[i]),
+      url: `https://www.google.com${extractGUrl(arrUrls[i])}`,
       price: clean(arrPrices[i]),
       title,
     });
