@@ -15,19 +15,6 @@ const getActiveTab = async () => {
   });
 };
 
-const getXPathString = (doc, xpath) => {
-  if (xpath === undefined || xpath === '') return '';
-  xpath = 'normalize-space(' + xpath + ')';
-  const result = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
-  return clean(result.stringValue);
-}
-
-const getXPathArray = (doc, xpath) => {
-  if (xpath === undefined || xpath === '') return '';
-  const result = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
-  return result;
-}
-
 const getElementBySelector = (selector = '') => {
   if (!selector || selector === '') {
     return selector;
@@ -143,42 +130,6 @@ const getNumericRating = (text = '', regex = new RegExp('')) => {
 
 const getNumberFromString = (price = '') =>
   Number(price.replace(/[^0-9\.-]+/g, '')) || 0;
-
-/**
- * Trip spaces and remove html entities
- * @param {string} str 
- */
-const clean = (str) => {
-  return str ? str.replace(/&nbsp;/g, '').replace(/&amp;/g, '').replace(/^\s+|\s+$/g, "") : '';
-}
-
-const extractGUrl = (url) => {
-  const vars = {};
-  url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
-    vars[key] = value;
-  });
-
-  // adurl exists
-  if (!(undefined === vars['adurl'])) {
-      // adurl is empty
-      if(vars["adurl"] === '') {
-          return url;
-      // adurl exists so let's return it
-      } else {
-          return vars['adurl'];
-      }
-  }
-
-  return url;
-}
-
-const getDocFromUrl = async (url) => {
-  const response = await fetch(url);
-  const responseText = await response.text();
-  const doc = document.implementation.createHTMLDocument('');
-  doc.documentElement.innerHTML = DOMPurify.sanitize(responseText);
-  return doc;
-}
 
 const setStorageValue = (data) => {
   chrome.storage.local.set(data);

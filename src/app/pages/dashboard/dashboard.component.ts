@@ -16,7 +16,8 @@ import {
 import { RecentSalesWidgetOptions } from './widgets/recent-sales-widget/recent-sales-widget-options.interface';
 import { SalesSummaryWidgetOptions } from './widgets/sales-summary-widget/sales-summary-widget-options.interface';
 import { DashboardService } from './dashboard.service';
-import { ExtensionService, SetUserId } from '../../extension.service';
+import { ExtensionService, SetUserId, PerformGoogleSearch } from '../../services/extension.service';
+import { ScraperService } from '../../services/scraper.service';
 import { ChartWidgetOptions } from '../../../@fury/shared/chart-widget/chart-widget-options.interface';
 import {
   AuthService,
@@ -139,6 +140,7 @@ export class DashboardComponent implements OnInit {
     private auth: AuthService,
     private afs: AngularFirestore,
     private extension: ExtensionService,
+    private scraper: ScraperService,
   ) {
     /**
      * Edge wrong drawing fix
@@ -261,6 +263,14 @@ export class DashboardComponent implements OnInit {
         this.signInWithUid();
         this.extension.handleMessage(SetUserId, message => {
           window.localStorage.setItem('uid', message.uid);
+        });
+        this.extension.handleMessage(PerformGoogleSearch, async message => {
+          if (!message.data) {
+            return;
+          }
+
+          const data = await this.scraper.searchGoogle(message.data);
+          console.log('this.scraper.searchGoogle:', data);
         });
       }
 
