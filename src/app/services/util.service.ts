@@ -11,11 +11,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class UtilService {
-
-  constructor(
-    private sanitizer: DomSanitizer,
-    private http: HttpClient,
-  ) {}
+  constructor(private sanitizer: DomSanitizer, private http: HttpClient) {}
 
   getXPathString(doc: Document, xpath: string) {
     if (!xpath) return '';
@@ -23,7 +19,7 @@ export class UtilService {
     const result = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
     return this.clean(result.stringValue);
   }
-  
+
   getXPathArray(doc: Document, xpath: string): any {
     if (xpath === undefined || xpath === '') return [];
     const result = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
@@ -32,14 +28,15 @@ export class UtilService {
 
   /**
    * Trip spaces and remove html entities
-   * @param {string} str 
+   * @param {string} str
    */
   clean(str: string): string {
-    return str ?
-      str.replace(/&nbsp;/g, '')
-        .replace(/&amp;/g, '')
-        .replace(/^\s+|\s+$/g, "") :
-      '';
+    return str
+      ? str
+          .replace(/&nbsp;/g, '')
+          .replace(/&amp;/g, '')
+          .replace(/^\s+|\s+$/g, '')
+      : '';
   }
 
   extractGUrl(url: string): string {
@@ -53,10 +50,13 @@ export class UtilService {
   }
 
   async getDocFromUrl(url: string): Promise<Document> {
-    const responseText = await this.http.get(url, {responseType: 'text'}).toPromise();
+    const responseText = await this.http
+      .get(url, { responseType: 'text' })
+      .toPromise();
     const doc = document.implementation.createHTMLDocument('');
-    doc.documentElement.innerHTML = this.sanitizer.bypassSecurityTrustHtml(responseText) as string;
+    doc.documentElement.innerHTML = this.sanitizer.bypassSecurityTrustHtml(
+      responseText,
+    ) as string;
     return doc;
   }
-
 }

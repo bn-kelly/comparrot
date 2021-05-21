@@ -18,7 +18,7 @@ const initEvents = () => {
  * Set icon against a url
  * @param {string} url
  */
-const setIcon = async (url) => {
+const setIcon = async url => {
   const retailers = await getStorageValue('retailers');
 
   if (!Array.isArray(retailers)) {
@@ -55,7 +55,6 @@ const syncRetailers = () => {
   fetch(`${BaseUrl}/retailers`)
     .then(response => response.json())
     .then(async data => {
-      console.log(data.retailers);
       setStorageValue({ retailers: data.retailers });
 
       const activeTab = await getActiveTab();
@@ -65,18 +64,16 @@ const syncRetailers = () => {
     });
 };
 
-const onBrowserActionClicked = (tab) => {
+const onBrowserActionClicked = tab => {
   chrome.tabs.sendMessage(tab.id, {
     action: 'toggle-show-iframe',
   });
-}
+};
 
-const onCommand = (command) => {
+const onCommand = command => {
   switch (command) {
     case 'show-iframe':
-      chrome.tabs.query({ currentWindow: true, active: true }, function (
-        tabs,
-      ) {
+      chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         const id = tabs && tabs[0] && tabs[0].id;
         if (id) {
           chrome.tabs.sendMessage(id, {
@@ -89,7 +86,7 @@ const onCommand = (command) => {
     default:
       break;
   }
-}
+};
 
 const onInstalled = () => {
   chrome.tabs.create({
@@ -97,14 +94,14 @@ const onInstalled = () => {
     active: true,
   });
   return false;
-}
+};
 
 const onTabsActivated = async () => {
   const activeTab = await getActiveTab();
   if (activeTab) {
     setIcon(activeTab.url);
   }
-}
+};
 
 const onTabsUpdated = async (tabId, changeInfo) => {
   if (changeInfo.url) {
@@ -113,6 +110,6 @@ const onTabsUpdated = async (tabId, changeInfo) => {
       setIcon(changeInfo.url);
     }
   }
-}
+};
 
 init();

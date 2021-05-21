@@ -194,7 +194,8 @@ export class LayoutComponent implements OnInit {
                 ? product.vendorInnerCode
                 : sha1(product.url);
 
-              await afs.doc(`products/${doc}`)
+              await afs
+                .doc(`products/${doc}`)
                 .get()
                 .toPromise()
                 .then((response: any) => {

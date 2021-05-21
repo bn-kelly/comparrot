@@ -16,7 +16,11 @@ import {
 import { RecentSalesWidgetOptions } from './widgets/recent-sales-widget/recent-sales-widget-options.interface';
 import { SalesSummaryWidgetOptions } from './widgets/sales-summary-widget/sales-summary-widget-options.interface';
 import { DashboardService } from './dashboard.service';
-import { ExtensionService, SetUserId, PerformGoogleSearch } from '../../services/extension.service';
+import {
+  ExtensionService,
+  SetUserId,
+  PerformGoogleSearch,
+} from '../../services/extension.service';
 import { ScraperService } from '../../services/scraper.service';
 import { ChartWidgetOptions } from '../../../@fury/shared/chart-widget/chart-widget-options.interface';
 import {
@@ -270,7 +274,6 @@ export class DashboardComponent implements OnInit {
           }
 
           const data = await this.scraper.searchGoogle(message.data);
-          console.log('this.scraper.searchGoogle:', data);
         });
       }
 

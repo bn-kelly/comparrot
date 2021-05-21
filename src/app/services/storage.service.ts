@@ -11,7 +11,6 @@ declare const chrome: any;
   providedIn: 'root',
 })
 export class StorageService {
-
   setValue(data: any): void {
     chrome.storage.local.set(data);
   }
@@ -23,5 +22,4 @@ export class StorageService {
       });
     });
   }
-
 }

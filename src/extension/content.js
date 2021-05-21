@@ -77,7 +77,9 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
         );
 
         const priceDivider = ' - ';
-        const title = productTitleElement.innerText.trim().replace(/(\r\n|\n|\r)/gm, ' ');
+        const title = productTitleElement.innerText
+          .trim()
+          .replace(/(\r\n|\n|\r)/gm, ' ');
         const originalPrice = productPriceElement
           ? productPriceElement.innerText.trim()
           : '';
@@ -491,7 +493,7 @@ const sendMessage = (action, data) => {
     action,
     data,
   });
-}
+};
 
 const saveCartToDB = cart => {
   chrome.runtime.sendMessage({

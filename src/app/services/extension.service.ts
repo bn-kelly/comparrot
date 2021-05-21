@@ -11,7 +11,6 @@ declare const chrome: any;
   providedIn: 'root',
 })
 export class ExtensionService {
-
   get isExtension() {
     return !!chrome && !!chrome.extension;
   }
@@ -43,7 +42,6 @@ export class ExtensionService {
         action === message.action && handler(message, sender, sendResponse),
     );
   }
-
 }
 
 export const SiteForceLogin = 'site-force-login';

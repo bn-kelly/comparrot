@@ -3,7 +3,10 @@ import { Router } from '@angular/router';
 
 import { AuthService } from '../../../pages/authentication/services/auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { ExtensionService, SiteForceLogout } from '../../../services/extension.service';
+import {
+  ExtensionService,
+  SiteForceLogout,
+} from '../../../services/extension.service';
 
 @Component({
   selector: 'fury-toolbar-user',

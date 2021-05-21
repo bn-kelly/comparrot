@@ -13,7 +13,10 @@ import { NotifyService } from './notify.service';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { ExtensionService, SiteForceLogin } from '../../../services/extension.service';
+import {
+  ExtensionService,
+  SiteForceLogin,
+} from '../../../services/extension.service';
 
 export interface User {
   displayName?: string;

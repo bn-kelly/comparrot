@@ -3,7 +3,10 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from '../../pages/authentication/services/auth.service';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ExtensionService, SiteForceLogin } from '../../services/extension.service';
+import {
+  ExtensionService,
+  SiteForceLogin,
+} from '../../services/extension.service';
 
 @Component({
   selector: 'fury-oauth-component',

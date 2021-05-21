@@ -131,14 +131,14 @@ const getNumericRating = (text = '', regex = new RegExp('')) => {
 const getNumberFromString = (price = '') =>
   Number(price.replace(/[^0-9\.-]+/g, '')) || 0;
 
-const setStorageValue = (data) => {
+const setStorageValue = data => {
   chrome.storage.local.set(data);
-}
+};
 
-const getStorageValue = (key) => {
+const getStorageValue = key => {
   return new Promise(resolve => {
     chrome.storage.local.get([key], result => {
       resolve(result[key]);
     });
   });
-}
+};
