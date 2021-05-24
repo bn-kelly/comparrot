@@ -148,7 +148,9 @@ const getNumericRating = (text = '', regex = new RegExp('')) => {
 const getNumberFromString = (price = '') => {
   const regex = /([0-9]*[.])?[0-9]+/g;
   const m = regex.exec(price);
-  return Number(m[0]);
+  return m
+    ? Number(m[0])
+    : 0;
 }
 
 const setStorageValue = data => {
