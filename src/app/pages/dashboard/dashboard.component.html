@@ -10,8 +10,8 @@
     fxLayout="column"
     fxLayout.gt-lg="row"
   >
-    <div *ngIf="!offers || !offers.length; else offerList">
-      <mat-card *ngIf="offers" class="landing-ext">
+    <div *ngIf="!products || !products.length; else productList">
+      <mat-card *ngIf="products" class="landing-ext">
         <div class="landing-ext-area">
           <div class="landng-ext-header">
             <div class="landng-welcome-title">Welcome <br>To {{ projectName }}!</div>
@@ -24,7 +24,7 @@
         </div>
       </mat-card>
     </div>
-    <ng-template #offerList>
+    <ng-template #productList>
       <div>
         <fury-select-timeframes #selectDataComp></fury-select-timeframes>
         <div
@@ -32,67 +32,42 @@
           fxLayout="row wrap"
         >
           <mat-card
-            class="offer"
+            class="product"
             *ngFor="
-              let offer of offers
-                | timeframeFilter: (selectDataComp.selectedValues$ | async)
+              let product of products
             "
           >
             <div class="offer__product-container">
-              <div class="offer__product-info">
-                <div class="offer__best-deal-container">
-                  <div
-                    *ngIf="offer.isBestDeal"
-                    class="offer__best-deal-chip"
-                    color="primary"
-                    selected
-                  >
-                    BEST DEAL
-                  </div>
-                </div>
-                <img
-                  *ngIf="offer.vendor"
-                  class="offer__product-vendor"
-                  src="../../../assets/img/logos/vendor/{{ offer.vendor }}.svg"
-                  alt="{{ offer.vendor }}"
-                />
-              </div>
               <img
                 class="offer__img"
-                *ngIf="offer.imageUrl || offer.image"
-                [src]="offer.imageUrl || offer.image"
-                [alt]="offer.title"
+                *ngIf="product.image"
+                [src]="product.image"
+                [alt]="product.title"
               />
               <span
                 mat-icon-button
                 class="offer__product-delete"
-                (click)="deleteOffer(offer.id)"
+                (click)="deleteOffer(product.sku)"
               >
                 <mat-icon>highlight_off</mat-icon>
               </span>
             </div>
             <mat-card-title
               class="offer__title"
-              matTooltip="{{ offer.title }}"
+              matTooltip="{{ product.title }}"
               [matTooltipPosition]="'above'"
             >
-              {{ offer.title }}
+              {{ product.title }}
             </mat-card-title>
             <mat-card-content class="offer__content">
               <div class="offer__price-container">
                 <span class="offer__price">
-                  {{ offer.price }}
-                </span>
-                <span
-                  class="offer__price offer__price__old"
-                  *ngIf="offer.oldPrice"
-                >
-                  {{ offer.oldPrice }}
+                  {{ product.price }}
                 </span>
               </div>
               <a
-                (click)="onBuyButtonClick($event, offer.buyUrl)"
-                href="{{ offer.buyUrl }}"
+                (click)="onBuyButtonClick($event, product.url)"
+                href="{{ product.url }}"
                 target="_blank"
                 class="offer__buy-button"
                 mat-raised-button
@@ -113,10 +88,10 @@
               <button
                 mat-button
                 class="offer__actions-button"
-                (click)="toggleAddToWishlist(offer.id)"
+                (click)="toggleAddToWishlist(product.sku)"
               >
                 <mat-icon>{{
-                  user.wishList.includes(offer.id)
+                  user.wishList.includes(product.sku)
                     ? 'favorite'
                     : 'favorite_border'
                 }}</mat-icon>

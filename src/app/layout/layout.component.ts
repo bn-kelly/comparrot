@@ -150,7 +150,7 @@ export class LayoutComponent implements OnInit {
 
       if (this.isExtension) {
         this.afs
-          .collection('vendors')
+          .collection('retailers')
           .valueChanges()
           .subscribe((vendors: Vendor[]) => {
             this.vendors = vendors;

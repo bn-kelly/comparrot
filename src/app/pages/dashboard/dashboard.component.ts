@@ -21,7 +21,7 @@ import {
   SetUserId,
   PerformGoogleSearch,
 } from '../../services/extension.service';
-import { ScraperService } from '../../services/scraper.service';
+import { ScraperService, Product } from '../../services/scraper.service';
 import { ChartWidgetOptions } from '../../../@fury/shared/chart-widget/chart-widget-options.interface';
 import {
   AuthService,
@@ -41,7 +41,8 @@ export class DashboardComponent implements OnInit {
   user: User;
   projectName: string;
   isLoggedIn: boolean;
-  offers: Offer[];
+  offers: any[];
+  products: Product[];
   salesData$: Observable<ChartData>;
   totalSalesOptions: BarChartWidgetOptions = {
     title: 'Total Sales',
@@ -203,6 +204,7 @@ export class DashboardComponent implements OnInit {
         user.isAnonymous && offers.length
           ? [offers.sort((a, b) => b.created - a.created)[0]]
           : offers.sort((a, b) => b.created - a.created) || [];
+      console.log('offers', offers);
       if (!this.isLoggedIn && !this.offers.length && this.isExtension) {
         this.router.navigate(['/login']);
       }
@@ -269,11 +271,13 @@ export class DashboardComponent implements OnInit {
           window.localStorage.setItem('uid', message.uid);
         });
         this.extension.handleMessage(PerformGoogleSearch, async message => {
-          if (!message.data) {
+          if (!message.data && !this.auth.isAuthenticated()) {
             return;
           }
-
+          console.log('message.data', message.data);
           const data = await this.scraper.searchGoogle(message.data);
+          console.log('data:', data);
+          this.products = data;
         });
       }
 
@@ -311,7 +315,7 @@ export class DashboardComponent implements OnInit {
       }
 
       if (this.extension.isExtension) {
-        this.getOffersByUser(user);
+        // this.getOffersByUser(user);
       } else {
         if (this.isLoggedIn) {
           window.localStorage.setItem('uid', user.uid);

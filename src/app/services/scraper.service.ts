@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 import { UtilService } from './util.service';
 import { StorageService } from './storage.service';
 
@@ -18,17 +20,18 @@ export interface Product {
   manufacturer?: string;
   vendor?: string;
   vendorInnerCode?: string;
+  sku: string;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class ScraperService {
-  constructor(private util: UtilService, private storage: StorageService) {}
+  constructor(private util: UtilService, private storage: StorageService, private http: HttpClient) {}
 
   async searchGoogle(product: Product): Promise<Product[]> {
     if (!product) {
-      return;
+      return [];
     }
 
     const search = product.upc || product.title;
@@ -40,9 +43,10 @@ export class ScraperService {
       doc,
       GoogleXPaths.g_step1_no_results_xpath,
     );
-
+    console.log('url:', url);
+    console.log('noResults', noResults);
     if (parseInt(noResults)) {
-      return;
+      return [];
     }
 
     const href = this.util.getXPathString(doc, GoogleXPaths.g_step1_href_xpath);
@@ -53,7 +57,7 @@ export class ScraperService {
       let node = urls.iterateNext();
 
       if (!node) {
-        return;
+        return [];
       }
 
       while (node) {
@@ -109,7 +113,8 @@ export class ScraperService {
       const id = href.split('product/')[1].split('?')[0];
       data = await this.getGooglePrices(id, search);
     }
-
+    console.log('href:', href);
+    console.log('data:', data);
     for (let i = 0; i < data.length; i++) {
       const doc = await this.util.getDocFromUrl(data[i].url);
       const retailers = await this.storage.getValue('retailers');
@@ -174,6 +179,17 @@ export class ScraperService {
     }
 
     return data;
+  }
+
+  triggerScraper(product: Product) {
+    this.http
+      .post(environment.cloudFunctions + '/scrape', product);
+  }
+
+  getProducts(product: Product) {
+    return this.http
+      .post(environment.cloudFunctions + '/products', product)
+      .toPromise();
   }
 }
 

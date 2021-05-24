@@ -26,6 +26,13 @@ export class UtilService {
     return result;
   }
 
+  getXPathContent(xpath: string) {
+    if (!xpath) return '';
+    xpath = `normalize-space(${xpath})`;
+    const result = document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null);
+    return this.clean(result.stringValue);
+  }
+
   /**
    * Trip spaces and remove html entities
    * @param {string} str

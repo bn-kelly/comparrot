@@ -15,6 +15,23 @@ const getActiveTab = async () => {
   });
 };
 
+function getXPathContent(xpath) {
+  if (xpath == undefined || xpath == "") return "";
+  var xpath = "normalize-space(" + xpath + ")";
+  var doc = document;
+  var result = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
+  return clean(result.stringValue);
+}
+
+function clean(str) {
+  return str
+    ? str
+        .replace(/&nbsp;/g, '')
+        .replace(/&amp;/g, '')
+        .replace(/^\s+|\s+$/g, '')
+    : '';
+}
+
 const getElementBySelector = (selector = '') => {
   if (!selector || selector === '') {
     return selector;
@@ -128,8 +145,11 @@ const getNumericRating = (text = '', regex = new RegExp('')) => {
     : defaultResult;
 };
 
-const getNumberFromString = (price = '') =>
-  Number(price.replace(/[^0-9\.-]+/g, '')) || 0;
+const getNumberFromString = (price = '') => {
+  const regex = /([0-9]*[.])?[0-9]+/g;
+  const m = regex.exec(price);
+  return Number(m[0]);
+}
 
 const setStorageValue = data => {
   chrome.storage.local.set(data);
