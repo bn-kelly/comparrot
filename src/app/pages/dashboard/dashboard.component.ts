@@ -276,8 +276,10 @@ export class DashboardComponent implements OnInit {
           }
           console.log('message.data', message.data);
           const data = await this.scraper.searchGoogle(message.data);
-          console.log('data:', data);
-          this.products = data;
+          this.products = data.filter(product => {
+            return product.retailer !== message.data.retailer;
+          });
+          console.log('products:', this.products);
         });
       }
 

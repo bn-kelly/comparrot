@@ -137,7 +137,7 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
 
         const product = {
           ...productData,
-          vendor: vendor.name,
+          retailer: vendor.name,
         };
 
         saveProductToDB(product);

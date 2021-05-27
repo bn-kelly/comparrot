@@ -11,15 +11,12 @@ import { StorageService } from './storage.service';
 
 export interface Product {
   url: string;
-  brand?: string;
   title?: string;
   upc?: string;
   price?: number;
   image?: string;
   created: number;
-  manufacturer?: string;
-  vendor?: string;
-  vendorInnerCode?: string;
+  retailer?: string;
   sku: string;
 }
 
@@ -103,7 +100,7 @@ export class ScraperService {
 
       for (let i = 0; i < arrRetailers.length; i++) {
         data.push({
-          name: this.util.clean(arrRetailers[i]),
+          retailer: this.util.clean(arrRetailers[i]),
           url: `https://www.google.com${arrUrls[i]}`,
           price: this.util.clean(arrPrices[i]),
           title: arrTitles[i],
@@ -114,12 +111,15 @@ export class ScraperService {
       data = await this.getGooglePrices(id, search);
     }
     console.log('href:', href);
-    console.log('data:', data);
     for (let i = 0; i < data.length; i++) {
+      if (!this.util.validURL(data[i].url)) {
+        continue;
+      }
+
       const doc = await this.util.getDocFromUrl(data[i].url);
       const retailers = await this.storage.getValue('retailers');
       const retailer = retailers.find(r => {
-        return data[i].name === r.name;
+        return data[i].retailer === r.name;
       });
 
       if (!retailer) {
@@ -127,7 +127,12 @@ export class ScraperService {
       }
 
       const image = doc.querySelector(retailer.selectors?.product?.image[0]);
-      data[i].image = image ? image.getAttribute('src') : null;
+      console.log('image', retailer, image, retailer.selectors?.product?.image[0]);
+      data[i].image = image
+        ? image.getAttribute('src') && image.getAttribute('src').includes('https')
+          ? image.getAttribute('src')
+          : `https:${image.getAttribute('src')}`
+        : '';
     }
 
     return data;
@@ -171,7 +176,7 @@ export class ScraperService {
 
     for (let i = 0; i < arrRetailers.length; i++) {
       data.push({
-        name: this.util.clean(arrRetailers[i]),
+        retailer: this.util.clean(arrRetailers[i]),
         url: `https://www.google.com${this.util.extractGUrl(arrUrls[i])}`,
         price: this.util.clean(arrPrices[i]),
         title,
