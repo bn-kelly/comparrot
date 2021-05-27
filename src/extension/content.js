@@ -133,6 +133,7 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
           vendorInnerCode,
           url,
           created: Date.now(),
+          sku: url,
         };
 
         const product = {
