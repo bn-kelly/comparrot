@@ -104,6 +104,7 @@ export class ScraperService {
           url: `https://www.google.com${arrUrls[i]}`,
           price: this.util.clean(arrPrices[i]),
           title: arrTitles[i],
+          sku: product.url,
         });
       }
     } else {
@@ -180,6 +181,7 @@ export class ScraperService {
         url: `https://www.google.com${this.util.extractGUrl(arrUrls[i])}`,
         price: this.util.clean(arrPrices[i]),
         title,
+        sku: id,
       });
     }
 
@@ -191,10 +193,11 @@ export class ScraperService {
       .post(environment.cloudFunctions + '/scrape', product);
   }
 
-  getProducts(product: Product) {
-    return this.http
+  async getProducts(product: Product): Promise<Product[]> {
+    const response: any = await this.http
       .post(environment.cloudFunctions + '/products', product)
       .toPromise();
+    return response.products as [Product];
   }
 }
 

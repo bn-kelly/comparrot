@@ -271,13 +271,19 @@ export class DashboardComponent implements OnInit {
           window.localStorage.setItem('uid', message.uid);
         });
         this.extension.handleMessage(PerformGoogleSearch, async message => {
-          if (!message.data && !this.auth.isAuthenticated()) {
+          const product = message.data as Product;
+          if (!product && !this.auth.isAuthenticated()) {
             return;
           }
-          console.log('message.data', message.data);
-          const data = await this.scraper.searchGoogle(message.data);
-          this.products = data.filter(product => {
-            return product.retailer !== message.data.retailer;
+          console.log('message.data', product);
+          const googleResult = await this.scraper.searchGoogle(product);
+          const scrapedResult = await this.scraper.getProducts(product);
+          if (scrapedResult.length === 0) {
+            this.scraper.triggerScraper(product);
+          }
+          console.log('scrapedResult:', scrapedResult);
+          this.products = [...googleResult, ...scrapedResult].filter(p => {
+            return p.retailer !== product.retailer;
           });
           console.log('products:', this.products);
         });
