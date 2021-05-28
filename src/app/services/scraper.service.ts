@@ -188,7 +188,7 @@ export class ScraperService {
 
   triggerScraper(product: Product) {
     return this.http
-      .post(environment.backend + '/scrape', { product })
+      .post(environment.cloudFunctions + '/scrape', { product })
       .toPromise();
   }
 
