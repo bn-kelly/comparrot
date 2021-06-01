@@ -77,7 +77,6 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const isExtension = !!window.chrome && !!window.chrome.extension;
     this.isPhoneAuthAllowed = isPhoneAuthAllowed;
 
     this.buildForm();
@@ -96,29 +95,7 @@ export class LoginComponent implements OnInit {
           .subscribe((project: Project) => {
             this.project = project;
             this.handleLogoUrl();
-
-            if (project && !isExtension) {
-              Array.from(document.getElementsByTagName('link')).forEach(
-                link => {
-                  if (link.getAttribute('rel') === 'icon') {
-                    const favicon = link.getAttribute('href');
-                    if (!!project.favicon && favicon !== project.favicon) {
-                      link.setAttribute('href', project.favicon);
-                    }
-                  }
-                },
-              );
-            }
           });
-      } else {
-        this.logoUrl = 'assets/img/logo.svg';
-        if (!isExtension) {
-          Array.from(document.getElementsByTagName('link')).forEach(link => {
-            if (link.getAttribute('rel') === 'icon') {
-              link.setAttribute('href', 'favicon.ico');
-            }
-          });
-        }
       }
     });
   }
@@ -151,10 +128,6 @@ export class LoginComponent implements OnInit {
       this.visible = true;
       this.cd.markForCheck();
     }
-  }
-
-  toggleForm() {
-    this.newUser = !this.newUser;
   }
 
   rememberUser() {
