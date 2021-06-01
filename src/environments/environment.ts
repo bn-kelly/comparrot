@@ -5,8 +5,6 @@
 
 export const environment = {
   production: false,
-  googleMapsApiKey: '',
-  backend: 'http://127.0.0.1:5000',
   cloudFunctions: 'https://us-central1-botsparked.cloudfunctions.net',
   projectName: 'comparrot',
   firebase: {

@@ -46,7 +46,6 @@ import { Offer } from './offer.model';
 
 @Injectable()
 export class DashboardService {
-  url = environment.backend;
 
   constructor(private http: HttpClient, private afs: AngularFirestore) {}
 

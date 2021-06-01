@@ -5,7 +5,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LayoutModule } from './layout/layout.module';
-import { AgmCoreModule } from '@agm/core';
 import { environment } from '../environments/environment';
 import { PendingInterceptorModule } from '../@fury/shared/loading-indicator/pending-interceptor.module';
 import {
@@ -37,11 +36,6 @@ import { CoreModule } from './pages/authentication/services/core.module';
 
     // Layout Module (Sidenav, Toolbar, Quickpanel, Content)
     LayoutModule,
-
-    // Google Maps Module
-    AgmCoreModule.forRoot({
-      apiKey: environment.googleMapsApiKey,
-    }),
 
     // Displays Loading Bar when a Route Request or HTTP Request is pending
     PendingInterceptorModule,
