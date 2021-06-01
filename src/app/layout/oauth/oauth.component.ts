@@ -21,7 +21,7 @@ export class OAuthComponent {
     private extension: ExtensionService,
   ) {}
 
-  handleResponse = response => {
+  handleResponse = (response: any) => {
     const [firstNameFromDisplayName, lastNameFromDisplayName] = (
       response.user.displayName || ''
     ).split(' ');
