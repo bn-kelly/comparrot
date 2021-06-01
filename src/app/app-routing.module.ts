@@ -54,11 +54,6 @@ const routes: Routes = [
         pathMatch: 'full',
       },
       {
-        path: 'level1/level2/level3/level4/level5',
-        loadChildren: () =>
-          import('./pages/level5/level5.module').then(m => m.Level5Module),
-      },
-      {
         path: 'account',
         canActivate: [AuthGuard],
         loadChildren: () =>
@@ -72,7 +67,6 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, {
       initialNavigation: 'enabled',
-      // preloadingStrategy: PreloadAllModules,
       scrollPositionRestoration: 'enabled',
       anchorScrolling: 'enabled',
     }),
