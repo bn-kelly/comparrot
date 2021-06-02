@@ -187,80 +187,58 @@ export class AuthService {
       });
   }
 
-  signInWithPhoneNumber(phoneNumber: string, recaptchaContainerId?: string) {
-    window.recaptchaVerifier = new auth.RecaptchaVerifier(
-      recaptchaContainerId || 'recaptcha-container',
-    );
-
-    window.recaptchaVerifier.render();
-
-    const appVerifier = window.recaptchaVerifier;
-    return this.afAuth
-      .signInWithPhoneNumber(phoneNumber, appVerifier)
-      .then(confirmationResult => confirmationResult)
-      .catch(error => this.handleError(error));
-  }
-
-  phoneOrEmailSignUp({
-    emailOrPhone,
+  emailSignUp({
+    email,
     password,
     firstName,
     lastName,
   }: any): Promise<any> {
-    if (emailOrPhone.includes('@')) {
-      return this.afAuth
-        .createUserWithEmailAndPassword(emailOrPhone, password)
-        .then(credential => {
-          this.notify.update('Welcome new user!', 'success');
-          this.updateUserData({
-            ...credential.user,
-            firstName,
-            lastName,
-          });
-          this.sendVerificationMail();
-          this.router.navigate(['/verify-email']);
-        })
-        .catch(error => this.handleError(error));
-    }
-
-    return this.signInWithPhoneNumber(emailOrPhone);
+    return this.afAuth
+      .createUserWithEmailAndPassword(email, password)
+      .then(credential => {
+        this.notify.update('Welcome new user!', 'success');
+        this.updateUserData({
+          ...credential.user,
+          firstName,
+          lastName,
+        });
+        this.sendVerificationMail();
+        this.router.navigate(['/verify-email']);
+      })
+      .catch(error => this.handleError(error));
   }
 
-  phoneOrEmailLogin(emailOrPhone: string, password: string): Promise<any> {
-    if (emailOrPhone.includes('@')) {
-      return this.afAuth
-        .signInWithEmailAndPassword(emailOrPhone, password)
-        .then(result => {
-          if (!result || !result.user) {
-            return;
-          }
-          if (result.user.emailVerified) {
-            if (this.extension.isExtension) {
-              window.localStorage.setItem('uid', result.user.uid);
-              this.extension.sendMessage(
-                {
-                  action: SiteForceLogin,
-                  uid: result.user.uid,
-                },
-                null,
-              );
-            }
-
-            this.notify.update('Welcome back!', 'success');
-            this.router.navigate(['/']);
-          } else {
-            this.sendVerificationMail();
-            this.notify.update(
-              'Please validate your email address. Kindly check your inbox.',
-              'error',
+  emailLogin(email: string, password: string): Promise<any> {
+    return this.afAuth
+      .signInWithEmailAndPassword(email, password)
+      .then(result => {
+        if (!result || !result.user) {
+          return;
+        }
+        if (result.user.emailVerified) {
+          if (this.extension.isExtension) {
+            window.localStorage.setItem('uid', result.user.uid);
+            this.extension.sendMessage(
+              {
+                action: SiteForceLogin,
+                uid: result.user.uid,
+              },
+              null,
             );
-            this.router.navigate(['/verify-email']);
           }
-        })
-        .catch(error => this.handleError(error));
-    }
 
-    return this.signInWithPhoneNumber(emailOrPhone);
+          this.notify.update('Welcome back!', 'success');
+          this.router.navigate(['/']);
+        } else {
+          this.sendVerificationMail();
+          this.notify.update(
+            'Please validate your email address. Kindly check your inbox.',
+            'error',
+          );
+          this.router.navigate(['/verify-email']);
+        }
+      })
+      .catch(error => this.handleError(error));
   }
 
   async sendVerificationMail() {

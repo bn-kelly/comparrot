@@ -12,7 +12,6 @@
       ></div>
     </div>
     <form
-      *ngIf="!verificationId"
       (ngSubmit)="signup()"
       class="form-signup padding"
       fxLayout="column"
@@ -57,23 +56,19 @@
 
         <mat-form-field fxFlex="grow">
           <mat-label>
-            {{ isPhoneAuthAllowed ? 'Email or Phone' : 'Email' }}
+            Email
           </mat-label>
-          <input matInput required formControlName="emailOrPhone" />
-          <mat-error *ngIf="formErrors.emailOrPhone">
-            {{ formErrors.emailOrPhone }}
+          <input matInput required formControlName="email" />
+          <mat-error *ngIf="formErrors.email">
+            {{ formErrors.email }}
           </mat-error>
           <mat-error
             *ngIf="
-              form.get('emailOrPhone').hasError('required') &&
-              !formErrors.emailOrPhone
+              form.get('email').hasError('required') &&
+              !formErrors.email
             "
           >
-            {{
-              isPhoneAuthAllowed
-                ? 'Please enter your email or phone number'
-                : 'Please enter your email'
-            }}
+            Please enter your email
           </mat-error>
         </mat-form-field>
 
@@ -187,41 +182,5 @@
         Already have an account? <a [routerLink]="['/login']">Login</a>
       </p>
     </form>
-    <div *ngIf="verificationId" class="padding text-center">
-      <h4>Thank You for Registering</h4>
-      <p>
-        The verification code has been sent to
-        <strong>{{ emailOrPhone }}</strong>
-      </p>
-      <p>Please enter the code from the SMS to continue.</p>
-
-      <code-input
-        class="code-input"
-        [isCodeHidden]="false"
-        [isNonDigitsCode]="false"
-        [codeLength]="6"
-        [initialFocusField]="0"
-        (codeChanged)="onPhoneVerificationChanged()"
-        (codeCompleted)="onPhoneVerificationCodeCompleted($event)"
-      >
-      </code-input>
-      <mat-error *ngIf="phoneVerificationError" class="code-input-error">
-        {{ phoneVerificationError }}
-      </mat-error>
-
-      <div class="padding">
-        <div id="recaptcha-container-code-confirmation"></div>
-      </div>
-
-      <div class="padding">
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="resendConfirmationCode()"
-        >
-          Resend confirmation code
-        </button>
-      </div>
-    </div>
   </div>
 </div>
