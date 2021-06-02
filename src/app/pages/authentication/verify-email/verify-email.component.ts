@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-
 import { AuthService } from '../services/auth.service';
 import { ThemeService } from '../../../../@fury/services/theme.service';
 import { Project } from '../../../layout/project.model';
@@ -29,10 +28,6 @@ export class VerifyEmailComponent implements OnInit {
   ngOnInit() {
     const authService = this.authService;
     this.user = authService.currentUser;
-    const user = this.user;
-    const router = this.router;
-
-    const isExtension = !!window.chrome && !!window.chrome.extension;
 
     this.themeService.theme$.subscribe(([currentTheme]) => {
       this.themeName = currentTheme.replace('fury-', '');
@@ -41,11 +36,11 @@ export class VerifyEmailComponent implements OnInit {
 
     const checkIfEmailIsVerified = () => {
       const interval = setInterval(async () => {
-        await user.reload();
-        const isEmailVerified = await authService.isEmailVerified();
+        await this.user.reload();
+        const isEmailVerified = authService.isEmailVerified();
         if (isEmailVerified) {
           clearInterval(interval);
-          await router.navigate(['/']);
+          await this.router.navigate(['/']);
         }
       }, 1000);
     };
@@ -61,29 +56,7 @@ export class VerifyEmailComponent implements OnInit {
           .subscribe((project: Project) => {
             this.project = project;
             this.handleLogoUrl();
-
-            if (project && !isExtension) {
-              Array.from(document.getElementsByTagName('link')).forEach(
-                link => {
-                  if (link.getAttribute('rel') === 'icon') {
-                    const favicon = link.getAttribute('href');
-                    if (!!project.favicon && favicon !== project.favicon) {
-                      link.setAttribute('href', project.favicon);
-                    }
-                  }
-                },
-              );
-            }
           });
-      } else {
-        this.logoUrl = 'assets/img/logo.svg';
-        if (!isExtension) {
-          Array.from(document.getElementsByTagName('link')).forEach(link => {
-            if (link.getAttribute('rel') === 'icon') {
-              link.setAttribute('href', 'favicon.ico');
-            }
-          });
-        }
       }
     });
   }
