@@ -107,17 +107,6 @@ export class LoginComponent implements OnInit {
         : '';
   }
 
-  send() {
-    this.router.navigate(['/']);
-    this.snackbar.open(
-      `Lucky you! Looks like you didn't need a password or email address! For a real application we provide validators to prevent this. ;)`,
-      'LOL THANKS',
-      {
-        duration: 10000,
-      },
-    );
-  }
-
   toggleVisibility() {
     if (this.visible) {
       this.inputType = 'password';
