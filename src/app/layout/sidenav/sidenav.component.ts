@@ -46,7 +46,6 @@ export class SidenavComponent implements OnInit {
 
   constructor(
     private afs: AngularFirestore,
-    private router: Router,
     private sidenavService: SidenavService,
     private themeService: ThemeService,
     public sanitizer: DomSanitizer,
