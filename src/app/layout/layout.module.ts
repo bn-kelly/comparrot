@@ -8,7 +8,6 @@ import { LayoutComponent } from './layout.component';
 import { SidenavModule } from './sidenav/sidenav.module';
 import { ToolbarModule } from './toolbar/toolbar.module';
 import { FurySharedModule } from '../../@fury/fury-shared.module';
-import { NavigationModule } from './navigation/navigation.module';
 
 @NgModule({
   imports: [
@@ -22,7 +21,6 @@ import { NavigationModule } from './navigation/navigation.module';
     ToolbarModule,
     SidenavModule,
     FooterModule,
-    NavigationModule,
   ],
   declarations: [LayoutComponent],
 })
