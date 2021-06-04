@@ -22,7 +22,6 @@ $theme-warn: mat-palette($mat-red, $theme-warn-hue);
   background: $theme-background;
   color: $theme-text;
 
-  @import "./pages/forms/form-wizard/form-wizard.component.theme";
   @import "./pages/coming-soon/coming-soon.component.theme";
 }
 
@@ -35,7 +34,6 @@ $theme-warn: mat-palette($mat-red, $theme-warn-hue);
   background: $theme-background;
   color: $theme-text;
 
-  @import "./pages/forms/form-wizard/form-wizard.component.theme";
   @import "./pages/coming-soon/coming-soon.component.theme";
 }
 
@@ -48,7 +46,6 @@ $theme-warn: mat-palette($mat-red, $theme-warn-hue);
   background: $theme-background;
   color: $theme-text;
 
-  @import "./pages/forms/form-wizard/form-wizard.component.theme";
   @import "./pages/coming-soon/coming-soon.component.theme";
 }
 
@@ -61,6 +58,5 @@ $theme-warn: mat-palette($mat-red, $theme-warn-hue);
   background: $theme-background;
   color: $theme-text;
 
-  @import "./pages/forms/form-wizard/form-wizard.component.theme";
   @import "./pages/coming-soon/coming-soon.component.theme";
 }
