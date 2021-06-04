@@ -55,10 +55,8 @@ export class LoginComponent implements OnInit {
   };
 
   constructor(
-    private router: Router,
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
-    private snackbar: MatSnackBar,
     private afs: AngularFirestore,
     private authService: AuthService,
     private themeService: ThemeService,
