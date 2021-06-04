@@ -1,4 +1,4 @@
-import { auth } from 'firebase';
+import * as firebase from 'firebase/app';
 import {
   ChangeDetectorRef,
   Component,
@@ -105,7 +105,7 @@ export class LoginComponent implements OnInit {
   }
 
   rememberUser() {
-    auth().setPersistence(auth.Auth.Persistence.LOCAL);
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
   }
 
   login() {

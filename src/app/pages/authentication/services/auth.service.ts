@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { auth } from 'firebase';
+import * as firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import {
   AngularFirestore,
@@ -95,6 +95,7 @@ export class AuthService {
     private notify: NotifyService,
     private http: HttpClient,
     private extension: ExtensionService,
+    private ngZone: NgZone,
   ) {
     this.user = this.afAuth.authState.pipe(
       switchMap(user => {
@@ -108,27 +109,21 @@ export class AuthService {
       }),
     );
 
-    this.afAuth.onAuthStateChanged(user => {
-      const isBot = navigator.webdriver;
-      if (!user && !isBot) {
-        this.anonymousLogin();
+    this.afAuth.onAuthStateChanged(async user => {
+      if (!user) {
+        await this.anonymousLogin();
+        return;
       }
 
-      if (user) {
-        if (isBot) {
-          auth().signOut();
-        }
+      this.uid = user.uid;
+      const doc = await this.getUserDocByUid(user.uid);
+      const data = doc.data();
 
-        this.uid = user.uid;
-        this.getUserDocByUid(user.uid).then(doc => {
-          const data = doc.data();
-          if (data) {
-            const dataToUpdate = user.isAnonymous ? user : { ...user, ...data };
-            this.currentUser = dataToUpdate;
-            this.updateUserData(dataToUpdate);
-            this.router.navigate(['/']);
-          }
-        });
+      if (data) {
+        const dataToUpdate = user.isAnonymous ? user : { ...user, ...data };
+        this.currentUser = dataToUpdate;
+        await this.updateUserData(dataToUpdate);
+        await this.ngZone.run(() => this.router.navigate(['/']));
       }
     });
 
@@ -138,27 +133,27 @@ export class AuthService {
   }
 
   id() {
-    const provider = new auth.GoogleAuthProvider();
+    const provider = new firebase.auth.GoogleAuthProvider();
     return this.oAuthLogin(provider);
   }
 
   googleLogin() {
-    const provider = new auth.GoogleAuthProvider();
+    const provider = new firebase.auth.GoogleAuthProvider();
     return this.oAuthLogin(provider);
   }
 
   githubLogin() {
-    const provider = new auth.GithubAuthProvider();
+    const provider = new firebase.auth.GithubAuthProvider();
     return this.oAuthLogin(provider);
   }
 
   facebookLogin() {
-    const provider = new auth.FacebookAuthProvider();
+    const provider = new firebase.auth.FacebookAuthProvider();
     return this.oAuthLogin(provider);
   }
 
   twitterLogin() {
-    const provider = new auth.TwitterAuthProvider();
+    const provider = new firebase.auth.TwitterAuthProvider();
     return this.oAuthLogin(provider);
   }
 
@@ -175,15 +170,15 @@ export class AuthService {
   anonymousLogin() {
     return this.afAuth
       .signInAnonymously()
-      .then(response => {
+      .then(async response => {
         // access granted for anonymous user
         this.notify.update('Welcome to Firestarter, anonymous!!!', 'success');
-        this.updateUserData(response.user);
+        await this.updateUserData(response.user);
       })
-      .catch(error => {
+      .catch(async error => {
         this.handleError(error);
         // access denied
-        this.router.navigate(['/login']);
+        await this.router.navigate(['/login']);
       });
   }
 
@@ -264,9 +259,9 @@ export class AuthService {
 
   signOut() {
     return new Promise(resolve => {
-      this.afAuth.signOut().then(() => {
+      this.afAuth.signOut().then(async () => {
         // signed out
-        this.anonymousLogin();
+        await this.anonymousLogin();
         resolve(true);
       });
     });

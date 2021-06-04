@@ -115,7 +115,7 @@ export class DashboardComponent implements OnInit {
 
       if (!user) {
         this.isLoggedIn = false;
-        this.auth.anonymousLogin();
+        await this.auth.anonymousLogin();
         return;
       }
 
