@@ -8,8 +8,6 @@
     "build-watch": "ng build --watch",
     "test": "ng test",
     "lint": "tsc --noEmit && eslint . --ext ts,json --quiet --fix",
-    "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
-    "crx": "crx3 -p comparrot.pem ./dist -o comparrot.crx",
     "pack": "rm comparrot.zip; cd dist; zip -r ../comparrot.zip *"
   },
   "lint-staged": {
