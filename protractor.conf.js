@@ -7,7 +7,6 @@ import tsNode from 'ts-node';
 
 exports.config = {
   allScriptsTimeout: 11000,
-  specs: ['./e2e/**/*.e2e-spec.ts'],
   capabilities: {
     browserName: 'chrome',
   },
@@ -21,9 +20,6 @@ exports.config = {
   },
   useAllAngular2AppRoots: true,
   beforeLaunch: function () {
-    tsNode.register({
-      project: 'e2e',
-    });
   },
   onPrepare: function () {
     jasmine.getEnv().addReporter(new SpecReporter());
