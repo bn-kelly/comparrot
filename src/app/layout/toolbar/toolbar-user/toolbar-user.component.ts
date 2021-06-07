@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../pages/authentication/services/auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import {
-  ExtensionService,
+  MessageService,
   SiteForceLogout,
-} from '../../../services/extension.service';
+} from '../../../services/message.service';
 
 @Component({
   selector: 'fury-toolbar-user',
@@ -24,7 +24,7 @@ export class ToolbarUserComponent implements OnInit {
     private router: Router,
     private afs: AngularFirestore,
     public auth: AuthService,
-    private extension: ExtensionService,
+    private extension: MessageService,
   ) {}
 
   goToAccount() {

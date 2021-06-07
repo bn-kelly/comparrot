@@ -14,9 +14,9 @@ import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import {
-  ExtensionService,
+  MessageService,
   SiteForceLogin,
-} from '../../../services/extension.service';
+} from '../../../services/message.service';
 
 export interface User {
   displayName?: string;
@@ -94,7 +94,7 @@ export class AuthService {
     private router: Router,
     private notify: NotifyService,
     private http: HttpClient,
-    private extension: ExtensionService,
+    private extension: MessageService,
     private ngZone: NgZone,
   ) {
     this.user = this.afAuth.authState.pipe(

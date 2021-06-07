@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import {
-  ExtensionService,
+  MessageService,
   SetUserId,
   PerformGoogleSearch,
-} from '../../services/extension.service';
+} from '../../services/message.service';
 import { ScraperService, Product } from '../../services/scraper.service';
 import {
   AuthService,
@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private afs: AngularFirestore,
-    private extension: ExtensionService,
+    private extension: MessageService,
     private scraper: ScraperService,
   ) {}
 

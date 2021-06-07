@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 /**
- * @class ExtensionService
+ * @class MessageService
  * Service to manage messages between content script and iframe.
  */
 
@@ -10,7 +10,7 @@ declare const chrome: any;
 @Injectable({
   providedIn: 'root',
 })
-export class ExtensionService {
+export class MessageService {
   get isExtension() {
     return !!chrome && !!chrome.extension;
   }

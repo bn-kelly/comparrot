@@ -4,9 +4,9 @@ import { AuthService } from '../../pages/authentication/services/auth.service';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import {
-  ExtensionService,
+  MessageService,
   SiteForceLogin,
-} from '../../services/extension.service';
+} from '../../services/message.service';
 
 @Component({
   selector: 'fury-oauth-component',
@@ -18,7 +18,7 @@ export class OAuthComponent {
     public afAuth: AngularFireAuth,
     public auth: AuthService,
     public router: Router,
-    private extension: ExtensionService,
+    private extension: MessageService,
   ) {}
 
   handleResponse = (response: any) => {
