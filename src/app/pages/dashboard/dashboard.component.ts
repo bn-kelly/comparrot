@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private afs: AngularFirestore,
-    private extension: MessageService,
+    private message: MessageService,
     private scraper: ScraperService,
   ) {}
 
@@ -92,10 +92,10 @@ export class DashboardComponent implements OnInit {
       this.user = user;
 
       this.signInWithUid();
-      this.extension.handleMessage(SetUserId, message => {
+      this.message.handleMessage(SetUserId, message => {
         window.localStorage.setItem('uid', message.uid);
       });
-      this.extension.handleMessage(PerformGoogleSearch, async message => {
+      this.message.handleMessage(PerformGoogleSearch, async message => {
         const product = message.data as Product;
         if (!product && !this.auth.isAuthenticated()) {
           return;

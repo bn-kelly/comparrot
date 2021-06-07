@@ -24,7 +24,7 @@ export class ToolbarUserComponent implements OnInit {
     private router: Router,
     private afs: AngularFirestore,
     public auth: AuthService,
-    private extension: MessageService,
+    private message: MessageService,
   ) {}
 
   goToAccount() {
@@ -38,17 +38,13 @@ export class ToolbarUserComponent implements OnInit {
 
   signOut() {
     this.auth.signOut().then(() => {
-      if (this.extension.isExtension) {
-        window.localStorage.setItem('uid', null);
-        this.extension.sendMessage(
-          {
-            action: SiteForceLogout,
-          },
-          null,
-        );
-      } else {
-        window.localStorage.setItem('uid', null);
-      }
+      window.localStorage.setItem('uid', null);
+      this.message.sendMessage(
+        {
+          action: SiteForceLogout,
+        },
+        null,
+      );
       this.router.navigate(['/']);
     });
     this.isOpen = false;

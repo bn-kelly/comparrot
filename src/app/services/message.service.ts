@@ -11,15 +11,7 @@ declare const chrome: any;
   providedIn: 'root',
 })
 export class MessageService {
-  get isExtension() {
-    return !!chrome && !!chrome.extension;
-  }
-
   sendMessage(data: any, cb: (data: any) => void) {
-    if (!this.isExtension) {
-      return cb({});
-    }
-
     chrome.tabs.getSelected(null, (tab: any) => {
       chrome.tabs.sendMessage(tab.id, data, cb);
     });
@@ -33,10 +25,6 @@ export class MessageService {
       sendResponse: (data: any) => void,
     ) => void,
   ) {
-    if (!this.isExtension) {
-      return handler({}, {}, null);
-    }
-
     chrome.runtime.onMessage.addListener(
       (message: any, sender: any, sendResponse: (data: any) => void) =>
         action === message.action && handler(message, sender, sendResponse),

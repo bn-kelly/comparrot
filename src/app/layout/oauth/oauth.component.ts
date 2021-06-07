@@ -18,7 +18,7 @@ export class OAuthComponent {
     public afAuth: AngularFireAuth,
     public auth: AuthService,
     public router: Router,
-    private extension: MessageService,
+    private message: MessageService,
   ) {}
 
   handleResponse = (response: any) => {
@@ -31,16 +31,14 @@ export class OAuthComponent {
       lastName: response.user.lastName || lastNameFromDisplayName || '',
     };
 
-    if (this.extension.isExtension) {
-      window.localStorage.setItem('uid', data.uid);
-      this.extension.sendMessage(
-        {
-          action: SiteForceLogin,
-          uid: data.uid,
-        },
-        null,
-      );
-    }
+    window.localStorage.setItem('uid', data.uid);
+    this.message.sendMessage(
+      {
+        action: SiteForceLogin,
+        uid: data.uid,
+      },
+      null,
+    );
 
     this.auth.updateUserData(data);
     this.router.navigate(['/']);

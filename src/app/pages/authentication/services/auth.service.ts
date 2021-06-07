@@ -94,7 +94,7 @@ export class AuthService {
     private router: Router,
     private notify: NotifyService,
     private http: HttpClient,
-    private extension: MessageService,
+    private message: MessageService,
     private ngZone: NgZone,
   ) {
     this.user = this.afAuth.authState.pipe(
@@ -211,16 +211,14 @@ export class AuthService {
           return;
         }
         if (result.user.emailVerified) {
-          if (this.extension.isExtension) {
-            window.localStorage.setItem('uid', result.user.uid);
-            this.extension.sendMessage(
-              {
-                action: SiteForceLogin,
-                uid: result.user.uid,
-              },
-              null,
-            );
-          }
+          window.localStorage.setItem('uid', result.user.uid);
+          this.message.sendMessage(
+            {
+              action: SiteForceLogin,
+              uid: result.user.uid,
+            },
+            null,
+          );
 
           this.notify.update('Welcome back!', 'success');
           this.router.navigate(['/']);
