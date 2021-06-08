@@ -7,24 +7,21 @@ import {
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.animation';
 import { AuthService } from '../services/auth.service';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { ThemeService } from '../../../../@fury/services/theme.service';
-import { Project } from '../../../layout/project.model';
+import { Project } from '../../../models/project.model';
 import { MatchingValidator } from './matching.validator';
-import { emailOrPasswordPattern } from '../constants';
 
 type UserFields =
   | 'firstname'
   | 'lastname'
-  | 'emailOrPhone'
+  | 'email'
   | 'password'
   | 'passwordConfirm'
   | 'acceptTerms';
 type FormErrors = { [u in UserFields]: string };
-
-const isPhoneAuthAllowed = location.protocol.startsWith('http');
 
 @Component({
   selector: 'fury-register',
@@ -37,16 +34,12 @@ export class RegisterComponent implements OnInit {
   form: FormGroup;
   firstName: '';
   lastName: '';
-  emailOrPhone: '';
+  email: '';
   password: '';
-  isPhoneAuthAllowed: boolean;
-  verificationId: '';
-  phoneConfirmationResult: any;
-  phoneVerificationError: '';
   formErrors: FormErrors = {
     firstname: '',
     lastname: '',
-    emailOrPhone: '',
+    email: '',
     password: '',
     passwordConfirm: '',
     acceptTerms: '',
@@ -58,13 +51,9 @@ export class RegisterComponent implements OnInit {
     lastname: {
       required: 'Please enter your lastname',
     },
-    emailOrPhone: {
-      required: `Please enter your email${
-        isPhoneAuthAllowed ? ' or phone number' : ''
-      }`,
-      emailOrPhone: `Must be a valid email${
-        isPhoneAuthAllowed ? ' or phone number' : ''
-      }`,
+    email: {
+      required: 'Please enter your email',
+      email: 'Must be a valid email',
     },
     password: {
       required: 'Please enter your password',
@@ -96,9 +85,6 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const isExtension = !!window.chrome && !!window.chrome.extension;
-    this.isPhoneAuthAllowed = isPhoneAuthAllowed;
-
     this.buildForm();
 
     this.themeService.theme$.subscribe(([currentTheme]) => {
@@ -115,29 +101,7 @@ export class RegisterComponent implements OnInit {
           .subscribe((project: Project) => {
             this.project = project;
             this.handleLogoUrl();
-
-            if (project && !isExtension) {
-              Array.from(document.getElementsByTagName('link')).forEach(
-                link => {
-                  if (link.getAttribute('rel') === 'icon') {
-                    const favicon = link.getAttribute('href');
-                    if (!!project.favicon && favicon !== project.favicon) {
-                      link.setAttribute('href', project.favicon);
-                    }
-                  }
-                },
-              );
-            }
           });
-      } else {
-        this.logoUrl = 'assets/img/logo.svg';
-        if (!isExtension) {
-          Array.from(document.getElementsByTagName('link')).forEach(link => {
-            if (link.getAttribute('rel') === 'icon') {
-              link.setAttribute('href', 'favicon.ico');
-            }
-          });
-        }
       }
     });
   }
@@ -147,10 +111,6 @@ export class RegisterComponent implements OnInit {
       this.project && this.project.logoUrl
         ? this.project.logoUrl[this.themeName] || this.project.logoUrl.default
         : '';
-  }
-
-  send() {
-    this.router.navigate(['/']);
   }
 
   toggleVisibility() {
@@ -173,24 +133,19 @@ export class RegisterComponent implements OnInit {
 
     this.firstName = this.form.value['firstname'];
     this.lastName = this.form.value['lastname'];
-    this.emailOrPhone = this.form.value['emailOrPhone'];
+    this.email = this.form.value['email'];
     this.password = this.form.value['password'];
 
     this.auth
-      .phoneOrEmailSignUp({
-        emailOrPhone: this.emailOrPhone,
+      .emailSignUp({
+        email: this.email,
         password: this.password,
         firstName: this.firstName,
         lastName: this.lastName,
       })
       .then(response => {
         const data: any = response ? { ...response } : {};
-        const { code, message, verificationId } = data;
-
-        if (verificationId) {
-          this.verificationId = verificationId;
-          this.phoneConfirmationResult = response;
-        }
+        const { code, message } = data;
 
         if (['auth/wrong-password', 'auth/too-many-requests'].includes(code)) {
           this.form.controls.password.setErrors({ password: message });
@@ -203,53 +158,8 @@ export class RegisterComponent implements OnInit {
         }
 
         if (['auth/email-already-in-use'].includes(code)) {
-          this.form.controls.emailOrPhone.setErrors({ emailOrPhone: message });
-          this.formErrors.emailOrPhone = message;
-        }
-      });
-  }
-
-  onPhoneVerificationChanged() {
-    this.phoneVerificationError = '';
-  }
-
-  onPhoneVerificationCodeCompleted(confirmationCode) {
-    this.phoneConfirmationResult
-      .confirm(confirmationCode)
-      .then(response => {
-        if (response && response.user && response.user.uid) {
-          this.auth
-            .getUserDocByUid(response.user.uid)
-            .then(doc => doc.data() || {})
-            .then(userDoc => {
-              this.auth.updateUserData({
-                ...response.user,
-                ...userDoc,
-              });
-              this.router.navigate(['/']);
-            });
-        }
-      })
-      .catch(error => {
-        const { code, message } = error;
-
-        if (['auth/invalid-verification-code'].includes(code)) {
-          this.phoneVerificationError = message;
-        }
-      });
-  }
-
-  resendConfirmationCode() {
-    const recaptchaElementId = 'recaptcha-container-code-confirmation';
-
-    this.auth
-      .signInWithPhoneNumber(this.emailOrPhone, recaptchaElementId)
-      .then((response: any) => {
-        this.verificationId = response.verificationId;
-        this.phoneConfirmationResult = response;
-        const recaptchaElement = document.getElementById(recaptchaElementId);
-        if (recaptchaElement) {
-          recaptchaElement.innerHTML = '';
+          this.form.controls.email.setErrors({ email: message });
+          this.formErrors.email = message;
         }
       });
   }
@@ -259,13 +169,11 @@ export class RegisterComponent implements OnInit {
       {
         firstname: ['', Validators.required],
         lastname: ['', Validators.required],
-        emailOrPhone: [
+        email: [
           '',
           [
             Validators.required,
-            this.isPhoneAuthAllowed
-              ? Validators.pattern(emailOrPasswordPattern)
-              : Validators.email,
+            Validators.email,
           ],
         ],
         password: [
@@ -298,7 +206,7 @@ export class RegisterComponent implements OnInit {
     for (const field in this.formErrors) {
       if (
         Object.prototype.hasOwnProperty.call(this.formErrors, field) &&
-        ['name', 'emailOrPhone', 'password', 'passwordConfirm'].includes(field)
+        ['name', 'email', 'password', 'passwordConfirm'].includes(field)
       ) {
         // clear previous error message (if any)
         this.formErrors[field] = '';

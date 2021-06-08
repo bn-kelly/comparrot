@@ -1,4 +1,4 @@
-import { auth } from 'firebase';
+import * as firebase from 'firebase/app';
 import {
   ChangeDetectorRef,
   Component,
@@ -7,19 +7,14 @@ import {
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.animation';
 import { AuthService } from '../services/auth.service';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { ThemeService } from '../../../../@fury/services/theme.service';
-import { Project } from '../../../layout/project.model';
-import { emailOrPasswordPattern } from '../constants';
+import { Project } from '../../../models/project.model';
 
-type UserFields = 'emailOrPhone' | 'password' | 'rememberMe';
+type UserFields = 'email' | 'password' | 'rememberMe';
 type FormErrors = { [u in UserFields]: string };
-
-const isPhoneAuthAllowed = location.protocol.startsWith('http');
 
 @Component({
   selector: 'fury-login',
@@ -30,13 +25,9 @@ const isPhoneAuthAllowed = location.protocol.startsWith('http');
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;
-  emailOrPhone: '';
+  email: '';
   password: '';
   rememberMe: false;
-  isPhoneAuthAllowed: boolean;
-  verificationId: '';
-  phoneConfirmationResult: any;
-  phoneVerificationError: '';
   inputType = 'password';
   visible = false;
   logoUrl: string;
@@ -47,18 +38,14 @@ export class LoginComponent implements OnInit {
   newUser = true; // to toggle login or signup form
   passReset = false; // set to true when password reset is triggered
   formErrors: FormErrors = {
-    emailOrPhone: '',
+    email: '',
     password: '',
     rememberMe: '',
   };
   validationMessages = {
-    emailOrPhone: {
-      required: `Please enter your email${
-        isPhoneAuthAllowed ? ' or phone number' : ''
-      }`,
-      emailOrPhone: `Must be a valid email${
-        isPhoneAuthAllowed ? ' or phone number' : ''
-      }`,
+    email: {
+      required: 'Please enter your email',
+      email: 'Must be a valid email',
     },
     password: {
       required: 'Please enter your password',
@@ -66,10 +53,8 @@ export class LoginComponent implements OnInit {
   };
 
   constructor(
-    private router: Router,
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
-    private snackbar: MatSnackBar,
     private afs: AngularFirestore,
     private authService: AuthService,
     private themeService: ThemeService,
@@ -77,9 +62,6 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const isExtension = !!window.chrome && !!window.chrome.extension;
-    this.isPhoneAuthAllowed = isPhoneAuthAllowed;
-
     this.buildForm();
 
     this.themeService.theme$.subscribe(([currentTheme]) => {
@@ -96,29 +78,7 @@ export class LoginComponent implements OnInit {
           .subscribe((project: Project) => {
             this.project = project;
             this.handleLogoUrl();
-
-            if (project && !isExtension) {
-              Array.from(document.getElementsByTagName('link')).forEach(
-                link => {
-                  if (link.getAttribute('rel') === 'icon') {
-                    const favicon = link.getAttribute('href');
-                    if (!!project.favicon && favicon !== project.favicon) {
-                      link.setAttribute('href', project.favicon);
-                    }
-                  }
-                },
-              );
-            }
           });
-      } else {
-        this.logoUrl = 'assets/img/logo.svg';
-        if (!isExtension) {
-          Array.from(document.getElementsByTagName('link')).forEach(link => {
-            if (link.getAttribute('rel') === 'icon') {
-              link.setAttribute('href', 'favicon.ico');
-            }
-          });
-        }
       }
     });
   }
@@ -128,17 +88,6 @@ export class LoginComponent implements OnInit {
       this.project && this.project.logoUrl
         ? this.project.logoUrl[this.themeName] || this.project.logoUrl.default
         : '';
-  }
-
-  send() {
-    this.router.navigate(['/']);
-    this.snackbar.open(
-      `Lucky you! Looks like you didn't need a password or email address! For a real application we provide validators to prevent this. ;)`,
-      'LOL THANKS',
-      {
-        duration: 10000,
-      },
-    );
   }
 
   toggleVisibility() {
@@ -153,12 +102,8 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  toggleForm() {
-    this.newUser = !this.newUser;
-  }
-
   rememberUser() {
-    auth().setPersistence(auth.Auth.Persistence.LOCAL);
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
   }
 
   login() {
@@ -166,20 +111,15 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.emailOrPhone = this.form.value['emailOrPhone'];
+    this.email = this.form.value['email'];
     this.password = this.form.value['password'];
     this.rememberMe = this.form.value['rememberMe'];
 
     this.authService
-      .phoneOrEmailLogin(this.emailOrPhone, this.password)
+      .emailLogin(this.email, this.password)
       .then(response => {
         const data: any = response ? { ...response } : {};
-        const { code, message, verificationId } = data;
-
-        if (verificationId) {
-          this.verificationId = verificationId;
-          this.phoneConfirmationResult = response;
-        }
+        const { code, message } = data;
 
         if (['auth/wrong-password', 'auth/too-many-requests'].includes(code)) {
           this.form.controls.password.setErrors({ password: message });
@@ -187,8 +127,8 @@ export class LoginComponent implements OnInit {
         }
 
         if (['auth/user-not-found'].includes(code)) {
-          this.form.controls.emailOrPhone.setErrors({ emailOrPhone: message });
-          this.formErrors.emailOrPhone = message;
+          this.form.controls.email.setErrors({ email: message });
+          this.formErrors.email = message;
         }
 
         if (!response && this.rememberMe) {
@@ -197,69 +137,19 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  onPhoneVerificationChanged() {
-    this.phoneVerificationError = '';
-  }
-
-  onPhoneVerificationCodeCompleted(confirmationCode) {
-    this.phoneConfirmationResult
-      .confirm(confirmationCode)
-      .then(response => {
-        if (response && response.user && response.user.uid) {
-          if (this.rememberMe) {
-            this.rememberUser();
-          }
-          this.authService
-            .getUserDocByUid(response.user.uid)
-            .then(doc => doc.data() || {})
-            .then(userDoc => {
-              this.authService.updateUserData({
-                ...response.user,
-                ...userDoc,
-              });
-              this.router.navigate(['/']);
-            });
-        }
-      })
-      .catch(error => {
-        const { code, message } = error;
-
-        if (['auth/invalid-verification-code'].includes(code)) {
-          this.phoneVerificationError = message;
-        }
-      });
-  }
-
-  resendConfirmationCode() {
-    const recaptchaElementId = 'recaptcha-container-code-confirmation';
-
-    this.authService
-      .signInWithPhoneNumber(this.emailOrPhone, recaptchaElementId)
-      .then((response: any) => {
-        this.verificationId = response.verificationId;
-        this.phoneConfirmationResult = response;
-        const recaptchaElement = document.getElementById(recaptchaElementId);
-        if (recaptchaElement) {
-          recaptchaElement.innerHTML = '';
-        }
-      });
-  }
-
   resetPassword() {
     this.authService
-      .resetPassword(this.form.value['emailOrPhone'])
+      .resetPassword(this.form.value['email'])
       .then(() => (this.passReset = true));
   }
 
   buildForm() {
     this.form = this.fb.group({
-      emailOrPhone: [
+      email: [
         '',
         [
           Validators.required,
-          this.isPhoneAuthAllowed
-            ? Validators.pattern(emailOrPasswordPattern)
-            : Validators.email,
+          Validators.email,
         ],
       ],
       password: ['', Validators.required],
@@ -279,7 +169,7 @@ export class LoginComponent implements OnInit {
     for (const field in this.formErrors) {
       if (
         Object.prototype.hasOwnProperty.call(this.formErrors, field) &&
-        ['emailOrPhone', 'password'].includes(field)
+        ['email', 'password'].includes(field)
       ) {
         // clear previous error message (if any)
         this.formErrors[field] = '';

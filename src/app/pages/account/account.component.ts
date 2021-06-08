@@ -8,14 +8,15 @@ import {
 import { MatAccordion } from '@angular/material/expansion';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService, User } from '../authentication/services/auth.service';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
-import { EmailAlert } from './email-alert.model';
-import { CategoryOfInterest } from './category-of-interest.model';
-import { FAQ } from './faq.model';
-import { Offer } from '../dashboard/offer.model';
-import { Project } from '../../layout/project.model';
-import { PersonalizationData } from './personalization-data.model';
+import { AuthService } from '../authentication/services/auth.service';
+import { User } from '../../models/user.model';
+import { EmailAlert } from '../../models/email-alert.model';
+import { CategoryOfInterest } from '../../models/category-of-interest.model';
+import { FAQ } from '../../models/faq.model';
+import { Offer } from '../../models/offer.model';
+import { Project } from '../../models/project.model';
+import { PersonalizationData } from '../../models/personalization-data.model';
 
 type Fields = 'firstName' | 'lastName' | 'photoURL';
 type FormErrors = { [u in Fields]: string };

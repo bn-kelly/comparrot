@@ -7,16 +7,8 @@
     "build": "ng build --prod",
     "build-watch": "ng build --watch",
     "test": "ng test",
-    "lint": "tsc --noEmit && eslint . --ext js,ts,json --quiet --fix",
-    "e2e": "ng e2e",
-    "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
-    "crx": "crx3 -p comparrot.pem ./dist -o comparrot.crx",
+    "lint": "tsc --noEmit && eslint . --ext ts,json --quiet --fix",
     "pack": "rm comparrot.zip; cd dist; zip -r ../comparrot.zip *"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged --relative"
-    }
   },
   "lint-staged": {
     "*.{js,ts}": [

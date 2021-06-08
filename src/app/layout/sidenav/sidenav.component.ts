@@ -13,11 +13,9 @@ import { map } from 'rxjs/operators';
 import { SidenavItem } from './sidenav-item/sidenav-item.interface';
 import { SidenavService } from './sidenav.service';
 import { ThemeService } from '../../../@fury/services/theme.service';
-import { Project } from '../project.model';
-import {
-  AuthService,
-  User,
-} from '../../pages/authentication/services/auth.service';
+import { Project } from '../../models/project.model';
+import { User } from '../../models/user.model';
+import { AuthService } from '../../pages/authentication/services/auth.service';
 
 @Component({
   selector: 'fury-sidenav',
@@ -46,7 +44,6 @@ export class SidenavComponent implements OnInit {
 
   constructor(
     private afs: AngularFirestore,
-    private router: Router,
     private sidenavService: SidenavService,
     private themeService: ThemeService,
     public sanitizer: DomSanitizer,
