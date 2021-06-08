@@ -1,4 +1,4 @@
-export class PersonalizationData {
+export interface PersonalizationData {
   types: {
     id: number;
     order: number;

@@ -2,7 +2,7 @@ import { CategoryOfInterest } from './category-of-interest.model';
 import { EmailAlert } from './email-alert.model';
 import { PersonalizationData } from './personalization-data.model';
 
-export class Project {
+export interface Project {
   logoUrl: {
     default: string;
     light: string;

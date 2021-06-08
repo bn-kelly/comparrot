@@ -1,4 +1,4 @@
-export class Offer {
+export interface Offer {
   id: string;
   image?: string;
   imageUrl?: string;

@@ -1,4 +1,4 @@
-export class EmailAlert {
+export interface EmailAlert {
   id: number;
   description: string;
 }
