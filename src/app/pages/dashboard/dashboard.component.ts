@@ -55,11 +55,12 @@ export class DashboardComponent implements OnInit {
   }
 
   showExtension() {
-    window.chrome.tabs.getSelected(null, tab => {
-      window.chrome.tabs.sendMessage(tab.id, {
+    this.message.sendMessage(
+      {
         action: 'show-iframe',
-      });
-    });
+      },
+      null,
+    );
   }
 
   async signInWithUid() {
@@ -110,6 +111,7 @@ export class DashboardComponent implements OnInit {
           return p.retailer !== product.retailer;
         });
         console.log('products:', this.products);
+        this.showExtension();
       });
 
       if (!user) {
