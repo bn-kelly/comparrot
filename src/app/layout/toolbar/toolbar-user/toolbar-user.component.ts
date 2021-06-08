@@ -3,10 +3,8 @@ import { Router } from '@angular/router';
 
 import { AuthService } from '../../../pages/authentication/services/auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
-import {
-  ExtensionService,
-  SiteForceLogout,
-} from '../../../services/extension.service';
+import { MessageService } from '../../../services/message.service';
+import { SiteForceLogout } from '../../../constants';
 
 @Component({
   selector: 'fury-toolbar-user',
@@ -24,7 +22,7 @@ export class ToolbarUserComponent implements OnInit {
     private router: Router,
     private afs: AngularFirestore,
     public auth: AuthService,
-    private extension: ExtensionService,
+    private message: MessageService,
   ) {}
 
   goToAccount() {
@@ -38,17 +36,13 @@ export class ToolbarUserComponent implements OnInit {
 
   signOut() {
     this.auth.signOut().then(() => {
-      if (this.extension.isExtension) {
-        window.localStorage.setItem('uid', null);
-        this.extension.sendMessage(
-          {
-            action: SiteForceLogout,
-          },
-          null,
-        );
-      } else {
-        window.localStorage.setItem('uid', null);
-      }
+      window.localStorage.setItem('uid', null);
+      this.message.sendMessage(
+        {
+          action: SiteForceLogout,
+        },
+        null,
+      );
       this.router.navigate(['/']);
     });
     this.isOpen = false;

@@ -1,12 +1,10 @@
-import * as firebase from 'firebase/app';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { AuthService } from '../../pages/authentication/services/auth.service';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  ExtensionService,
-  SiteForceLogin,
-} from '../../services/extension.service';
+import { AngularFireAuth } from '@angular/fire/auth';
+import * as firebase from 'firebase/app';
+import { AuthService } from '../../pages/authentication/services/auth.service';
+import { MessageService } from '../../services/message.service';
+import { SiteForceLogin } from '../../constants';
 
 @Component({
   selector: 'fury-oauth-component',
@@ -18,7 +16,7 @@ export class OAuthComponent {
     public afAuth: AngularFireAuth,
     public auth: AuthService,
     public router: Router,
-    private extension: ExtensionService,
+    private message: MessageService,
   ) {}
 
   handleResponse = (response: any) => {
@@ -31,16 +29,14 @@ export class OAuthComponent {
       lastName: response.user.lastName || lastNameFromDisplayName || '',
     };
 
-    if (this.extension.isExtension) {
-      window.localStorage.setItem('uid', data.uid);
-      this.extension.sendMessage(
-        {
-          action: SiteForceLogin,
-          uid: data.uid,
-        },
-        null,
-      );
-    }
+    window.localStorage.setItem('uid', data.uid);
+    this.message.sendMessage(
+      {
+        action: SiteForceLogin,
+        uid: data.uid,
+      },
+      null,
+    );
 
     this.auth.updateUserData(data);
     this.router.navigate(['/']);

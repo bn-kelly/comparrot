@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ThemeService } from '../../../@fury/services/theme.service';
 import { AuthService } from '../../pages/authentication/services/auth.service';
 
 @Component({
@@ -10,7 +9,7 @@ import { AuthService } from '../../pages/authentication/services/auth.service';
 export class FooterComponent implements OnInit {
   isLoggedIn: boolean;
 
-  constructor(private themeService: ThemeService, private auth: AuthService) {}
+  constructor(private auth: AuthService) {}
 
   ngOnInit() {
     this.auth.user.subscribe(user => {

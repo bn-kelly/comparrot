@@ -67,9 +67,6 @@ $toolbar-search-dropdown-elevation: $elevation !default;
 
 @import "../../../app/layout/toolbar/toolbar.component.theme";
 
-// Navigation
-@import "../../../app/layout/navigation/navigation.component.theme";
-
 // Card
 @import "../../shared/card/card.component.theme";
 
@@ -96,26 +93,6 @@ $footer-elevation: 0 !default;
 
 // List
 @import "../../shared/list/list.component.theme";
-
-// Widgets
-
-// Advanced Pie Chart Widget
-@import "../../../app/pages/dashboard/widgets/advanced-pie-chart-widget/advanced-pie-chart-widget.component.theme";
-
-// Recent Sales Widget
-@import "../../../app/pages/dashboard/widgets/recent-sales-widget/recent-sales-widget.component.theme";
-
-// Market Widget
-@import "../../../app/pages/dashboard/widgets/market-widget/market-widget.component.theme";
-
-// Sales Summary Widget
-@import "../../../app/pages/dashboard/widgets/sales-summary-widget/sales-summary-widget.component.theme";
-
-// Audience Overview Widget
-@import "../../../app/pages/dashboard/widgets/audience-overview-widget/audience-overview-widget.component.theme";
-
-// Donut Chart Widget
-@import "../../../app/pages/dashboard/widgets/donut-chart-widget/donut-chart-widget.component.theme";
 
 // OAuth Component
 @import "../../../app/layout/oauth/oauth.component.theme";

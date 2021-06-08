@@ -3,10 +3,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.animation';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.animation';
 import { ThemeService } from '../../../../@fury/services/theme.service';
-import { Project } from '../../../layout/project.model';
+import { Project } from '../../../models/project.model';
 import { AuthService } from '../services/auth.service';
 
 type UserFields = 'email';
@@ -44,8 +44,6 @@ export class ForgotPasswordComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const isExtension = !!window.chrome && !!window.chrome.extension;
-
     this.buildForm();
 
     this.themeService.theme$.subscribe(([currentTheme]) => {
@@ -62,29 +60,7 @@ export class ForgotPasswordComponent implements OnInit {
           .subscribe((project: Project) => {
             this.project = project;
             this.handleLogoUrl();
-
-            if (project && !isExtension) {
-              Array.from(document.getElementsByTagName('link')).forEach(
-                link => {
-                  if (link.getAttribute('rel') === 'icon') {
-                    const favicon = link.getAttribute('href');
-                    if (!!project.favicon && favicon !== project.favicon) {
-                      link.setAttribute('href', project.favicon);
-                    }
-                  }
-                },
-              );
-            }
           });
-      } else {
-        this.logoUrl = 'assets/img/logo_mobile.svg';
-        if (!isExtension) {
-          Array.from(document.getElementsByTagName('link')).forEach(link => {
-            if (link.getAttribute('rel') === 'icon') {
-              link.setAttribute('href', 'favicon.ico');
-            }
-          });
-        }
       }
     });
   }

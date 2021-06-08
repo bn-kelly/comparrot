@@ -7,11 +7,21 @@ import { HttpClient } from '@angular/common/http';
  * Service for utility functions.
  */
 
+declare const chrome: any;
+
 @Injectable({
   providedIn: 'root',
 })
 export class UtilService {
   constructor(private sanitizer: DomSanitizer, private http: HttpClient) {}
+
+  async getSeletedTab(): Promise<any> {
+    return new Promise((resolve) => {
+      chrome.tabs.getSelected(null, (tab: any) => {
+        resolve(tab);
+      });
+    });
+  }
 
   getXPathString(doc: Document, xpath: string) {
     if (!xpath) return '';

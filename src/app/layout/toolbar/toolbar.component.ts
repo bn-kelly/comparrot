@@ -11,7 +11,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { map } from 'rxjs/operators';
 import { ThemeService } from '../../../@fury/services/theme.service';
 import { AuthService } from '../../pages/authentication/services/auth.service';
-import { Project } from '../project.model';
+import { Project } from '../../models/project.model';
 
 @Component({
   selector: 'fury-toolbar',
