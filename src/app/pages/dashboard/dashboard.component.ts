@@ -6,10 +6,7 @@ import { AuthService } from '../../pages/authentication/services/auth.service';
 import { Project } from '../../models/project.model';
 import { User } from '../../models/user.model';
 import { Product } from '../../models/product.model';
-import {
-  SetUserId,
-  PerformGoogleSearch,
-} from '../../constants';
+import { SetUserId, PerformGoogleSearch } from '../../constants';
 
 @Component({
   selector: 'fury-dashboard',

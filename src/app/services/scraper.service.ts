@@ -15,7 +15,11 @@ import { Product } from '../models/product.model';
   providedIn: 'root',
 })
 export class ScraperService {
-  constructor(private util: UtilService, private storage: StorageService, private http: HttpClient) {}
+  constructor(
+    private util: UtilService,
+    private storage: StorageService,
+    private http: HttpClient,
+  ) {}
 
   async searchGoogle(product: Product): Promise<Product[]> {
     if (!product) {
@@ -118,9 +122,15 @@ export class ScraperService {
       }
 
       const image = doc.querySelector(retailer.selectors?.product?.image[0]);
-      console.log('image', retailer, image, retailer.selectors?.product?.image[0]);
+      console.log(
+        'image',
+        retailer,
+        image,
+        retailer.selectors?.product?.image[0],
+      );
       data[i].image = image
-        ? image.getAttribute('src') && image.getAttribute('src').includes('https')
+        ? image.getAttribute('src') &&
+          image.getAttribute('src').includes('https')
           ? image.getAttribute('src')
           : `https:${image.getAttribute('src')}`
         : '';

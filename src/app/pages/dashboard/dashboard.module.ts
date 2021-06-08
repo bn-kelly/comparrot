@@ -13,9 +13,7 @@ import { FurySharedModule } from '../../../@fury/fury-shared.module';
     MaterialModule,
     FurySharedModule,
   ],
-  declarations: [
-    DashboardComponent,
-  ],
+  declarations: [DashboardComponent],
   providers: [DashboardService],
 })
 export class DashboardModule {}

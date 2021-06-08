@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SidenavItem } from './sidenav-item/sidenav-item.interface';

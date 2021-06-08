@@ -117,12 +117,7 @@ export class AuthService {
       });
   }
 
-  emailSignUp({
-    email,
-    password,
-    firstName,
-    lastName,
-  }: any): Promise<any> {
+  emailSignUp({ email, password, firstName, lastName }: any): Promise<any> {
     return this.afAuth
       .createUserWithEmailAndPassword(email, password)
       .then(credential => {

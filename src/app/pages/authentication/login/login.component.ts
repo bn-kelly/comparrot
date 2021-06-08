@@ -115,26 +115,24 @@ export class LoginComponent implements OnInit {
     this.password = this.form.value['password'];
     this.rememberMe = this.form.value['rememberMe'];
 
-    this.authService
-      .emailLogin(this.email, this.password)
-      .then(response => {
-        const data: any = response ? { ...response } : {};
-        const { code, message } = data;
+    this.authService.emailLogin(this.email, this.password).then(response => {
+      const data: any = response ? { ...response } : {};
+      const { code, message } = data;
 
-        if (['auth/wrong-password', 'auth/too-many-requests'].includes(code)) {
-          this.form.controls.password.setErrors({ password: message });
-          this.formErrors.password = message;
-        }
+      if (['auth/wrong-password', 'auth/too-many-requests'].includes(code)) {
+        this.form.controls.password.setErrors({ password: message });
+        this.formErrors.password = message;
+      }
 
-        if (['auth/user-not-found'].includes(code)) {
-          this.form.controls.email.setErrors({ email: message });
-          this.formErrors.email = message;
-        }
+      if (['auth/user-not-found'].includes(code)) {
+        this.form.controls.email.setErrors({ email: message });
+        this.formErrors.email = message;
+      }
 
-        if (!response && this.rememberMe) {
-          this.rememberUser();
-        }
-      });
+      if (!response && this.rememberMe) {
+        this.rememberUser();
+      }
+    });
   }
 
   resetPassword() {
@@ -145,13 +143,7 @@ export class LoginComponent implements OnInit {
 
   buildForm() {
     this.form = this.fb.group({
-      email: [
-        '',
-        [
-          Validators.required,
-          Validators.email,
-        ],
-      ],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       rememberMe: false,
     });

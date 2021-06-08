@@ -19,7 +19,6 @@ import { Vendor } from '../models/vendor.model';
   styleUrls: ['./layout.component.scss'],
 })
 export class LayoutComponent implements OnInit {
-
   scrapedUrls: string[] = [];
   vendors: Vendor[];
 
@@ -55,7 +54,6 @@ export class LayoutComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-
     this.auth.user.subscribe(user => {
       if (!user) {
         Array.from(document.getElementsByTagName('link')).forEach(link => {
@@ -79,7 +77,7 @@ export class LayoutComponent implements OnInit {
         .valueChanges()
         .subscribe(async (vendors: Vendor[]) => {
           this.vendors = vendors;
-          
+
           const tab = await this.util.getSeletedTab();
           console.info('this.scrapedUrls');
           console.info(this.scrapedUrls);
@@ -97,8 +95,8 @@ export class LayoutComponent implements OnInit {
               action: TryToScrapeData,
               url: tab.url,
               vendors: this.vendors,
-            }, 
-            null
+            },
+            null,
           );
           this.scrapedUrls.push(tab.url);
         });
