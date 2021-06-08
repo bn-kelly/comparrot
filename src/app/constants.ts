@@ -2,6 +2,7 @@ export const SiteForceLogin = 'site-force-login';
 export const SiteForceLogout = 'site-force-logout';
 export const SetUserId = 'set-user-id';
 export const PerformGoogleSearch = 'perform-google-search';
+export const TryToScrapeData = 'try-to-scrape-data';
 
 export const GoogleXPaths = {
   g_prod_url:

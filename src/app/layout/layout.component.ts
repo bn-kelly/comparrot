@@ -8,6 +8,9 @@ import { NavigationEnd, Router } from '@angular/router';
 import { ThemeService } from '../../@fury/services/theme.service';
 import { checkRouterChildsData } from '../../@fury/utils/check-router-childs-data';
 import { AuthService } from '../pages/authentication/services/auth.service';
+import { MessageService } from '../services/message.service';
+import { UtilService } from '../services/util.service';
+import { TryToScrapeData } from '../constants';
 import { Vendor } from '../models/vendor.model';
 
 @Component({
@@ -47,6 +50,8 @@ export class LayoutComponent implements OnInit {
     public auth: AuthService,
     private themeService: ThemeService,
     private router: Router,
+    private message: MessageService,
+    private util: UtilService,
   ) {}
 
   ngOnInit() {
@@ -72,28 +77,30 @@ export class LayoutComponent implements OnInit {
       this.afs
         .collection('retailers')
         .valueChanges()
-        .subscribe((vendors: Vendor[]) => {
+        .subscribe(async (vendors: Vendor[]) => {
           this.vendors = vendors;
+          
+          const tab = await this.util.getSeletedTab();
+          console.info('this.scrapedUrls');
+          console.info(this.scrapedUrls);
 
-          window.chrome.tabs.getSelected(null, tab => {
-            // TODO: remove when 174512601 is done
-            console.info('this.scrapedUrls');
-            console.info(this.scrapedUrls);
-            if (
-              Array.isArray(this.scrapedUrls) &&
-              this.scrapedUrls.includes(tab.url)
-            ) {
-              return;
-            }
-            // TODO: remove when 174512601 is done
-            console.info('--- layout try-to-scrape-data ---');
-            window.chrome.tabs.sendMessage(tab.id, {
-              action: 'try-to-scrape-data',
+          if (
+            Array.isArray(this.scrapedUrls) &&
+            this.scrapedUrls.includes(tab.url)
+          ) {
+            return;
+          }
+
+          console.info('--- layout try-to-scrape-data ---');
+          this.message.sendMessage(
+            {
+              action: TryToScrapeData,
               url: tab.url,
               vendors: this.vendors,
-            });
-            this.scrapedUrls.push(tab.url);
-          });
+            }, 
+            null
+          );
+          this.scrapedUrls.push(tab.url);
         });
     });
 
