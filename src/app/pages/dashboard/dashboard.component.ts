@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { MessageService } from '../../services/message.service';
+import { ScraperService } from '../../services/scraper.service';
+import { AuthService } from '../../pages/authentication/services/auth.service';
+import { Project } from '../../models/project.model';
+import { User } from '../../models/user.model';
+import { Product } from '../../models/product.model';
 import {
-  MessageService,
   SetUserId,
   PerformGoogleSearch,
-} from '../../services/message.service';
-import { ScraperService, Product } from '../../services/scraper.service';
-import {
-  AuthService,
-  User,
-} from '../../pages/authentication/services/auth.service';
-import { Project } from '../../layout/project.model';
+} from '../../constants';
 
 @Component({
   selector: 'fury-dashboard',

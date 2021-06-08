@@ -4,7 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { ThemeService } from '../../../../@fury/services/theme.service';
-import { Project } from '../../../layout/project.model';
+import { Project } from '../../../models/project.model';
 
 @Component({
   selector: 'fury-verify-email',

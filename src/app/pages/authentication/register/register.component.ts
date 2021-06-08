@@ -11,7 +11,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.animation';
 import { AuthService } from '../services/auth.service';
 import { ThemeService } from '../../../../@fury/services/theme.service';
-import { Project } from '../../../layout/project.model';
+import { Project } from '../../../models/project.model';
 import { MatchingValidator } from './matching.validator';
 
 type UserFields =

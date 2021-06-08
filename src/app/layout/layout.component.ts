@@ -8,7 +8,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { ThemeService } from '../../@fury/services/theme.service';
 import { checkRouterChildsData } from '../../@fury/utils/check-router-childs-data';
 import { AuthService } from '../pages/authentication/services/auth.service';
-import { Vendor } from './vendor.model';
+import { Vendor } from '../models/vendor.model';
 
 @Component({
   selector: 'fury-layout',

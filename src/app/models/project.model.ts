@@ -1,6 +1,6 @@
-import { CategoryOfInterest } from '../pages/account/category-of-interest.model';
-import { EmailAlert } from '../pages/account/email-alert.model';
-import { PersonalizationData } from '../pages/account/personalization-data.model';
+import { CategoryOfInterest } from './category-of-interest.model';
+import { EmailAlert } from './email-alert.model';
+import { PersonalizationData } from './personalization-data.model';
 
 export class Project {
   logoUrl: {

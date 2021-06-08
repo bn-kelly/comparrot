@@ -31,8 +31,3 @@ export class MessageService {
     );
   }
 }
-
-export const SiteForceLogin = 'site-force-login';
-export const SiteForceLogout = 'site-force-logout';
-export const SetUserId = 'set-user-id';
-export const PerformGoogleSearch = 'perform-google-search';

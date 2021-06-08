@@ -1,85 +1,20 @@
 import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-
-import * as firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import {
   AngularFirestore,
   AngularFirestoreDocument,
 } from '@angular/fire/firestore';
-import { NotifyService } from './notify.service';
-
+import * as firebase from 'firebase/app';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { NotifyService } from './notify.service';
 import { environment } from '../../../../environments/environment';
-import {
-  MessageService,
-  SiteForceLogin,
-} from '../../../services/message.service';
-
-export interface User {
-  displayName?: string;
-  phoneNumber?: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  emailVerified?: boolean;
-  photoURL?: string;
-  ui: {
-    navigation: 'side' | 'top';
-    sidenavUserVisible: boolean;
-    toolbarVisible: boolean;
-    toolbarPosition: any;
-    footerVisible: boolean;
-    footerPosition: any;
-    theme: 'fury-default' | 'fury-light' | 'fury-dark' | 'fury-flat';
-    title: string;
-    search: string;
-  };
-  extension?: {
-    show: boolean;
-    lastShown: number;
-  };
-  projectName?: string;
-  uid: string;
-  isAnonymous: boolean;
-  isAdmin?: boolean;
-  isBot?: boolean;
-  emailAlerts?: any;
-  categoriesOfInterest?: any;
-  wishList?: string[];
-  personalizationData?: any;
-  categoriesDescriptions?: any;
-  filters?: {
-    offersDefaultSelected?: number;
-  };
-}
-
-export interface Credential {
-  uid: string;
-  email?: string;
-  emailVerified?: boolean;
-  displayName?: string;
-  phoneNumber?: string;
-  firstName?: string;
-  lastName?: string;
-  photoURL?: string;
-  ui?: any;
-  extension?: {
-    show: boolean;
-    lastShown: number;
-  };
-  projectName?: string;
-  isAnonymous: boolean;
-  isAdmin?: boolean;
-  isBot?: boolean;
-  emailAlerts?: any;
-  categoriesOfInterest?: any;
-  wishList?: string[];
-  personalizationData?: any;
-  categoriesDescriptions?: any;
-}
+import { MessageService } from '../../../services/message.service';
+import { SiteForceLogin } from '../../../constants';
+import { User } from '../../../models/user.model';
+import { Credential } from '../../../models/credential.model';
 
 @Injectable()
 export class AuthService {
