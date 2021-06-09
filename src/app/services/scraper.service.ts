@@ -128,6 +128,7 @@ export class ScraperService {
         image,
         retailer.selectors?.product?.image[0],
       );
+      data[i].price = this.util.getNumberFromString(data[i].price);
       data[i].image = image
         ? image.getAttribute('src') &&
           image.getAttribute('src').includes('https')

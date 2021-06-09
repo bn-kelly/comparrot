@@ -23,6 +23,14 @@ export class UtilService {
     });
   }
 
+  getNumberFromString(price:string = '') {
+    const regex = /([0-9]*[.])?[0-9]+/g;
+    const m = regex.exec(price);
+    return m
+      ? Number(m[0])
+      : 0;
+  }
+
   getXPathString(doc: Document, xpath: string) {
     if (!xpath) return '';
     xpath = `normalize-space(${xpath})`;

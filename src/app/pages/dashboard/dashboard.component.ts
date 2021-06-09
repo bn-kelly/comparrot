@@ -104,9 +104,13 @@ export class DashboardComponent implements OnInit {
           this.scraper.triggerScraper(product);
         }
         console.log('scrapedResult:', scrapedResult);
-        this.products = [...googleResult, ...scrapedResult].filter(p => {
-          return p.retailer !== product.retailer;
-        });
+        this.products = [...googleResult, ...scrapedResult]
+          .filter(p => {
+            return p.retailer !== product.retailer;
+          })
+          .sort((a, b) => {
+            return a.price - b.price;
+          });
         console.log('products:', this.products);
         this.showExtension();
       });
