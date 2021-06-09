@@ -6,7 +6,7 @@ import { AuthService } from '../../pages/authentication/services/auth.service';
 import { Project } from '../../models/project.model';
 import { User } from '../../models/user.model';
 import { Product } from '../../models/product.model';
-import { SetUserId, PerformGoogleSearch } from '../../constants';
+import { SetUserId, PerformGoogleSearch, ShowIframe } from '../../constants';
 
 @Component({
   selector: 'fury-dashboard',
@@ -54,7 +54,7 @@ export class DashboardComponent implements OnInit {
   showExtension() {
     this.message.sendMessage(
       {
-        action: 'show-iframe',
+        action: ShowIframe,
       },
       null,
     );

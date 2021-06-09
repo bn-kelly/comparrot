@@ -17,6 +17,8 @@ import { FAQ } from '../../models/faq.model';
 import { Offer } from '../../models/offer.model';
 import { Project } from '../../models/project.model';
 import { PersonalizationData } from '../../models/personalization-data.model';
+import { MessageService } from '../../services/message.service';
+import { ToggleExpandIframeWidth } from '../../constants';
 
 type Fields = 'firstName' | 'lastName' | 'photoURL';
 type FormErrors = { [u in Fields]: string };
@@ -72,6 +74,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private auth: AuthService,
     private afs: AngularFirestore,
+    private message: MessageService,
   ) {
     this.isGeneralProfileUpdated = false;
     this.isGeneralProfileFormSubmitting = false;
@@ -337,12 +340,13 @@ export class AccountComponent implements OnInit, OnDestroy {
       return;
     }
 
-    window.chrome.tabs.getSelected(null, tab => {
-      window.chrome.tabs.sendMessage(tab.id, {
-        action: 'toggle-expand-iframe-width',
+    this.message.sendMessage(
+      {
+        action: ToggleExpandIframeWidth,
         isOpen,
-      });
-    });
+      },
+      null,
+    );
   }
 
   areGeneralProfileFormButtonsDisabled = () =>
