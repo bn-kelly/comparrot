@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { MessageService } from '../../../services/message.service';
+import { HideIframe } from '../../../constants';
 
 @Component({
   selector: 'fury-toolbar-close',
@@ -6,15 +8,20 @@ import { Component } from '@angular/core';
   styleUrls: ['./toolbar-close.component.scss'],
 })
 export class ToolbarCloseComponent {
+  constructor(
+    private message: MessageService,
+  ) {}
+
   hideExtension() {
     if (!window.chrome || !window.chrome.tabs) {
       return;
     }
 
-    window.chrome.tabs.getSelected(null, tab => {
-      window.chrome.tabs.sendMessage(tab.id, {
-        action: 'hide-iframe',
-      });
-    });
+    this.message.sendMessage(
+      {
+        action: HideIframe
+      },
+      null
+    );
   }
 }

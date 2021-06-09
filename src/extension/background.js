@@ -66,7 +66,7 @@ const syncRetailers = () => {
 
 const onBrowserActionClicked = tab => {
   chrome.tabs.sendMessage(tab.id, {
-    action: 'toggle-show-iframe',
+    action: ToggleShowIframe,
   });
 };
 

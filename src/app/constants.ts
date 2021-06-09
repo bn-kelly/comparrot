@@ -5,6 +5,8 @@ export const PerformGoogleSearch = 'perform-google-search';
 export const TryToScrapeData = 'try-to-scrape-data';
 export const ToggleExpandIframeWidth = 'toggle-expand-iframe-width';
 export const ShowIframe = 'show-iframe';
+export const HideIframe = 'hide-iframe';
+export const ToggleShowIframe = 'toggle-show-iframe';
 
 export const GoogleXPaths = {
   g_prod_url:

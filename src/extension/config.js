@@ -8,6 +8,11 @@ const SiteForceLogin = 'site-force-login';
 const SiteForceLogout = 'site-force-logout';
 const SetUserId = 'set-user-id';
 const PerformGoogleSearch = 'perform-google-search';
+const TryToScrapeData = 'try-to-scrape-data';
+const ToggleExpandIframeWidth = 'toggle-expand-iframe-width';
+const ShowIframe = 'show-iframe';
+const HideIframe = 'hide-iframe';
+const ToggleShowIframe = 'toggle-show-iframe';
 
 const extensionOrigin = `chrome-extension://${chrome.runtime.id}`;
 const iframeID = 'extension-iframe';

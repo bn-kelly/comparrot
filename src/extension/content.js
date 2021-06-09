@@ -273,23 +273,23 @@ const setUserId = data => {
  */
 const handleMessage = msg => {
   switch (msg.action) {
-    case 'toggle-show-iframe':
+    case ToggleShowIframe:
       toggleShowIframe();
       break;
 
-    case 'show-iframe':
+    case ShowIframe:
       showIframe();
       break;
 
-    case 'hide-iframe':
+    case HideIframe:
       hideIframe();
       break;
 
-    case 'toggle-expand-iframe-width':
+    case ToggleExpandIframeWidth:
       toggleExpandIframeWidth(msg.isOpen);
       break;
 
-    case 'try-to-scrape-data':
+    case TryToScrapeData:
       tryToScrapeDataByVendor(msg.url, msg.vendors);
       break;
 
