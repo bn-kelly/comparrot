@@ -232,36 +232,6 @@ const getUrl = (product = Element, itemUrl = {}) => {
     : product.getAttribute(itemUrl.attribute);
 };
 
-const getRegistryId = (url = '', index = 0, divider = '/') => {
-  const urlAsArray = url.split(divider);
-  return Array.isArray(urlAsArray) ? urlAsArray[index] || '' : '';
-};
-
-const getInfoAboutPurchasedItems = (text = '', alreadyPurchasedText) => {
-  const regex = /[^\d]*(\d*)[^\d]*(\d*)[^\d]*/;
-  const matches = text.match(regex);
-  const defaultResult = {};
-  return Array.isArray(matches)
-    ? matches.filter(Boolean).reduce((result, item, index) => {
-        if (index === 0 && item === alreadyPurchasedText) {
-          result = {
-            purchased: 1,
-            total: 1,
-            remaining: 0,
-          };
-        }
-        if (index === 1) {
-          result.purchased = +item;
-        }
-        if (index === 2) {
-          result.total = +item;
-          result.remaining = result.total - result.purchased;
-        }
-        return result;
-      }, defaultResult)
-    : defaultResult;
-};
-
 /**
  * Dispatch an event to make site to login
  * @param {string} uid
