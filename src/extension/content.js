@@ -144,96 +144,6 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
         sendMessage(PerformGoogleSearch, product);
       }
 
-      // Scraping Baby Registry List
-      const babyRegistryListTriggerContainer = getElementBySelector(
-        vendor?.selectors?.registries?.baby?.list?.triggers?.container,
-      );
-
-      const shouldRunBabyRegistryListTrigger = !!babyRegistryListTriggerContainer;
-
-      if (shouldRunBabyRegistryListTrigger) {
-        const config = { attributes: false, childList: true, subtree: true };
-
-        const callback = function () {
-          const babyRegistryListItems = getDescendantsOfElementBySelector(
-            babyRegistryListTriggerContainer,
-            vendor?.selectors?.registries?.baby?.list?.item,
-          );
-
-          const shouldScrapeBabyRegistryList =
-            !!babyRegistryListItems && !!babyRegistryListItems.length;
-
-          if (shouldScrapeBabyRegistryList) {
-            const babyRegistryListData = [...babyRegistryListItems].reduce(
-              (result, item) => {
-                const itemName = getFirstDescendantOfElementBySelector(
-                  item,
-                  vendor?.selectors?.registries?.baby?.list?.name,
-                );
-                const name = itemName ? itemName.innerText.trim() : '';
-
-                const itemLocation = getFirstDescendantOfElementBySelector(
-                  item,
-                  vendor?.selectors?.registries?.baby?.list?.location,
-                );
-                const location = itemLocation
-                  ? itemLocation.innerText.trim()
-                  : '';
-
-                const itemDate = getFirstDescendantOfElementBySelector(
-                  item,
-                  vendor?.selectors?.registries?.baby?.list?.date,
-                );
-                const date = itemDate ? itemDate.innerText.trim() : '';
-
-                const itemUrl = item.hasAttribute(
-                  vendor?.selectors?.registries?.baby?.list?.url?.attribute,
-                )
-                  ? item
-                  : getFirstDescendantOfElementBySelector(
-                      item,
-                      vendor?.selectors?.registries?.baby?.list?.url?.selector,
-                    );
-
-                const url = getUrl(
-                  itemUrl,
-                  vendor?.selectors?.registries?.baby?.list?.url,
-                );
-
-                const id = getRegistryId(
-                  url,
-                  vendor?.selectors?.registries?.baby?.list?.url?.index,
-                  vendor?.selectors?.registries?.baby?.list?.url?.divider,
-                );
-
-                result.push({
-                  name,
-                  location,
-                  date,
-                  url,
-                  id,
-                  created: Date.now(),
-                  updated: 0,
-                  type: baby,
-                  vendor: vendor.name,
-                  scraped: false,
-                });
-                return result;
-              },
-              [],
-            );
-
-            if (!!babyRegistryListData.length) {
-              saveRegistryToDB(babyRegistryListData);
-            }
-          }
-        };
-
-        const observer = new MutationObserver(callback);
-
-        observer.observe(babyRegistryListTriggerContainer, config);
-      }
-
       // Scraping Baby Registry List Item
       const babyRegistryResultTriggerContainer =
         vendor?.selectors?.registries?.baby?.result?.triggers &&
@@ -402,13 +312,6 @@ const sendMessage = (action, data) => {
   chrome.runtime.sendMessage({
     action,
     data,
-  });
-};
-
-const saveRegistryToDB = items => {
-  chrome.runtime.sendMessage({
-    action: 'save-registry-list-to-db',
-    items,
   });
 };
 

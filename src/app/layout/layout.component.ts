@@ -106,20 +106,6 @@ export class LayoutComponent implements OnInit {
       const afs = this.afs;
 
       window.chrome.extension.onMessage.addListener(message => {
-        if (message.action === 'save-registry-list-to-db') {
-          const { items } = message;
-
-          items.forEach(item => {
-            const { id, date } = item;
-            const unixDate = moment(date).unix() * 1000;
-            const data = {
-              ...item,
-              unixDate,
-            };
-            afs.collection('registries').doc(id).set(data, { merge: true });
-          });
-        }
-
         if (message.action === 'save-registry-result-to-db') {
           const { id, items, itemsQuantity } = message;
           const itemsData = items.reduce(
