@@ -105,29 +105,6 @@ export class LayoutComponent implements OnInit {
     this.afAuth.onAuthStateChanged(user => {
       const afs = this.afs;
 
-      window.chrome.extension.onMessage.addListener(function saveCartToDB(
-        message,
-      ) {
-        window.chrome.extension.onMessage.removeListener(saveCartToDB);
-        if (message.action === 'save-cart-to-db' && !!user && !!user.uid) {
-          const { cart } = message;
-
-          const hash = sha1(
-            cart.items.reduce((result, item) => {
-              result = result + item.vendorInnerCode;
-              return result;
-            }, ''),
-          );
-
-          afs
-            .collection('carts')
-            .doc(user.uid)
-            .collection(cart.vendor)
-            .doc(hash)
-            .set(cart, { merge: true });
-        }
-      });
-
       window.chrome.extension.onMessage.addListener(message => {
         if (message.action === 'save-registry-list-to-db') {
           const { items } = message;

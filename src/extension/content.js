@@ -144,90 +144,6 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
         sendMessage(PerformGoogleSearch, product);
       }
 
-      // Scraping Cart
-      const cartItemsWrapper = getElementBySelector(
-        vendor?.selectors?.cart?.itemsWrapper,
-      );
-      const cartItems = getDescendantsOfElementBySelector(
-        cartItemsWrapper,
-        vendor?.selectors?.cart?.item,
-      );
-      const shouldScrapeCart =
-        !!cartItemsWrapper && cartItems && !!cartItems.length;
-
-      if (shouldScrapeCart) {
-        const cartData = [...cartItems].reduce(
-          (result, item) => {
-            const itemTitle = getFirstDescendantOfElementBySelector(
-              item,
-              vendor?.selectors?.cart?.itemTitle,
-            );
-            const title = itemTitle ? itemTitle.innerText.trim() : '';
-            const itemImage = getFirstDescendantOfElementBySelector(
-              item,
-              vendor?.selectors?.cart?.itemImage,
-            );
-            const image = itemImage
-              ? itemImage.src
-                ? itemImage.src.trim()
-                : itemImage.srcset
-                ? itemImage.srcset.trim()
-                : ''
-              : '';
-            const itemQuantity = getFirstDescendantOfElementBySelector(
-              item,
-              vendor?.selectors?.cart?.itemQuantity,
-            );
-            const quantity = itemQuantity
-              ? getNumberFromString(itemQuantity.innerText.trim())
-              : '';
-            const itemPrice = getFirstDescendantOfElementBySelector(
-              item,
-              vendor?.selectors?.cart?.itemPrice,
-            );
-            const price = itemPrice
-              ? getNumberFromString(itemPrice.innerText.trim())
-              : '';
-            const vendorInnerCode = getVendorInnerCode(
-              item,
-              vendor?.selectors?.cart?.innerCode,
-            );
-
-            if (!result.totalPrice) {
-              const totalPriceElement = getElementBySelector(
-                vendor?.selectors?.cart?.totalPrice,
-              );
-              const totalPrice = totalPriceElement
-                ? getNumberFromString(totalPriceElement.innerHTML.trim())
-                : 0;
-
-              result.totalPrice = totalPrice;
-            }
-
-            result.items.push({
-              title,
-              image,
-              quantity,
-              price,
-              vendorInnerCode,
-            });
-            result.totalQuantity = +result.totalQuantity + +quantity;
-            return result;
-          },
-          { items: [], totalQuantity: 0, totalPrice: 0 },
-        );
-
-        const cart = {
-          ...cartData,
-          created: Date.now(),
-          vendor: vendor.name,
-        };
-
-        if (!!cart.items.length) {
-          saveCartToDB(cart);
-        }
-      }
-
       // Scraping Baby Registry List
       const babyRegistryListTriggerContainer = getElementBySelector(
         vendor?.selectors?.registries?.baby?.list?.triggers?.container,
@@ -486,13 +402,6 @@ const sendMessage = (action, data) => {
   chrome.runtime.sendMessage({
     action,
     data,
-  });
-};
-
-const saveCartToDB = cart => {
-  chrome.runtime.sendMessage({
-    action: 'save-cart-to-db',
-    cart,
   });
 };
 
