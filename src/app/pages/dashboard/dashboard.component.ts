@@ -112,7 +112,9 @@ export class DashboardComponent implements OnInit {
             return a.price - b.price;
           });
         console.log('products:', this.products);
-        this.showExtension();
+        if (this.products.length) {
+          this.showExtension();
+        }
       });
 
       if (!user) {
