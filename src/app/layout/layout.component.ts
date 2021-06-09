@@ -101,40 +101,5 @@ export class LayoutComponent implements OnInit {
           this.scrapedUrls.push(tab.url);
         });
     });
-
-    this.afAuth.onAuthStateChanged(user => {
-      const afs = this.afs;
-
-      window.chrome.extension.onMessage.addListener(message => {
-        if (message.action === 'save-registry-result-to-db') {
-          const { id, items, itemsQuantity } = message;
-          const itemsData = items.reduce(
-            (result, item) => {
-              result.itemsTotal =
-                +result.itemsTotal + +(item.purchased.total || 0);
-              result.itemsRemaining =
-                +result.itemsRemaining + +(item.purchased.remaining || 0);
-              result.itemsPurchased =
-                +result.itemsPurchased + +(item.purchased.purchased || 0);
-
-              return result;
-            },
-            {
-              itemsPurchased: 0,
-              itemsRemaining: 0,
-              itemsTotal: 0,
-            },
-          );
-
-          const data = {
-            items,
-            itemsQuantity,
-            ...itemsData,
-          };
-
-          afs.collection('registries').doc(id).set(data, { merge: true });
-        }
-      });
-    });
   }
 }
