@@ -141,7 +141,6 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
           retailer: vendor.name,
         };
 
-        saveProductToDB(product);
         sendMessage(PerformGoogleSearch, product);
       }
 
@@ -480,13 +479,6 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
         babyRegistryResultCallback();
       }
     }
-  });
-};
-
-const saveProductToDB = product => {
-  chrome.runtime.sendMessage({
-    action: 'save-product-to-db',
-    product,
   });
 };
 
