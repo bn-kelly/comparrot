@@ -27,12 +27,12 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   deleteOffer(id) {
-    this.afs
-      .collection('offers')
-      .doc(this.user.uid)
-      .collection('latest')
-      .doc(id)
-      .delete();
+    // this.afs
+    //   .collection('offers')
+    //   .doc(this.user.uid)
+    //   .collection('latest')
+    //   .doc(id)
+    //   .delete();
   }
 
   onBuyButtonClick(event, url) {

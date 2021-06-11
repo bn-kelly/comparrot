@@ -85,19 +85,19 @@ export class AccountComponent implements OnInit, OnDestroy {
     this.auth.user.subscribe(user => {
       this.user = user;
 
-      if (user) {
-        this.afs
-          .collection('offers')
-          .doc(user.uid)
-          .collection('latest')
-          .valueChanges()
-          .subscribe((offers: Offer[]) => {
-            this.wishList = offers
-              .filter(offer => this.user.wishList.includes(offer.id))
-              .sort((a, b) => b.created - a.created);
-          });
-        this.projectName = user.projectName;
-      }
+      // if (user) {
+      //   this.afs
+      //     .collection('offers')
+      //     .doc(user.uid)
+      //     .collection('latest')
+      //     .valueChanges()
+      //     .subscribe((offers: Offer[]) => {
+      //       this.wishList = offers
+      //         .filter(offer => this.user.wishList.includes(offer.id))
+      //         .sort((a, b) => b.created - a.created);
+      //     });
+      //   this.projectName = user.projectName;
+      // }
 
       if (
         user &&
