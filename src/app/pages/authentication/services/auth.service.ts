@@ -37,7 +37,7 @@ export class AuthService {
         if (user) {
           this.uid = user.uid;
           this.currentUser = user;
-          return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
+          return this.afs.doc<User>(`user/${user.uid}`).valueChanges();
         } else {
           return of(null);
         }
@@ -214,12 +214,12 @@ export class AuthService {
     if (!uid) {
       return;
     }
-    return this.afs.collection('users').doc(uid).get().toPromise();
+    return this.afs.collection('user').doc(uid).get().toPromise();
   }
 
   public updateUserData(user: Credential) {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(
-      `users/${user.uid}`,
+      `user/${user.uid}`,
     );
 
     const data: User = {

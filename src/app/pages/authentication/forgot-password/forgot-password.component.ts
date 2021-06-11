@@ -54,7 +54,7 @@ export class ForgotPasswordComponent implements OnInit {
     this.auth.user.subscribe(user => {
       if (user && user.projectName) {
         this.afs
-          .collection('projects')
+          .collection('project')
           .doc(user.projectName)
           .valueChanges()
           .subscribe((project: Project) => {

@@ -60,7 +60,7 @@ export class SidenavComponent implements OnInit {
 
       if (user && user.projectName) {
         this.afs
-          .collection('projects')
+          .collection('project')
           .doc(user.projectName)
           .valueChanges()
           .subscribe((project: Project) => {

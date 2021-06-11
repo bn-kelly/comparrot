@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit {
       : [...this.user.wishList, id];
 
     this.afs
-      .collection('users')
+      .collection('user')
       .doc(this.user.uid)
       .update({ wishList: wishList.sort() });
   }
@@ -124,7 +124,7 @@ export class DashboardComponent implements OnInit {
 
       if (!!projectName) {
         this.afs
-          .collection('projects')
+          .collection('project')
           .doc(user.projectName)
           .valueChanges()
           .subscribe((project: Project) => {
@@ -139,7 +139,7 @@ export class DashboardComponent implements OnInit {
 
       if (!isAnonymous && !Array.isArray(user.wishList)) {
         this.afs
-          .collection('users')
+          .collection('user')
           .doc(this.user.uid)
           .update({ wishList: [] });
       }

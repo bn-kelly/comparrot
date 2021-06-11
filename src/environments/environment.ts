@@ -5,16 +5,15 @@
 
 export const environment = {
   production: false,
-  cloudFunctions: 'https://us-central1-botsparked.cloudfunctions.net',
+  cloudFunctions: 'https://us-central1-comparrot-8cd1d.cloudfunctions.net',
   projectName: 'comparrot',
   firebase: {
-    apiKey: 'AIzaSyB43AEAPGnHyfwaoP5KzCp9b9WCVyxxHfY',
-    authDomain: 'botsparked.firebaseapp.com',
-    databaseURL: 'https://botsparked.firebaseio.com',
-    projectId: 'botsparked',
-    storageBucket: 'botsparked.appspot.com',
-    messagingSenderId: '899772049124',
-    appId: '1:899772049124:web:25fbb72d06d4e05ab76ef1',
-    measurementId: 'G-8L7SE2P7GX',
+    apiKey: "AIzaSyAti1-8hQW-DDVw5V8_CMPAxdmpMuFp9MU",
+    authDomain: "comparrot-8cd1d.firebaseapp.com",
+    projectId: "comparrot-8cd1d",
+    storageBucket: "comparrot-8cd1d.appspot.com",
+    messagingSenderId: "218679252583",
+    appId: "1:218679252583:web:32cfe24c7311cb62d866c2",
+    measurementId: "G-WBW95YTENJ"
   },
 };

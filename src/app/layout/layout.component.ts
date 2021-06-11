@@ -73,7 +73,7 @@ export class LayoutComponent implements OnInit {
       }
 
       this.afs
-        .collection('retailers')
+        .collection('retailer')
         .valueChanges()
         .subscribe(async (vendors: Vendor[]) => {
           this.vendors = vendors;

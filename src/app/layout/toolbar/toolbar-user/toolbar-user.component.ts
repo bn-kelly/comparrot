@@ -12,7 +12,6 @@ import { SiteForceLogout } from '../../../constants';
   styleUrls: ['./toolbar-user.component.scss'],
 })
 export class ToolbarUserComponent implements OnInit {
-  isExtension: boolean;
   isOpen: boolean;
   user: any = {};
   userName: string;
@@ -50,8 +49,6 @@ export class ToolbarUserComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.isExtension = !!window.chrome && !!window.chrome.extension;
-
     this.auth.user.subscribe(user => {
       this.user = user || {};
       if (!!user) {

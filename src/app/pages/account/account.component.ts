@@ -85,19 +85,19 @@ export class AccountComponent implements OnInit, OnDestroy {
     this.auth.user.subscribe(user => {
       this.user = user;
 
-      // if (user) {
-      //   this.afs
-      //     .collection('offers')
-      //     .doc(user.uid)
-      //     .collection('latest')
-      //     .valueChanges()
-      //     .subscribe((offers: Offer[]) => {
-      //       this.wishList = offers
-      //         .filter(offer => this.user.wishList.includes(offer.id))
-      //         .sort((a, b) => b.created - a.created);
-      //     });
-      //   this.projectName = user.projectName;
-      // }
+      if (user) {
+        // this.afs
+        //   .collection('offers')
+        //   .doc(user.uid)
+        //   .collection('latest')
+        //   .valueChanges()
+        //   .subscribe((offers: Offer[]) => {
+        //     this.wishList = offers
+        //       .filter(offer => this.user.wishList.includes(offer.id))
+        //       .sort((a, b) => b.created - a.created);
+        //   });
+        this.projectName = user.projectName;
+      }
 
       if (
         user &&
@@ -108,7 +108,7 @@ export class AccountComponent implements OnInit, OnDestroy {
         !this.personalizationData
       ) {
         this.afs
-          .collection('projects')
+          .collection('project')
           .doc(this.projectName)
           .valueChanges()
           .subscribe((project: Project) => {
@@ -504,7 +504,7 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   updateUserEmailAlerts(emailAlerts = []) {
     this.afs
-      .collection('users')
+      .collection('user')
       .doc(this.user.uid)
       .set(
         { emailAlerts: { [this.projectName]: emailAlerts } },
@@ -514,7 +514,7 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   updateUserCategoriesOfInterest(categoriesOfInterest = []) {
     this.afs
-      .collection('users')
+      .collection('user')
       .doc(this.user.uid)
       .set(
         { categoriesOfInterest: { [this.projectName]: categoriesOfInterest } },
@@ -524,7 +524,7 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   updateUserPersonalizationData(personalizationData) {
     this.afs
-      .collection('users')
+      .collection('user')
       .doc(this.user.uid)
       .set(
         {
@@ -536,7 +536,7 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   updateUserCategoriesDescriptions(categoriesDescriptions) {
     this.afs
-      .collection('users')
+      .collection('user')
       .doc(this.user.uid)
       .set(
         {
@@ -555,6 +555,6 @@ export class AccountComponent implements OnInit, OnDestroy {
       .map(item => item.id)
       .sort();
 
-    this.afs.collection('users').doc(this.user.uid).update({ wishList });
+    this.afs.collection('user').doc(this.user.uid).update({ wishList });
   }
 }

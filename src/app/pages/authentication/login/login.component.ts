@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
     this.authService.user.subscribe(user => {
       if (user && user.projectName) {
         this.afs
-          .collection('projects')
+          .collection('project')
           .doc(user.projectName)
           .valueChanges()
           .subscribe((project: Project) => {

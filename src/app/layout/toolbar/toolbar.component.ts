@@ -22,7 +22,6 @@ export class ToolbarComponent implements OnInit {
   @Input()
   @HostBinding('class.no-box-shadow')
   hasNavigation: boolean;
-  isExtension: boolean;
   isLoggedIn: boolean;
   logoUrl: string;
   themeName: string;
@@ -42,8 +41,6 @@ export class ToolbarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.isExtension = !!window.chrome && !!window.chrome.extension;
-
     this.themeService.theme$.subscribe(([currentTheme]) => {
       this.themeName = currentTheme.replace('fury-', '');
       this.handleLogoUrl();
@@ -52,7 +49,7 @@ export class ToolbarComponent implements OnInit {
     this.auth.user.subscribe(user => {
       if (user && user.projectName) {
         this.afs
-          .collection('projects')
+          .collection('project')
           .doc(user.projectName)
           .valueChanges()
           .subscribe((project: Project) => {
