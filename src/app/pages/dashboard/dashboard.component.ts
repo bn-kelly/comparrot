@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
 import { MessageService } from '../../services/message.service';
 import { ScraperService } from '../../services/scraper.service';
 import { AuthService } from '../../pages/authentication/services/auth.service';
@@ -20,6 +21,7 @@ export class DashboardComponent implements OnInit {
   products: Product[];
 
   constructor(
+    private router: Router,
     private auth: AuthService,
     private afs: AngularFirestore,
     private message: MessageService,
@@ -85,6 +87,11 @@ export class DashboardComponent implements OnInit {
     this.auth.user.subscribe(async user => {
       this.user = user;
 
+      if (!this.auth.isAuthenticated()) {
+        this.router.navigate(['/login']);
+        return;
+      }
+
       this.signInWithUid();
       this.message.handleMessage(SetUserId, message => {
         window.localStorage.setItem('uid', message.uid);
@@ -92,7 +99,7 @@ export class DashboardComponent implements OnInit {
       this.message.handleMessage(PerformGoogleSearch, async message => {
         const product = message.data as Product;
 
-        if (!product || !this.auth.isAuthenticated()) {
+        if (!product) {
           return;
         }
         console.log('message.data', product);
