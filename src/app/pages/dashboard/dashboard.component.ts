@@ -91,7 +91,8 @@ export class DashboardComponent implements OnInit {
       });
       this.message.handleMessage(PerformGoogleSearch, async message => {
         const product = message.data as Product;
-        if (!product && !this.auth.isAuthenticated()) {
+
+        if (!product || !this.auth.isAuthenticated()) {
           return;
         }
         console.log('message.data', product);

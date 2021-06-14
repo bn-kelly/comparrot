@@ -122,7 +122,7 @@ const tryToScrapeDataByVendor = (url, vendors = []) => {
               vendor?.selectors?.product?.innerCode,
             )
           : '';
-        const upc = new Function(vendor?.selectors?.product?.upc)();
+        const upc = getXPathContent(vendor?.selectors?.product?.upc);
         const productData = {
           title,
           upc,

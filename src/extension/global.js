@@ -16,7 +16,11 @@ const getActiveTab = async () => {
 };
 
 function getXPathContent(xpath) {
-  if (xpath == undefined || xpath == "") return "";
+  if (xpath === undefined || xpath.length === 0) return "";
+  if (Array.isArray(xpath)) {
+    xpath = xpath[0];
+  }
+
   var xpath = "normalize-space(" + xpath + ")";
   var doc = document;
   var result = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
