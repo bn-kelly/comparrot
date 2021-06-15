@@ -16,15 +16,20 @@ const getActiveTab = async () => {
 };
 
 function getXPathContent(xpath) {
-  if (xpath === undefined || xpath.length === 0) return "";
-  if (Array.isArray(xpath)) {
-    xpath = xpath[0];
+  if (xpath === undefined || xpath.length === 0) return '';
+
+  const xpaths = Array.isArray(xpath) ? xpath : [ xpath ];
+  for (let xpath of xpaths) {
+    xpath = "normalize-space(" + xpath + ")";
+    const result = document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null);
+    const value = clean(result.stringValue);
+    
+    if (value !== '') {
+      return value;
+    }
   }
 
-  var xpath = "normalize-space(" + xpath + ")";
-  var doc = document;
-  var result = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
-  return clean(result.stringValue);
+  return '';
 }
 
 function clean(str) {

@@ -44,6 +44,23 @@ export class UtilService {
     return result;
   }
 
+  getXPathContent(doc: Document, xpath: any): string {
+    if (xpath === undefined || xpath.length === 0) return '';
+  
+    const xpaths = Array.isArray(xpath) ? xpath : [ xpath ];
+    for (let xpath of xpaths) {
+      xpath = "normalize-space(" + xpath + ")";
+      const result = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
+      const value = this.clean(result.stringValue);
+      
+      if (value !== '') {
+        return value;
+      }
+    }
+  
+    return '';
+  }
+
   /**
    * Trip spaces and remove html entities
    * @param {string} str

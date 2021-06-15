@@ -123,19 +123,8 @@ export class ScraperService {
         continue;
       }
 
-      const image = doc.querySelector(retailer.selectors?.product?.image[0]);
-      console.log(
-        'image',
-        retailer,
-        image,
-        retailer.selectors?.product?.image[0],
-      );
-      data[i].image = image
-        ? image.getAttribute('src') &&
-          image.getAttribute('src').includes('https')
-          ? image.getAttribute('src')
-          : `https:${image.getAttribute('src')}`
-        : '';
+      const image = this.util.getXPathContent(doc, retailer.selectors?.product?.image);
+      data[i].image = image.includes('https') ? image : `https:${image}`;
     }
 
     return data;
