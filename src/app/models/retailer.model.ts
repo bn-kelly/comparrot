@@ -1,4 +1,4 @@
-export interface Vendor {
+export interface Retailer {
   name: string;
   searchUrl: string;
   selectors: any;

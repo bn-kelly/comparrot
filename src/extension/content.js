@@ -64,81 +64,30 @@ const toggleExpandIframeWidth = isOpen => {
   iframe.classList[toggleExpandedClass](expandedClassName);
 };
 
-const tryToScrapeDataByVendor = (url, vendors = []) => {
-  vendors.forEach(vendor => {
-    if (url.includes(vendor.url)) {
-      const productTitleElement = getElementBySelector(
-        vendor?.selectors?.product?.title,
-      );
+const tryToScrapeDataByVendor = (url, retailers = []) => {
+  retailers.forEach(retailer => {
+    if (url.includes(retailer.url)) {
+      const title = getXPathContent(retailer?.selectors?.product?.title)
+        .trim()
+        .replace(/(\r\n|\n|\r)/gm, ' ');
 
-      if (!!productTitleElement) {
-        const productPriceElement = getElementBySelector(
-          vendor?.selectors?.product?.price,
-        );
-
+      if (!!title) {
         const priceDivider = ' - ';
-        const title = productTitleElement.innerText
-          .trim()
-          .replace(/(\r\n|\n|\r)/gm, ' ');
-        const originalPrice = productPriceElement
-          ? productPriceElement.innerText.trim()
-          : '';
-
+        const originalPrice = getXPathContent(retailer?.selectors?.product?.price).trim();
         const price = originalPrice.includes(priceDivider)
           ? getNumberFromString(originalPrice.split(priceDivider)[0])
           : getNumberFromString(originalPrice);
-
-        const productImageElement = getElementBySelector(
-          vendor?.selectors?.product?.image,
-        );
-
-        const image = productImageElement ? productImageElement.src : '';
-
-        const brandItem = getElementBySelector(
-          vendor?.selectors?.product?.brand?.selector,
-        );
-
-        const brand = getAttribute(
-          brandItem,
-          vendor?.selectors?.product?.brand,
-        );
-
-        const manufacturerItem = getElementBySelector(
-          vendor?.selectors?.product?.manufacturer?.selector,
-        );
-
-        const manufacturer = getAttribute(
-          manufacturerItem,
-          vendor?.selectors?.product?.manufacturer,
-        );
-
-        const vendorInnerCodeElement = getElementBySelector(
-          vendor?.selectors?.product?.innerCode?.selector,
-        );
-
-        const vendorInnerCode = vendorInnerCodeElement
-          ? getVendorInnerCode(
-              vendorInnerCodeElement,
-              vendor?.selectors?.product?.innerCode,
-            )
-          : '';
-        const upc = getXPathContent(vendor?.selectors?.product?.upc);
-        const productData = {
+        const image = getXPathContent(retailer?.selectors?.product?.image);
+        const upc = getXPathContent(retailer?.selectors?.product?.upc);
+        const product = {
           title,
           upc,
           image,
           price,
-          brand,
-          manufacturer,
-          vendorInnerCode,
           url,
           created: Date.now(),
           sku: url,
-        };
-
-        const product = {
-          ...productData,
-          retailer: vendor.name,
+          retailer: retailer.name,
         };
 
         sendMessage(PerformGoogleSearch, product);
@@ -152,84 +101,6 @@ const sendMessage = (action, data) => {
     action,
     data,
   });
-};
-
-const getVendorInnerCode = (product = Element, innerCode = {}) => {
-  if (innerCode.attribute === 'regex') {
-    const regex = new RegExp(innerCode.regex, 'igm');
-    const found = regex.exec(product.innerText);
-    return found && found.groups && found.groups.vendorInnerCode
-      ? found.groups.vendorInnerCode
-      : '';
-  }
-
-  if (innerCode.selector) {
-    const element = getDescendantsOfElementBySelector(
-      product,
-      innerCode.selector,
-    );
-    return element && element[0]
-      ? innerCode.subattribute
-        ? JSON.parse(element[0].getAttribute(innerCode.attribute))[
-            innerCode.subattribute
-          ]
-        : element[0].getAttribute(innerCode.attribute)
-      : product.getAttribute(innerCode.attribute) || '';
-  }
-
-  return Array.isArray(innerCode.attribute)
-    ? innerCode.attribute.filter(attribute =>
-        product.getAttribute(attribute),
-      )[0]
-    : product.getAttribute(innerCode.attribute) || '';
-};
-
-const getUrl = (product = Element, itemUrl = {}) => {
-  const getParsedSubAttribute = data => {
-    const parsedData = JSON.parse(data);
-    return parsedData && parsedData[itemUrl.subattribute]
-      ? parsedData[itemUrl.subattribute]
-      : '';
-  };
-
-  const getParsedUrl = url => {
-    if (!url) {
-      return '';
-    }
-
-    const regex = /^document.location.href='(.*)'/;
-    const matches = url.match(regex);
-    const origin = window.location.origin;
-
-    if (url.includes('document.location.href=')) {
-      return matches[1].includes(origin)
-        ? matches[1]
-        : `${origin}${matches[1]}`;
-    }
-    return url.startsWith(origin) ? url : `${origin}${url}`;
-  };
-
-  if (itemUrl.selector) {
-    const element = product.hasAttribute(itemUrl.attribute)
-      ? product
-      : getDescendantsOfElementBySelector(product, itemUrl.selector);
-
-    const found = element || element[0];
-
-    const originalUrl = found
-      ? itemUrl.subattribute
-        ? getParsedSubAttribute(found.getAttribute(itemUrl.attribute))
-        : found.getAttribute(itemUrl.attribute)
-      : itemUrl.subattribute
-      ? getParsedSubAttribute(product.getAttribute(itemUrl.attribute))
-      : '';
-
-    return getParsedUrl(originalUrl);
-  }
-
-  return Array.isArray(itemUrl.attribute)
-    ? itemUrl.attribute.filter(attribute => product.getAttribute(attribute))[0]
-    : product.getAttribute(itemUrl.attribute);
 };
 
 /**
@@ -290,7 +161,7 @@ const handleMessage = msg => {
       break;
 
     case TryToScrapeData:
-      tryToScrapeDataByVendor(msg.url, msg.vendors);
+      tryToScrapeDataByVendor(msg.url, msg.retailers);
       break;
 
     case SiteForceLogin:

@@ -107,6 +107,8 @@ export class ScraperService {
     }
     console.log('href:', href);
     for (let i = 0; i < data.length; i++) {
+      data[i].price = this.util.getNumberFromString(data[i].price);
+
       if (!this.util.validURL(data[i].url)) {
         continue;
       }
@@ -128,7 +130,6 @@ export class ScraperService {
         image,
         retailer.selectors?.product?.image[0],
       );
-      data[i].price = this.util.getNumberFromString(data[i].price);
       data[i].image = image
         ? image.getAttribute('src') &&
           image.getAttribute('src').includes('https')

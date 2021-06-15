@@ -11,7 +11,7 @@ import { AuthService } from '../pages/authentication/services/auth.service';
 import { MessageService } from '../services/message.service';
 import { UtilService } from '../services/util.service';
 import { TryToScrapeData } from '../constants';
-import { Vendor } from '../models/vendor.model';
+import { Retailer } from '../models/retailer.model';
 
 @Component({
   selector: 'fury-layout',
@@ -20,7 +20,7 @@ import { Vendor } from '../models/vendor.model';
 })
 export class LayoutComponent implements OnInit {
   scrapedUrls: string[] = [];
-  vendors: Vendor[];
+  retailers: Retailer[];
 
   toolbarVisible$ = this.themeService.config$.pipe(
     map(config => config.toolbarVisible),
@@ -75,8 +75,8 @@ export class LayoutComponent implements OnInit {
       this.afs
         .collection('retailer')
         .valueChanges()
-        .subscribe(async (vendors: Vendor[]) => {
-          this.vendors = vendors;
+        .subscribe(async (retailers: Retailer[]) => {
+          this.retailers = retailers;
 
           const tab = await this.util.getSeletedTab();
           console.info('this.scrapedUrls');
@@ -94,7 +94,7 @@ export class LayoutComponent implements OnInit {
             {
               action: TryToScrapeData,
               url: tab.url,
-              vendors: this.vendors,
+              retailers: this.retailers,
             },
             null,
           );
