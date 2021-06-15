@@ -98,11 +98,11 @@ export class DashboardComponent implements OnInit {
       });
       this.message.handleMessage(PerformGoogleSearch, async message => {
         const product = message.data as Product;
-
+        console.log('message.data', product);
         if (!product) {
           return;
         }
-        console.log('message.data', product);
+
         const googleResult = await this.scraper.searchGoogle(product);
         const scrapedResult = await this.scraper.getProducts(product);
         if (scrapedResult.length === 0) {

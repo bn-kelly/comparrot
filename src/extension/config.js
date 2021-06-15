@@ -1,7 +1,7 @@
 const LogoActivePath = 'assets/img/icons/extension-active-128.png';
 const LogoInactivePath = 'assets/img/icons/extension-inactive-128.png';
 const CheckRetailersInterval = 24 * 60 * 60 * 1000;
-const BaseUrl = 'https://us-central1-botsparked.cloudfunctions.net';
+const BaseUrl = 'https://us-central1-comparrot-8cd1d.cloudfunctions.net';
 const WelcomeUrl = 'https://joincomparrot.com/extension/welcome/';
 
 const SiteForceLogin = 'site-force-login';
