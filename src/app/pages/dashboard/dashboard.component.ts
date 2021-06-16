@@ -98,7 +98,7 @@ export class DashboardComponent implements OnInit {
       });
       this.message.handleMessage(PerformGoogleSearch, async message => {
         const product = message.data as Product;
-        console.log('message.data', product);
+        console.log('Product:', product);
         if (!product) {
           return;
         }
