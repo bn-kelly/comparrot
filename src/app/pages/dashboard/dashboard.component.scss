@@ -16,6 +16,7 @@
       }
 
       &__buy-button {
+        background: linear-gradient(to right, #6366F1 0%, #38BDF8 100%) !important;
         border-radius: 25px;
         min-width: 100px;
         line-height: 30px;
@@ -164,7 +165,7 @@
   }
 
   &__price {
-    color: $color-success;
+    color: #6366F1;
     font-weight: 600;
     font-size: 22px;
     line-height: 33px;
