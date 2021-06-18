@@ -97,7 +97,7 @@ export class ScraperService {
         data.push({
           retailer: this.util.clean(arrRetailers[i]),
           url: `https://www.google.com${arrUrls[i]}`,
-          price: this.util.getNumberFromString(this.util.clean(arrPrices[i])),
+          price: this.util.getNumberFromString(this.util.clean(arrPrices[i])).toFixed(2),
           title: arrTitles[i],
         });
       }
@@ -173,7 +173,7 @@ export class ScraperService {
       data.push({
         retailer: this.util.clean(arrRetailers[i]),
         url: `https://www.google.com${this.util.extractGUrl(arrUrls[i])}`,
-        price: this.util.getNumberFromString(this.util.clean(arrPrices[i])),
+        price: this.util.getNumberFromString(this.util.clean(arrPrices[i])).toFixed(2),
         title,
       });
     }
