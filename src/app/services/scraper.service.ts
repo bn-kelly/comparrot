@@ -97,7 +97,7 @@ export class ScraperService {
         data.push({
           retailer: this.util.clean(arrRetailers[i]),
           url: `https://www.google.com${arrUrls[i]}`,
-          price: this.util.clean(arrPrices[i]),
+          price: this.util.getNumberFromString(this.util.clean(arrPrices[i])),
           title: arrTitles[i],
         });
       }
@@ -105,10 +105,13 @@ export class ScraperService {
       const id = href.split('product/')[1].split('?')[0];
       data = await this.getGooglePrices(id, search);
     }
-    console.log('href:', href);
-    for (let i = 0; i < data.length; i++) {
-      data[i].price = this.util.getNumberFromString(data[i].price);
 
+    console.log('href:', href);
+    data = data.filter(p => {
+      return p.price < product.price;
+    });
+
+    for (let i = 0; i < data.length; i++) {
       if (!this.util.validURL(data[i].url)) {
         continue;
       }
@@ -170,7 +173,7 @@ export class ScraperService {
       data.push({
         retailer: this.util.clean(arrRetailers[i]),
         url: `https://www.google.com${this.util.extractGUrl(arrUrls[i])}`,
-        price: this.util.clean(arrPrices[i]),
+        price: this.util.getNumberFromString(this.util.clean(arrPrices[i])),
         title,
       });
     }

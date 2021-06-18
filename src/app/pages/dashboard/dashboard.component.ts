@@ -108,7 +108,7 @@ export class DashboardComponent implements OnInit {
         if (scrapedResult.length === 0) {
           this.scraper.triggerScraper(product);
         }
-        console.log('scrapedResult:', scrapedResult);
+
         this.products = [...googleResult, ...scrapedResult]
           .filter(p => {
             return p.retailer !== product.retailer && p.price < product.price;
