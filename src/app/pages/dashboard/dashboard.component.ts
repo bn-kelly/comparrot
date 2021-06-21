@@ -3,11 +3,13 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { MessageService } from '../../services/message.service';
 import { ScraperService } from '../../services/scraper.service';
+import { UtilService } from '../../services/util.service';
 import { AuthService } from '../../pages/authentication/services/auth.service';
 import { Project } from '../../models/project.model';
 import { User } from '../../models/user.model';
 import { Product } from '../../models/product.model';
-import { SetUserId, PerformGoogleSearch, ShowIframe } from '../../constants';
+import { Retailer } from '../../models/retailer.model';
+import { SetUserId, PerformGoogleSearch, ShowIframe, TryToScrapeData } from '../../constants';
 
 @Component({
   selector: 'fury-dashboard',
@@ -26,6 +28,7 @@ export class DashboardComponent implements OnInit {
     private afs: AngularFirestore,
     private message: MessageService,
     private scraper: ScraperService,
+    private util: UtilService,
   ) {}
 
   deleteOffer(id) {
@@ -92,10 +95,28 @@ export class DashboardComponent implements OnInit {
         return;
       }
 
-      this.signInWithUid();
+      await this.signInWithUid();
+
+      this.afs
+        .collection('retailer')
+        .valueChanges()
+        .subscribe(async (retailers: Retailer[]) => {
+          const tab = await this.util.getSeletedTab();
+
+          this.message.sendMessage(
+            {
+              action: TryToScrapeData,
+              url: tab.url,
+              retailers,
+            },
+            null,
+          );
+        });
+
       this.message.handleMessage(SetUserId, message => {
         window.localStorage.setItem('uid', message.uid);
       });
+
       this.message.handleMessage(PerformGoogleSearch, async message => {
         const product = message.data as Product;
         console.log('Product:', product);
@@ -103,19 +124,7 @@ export class DashboardComponent implements OnInit {
           return;
         }
 
-        const googleResult = await this.scraper.searchGoogle(product);
-        const scrapedResult = await this.scraper.getProducts(product);
-        if (scrapedResult.length === 0) {
-          this.scraper.triggerScraper(product);
-        }
-
-        this.products = [...googleResult, ...scrapedResult]
-          .filter(p => {
-            return p.retailer !== product.retailer && p.price < product.price;
-          })
-          .sort((a, b) => {
-            return a.price - b.price;
-          });
+        this.products = await this.scraper.getProducts(product);
         console.log('products:', this.products);
         this.showExtension();
       });

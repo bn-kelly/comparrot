@@ -15,6 +15,8 @@ import { Product } from '../models/product.model';
   providedIn: 'root',
 })
 export class ScraperService {
+  private map = new Map<string, any>();
+
   constructor(
     private util: UtilService,
     private storage: StorageService,
@@ -115,18 +117,22 @@ export class ScraperService {
         continue;
       }
 
-      const doc = await this.util.getDocFromUrl(data[i].url);
-      const retailers = await this.storage.getValue('retailers');
-      const retailer = retailers.find(r => {
-        return data[i].retailer === r.name;
-      });
+      try {
+        const doc = await this.util.getDocFromUrl(data[i].url);
+        const retailers = await this.storage.getValue('retailers');
+        const retailer = retailers.find(r => {
+          return data[i].retailer === r.name;
+        });
 
-      if (!retailer) {
+        if (!retailer) {
+          continue;
+        }
+
+        const image = this.util.getXPathContent(doc, retailer.selectors?.product?.image);
+        data[i].image = image.includes('https') ? image : `https:${image}`;
+      } catch (_) {
         continue;
       }
-
-      const image = this.util.getXPathContent(doc, retailer.selectors?.product?.image);
-      data[i].image = image.includes('https') ? image : `https:${image}`;
     }
 
     return data;
@@ -187,10 +193,37 @@ export class ScraperService {
       .toPromise();
   }
 
-  async getProducts(product: Product): Promise<Product[]> {
+  async getScrapedProducts(product: Product): Promise<Product[]> {
     const response: any = await this.http
       .post(environment.cloudFunctions + '/products', { product })
       .toPromise();
     return response.products as [Product];
+  }
+
+  async getProducts(product: Product) {
+    const key = product.sku;
+    let products = this.map.get(key);
+    
+    if (!products) {
+
+      const googleResult = await this.searchGoogle(product);
+      const scrapedResult = await this.getScrapedProducts(product);
+
+      if (scrapedResult.length === 0) {
+        this.triggerScraper(product);
+      }
+
+      products = [...googleResult, ...scrapedResult]
+        .filter(p => {
+          return p.retailer !== product.retailer && p.price < product.price;
+        })
+        .sort((a, b) => {
+          return a.price - b.price;
+        });
+
+      this.map.set(key, products);
+    }
+
+    return products;
   }
 }

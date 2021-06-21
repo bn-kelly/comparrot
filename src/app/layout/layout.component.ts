@@ -1,17 +1,9 @@
-import sha1 from 'sha1';
-import * as moment from 'moment';
 import { filter, map, startWith } from 'rxjs/operators';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ThemeService } from '../../@fury/services/theme.service';
 import { checkRouterChildsData } from '../../@fury/utils/check-router-childs-data';
 import { AuthService } from '../pages/authentication/services/auth.service';
-import { MessageService } from '../services/message.service';
-import { UtilService } from '../services/util.service';
-import { TryToScrapeData } from '../constants';
-import { Retailer } from '../models/retailer.model';
 
 @Component({
   selector: 'fury-layout',
@@ -19,8 +11,6 @@ import { Retailer } from '../models/retailer.model';
   styleUrls: ['./layout.component.scss'],
 })
 export class LayoutComponent implements OnInit {
-  scrapedUrls: string[] = [];
-  retailers: Retailer[];
 
   toolbarVisible$ = this.themeService.config$.pipe(
     map(config => config.toolbarVisible),
@@ -44,13 +34,9 @@ export class LayoutComponent implements OnInit {
   );
 
   constructor(
-    private afs: AngularFirestore,
-    private afAuth: AngularFireAuth,
     public auth: AuthService,
     private themeService: ThemeService,
     private router: Router,
-    private message: MessageService,
-    private util: UtilService,
   ) {}
 
   ngOnInit() {
@@ -71,35 +57,6 @@ export class LayoutComponent implements OnInit {
           }
         });
       }
-
-      this.afs
-        .collection('retailer')
-        .valueChanges()
-        .subscribe(async (retailers: Retailer[]) => {
-          this.retailers = retailers;
-
-          const tab = await this.util.getSeletedTab();
-          console.info('this.scrapedUrls');
-          console.info(this.scrapedUrls);
-
-          if (
-            Array.isArray(this.scrapedUrls) &&
-            this.scrapedUrls.includes(tab.url)
-          ) {
-            return;
-          }
-
-          console.info('--- layout try-to-scrape-data ---');
-          this.message.sendMessage(
-            {
-              action: TryToScrapeData,
-              url: tab.url,
-              retailers: this.retailers,
-            },
-            null,
-          );
-          this.scrapedUrls.push(tab.url);
-        });
     });
   }
 }
