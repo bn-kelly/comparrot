@@ -106,7 +106,6 @@ export class ScraperService {
       data = await this.getGooglePrices(id, search);
     }
 
-    console.log('href:', href);
     data = data.filter(p => {
       return p.price < product.price;
     });
@@ -137,6 +136,7 @@ export class ScraperService {
     let url = GoogleXPaths.g_prod_url;
     url = url.replace(/xxxxx/g, id);
     url = url.replace(/qqqqq/g, search);
+    console.log('getGooglePrices:', url);
     const doc = await this.util.getDocFromUrl(url);
 
     const arrRetailers = [];

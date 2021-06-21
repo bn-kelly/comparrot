@@ -10,7 +10,7 @@ export const ToggleShowIframe = 'toggle-show-iframe';
 
 export const GoogleXPaths = {
   g_prod_url:
-    'https://www.google.com/shopping/product/xxxxx/offers?q=qqqqq&prds=cid:xxxxx,cond:1,scoring:tp',
+    'https://www.google.com/shopping/product/xxxxx/offers?q=qqqqq&prds=cid:xxxxx,scoring:p',
   g_step1_href_xpath:
     "//div[contains(@class,'psmkhead')]/preceding-sibling::div//h3[@class='r']/a[contains(@href, '/shopping/product') and not(contains(@href,'product/1/')) and not(contains(@href,'product/1?'))]/@href|//div[@class='psjtitle']/a[contains(@href, '/shopping/product') and not(contains(@href,'product/1/')) and not(contains(@href,'product/1?'))]/@href|(//div[@class='psjtitle']/a[contains(@href, '/shopping/product') and not(contains(@href,'product/1/')) and not(contains(@href,'product/1?'))]/@href)|//div[(contains(@class,'_Ked') or contains(@class,'shop-result-group')) and count(div[contains(text(),'Results for')])=0 and count(div[contains(text(),'Other Matches')])=0 and count(div[contains(text(),'People also considered')])=0]//a[contains(@href, '/shopping/product') and not(contains(@href,'product/1/')) and not(contains(@href,'product/1?'))]/@href",
   g_step1_no_results_xpath:
