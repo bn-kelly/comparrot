@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { MessageService } from '../../services/message.service';
 import { ScraperService } from '../../services/scraper.service';
 import { UtilService } from '../../services/util.service';
+import { StorageService } from '../../services/storage.service';
 import { AuthService } from '../../pages/authentication/services/auth.service';
 import { Project } from '../../models/project.model';
 import { User } from '../../models/user.model';
 import { Product } from '../../models/product.model';
-import { Retailer } from '../../models/retailer.model';
 import { SetUserId, PerformGoogleSearch, ShowIframe, TryToScrapeData } from '../../constants';
 
 @Component({
@@ -21,14 +22,18 @@ export class DashboardComponent implements OnInit {
   projectName: string;
   isLoggedIn: boolean;
   products: Product[];
+  showResult: Boolean;
 
   constructor(
+    private ngZone: NgZone,
     private router: Router,
     private auth: AuthService,
     private afs: AngularFirestore,
+    private spinner: NgxSpinnerService,
     private message: MessageService,
     private scraper: ScraperService,
     private util: UtilService,
+    private storage: StorageService,
   ) {}
 
   deleteOffer(id) {
@@ -87,6 +92,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.showResult = false;
     this.auth.user.subscribe(async user => {
       this.user = user;
 
@@ -95,23 +101,11 @@ export class DashboardComponent implements OnInit {
         return;
       }
 
+      await this.spinner.show();
       await this.signInWithUid();
 
-      this.afs
-        .collection('retailer')
-        .valueChanges()
-        .subscribe(async (retailers: Retailer[]) => {
-          const tab = await this.util.getSeletedTab();
-
-          this.message.sendMessage(
-            {
-              action: TryToScrapeData,
-              url: tab.url,
-              retailers,
-            },
-            null,
-          );
-        });
+      const retailers = await this.storage.getValue('retailers');
+      const tab = await this.util.getSeletedTab();
 
       this.message.handleMessage(SetUserId, message => {
         window.localStorage.setItem('uid', message.uid);
@@ -121,13 +115,28 @@ export class DashboardComponent implements OnInit {
         const product = message.data as Product;
         console.log('Product:', product);
         if (!product) {
+          this.showResult = true;
+          await this.spinner.hide();
           return;
         }
 
-        this.products = await this.scraper.getProducts(product);
-        console.log('products:', this.products);
-        this.showExtension();
+        this.ngZone.run(async () => {
+          this.products = await this.scraper.getProducts(product);
+          console.log('products:', this.products);
+          this.showExtension();
+          this.showResult = true;
+          await this.spinner.hide();
+        });
       });
+
+      this.message.sendMessage(
+        {
+          action: TryToScrapeData,
+          url: tab.url,
+          retailers,
+        },
+        null,
+      );
 
       if (!user) {
         this.isLoggedIn = false;

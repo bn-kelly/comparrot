@@ -3,7 +3,17 @@
   class="dashboard extension"
   fxLayout="column"
 >
+  <ngx-spinner
+    class="ngx-spinner"
+    [fullScreen]="false"
+    type="square-spin"
+    size="medium"
+    bdColor="rgba(100,149,237,0.8)"
+    color="white">
+    <p class="loading">Loading Products...</p>
+  </ngx-spinner>
   <div
+    *ngIf="showResult"
     [fxLayoutGap]="'16px'"
     fxFlex="noshrink"
     fxLayout="column"
