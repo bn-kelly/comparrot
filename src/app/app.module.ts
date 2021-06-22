@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { Injector, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Needed for Touch functionality of Material Components
 import { AngularFireModule } from '@angular/fire';
@@ -15,6 +15,7 @@ import {
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
   MatSnackBarConfig,
 } from '@angular/material/snack-bar';
+import { ApplicationContext as ComparrotApp } from '@coturiv/firebase/app';
 import { CoreModule } from './pages/authentication/services/core.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -67,4 +68,8 @@ import { PendingInterceptorModule } from '../@fury/shared/loading-indicator/pend
     },
   ],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(injector: Injector) {
+    ComparrotApp.get().initialize({ injector });
+  }
+}

@@ -6,7 +6,7 @@ import {
   AngularFirestore,
   AngularFirestoreDocument,
 } from '@angular/fire/firestore';
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { NotifyService } from './notify.service';
@@ -52,7 +52,7 @@ export class AuthService {
 
       this.uid = user.uid;
       const doc = await this.getUserDocByUid(user.uid);
-      const data = doc.data();
+      const data: any = doc.data();
 
       if (data) {
         const dataToUpdate = user.isAnonymous ? user : { ...user, ...data };

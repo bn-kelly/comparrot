@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import { AuthService } from '../../pages/authentication/services/auth.service';
 import { MessageService } from '../../services/message.service';
 import { SiteForceLogin } from '../../constants';
