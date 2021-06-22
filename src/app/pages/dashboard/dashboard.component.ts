@@ -36,13 +36,10 @@ export class DashboardComponent implements OnInit {
     private storage: StorageService,
   ) {}
 
-  deleteOffer(id) {
-    // this.afs
-    //   .collection('offers')
-    //   .doc(this.user.uid)
-    //   .collection('latest')
-    //   .doc(id)
-    //   .delete();
+  deleteOffer(sku: string) {
+    this.products = this.products.filter(p => {
+      return p.sku !== sku;
+    });
   }
 
   onBuyButtonClick(event, url) {

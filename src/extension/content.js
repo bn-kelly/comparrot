@@ -79,6 +79,7 @@ const tryToScrapeDataByVendor = (url, retailers = []) => {
           : getNumberFromString(originalPrice);
         const image = getXPathContent(retailer?.selectors?.product?.image);
         const upc = getXPathContent(retailer?.selectors?.product?.upc);
+        const sku = getXPathContent(retailer?.selectors?.product?.sku) || url;
         const product = {
           title,
           upc,
@@ -86,7 +87,7 @@ const tryToScrapeDataByVendor = (url, retailers = []) => {
           price,
           url,
           created: Date.now(),
-          sku: url,
+          sku,
           retailer: retailer.name,
         };
 

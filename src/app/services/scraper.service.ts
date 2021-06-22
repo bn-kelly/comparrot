@@ -96,11 +96,13 @@ export class ScraperService {
       }
 
       for (let i = 0; i < arrRetailers.length; i++) {
+        const url = `https://www.google.com${arrUrls[i]}`;
         data.push({
-          retailer: this.util.clean(arrRetailers[i]),
-          url: `https://www.google.com${arrUrls[i]}`,
-          price: this.util.getNumberFromString(this.util.clean(arrPrices[i])).toFixed(2),
+          url,
           title: arrTitles[i],
+          price: this.util.getNumberFromString(this.util.clean(arrPrices[i])).toFixed(2),
+          retailer: this.util.clean(arrRetailers[i]),
+          sku: url,
         });
       }
     } else {
@@ -176,11 +178,13 @@ export class ScraperService {
     const data = [];
 
     for (let i = 0; i < arrRetailers.length; i++) {
+      const url = `https://www.google.com${this.util.extractGUrl(arrUrls[i])}`;
       data.push({
-        retailer: this.util.clean(arrRetailers[i]),
-        url: `https://www.google.com${this.util.extractGUrl(arrUrls[i])}`,
-        price: this.util.getNumberFromString(this.util.clean(arrPrices[i])).toFixed(2),
+        url,
         title,
+        price: this.util.getNumberFromString(this.util.clean(arrPrices[i])).toFixed(2),
+        retailer: this.util.clean(arrRetailers[i]),
+        sku: url,
       });
     }
 
