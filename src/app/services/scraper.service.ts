@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import sha1 from 'sha1';
 import { environment } from '../../environments/environment';
 import { UtilService } from './util.service';
 import { StorageService } from './storage.service';
@@ -97,12 +98,16 @@ export class ScraperService {
 
       for (let i = 0; i < arrRetailers.length; i++) {
         const url = `https://www.google.com${arrUrls[i]}`;
+        const title = arrTitles[i];
+        const price = this.util.getNumberFromString(this.util.clean(arrPrices[i])).toFixed(2);
+        const retailer = this.util.clean(arrRetailers[i]);
+
         data.push({
           url,
-          title: arrTitles[i],
-          price: this.util.getNumberFromString(this.util.clean(arrPrices[i])).toFixed(2),
-          retailer: this.util.clean(arrRetailers[i]),
-          sku: url,
+          title,
+          price,
+          retailer,
+          sku: sha1(`${title}${retailer}`),
         });
       }
     } else {
@@ -131,7 +136,9 @@ export class ScraperService {
         }
 
         const image = this.util.getXPathContent(doc, retailer.selectors?.product?.image);
+        const sku = this.util.getXPathContent(doc, retailer.selectors?.product?.sku);
         data[i].image = image.includes('https') ? image : `https:${image}`;
+        data[i].sku = sku;
       } catch (_) {
         continue;
       }
@@ -179,12 +186,15 @@ export class ScraperService {
 
     for (let i = 0; i < arrRetailers.length; i++) {
       const url = `https://www.google.com${this.util.extractGUrl(arrUrls[i])}`;
+      const price = this.util.getNumberFromString(this.util.clean(arrPrices[i])).toFixed(2);
+      const retailer = this.util.clean(arrRetailers[i]);
+
       data.push({
         url,
         title,
-        price: this.util.getNumberFromString(this.util.clean(arrPrices[i])).toFixed(2),
-        retailer: this.util.clean(arrRetailers[i]),
-        sku: url,
+        price,
+        retailer,
+        sku: sha1(`${title}${retailer}`),
       });
     }
 

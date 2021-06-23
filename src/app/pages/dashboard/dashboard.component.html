@@ -62,7 +62,7 @@
               <span
                 mat-icon-button
                 class="offer__product-delete"
-                (click)="deleteOffer(product.sku)"
+                (click)="deleteOffer(product)"
               >
                 <mat-icon>highlight_off</mat-icon>
               </span>
@@ -92,7 +92,6 @@
               </a>
             </mat-card-content>
             <mat-card-actions
-              *ngIf="isLoggedIn"
               align="end"
               class="offer__actions"
             >
@@ -103,10 +102,10 @@
               <button
                 mat-button
                 class="offer__actions-button"
-                (click)="toggleAddToWishlist(product.sku)"
+                (click)="toggleAddToWishlist(product)"
               >
                 <mat-icon>{{
-                  user.wishList.includes(product.sku)
+                  userContext && userContext.wishlist.includes(product.sku)
                     ? 'favorite'
                     : 'favorite_border'
                 }}</mat-icon>

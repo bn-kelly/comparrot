@@ -10,7 +10,10 @@ import { AuthService } from '../../pages/authentication/services/auth.service';
 import { Project } from '../../models/project.model';
 import { User } from '../../models/user.model';
 import { Product } from '../../models/product.model';
+import { UserContext } from 'src/app/models/user-context.model';
 import { SetUserId, PerformGoogleSearch, ShowIframe, TryToScrapeData } from '../../constants';
+import { FirebaseService } from '@coturiv/firebase/app';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'fury-dashboard',
@@ -23,6 +26,7 @@ export class DashboardComponent implements OnInit {
   isLoggedIn: boolean;
   products: Product[];
   showResult: Boolean;
+  userContext: UserContext;
 
   constructor(
     private ngZone: NgZone,
@@ -34,11 +38,12 @@ export class DashboardComponent implements OnInit {
     private scraper: ScraperService,
     private util: UtilService,
     private storage: StorageService,
+    private firebaseService: FirebaseService
   ) {}
 
-  deleteOffer(sku: string) {
+  deleteOffer(product: Product) {
     this.products = this.products.filter(p => {
-      return p.sku !== sku;
+      return p.sku !== product.sku;
     });
   }
 
@@ -47,15 +52,17 @@ export class DashboardComponent implements OnInit {
     window.chrome.tabs.create({ url });
   }
 
-  toggleAddToWishlist(id) {
-    const wishList = this.user.wishList.includes(id)
-      ? this.user.wishList.filter(category => category !== id)
-      : [...this.user.wishList, id];
+  async toggleAddToWishlist(product: Product) {
+    if (this.userContext && this.userContext.wishlist) {
+      this.userContext.wishlist = this.userContext.wishlist.includes(product.sku)
+        ? this.userContext.wishlist.filter(s => s !== product.sku)
+        : [...this.userContext.wishlist, product.sku];
+    } else {
+      this.userContext = { wishlist: [product.sku] };
+    }
 
-    this.afs
-      .collection('user')
-      .doc(this.user.uid)
-      .update({ wishList: wishList.sort() });
+    await this.firebaseService.set(`product/${product.sku}`, {...product, ...{id: product.sku}}, true);
+    await this.firebaseService.set(`user_context/${this.user.uid}`, this.userContext, true);
   }
 
   showExtension() {
@@ -135,13 +142,7 @@ export class DashboardComponent implements OnInit {
         null,
       );
 
-      if (!user) {
-        this.isLoggedIn = false;
-        await this.auth.anonymousLogin();
-        return;
-      }
-
-      const { isAnonymous, projectName } = user;
+      const { projectName } = user;
 
       if (!!projectName) {
         this.afs
@@ -156,14 +157,8 @@ export class DashboardComponent implements OnInit {
           });
       }
 
-      this.isLoggedIn = !isAnonymous;
-
-      if (!isAnonymous && !Array.isArray(user.wishList)) {
-        this.afs
-          .collection('user')
-          .doc(this.user.uid)
-          .update({ wishList: [] });
-      }
+      this.userContext = await this.firebaseService.doc(`user_context/${this.user.uid}`).pipe(take(1)).toPromise();
+      console.log('this.userContext', this.userContext);
     });
   }
 }
