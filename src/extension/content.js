@@ -22,6 +22,8 @@ const toggleShowIframe = () => {
   iframe.classList[toggleActiveClass](activeClassName);
   iframe.classList[toggleActiveClass](inClassName);
   iframe.classList[toggleInactiveClass](inactiveClassName);
+
+  setZIndex();
 };
 
 const showIframe = () => {
@@ -36,6 +38,8 @@ const showIframe = () => {
     iframe.classList.add(inClassName);
     iframe.classList.remove(inactiveClassName);
   }
+
+  setZIndex();
 };
 
 const hideIframe = () => {
@@ -182,10 +186,14 @@ const handleMessage = msg => {
  * Create an iframe to show the extension UI
  */
 const addIframe = () => {
+  if (getIframe()) {
+    return;
+  }
+
   const iframe = document.createElement('iframe');
   iframe.id = iframeID;
   iframe.src = chrome.runtime.getURL('index.html');
-  document.body.appendChild(iframe);
+  document.documentElement.appendChild(iframe);
 };
 
 /**
@@ -205,6 +213,18 @@ const replaceIframe = () => {
     childList: true,
   });
 };
+
+const setZIndex = () => {
+  const iframe = getIframe();
+  let nextElement = iframe.nextSibling;
+
+  while (nextElement && nextElement.nodeType === Node.ELEMENT_NODE) {
+    if (nextElement.style.zIndex === '2147483647') {
+      nextElement.style.zIndex = '2147483646';
+    }
+    nextElement = nextElement.nextSibling;
+  }
+}
 
 /**
  * Initialize event handlers
