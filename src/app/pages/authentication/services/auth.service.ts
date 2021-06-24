@@ -7,8 +7,8 @@ import {
   AngularFirestoreDocument,
 } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
-import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 import { NotifyService } from './notify.service';
 import { environment } from '../../../../environments/environment';
 import { MessageService } from '../../../services/message.service';
@@ -20,8 +20,9 @@ import { Credential } from '../../../models/credential.model';
 export class AuthService {
   user: Observable<User | null>;
   uid: string;
-  currentUser: any;
   authState: any = null;
+
+  user$: BehaviorSubject<any>;
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -36,13 +37,17 @@ export class AuthService {
       switchMap(user => {
         if (user) {
           this.uid = user.uid;
-          this.currentUser = user;
           return this.afs.doc<User>(`user/${user.uid}`).valueChanges();
         } else {
           return of(null);
         }
       }),
+      tap(user => {
+        this.currentUser = user;
+      })
     );
+
+    this.user$ = new BehaviorSubject(null);
 
     this.afAuth.onAuthStateChanged(async user => {
       if (!user) {
@@ -65,6 +70,24 @@ export class AuthService {
     this.afAuth.authState.subscribe(authState => {
       this.authState = authState;
     });
+  }
+
+  set currentUser(user: any) {
+    this.user$.next(user);
+  }
+
+  get currentUser() {
+    return this.user$.value;
+  }
+
+  loadUserData(): Observable<any> {
+    return this.afAuth.authState.pipe(
+      switchMap((auth) => (auth && !auth.isAnonymous ? this.afs.doc<User>(`user/${auth.uid}`).valueChanges() : of(null))),
+      take(1),
+      map((user) => {
+        return (this.currentUser = user);
+      })
+    );
   }
 
   id() {

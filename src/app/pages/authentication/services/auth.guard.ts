@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map, take, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 
 import { AuthService } from './auth.service';
 import { NotifyService } from './notify.service';
@@ -16,18 +16,18 @@ export class AuthGuard implements CanActivate {
     private notify: NotifyService,
   ) {}
   canActivate(): Observable<boolean> | Promise<boolean> | boolean {
-    return this.auth.user.pipe(
-      take(1),
-      map(user => !!user && !user.isAnonymous),
-      tap(loggedIn => {
-        if (!loggedIn) {
-          // access denied
-          this.notify.update('You must be logged in!', 'error');
-          this.router.navigate(['/login']);
-        } else {
-          // access granted for logged in user
-        }
-      }),
-    );
+    const currentUser = this.auth.currentUser;
+
+    return currentUser
+      ? of(true)
+      : this.auth.loadUserData().pipe(
+          map((user) => !!user),
+          tap((isLoggedIn) => {
+            if (!isLoggedIn) {
+              this.notify.update('You must be logged in!', 'error');
+              this.router.navigate(['/login']);
+            }
+          })
+        );
   }
 }

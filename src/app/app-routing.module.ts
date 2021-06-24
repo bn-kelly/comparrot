@@ -45,18 +45,19 @@ const routes: Routes = [
     component: LayoutComponent,
     children: [
       {
-        path: '',
+        path: 'dashboard',
         loadChildren: () =>
           import('./pages/dashboard/dashboard.module').then(
             m => m.DashboardModule,
           ),
-        pathMatch: 'full',
+        // pathMatch: 'full',
       },
       {
-        path: 'account',
+        path: '',
         canActivate: [AuthGuard],
         loadChildren: () =>
           import('./pages/account/account.module').then(m => m.AccountModule),
+          pathMatch: 'full',
       },
     ],
   },

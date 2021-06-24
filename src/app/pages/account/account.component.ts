@@ -13,12 +13,13 @@ import { AuthService } from '../authentication/services/auth.service';
 import { User } from '../../models/user.model';
 import { EmailAlert } from '../../models/email-alert.model';
 import { CategoryOfInterest } from '../../models/category-of-interest.model';
-import { FAQ } from '../../models/faq.model';
 import { Offer } from '../../models/offer.model';
 import { Project } from '../../models/project.model';
 import { PersonalizationData } from '../../models/personalization-data.model';
 import { MessageService } from '../../services/message.service';
 import { ToggleExpandIframeWidth } from '../../constants';
+import { FirebaseService } from '@coturiv/firebase/app';
+import { take } from 'rxjs/operators';
 
 type Fields = 'firstName' | 'lastName' | 'photoURL';
 type FormErrors = { [u in Fields]: string };
@@ -41,10 +42,6 @@ export class AccountComponent implements OnInit, OnDestroy {
   isGeneralProfileFormSubmitting: boolean;
   isPhotoURLFileChanged: boolean;
   emailAlerts: EmailAlert[];
-  categoriesOfInterest: CategoryOfInterest[];
-  personalizationData: PersonalizationData;
-  categorySizesDivider = ', ';
-  faqList: FAQ[];
   wishList: Offer[];
   user: User;
   projectName: string;
@@ -68,208 +65,59 @@ export class AccountComponent implements OnInit, OnDestroy {
   };
   imageChangedEvent: any = '';
   croppedImage: any = '';
-  panelOpenState = false;
+
+  userInterests = [];
+  userSizes = [];
 
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
     private afs: AngularFirestore,
     private message: MessageService,
+    private firebaseService: FirebaseService
   ) {
     this.isGeneralProfileUpdated = false;
     this.isGeneralProfileFormSubmitting = false;
     this.isPhotoURLFileChanged = false;
   }
 
-  ngOnInit() {
-    this.auth.user.subscribe(user => {
-      this.user = user;
+  async ngOnInit() {
+    this.user = this.auth.currentUser;
+    const { projectName, firstName, lastName, photoURL, uid} = this.user;
+    this.projectName = projectName;
 
-      if (user) {
-        // this.afs
-        //   .collection('offers')
-        //   .doc(user.uid)
-        //   .collection('latest')
-        //   .valueChanges()
-        //   .subscribe((offers: Offer[]) => {
-        //     this.wishList = offers
-        //       .filter(offer => this.user.wishList.includes(offer.id))
-        //       .sort((a, b) => b.created - a.created);
-        //   });
-        this.projectName = user.projectName;
-      }
-
-      if (
-        user &&
-        this.projectName &&
-        !this.faqList &&
-        !this.categoriesOfInterest &&
-        !this.emailAlerts &&
-        !this.personalizationData
-      ) {
-        this.afs
-          .collection('project')
-          .doc(this.projectName)
-          .valueChanges()
-          .subscribe((project: Project) => {
-            this.faqList = project.faq || [];
-            this.categoriesOfInterest = project.categoriesOfInterest || [];
-            this.emailAlerts = project.emailAlerts || [];
-            this.personalizationData = project.personalizationData || {
-              types: [],
-            };
-
-            if (
-              !this.user.categoriesOfInterest ||
-              (!Array.isArray(
-                this.user.categoriesOfInterest[this.projectName],
-              ) &&
-                Array.isArray(this.categoriesOfInterest))
-            ) {
-              this.updateUserCategoriesOfInterest([]);
-            }
-
-            if (
-              !this.user.emailAlerts ||
-              (!Array.isArray(this.user.emailAlerts[this.projectName]) &&
-                Array.isArray(this.emailAlerts))
-            ) {
-              const userEmailAlerts = this.emailAlerts.map(alert => alert.id);
-              this.updateUserEmailAlerts(userEmailAlerts);
-            }
-
-            if (
-              !this.user.personalizationData ||
-              !this.user.personalizationData[this.projectName] ||
-              (!Array.isArray(
-                this.user.personalizationData[this.projectName].types,
-              ) &&
-                this.personalizationData &&
-                Array.isArray(this.personalizationData.types))
-            ) {
-              const userPersonalizationData = this.personalizationData.types.reduce(
-                (typesAcc, type) => {
-                  typesAcc = {
-                    ...typesAcc,
-                    [type.id]: type.categories.reduce(
-                      (categoriesAcc, category) => {
-                        categoriesAcc = {
-                          ...categoriesAcc,
-                          [category.id]: category.sizes.reduce(
-                            (sizesAcc, size) => {
-                              const values =
-                                this.user.personalizationData &&
-                                this.user.personalizationData[
-                                  this.projectName
-                                ] &&
-                                this.user.personalizationData[this.projectName][
-                                  type.id
-                                ] &&
-                                this.user.personalizationData[this.projectName][
-                                  type.id
-                                ][category.id] &&
-                                this.user.personalizationData[this.projectName][
-                                  type.id
-                                ][category.id][size.id] &&
-                                !!this.user.personalizationData[
-                                  this.projectName
-                                ][type.id][category.id][size.id].length
-                                  ? this.user.personalizationData[
-                                      this.projectName
-                                    ][type.id][category.id][size.id]
-                                  : [];
-
-                              sizesAcc = {
-                                ...sizesAcc,
-                                [size.id]: values,
-                              };
-                              return sizesAcc;
-                            },
-                            {},
-                          ),
-                        };
-                        return categoriesAcc;
-                      },
-                      {},
-                    ),
-                  };
-                  return typesAcc;
-                },
-                {},
-              );
-
-              const categoriesDescriptions = this.personalizationData.types.reduce(
-                (typesAcc, type) => {
-                  typesAcc = {
-                    ...typesAcc,
-                    [type.id]: type.categories.reduce(
-                      (categoriesAcc, category) => {
-                        categoriesAcc = {
-                          ...categoriesAcc,
-                          [category.id]:
-                            this.user.personalizationData &&
-                            this.user.personalizationData[this.projectName] &&
-                            this.user.personalizationData[this.projectName][
-                              type.id
-                            ] &&
-                            this.user.personalizationData[this.projectName][
-                              type.id
-                            ][category.id]
-                              ? category.sizes.reduce((result, size) => {
-                                  const values =
-                                    this.user.personalizationData &&
-                                    this.user.personalizationData[
-                                      this.projectName
-                                    ][type.id][category.id][size.id]
-                                      ? size.values
-                                          .filter(value =>
-                                            this.user.personalizationData[
-                                              this.projectName
-                                            ][type.id][category.id][
-                                              size.id
-                                            ].includes(value.id),
-                                          )
-                                          .map(value => value.title)
-                                      : [];
-
-                                  result = result
-                                    ? [
-                                        ...result.split(
-                                          this.categorySizesDivider,
-                                        ),
-                                        ...values,
-                                      ].join(this.categorySizesDivider)
-                                    : values.join(this.categorySizesDivider);
-
-                                  return result;
-                                }, '')
-                              : '',
-                        };
-                        return categoriesAcc;
-                      },
-                      {},
-                    ),
-                  };
-
-                  return typesAcc;
-                },
-                {},
-              );
-
-              this.updateUserPersonalizationData(userPersonalizationData);
-              this.updateUserCategoriesDescriptions(categoriesDescriptions);
-            }
-          });
-
-        this.initialGeneralProfileFormData = {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          photoURL: user.photoURL,
-        };
-      }
-      this.buildForm(this.user);
-    });
+    this.buildForm(this.user);
     this.toggleExpandIframe(true);
+
+    const { interests, sizes } = await this.firebaseService.docAsPromise(`user_context/${uid}`);
+
+    this.userInterests = interests;
+    this.userSizes = sizes;
+
+    if (
+      this.projectName &&
+      !this.emailAlerts
+    ) {
+      this.afs
+        .collection('project')
+        .doc(this.projectName)
+        .valueChanges()
+        .subscribe((project: Project) => {
+          this.emailAlerts = project.emailAlerts || [];
+
+          if (
+            !this.user.emailAlerts ||
+            (!Array.isArray(this.user.emailAlerts[this.projectName]) &&
+              Array.isArray(this.emailAlerts))
+          ) {
+            const userEmailAlerts = this.emailAlerts.map(alert => alert.id);
+            this.updateUserEmailAlerts(userEmailAlerts);
+          }
+        });
+        
+      }
+      this.initialGeneralProfileFormData = {firstName, lastName, photoURL};
+      
   }
 
   ngOnDestroy() {
@@ -422,84 +270,12 @@ export class AccountComponent implements OnInit, OnDestroy {
     }
   }
 
-  toggleSelectCategoryOfInterest(id) {
-    const categoriesOfInterest = this.user.categoriesOfInterest[
-      this.projectName
-    ].includes(id)
-      ? this.user.categoriesOfInterest[this.projectName].filter(
-          category => category !== id,
-        )
-      : [...this.user.categoriesOfInterest[this.projectName], id].sort();
-
-    this.updateUserCategoriesOfInterest(categoriesOfInterest);
+  async updateUserInterests(interests: string[]) {
+    await this.firebaseService.set(`user_context/${this.user.uid}`, { interests }, true);
   }
 
-  toggleSelectPersonalizationData({ type, category, size, value }) {
-    const personalizationData = this.user.personalizationData[this.projectName][
-      type.id
-    ][category.id][size.id].includes(value.id)
-      ? {
-          ...this.user.personalizationData[this.projectName],
-          [type.id]: {
-            ...this.user.personalizationData[this.projectName][type.id],
-            [category.id]: {
-              ...this.user.personalizationData[this.projectName][type.id][
-                category.id
-              ],
-              [size.id]: this.user.personalizationData[this.projectName][
-                type.id
-              ][category.id][size.id].filter(item => item !== value.id),
-            },
-          },
-        }
-      : {
-          ...this.user.personalizationData[this.projectName],
-          [type.id]: {
-            ...this.user.personalizationData[this.projectName][type.id],
-            [category.id]: {
-              ...this.user.personalizationData[this.projectName][type.id][
-                category.id
-              ],
-              [size.id]: [
-                ...this.user.personalizationData[this.projectName][type.id][
-                  category.id
-                ][size.id],
-                value.id,
-              ].sort((a, b) => a - b),
-            },
-          },
-        };
-
-    const categoriesDescriptions = {
-      ...this.user.categoriesDescriptions[this.projectName],
-      [type.id]: {
-        ...this.user.categoriesDescriptions[this.projectName][type.id],
-        [category.id]: this.toggleCategorySizes({
-          typeId: type.id,
-          categoryId: category.id,
-          sizeValueTitle: value.title,
-        }),
-      },
-    };
-
-    this.updateUserPersonalizationData(personalizationData);
-    this.updateUserCategoriesDescriptions(categoriesDescriptions);
-  }
-
-  toggleCategorySizes({ typeId, categoryId, sizeValueTitle }) {
-    const values = this.user.categoriesDescriptions[this.projectName][typeId][
-      categoryId
-    ].split(this.categorySizesDivider);
-
-    const isValueExist = values.includes(sizeValueTitle);
-
-    return isValueExist
-      ? values
-          .filter(value => value !== sizeValueTitle)
-          .join(this.categorySizesDivider)
-      : [...values.filter(Boolean), sizeValueTitle].join(
-          this.categorySizesDivider,
-        );
+  async updateSizingPreference(sizes: any[]) {
+    await this.firebaseService.set(`user_context/${this.user.uid}`, { sizes }, true);
   }
 
   updateUserEmailAlerts(emailAlerts = []) {
@@ -508,42 +284,6 @@ export class AccountComponent implements OnInit, OnDestroy {
       .doc(this.user.uid)
       .set(
         { emailAlerts: { [this.projectName]: emailAlerts } },
-        { merge: true },
-      );
-  }
-
-  updateUserCategoriesOfInterest(categoriesOfInterest = []) {
-    this.afs
-      .collection('user')
-      .doc(this.user.uid)
-      .set(
-        { categoriesOfInterest: { [this.projectName]: categoriesOfInterest } },
-        { merge: true },
-      );
-  }
-
-  updateUserPersonalizationData(personalizationData) {
-    this.afs
-      .collection('user')
-      .doc(this.user.uid)
-      .set(
-        {
-          personalizationData: { [this.projectName]: personalizationData },
-        },
-        { merge: true },
-      );
-  }
-
-  updateUserCategoriesDescriptions(categoriesDescriptions) {
-    this.afs
-      .collection('user')
-      .doc(this.user.uid)
-      .set(
-        {
-          categoriesDescriptions: {
-            [this.projectName]: categoriesDescriptions,
-          },
-        },
         { merge: true },
       );
   }
