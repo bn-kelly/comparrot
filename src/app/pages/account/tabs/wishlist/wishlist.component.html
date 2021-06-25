@@ -1,1 +1,43 @@
-<p>wishlist works!</p>
+<h2 class="tab-header">My Wishlist</h2>
+<div
+  class="wishlist-item"
+  fxLayout="column"
+  fxLayout.gt-xs="row"
+  fxLayoutGap="16px"
+  *ngFor="let item of wishlist"
+>
+  <div
+    target="_blank"
+    class="wishlist-item__image-container"
+    fxFlex="grow"
+    fxFlex.gt-xs="auto"
+  >
+    <img
+      class="wishlist-item__img"
+      *ngIf="item.image"
+      [src]="item.image"
+      [alt]="item.title"
+    />
+    <span
+      mat-icon-button
+      class="wishlist-item__delete-btn"
+      (click)="deleteItem(item.id)"
+    >
+      <mat-icon>delete</mat-icon>
+    </span>
+  </div>
+  <div fxFlex="auto" fxFlex.gt-xs="grow">
+    <a
+      [href]="item.url"
+      target="_blank"
+      class="wishlist-item__title"
+      matTooltip="{{ item.title }}"
+      [matTooltipPosition]="'above'"
+    >
+      {{ item.title }}
+    </a>
+    <div class="wishlist-item__price">
+      {{ item.price }}
+    </div>
+  </div>
+</div>

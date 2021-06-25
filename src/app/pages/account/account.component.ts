@@ -12,14 +12,11 @@ import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { AuthService } from '../authentication/services/auth.service';
 import { User } from '../../models/user.model';
 import { EmailAlert } from '../../models/email-alert.model';
-import { CategoryOfInterest } from '../../models/category-of-interest.model';
 import { Offer } from '../../models/offer.model';
 import { Project } from '../../models/project.model';
-import { PersonalizationData } from '../../models/personalization-data.model';
 import { MessageService } from '../../services/message.service';
 import { ToggleExpandIframeWidth } from '../../constants';
 import { FirebaseService } from '@coturiv/firebase/app';
-import { take } from 'rxjs/operators';
 
 type Fields = 'firstName' | 'lastName' | 'photoURL';
 type FormErrors = { [u in Fields]: string };
@@ -42,7 +39,6 @@ export class AccountComponent implements OnInit, OnDestroy {
   isGeneralProfileFormSubmitting: boolean;
   isPhotoURLFileChanged: boolean;
   emailAlerts: EmailAlert[];
-  wishList: Offer[];
   user: User;
   projectName: string;
   form: FormGroup;
@@ -68,6 +64,7 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   userInterests = [];
   userSizes = [];
+  userWishlist = [];
 
   constructor(
     private fb: FormBuilder,
@@ -89,10 +86,11 @@ export class AccountComponent implements OnInit, OnDestroy {
     this.buildForm(this.user);
     this.toggleExpandIframe(true);
 
-    const { interests, sizes } = await this.firebaseService.docAsPromise(`user_context/${uid}`);
+    const { interests, sizes, wishlist } = await this.firebaseService.docAsPromise(`user_context/${uid}`);
 
     this.userInterests = interests;
     this.userSizes = sizes;
+    this.userWishlist = wishlist;
 
     if (
       this.projectName &&
@@ -288,13 +286,7 @@ export class AccountComponent implements OnInit, OnDestroy {
       );
   }
 
-  deleteItemFromWishList(event, id) {
-    event.preventDefault();
-    const wishList = this.wishList
-      .filter(item => item.id !== id)
-      .map(item => item.id)
-      .sort();
-
-    this.afs.collection('user').doc(this.user.uid).update({ wishList });
+  async deleteItemFromWishList(wishlist: string[]) {
+    await this.firebaseService.set(`user_context/${this.user.uid}`, { wishlist }, true);
   }
 }

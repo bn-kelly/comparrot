@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { QueryBuilder } from '@coturiv/firebase';
+import { FirebaseService, leftJoin } from '@coturiv/firebase/app';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'fury-wishlist',
@@ -6,10 +9,30 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./wishlist.component.scss']
 })
 export class WishlistComponent implements OnInit {
+  @Input()
+  userWishlist: [];
 
-  constructor() { }
+  @Output()
+  itemDelete = new EventEmitter();
 
-  ngOnInit(): void {
+  wishlist = [];
+
+  constructor(private firebaseService: FirebaseService) { }
+
+  async ngOnInit() {
+    if (this.userWishlist.length === 0) {
+      return;
+    }
+
+    const qb = new QueryBuilder();
+    qb.where(['id', 'in', this.userWishlist]);
+    this.wishlist = await this.firebaseService.collectionAsPromise('product', qb);
+  }
+
+  deleteItem(id: string) {
+    const ids = this.userWishlist.filter(s => s !== id);
+    this.wishlist = this.wishlist.filter(p => p.id !== id);
+    this.itemDelete.emit(ids);
   }
 
 }

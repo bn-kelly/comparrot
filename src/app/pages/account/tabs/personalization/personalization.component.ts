@@ -34,7 +34,9 @@ export class PersonalizationComponent implements OnInit {
     this.userSizes?.forEach(size => {
       for (let sv of size.value) {
         const type = Object.keys(sv)[0];
-        this.selectSizeValue(size.id, type, sv[type]);
+        for (let vv of sv[type]) {
+          this.selectSizeValue(size.id, type, vv);
+        }
       }
     })
   }
