@@ -11,7 +11,7 @@ import { Project } from '../../models/project.model';
 import { User } from '../../models/user.model';
 import { Product } from '../../models/product.model';
 import { UserContext } from 'src/app/models/user-context.model';
-import { SetUserId, PerformGoogleSearch, ShowIframe, TryToScrapeData } from '../../constants';
+import { SetUserId, PerformGoogleSearch, ShowIframe, TryToScrapeData, StartSpinExtensionIcon, StopSpinExtensionIcon } from '../../constants';
 import { FirebaseService } from '@coturiv/firebase/app';
 import { take } from 'rxjs/operators';
 
@@ -95,6 +95,28 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  async startSpinning() {
+    this.showResult = false;
+    this.message.sendMessage(
+      {
+        action: StartSpinExtensionIcon,
+      },
+      null,
+    );
+    await this.spinner.show();
+  }
+
+  async stopSpinning() {
+    this.showResult = true;
+    this.message.sendMessage(
+      {
+        action: StopSpinExtensionIcon,
+      },
+      null,
+    );
+    await this.spinner.hide();
+  }
+
   ngOnInit() {
     this.showResult = false;
     this.auth.user.subscribe(async user => {
@@ -105,7 +127,7 @@ export class DashboardComponent implements OnInit {
         return;
       }
 
-      // await this.spinner.show();
+      await this.startSpinning();
       await this.signInWithUid();
 
       const retailers = await this.storage.getValue('retailers');
@@ -119,8 +141,7 @@ export class DashboardComponent implements OnInit {
         const product = message.data as Product;
         console.log('Product:', product);
         if (!product) {
-          this.showResult = true;
-          await this.spinner.hide();
+          await this.stopSpinning();
           return;
         }
 
@@ -128,8 +149,7 @@ export class DashboardComponent implements OnInit {
           this.products = await this.scraper.getProducts(product);
           console.log('products:', this.products);
           this.showExtension();
-          this.showResult = true;
-          await this.spinner.hide();
+          await this.stopSpinning();
         });
       });
 

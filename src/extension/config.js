@@ -13,6 +13,8 @@ const ToggleExpandIframeWidth = 'toggle-expand-iframe-width';
 const ShowIframe = 'show-iframe';
 const HideIframe = 'hide-iframe';
 const ToggleShowIframe = 'toggle-show-iframe';
+const StartSpinExtensionIcon = 'start-spin-extension-icon';
+const StopSpinExtensionIcon = 'stop-spin-extension-icon';
 
 const extensionOrigin = `chrome-extension://${chrome.runtime.id}`;
 const iframeID = 'extension-iframe';

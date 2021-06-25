@@ -1,3 +1,5 @@
+let spinIcon = false;
+
 const init = () => {
   chrome.browserAction.setPopup({ popup: '' });
   chrome.browserAction.setIcon({ path: LogoInactivePath });
@@ -12,6 +14,7 @@ const initEvents = () => {
   chrome.runtime.onInstalled.addListener(onInstalled);
   chrome.tabs.onActivated.addListener(onTabsActivated);
   chrome.tabs.onUpdated.addListener(onTabsUpdated);
+  chrome.runtime.onMessage.addListener(onMessageReceived);
 };
 
 /**
@@ -111,5 +114,20 @@ const onTabsUpdated = async (tabId, changeInfo) => {
     }
   }
 };
+
+const onMessageReceived = async (message, sender, sendResponse) => {
+  console.log('message:', message);
+  if (message.action === StartSpinExtensionIcon) {
+    let index = 0;
+    spinIcon = true;
+    while(spinIcon) {
+      chrome.browserAction.setIcon({ path: `assets/img/icons/extension-spin-${(index++ % 12)}.png` });
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+  } else if (message.action === StopSpinExtensionIcon) {
+    spinIcon = false;
+    chrome.browserAction.setIcon({ path: 'assets/img/icons/extension-active-128.png' });
+  }
+}
 
 init();
