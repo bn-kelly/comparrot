@@ -178,7 +178,6 @@ export class DashboardComponent implements OnInit {
       }
 
       this.userContext = await this.firebaseService.doc(`user_context/${this.user.uid}`).pipe(take(1)).toPromise();
-      console.log('this.userContext', this.userContext);
     });
   }
 }

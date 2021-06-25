@@ -96,6 +96,8 @@ const tryToScrapeDataByVendor = (url, retailers = []) => {
         };
 
         sendMessage(PerformGoogleSearch, product);
+      } else {
+        sendMessage(PerformGoogleSearch, null);
       }
     }
   });
