@@ -11,7 +11,7 @@ declare const chrome: any;
   providedIn: 'root',
 })
 export class MessageService {
-  sendMessage(data: any, cb: (data: any) => void) {
+  sendMessageToTab(data: any, cb: (data: any) => void) {
     chrome.tabs.getSelected(null, (tab: any) => {
       chrome.tabs.sendMessage(tab.id, data, cb);
     });

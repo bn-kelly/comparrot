@@ -30,7 +30,7 @@ export class OAuthComponent {
     };
 
     window.localStorage.setItem('uid', data.uid);
-    this.message.sendMessage(
+    this.message.sendMessageToTab(
       {
         action: SiteForceLogin,
         uid: data.uid,

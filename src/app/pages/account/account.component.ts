@@ -188,7 +188,7 @@ export class AccountComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.message.sendMessage(
+    this.message.sendMessageToTab(
       {
         action: ToggleExpandIframeWidth,
         isOpen,

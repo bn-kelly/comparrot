@@ -165,7 +165,7 @@ export class AuthService {
         }
         if (result.user.emailVerified) {
           window.localStorage.setItem('uid', result.user.uid);
-          this.message.sendMessage(
+          this.message.sendMessageToTab(
             {
               action: SiteForceLogin,
               uid: result.user.uid,

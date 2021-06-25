@@ -66,7 +66,7 @@ export class DashboardComponent implements OnInit {
   }
 
   showExtension() {
-    this.message.sendMessage(
+    this.message.sendMessageToTab(
       {
         action: ShowIframe,
       },
@@ -97,7 +97,7 @@ export class DashboardComponent implements OnInit {
 
   async startSpinning() {
     this.showResult = false;
-    this.message.sendMessage(
+    this.message.sendMessageToTab(
       {
         action: StartSpinExtensionIcon,
       },
@@ -108,7 +108,7 @@ export class DashboardComponent implements OnInit {
 
   async stopSpinning() {
     this.showResult = true;
-    this.message.sendMessage(
+    this.message.sendMessageToTab(
       {
         action: StopSpinExtensionIcon,
       },
@@ -153,7 +153,7 @@ export class DashboardComponent implements OnInit {
         });
       });
 
-      this.message.sendMessage(
+      this.message.sendMessageToTab(
         {
           action: TryToScrapeData,
           url: tab.url,

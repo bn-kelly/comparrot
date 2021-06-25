@@ -17,7 +17,7 @@ export class ToolbarCloseComponent {
       return;
     }
 
-    this.message.sendMessage(
+    this.message.sendMessageToTab(
       {
         action: HideIframe
       },
