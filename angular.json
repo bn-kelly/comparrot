@@ -38,6 +38,10 @@
               "src/styles.scss"
             ],
             "scripts": [],
+            "allowedCommonJsDependencies": [
+              "core-js",
+              "sha1"
+            ],
             "baseHref": "/",
             "vendorChunk": true,
             "extractLicenses": false,

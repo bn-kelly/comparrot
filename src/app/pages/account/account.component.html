@@ -164,37 +164,7 @@
 
         <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="16px">
           <div fxFlex="grow">
-            <h3>Choose your interests</h3>
-            <p class="padding-bottom">
-              Get personalized shopping recommendations
-            </p>
-            <div
-              class="categories-container"
-              *ngIf="
-                user &&
-                user.categoriesOfInterest &&
-                user.categoriesOfInterest[projectName]
-              "
-            >
-              <button
-                *ngFor="let category of categoriesOfInterest"
-                mat-raised-button
-                [color]="
-                  user.categoriesOfInterest[projectName].includes(category.id)
-                    ? 'primary'
-                    : 'default'
-                "
-                class="category-button"
-                (click)="toggleSelectCategoryOfInterest(category.id)"
-              >
-                <img
-                  src="{{ category.img }}"
-                  alt=""
-                  class="category-button-image"
-                />
-                {{ category.value }}
-              </button>
-            </div>
+              <fury-interests [userInterests]="userInterests" (selectionChange)="updateUserInterests($event)"></fury-interests>
           </div>
           <div fxFlex="grow">
             <h3>Alerts</h3>
@@ -224,81 +194,11 @@
       <mat-tab
         label="Personalization"
       >
-        <ng-template matTabContent>
-          <h2 class="tab-header">Personalization</h2>
-          <p>Please choose your sizes, so we can provide accurate results🙂</p>
-          <mat-tab-group
-            animationDuration="0ms"
-            dynamicHeight
-            *ngIf="index === 1"
-          >
-            <mat-tab
-              *ngFor="
-                let type of personalizationData.types
-                  | orderBy: 'order'
-              "
-              label="{{ type.title }}"
-            >
-              <div class="tab-content">
-                <mat-accordion>
-                  <mat-expansion-panel
-                    *ngFor="let category of type.categories | orderBy: 'order'"
-                    (opened)="panelOpenState = true"
-                    (closed)="panelOpenState = false"
-                  >
-                    <mat-expansion-panel-header
-                      class="personalization-data__panel-header"
-                    >
-                      <mat-panel-title
-                        class="personalization-data__panel-title"
-                      >
-                        <div class="personalization-data__category-title">
-                          <strong>{{ category.title }}</strong>
-                        </div>
-                        <div class="personalization-data__category-description">
-                          {{
-                            user.categoriesDescriptions[projectName][type.id][
-                              category.id
-                            ] || 'No selected sizes'
-                          }}
-                        </div>
-                      </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <div *ngFor="let size of category.sizes | orderBy: 'order'">
-                      <h4>{{ size.title }}</h4>
-                      <button
-                        *ngFor="let value of size.values | orderBy: 'order'"
-                        mat-button
-                        color="primary"
-                        [ngClass]="
-                          user.personalizationData[projectName][type.id][
-                            category.id
-                          ][size.id].includes(value.id)
-                            ? 'mat-raised-button'
-                            : 'mat-stroked-button'
-                        "
-                        class="personalization-data__category-button"
-                        (click)="
-                          toggleSelectPersonalizationData({
-                            type: type,
-                            category: category,
-                            size: size,
-                            value: value
-                          })
-                        "
-                      >
-                        {{ value.title }}
-                      </button>
-                    </div>
-                  </mat-expansion-panel>
-                </mat-accordion>
-              </div>
-            </mat-tab>
-          </mat-tab-group>
-        </ng-template>
+        <fury-personalization [userSizes]="userSizes" (selectionChange)="updateSizingPreference($event)"></fury-personalization>
       </mat-tab>
       <mat-tab label="My Wishlist">
-        <h2 class="tab-header">My Wishlist</h2>
+        <fury-wishlist></fury-wishlist>
+        <!-- <h2 class="tab-header">My Wishlist</h2>
         <div
           class="wishlist-item"
           fxLayout="column"
@@ -344,24 +244,10 @@
               }}</span>
             </div>
           </div>
-        </div>
+        </div> -->
       </mat-tab>
-      <mat-tab label="FAQ" *ngIf="faqList && !!faqList.length">
-        <h2 class="tab-header">FAQ</h2>
-        <mat-accordion>
-          <mat-expansion-panel
-            *ngFor="let faqItem of faqList"
-            (opened)="panelOpenState = true"
-            (closed)="panelOpenState = false"
-          >
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                {{ faqItem.question }}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>{{ faqItem.answer }}</p>
-          </mat-expansion-panel>
-        </mat-accordion>
+      <mat-tab label="FAQ">
+        <fury-faq></fury-faq>
       </mat-tab>
       <mat-tab label="Contact Us">
         <fury-contact-us></fury-contact-us>

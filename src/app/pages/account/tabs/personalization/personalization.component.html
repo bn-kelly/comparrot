@@ -1,0 +1,48 @@
+<h2 class="tab-header">Personalization</h2>
+<p>Please choose your sizes, so we can provide accurate results🙂</p>
+<mat-tab-group animationDuration="0ms"  dynamicHeight>
+    <mat-tab *ngFor="let cat of categories"
+        label="{{ cat }}"
+    >
+        <div class="tab-content">
+            <mat-accordion>
+                <mat-expansion-panel
+                *ngFor="let size of getSizesByCategory(cat)"
+                (opened)="panelOpenState = true"
+                (closed)="panelOpenState = false"
+                >
+                <mat-expansion-panel-header
+                    class="personalization-data__panel-header"
+                >
+                    <mat-panel-title
+                    class="personalization-data__panel-title"
+                    >
+                    <div class="personalization-data__category-title">
+                        <strong>{{ size.species.title }}</strong>
+                    </div>
+                    <div class="personalization-data__category-description">
+                        {{ size.selection || 'No selected sizes' }}
+                    </div>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div *ngFor="let sv of size.value">
+                    <ng-container *ngFor="let v of sv | keyvalue">
+                        <h4>{{ types[v.key] }}</h4>
+                        <ng-container *ngFor="let vv of v.value">
+                            <button
+                                mat-button
+                                color="primary"
+                                [ngClass]="sizesMap.get(size.id + v.key + vv) ? 'mat-raised-button' : 'mat-stroked-button'"
+                                class="personalization-data__category-button"
+                                (click)="selectSizeValue(size.id, v.key, vv, true)"
+                            >
+                            {{ vv }}
+                            </button>
+                        </ng-container>                            
+                    </ng-container>
+                </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+    </mat-tab>
+</mat-tab-group>

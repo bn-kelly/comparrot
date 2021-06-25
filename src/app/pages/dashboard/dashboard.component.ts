@@ -105,7 +105,7 @@ export class DashboardComponent implements OnInit {
         return;
       }
 
-      await this.spinner.show();
+      // await this.spinner.show();
       await this.signInWithUid();
 
       const retailers = await this.storage.getValue('retailers');
