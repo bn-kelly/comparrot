@@ -117,14 +117,14 @@ const onTabsUpdated = async (tabId, changeInfo) => {
 
 const onMessageReceived = async (message, sender, sendResponse) => {
   console.log('message:', message);
-  if (message.action === StartSpinExtensionIcon) {
+  if (message.action === StartSpinExtensionIcon && !spinIcon) {
     let index = 0;
     spinIcon = true;
     while(spinIcon) {
       chrome.browserAction.setIcon({ path: `assets/img/icons/extension-spin-${(index++ % 12)}.png` });
       await new Promise(resolve => setTimeout(resolve, 100));
     }
-  } else if (message.action === StopSpinExtensionIcon) {
+  } else if (message.action === StopSpinExtensionIcon && spinIcon) {
     spinIcon = false;
     chrome.browserAction.setIcon({ path: 'assets/img/icons/extension-active-128.png' });
   }

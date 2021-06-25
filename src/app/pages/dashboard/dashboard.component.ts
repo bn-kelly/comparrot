@@ -97,7 +97,7 @@ export class DashboardComponent implements OnInit {
 
   async startSpinning() {
     this.showResult = false;
-    this.message.sendMessageToTab(
+    this.message.sendMessage(
       {
         action: StartSpinExtensionIcon,
       },
@@ -108,7 +108,7 @@ export class DashboardComponent implements OnInit {
 
   async stopSpinning() {
     this.showResult = true;
-    this.message.sendMessageToTab(
+    this.message.sendMessage(
       {
         action: StopSpinExtensionIcon,
       },
