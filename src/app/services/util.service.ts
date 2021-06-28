@@ -25,7 +25,7 @@ export class UtilService {
 
   getNumberFromString(price:string = '') {
     const regex = /([0-9]*[.])?[0-9]+/g;
-    const m = regex.exec(price);
+    const m = regex.exec(price.replace(',', ''));
     return m
       ? Number(m[0])
       : 0;
