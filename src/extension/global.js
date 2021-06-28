@@ -15,7 +15,7 @@ const getActiveTab = async () => {
   });
 };
 
-function getXPathContent(xpath) {
+const getXPathContent = (xpath) => {
   if (xpath === undefined || xpath.length === 0) return '';
 
   const xpaths = Array.isArray(xpath) ? xpath : [ xpath ];
@@ -32,7 +32,7 @@ function getXPathContent(xpath) {
   return '';
 }
 
-function clean(str) {
+const clean = (str) => {
   return str
     ? str
         .replace(/&nbsp;/g, '')
