@@ -82,7 +82,7 @@ export class DashboardComponent implements OnInit {
     }
 
     if (uid === 'null' && this.auth.isAuthenticated()) {
-      this.auth.signOut();
+      await this.auth.signOut();
       return;
     }
 
@@ -90,7 +90,7 @@ export class DashboardComponent implements OnInit {
       const data: any = await this.auth.getCustomToken(uid);
 
       if (data.token) {
-        this.auth.signInWithCustomToken(data.token);
+        await this.auth.signInWithCustomToken(data.token);
       }
     }
   }
@@ -117,67 +117,73 @@ export class DashboardComponent implements OnInit {
     await this.spinner.hide();
   }
 
-  ngOnInit() {
-    this.showResult = false;
-    this.auth.user.subscribe(async user => {
-      this.user = user;
+  async ngOnInit() {
+    this.user = this.auth.currentUser;
 
-      if (!this.auth.isAuthenticated()) {
-        this.router.navigate(['/login']);
+    if (!this.auth.isAuthenticated()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    await this.signInWithUid();
+
+    const retailers: any[] = await this.storage.getValue('retailers');
+    const tab = await this.util.getSeletedTab();
+    const retailer = retailers.find(r => {
+      return tab.url.includes(r.url);
+    });
+    
+    if (!retailer) {
+      this.showResult = true;
+      return;
+    }
+
+    await this.startSpinning();
+
+    this.message.handleMessage(SetUserId, message => {
+      window.localStorage.setItem('uid', message.uid);
+    });
+
+    this.message.handleMessage(PerformGoogleSearch, async message => {
+      const product = message.data as Product;
+      console.log('Product:', product);
+      if (!product) {
+        await this.stopSpinning();
         return;
       }
 
-      await this.startSpinning();
-      await this.signInWithUid();
-
-      const retailers = await this.storage.getValue('retailers');
-      const tab = await this.util.getSeletedTab();
-
-      this.message.handleMessage(SetUserId, message => {
-        window.localStorage.setItem('uid', message.uid);
+      this.ngZone.run(async () => {
+        this.products = await this.scraper.getProducts(product);
+        console.log('products:', this.products);
+        this.showExtension();
+        await this.stopSpinning();
       });
-
-      this.message.handleMessage(PerformGoogleSearch, async message => {
-        const product = message.data as Product;
-        console.log('Product:', product);
-        if (!product) {
-          await this.stopSpinning();
-          return;
-        }
-
-        this.ngZone.run(async () => {
-          this.products = await this.scraper.getProducts(product);
-          console.log('products:', this.products);
-          this.showExtension();
-          await this.stopSpinning();
-        });
-      });
-
-      this.message.sendMessageToTab(
-        {
-          action: TryToScrapeData,
-          url: tab.url,
-          retailers,
-        },
-        null,
-      );
-
-      const { projectName } = user;
-
-      if (!!projectName) {
-        this.afs
-          .collection('project')
-          .doc(user.projectName)
-          .valueChanges()
-          .subscribe((project: Project) => {
-            this.projectName =
-              project && project.name
-                ? project.name.charAt(0).toUpperCase() + project.name.slice(1)
-                : '';
-          });
-      }
-
-      this.userContext = await this.firebaseService.doc(`user_context/${this.user.uid}`).pipe(take(1)).toPromise();
     });
+
+    this.message.sendMessageToTab(
+      {
+        action: TryToScrapeData,
+        url: tab.url,
+        retailers,
+      },
+      null,
+    );
+
+    const { projectName } = this.user;
+
+    if (!!projectName) {
+      this.afs
+        .collection('project')
+        .doc(this.user.projectName)
+        .valueChanges()
+        .subscribe((project: Project) => {
+          this.projectName =
+            project && project.name
+              ? project.name.charAt(0).toUpperCase() + project.name.slice(1)
+              : '';
+        });
+    }
+
+    this.userContext = await this.firebaseService.doc(`user_context/${this.user.uid}`).pipe(take(1)).toPromise();
   }
 }

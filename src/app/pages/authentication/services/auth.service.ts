@@ -211,8 +211,6 @@ export class AuthService {
   signOut() {
     return new Promise(resolve => {
       this.afAuth.signOut().then(async () => {
-        // signed out
-        await this.anonymousLogin();
         resolve(true);
       });
     });
@@ -224,8 +222,8 @@ export class AuthService {
       .toPromise();
   }
 
-  signInWithCustomToken(token: string) {
-    this.afAuth.signInWithCustomToken(token);
+  async signInWithCustomToken(token: string) {
+    await this.afAuth.signInWithCustomToken(token);
   }
 
   private handleError(error: Error) {

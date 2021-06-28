@@ -68,39 +68,44 @@ const toggleExpandIframeWidth = isOpen => {
   iframe.classList[toggleExpandedClass](expandedClassName);
 };
 
-const tryToScrapeDataByVendor = (url, retailers = []) => {
-  retailers.forEach(retailer => {
-    if (url.includes(retailer.url)) {
-      const title = getXPathContent(retailer?.selectors?.product?.title)
-        .trim()
-        .replace(/(\r\n|\n|\r)/gm, ' ');
+const tryToScrapeData = (url, retailers = []) => {
+  let product = null;
 
-      if (!!title) {
-        const priceDivider = ' - ';
-        const originalPrice = getXPathContent(retailer?.selectors?.product?.price).trim();
-        const price = originalPrice.includes(priceDivider)
-          ? getNumberFromString(originalPrice.split(priceDivider)[0])
-          : getNumberFromString(originalPrice);
-        const image = getXPathContent(retailer?.selectors?.product?.image);
-        const upc = getXPathContent(retailer?.selectors?.product?.upc);
-        const sku = getXPathContent(retailer?.selectors?.product?.sku) || url;
-        const product = {
-          title,
-          upc,
-          image,
-          price,
-          url,
-          created: Date.now(),
-          sku,
-          retailer: retailer.name,
-        };
-
-        sendMessage(PerformGoogleSearch, product);
-      } else {
-        sendMessage(PerformGoogleSearch, null);
+  try {
+    for (retailer of retailers) {
+      if (url.includes(retailer.url)) {
+        const title = getXPathContent(retailer?.selectors?.product?.title)
+          .trim()
+          .replace(/(\r\n|\n|\r)/gm, ' ');
+  
+        if (!!title) {
+          const priceDivider = ' - ';
+          const originalPrice = getXPathContent(retailer?.selectors?.product?.price).trim();
+          const price = originalPrice.includes(priceDivider)
+            ? getNumberFromString(originalPrice.split(priceDivider)[0])
+            : getNumberFromString(originalPrice);
+          const image = getXPathContent(retailer?.selectors?.product?.image);
+          const upc = getXPathContent(retailer?.selectors?.product?.upc);
+          const sku = getXPathContent(retailer?.selectors?.product?.sku) || url;
+          product = {
+            title,
+            upc,
+            image,
+            price,
+            url,
+            created: Date.now(),
+            sku,
+            retailer: retailer.name,
+          };
+        }
       }
     }
-  });
+  
+    sendMessage(PerformGoogleSearch, product);
+  } catch(e) {
+    console.log('tryToScrapeData:', e);
+    sendMessage(PerformGoogleSearch, product);
+  }
 };
 
 const sendMessage = (action, data) => {
@@ -168,7 +173,7 @@ const handleMessage = msg => {
       break;
 
     case TryToScrapeData:
-      tryToScrapeDataByVendor(msg.url, msg.retailers);
+      tryToScrapeData(msg.url, msg.retailers);
       break;
 
     case SiteForceLogin:
