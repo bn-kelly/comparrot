@@ -22,7 +22,6 @@ import { take } from 'rxjs/operators';
 })
 export class DashboardComponent implements OnInit {
   user: User;
-  projectName: string;
   isLoggedIn: boolean;
   products: Product[];
   showResult: Boolean;
@@ -164,25 +163,10 @@ export class DashboardComponent implements OnInit {
       {
         action: TryToScrapeData,
         url: tab.url,
-        retailers,
+        retailer,
       },
       null,
     );
-
-    const { projectName } = this.user;
-
-    if (!!projectName) {
-      this.afs
-        .collection('project')
-        .doc(this.user.projectName)
-        .valueChanges()
-        .subscribe((project: Project) => {
-          this.projectName =
-            project && project.name
-              ? project.name.charAt(0).toUpperCase() + project.name.slice(1)
-              : '';
-        });
-    }
 
     this.userContext = await this.firebaseService.doc(`user_context/${this.user.uid}`).pipe(take(1)).toPromise();
   }

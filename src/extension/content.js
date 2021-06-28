@@ -68,37 +68,33 @@ const toggleExpandIframeWidth = isOpen => {
   iframe.classList[toggleExpandedClass](expandedClassName);
 };
 
-const tryToScrapeData = (url, retailers = []) => {
+const tryToScrapeData = (url, retailer) => {
   let product = null;
 
   try {
-    for (retailer of retailers) {
-      if (url.includes(retailer.url)) {
-        const title = getXPathContent(retailer?.selectors?.product?.title)
-          .trim()
-          .replace(/(\r\n|\n|\r)/gm, ' ');
-  
-        if (!!title) {
-          const priceDivider = ' - ';
-          const originalPrice = getXPathContent(retailer?.selectors?.product?.price).trim();
-          const price = originalPrice.includes(priceDivider)
-            ? getNumberFromString(originalPrice.split(priceDivider)[0])
-            : getNumberFromString(originalPrice);
-          const image = getXPathContent(retailer?.selectors?.product?.image);
-          const upc = getXPathContent(retailer?.selectors?.product?.upc);
-          const sku = getXPathContent(retailer?.selectors?.product?.sku) || url;
-          product = {
-            title,
-            upc,
-            image,
-            price,
-            url,
-            created: Date.now(),
-            sku,
-            retailer: retailer.name,
-          };
-        }
-      }
+    const title = getXPathContent(retailer?.selectors?.product?.title)
+      .trim()
+      .replace(/(\r\n|\n|\r)/gm, ' ');
+
+    if (!!title) {
+      const priceDivider = ' - ';
+      const originalPrice = getXPathContent(retailer?.selectors?.product?.price).trim();
+      const price = originalPrice.includes(priceDivider)
+        ? getNumberFromString(originalPrice.split(priceDivider)[0])
+        : getNumberFromString(originalPrice);
+      const image = getXPathContent(retailer?.selectors?.product?.image);
+      const upc = getXPathContent(retailer?.selectors?.product?.upc);
+      const sku = getXPathContent(retailer?.selectors?.product?.sku) || url;
+      product = {
+        title,
+        upc,
+        image,
+        price,
+        url,
+        created: Date.now(),
+        sku,
+        retailer: retailer.name,
+      };
     }
   
     sendMessage(PerformGoogleSearch, product);
@@ -173,7 +169,7 @@ const handleMessage = msg => {
       break;
 
     case TryToScrapeData:
-      tryToScrapeData(msg.url, msg.retailers);
+      tryToScrapeData(msg.url, msg.retailer);
       break;
 
     case SiteForceLogin:
