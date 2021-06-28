@@ -30,7 +30,7 @@ export class ScraperService {
     }
 
     const search = product.upc || product.title;
-    const url = `https://www.google.com/search?tbm=shop&tbs=vw:1,new:1,price:1,ppr_max:${product.price}&q=${search}`;
+    const url = `https://www.google.com/search?tbm=shop&tbs=vw:1,price:1,ppr_max:${product.price}&q=${search}`;
     const doc = await this.util.getDocFromUrl(url);
     let data = [];
 
