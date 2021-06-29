@@ -83,8 +83,8 @@ const tryToScrapeData = (url, retailer) => {
         ? getNumberFromString(originalPrice.split(priceDivider)[0])
         : getNumberFromString(originalPrice);
       const image = getXPathContent(retailer?.selectors?.product?.image);
-      const upc = getXPathContent(retailer?.selectors?.product?.upc);
-      const sku = getXPathContent(retailer?.selectors?.product?.sku) || url;
+      const upc = getXPathContent(retailer?.selectors?.product?.upc).replace(/_~_/g,'');
+      const sku = getXPathContent(retailer?.selectors?.product?.sku).replace(/_~_/g,'') || url;
       product = {
         title,
         upc,
@@ -238,13 +238,15 @@ const initEvents = () => {
   window.addEventListener(SetUserId, setUserId);
 };
 
-if (!location.ancestorOrigins.contains(extensionOrigin) && !inIframe()) {
-  addIframe();
-  initEvents();
-
-  // Homedepot prevent injecting iframe
-  // Cause of this reason, replace site original iframe with extension iframe
-  if (location.href.includes('www.homedepot.com')) {
-    replaceIframe();
+window.onload = () => {
+  if (!location.ancestorOrigins.contains(extensionOrigin) && !inIframe()) {
+    addIframe();
+    initEvents();
+  
+    // Homedepot prevent injecting iframe
+    // Cause of this reason, replace site original iframe with extension iframe
+    if (location.href.includes('www.homedepot.com')) {
+      replaceIframe();
+    }
   }
 }
