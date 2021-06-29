@@ -36,6 +36,8 @@ export const GoogleXPaths = {
     "//tr[@class='sh-osd__offer-row']//td//span[contains(text(),'Estimated Tax') or contains(text(),'Estimated Tax')]//parent::td/following-sibling::*",
   g_step2_title_xpath:
     "//h1[@id='product-name']|//a[contains(@class, 'title')]",
+  g_step2_image_xpath:
+  "//div[@id='sg-product__pdp-container']//img/@src",
   g_step2_total_price_xpath:
     "//tr[@class='sh-osd__offer-row']//td[contains(text(),'Total price')]/following-sibling::*",
   order_confirmation_xpath:

@@ -182,6 +182,10 @@ export class ScraperService {
       doc,
       GoogleXPaths.g_step2_title_xpath,
     );
+    const image = this.util.getXPathString(
+      doc,
+      GoogleXPaths.g_step2_image_xpath,
+    );
     const data = [];
 
     for (let i = 0; i < arrRetailers.length; i++) {
@@ -193,6 +197,7 @@ export class ScraperService {
         url,
         title,
         price,
+        image,
         retailer,
         sku: sha1(`${title}${retailer}`),
       });
