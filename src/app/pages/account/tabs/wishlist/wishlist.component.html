@@ -1,43 +1,52 @@
 <h2 class="tab-header">My Wishlist</h2>
 <div
-  class="wishlist-item"
-  fxLayout="column"
-  fxLayout.gt-xs="row"
-  fxLayoutGap="16px"
-  *ngFor="let item of wishlist"
+  class="wishlist"
+  fxLayout.xs="column"
+  fxLayout="row wrap"
 >
-  <div
-    target="_blank"
-    class="wishlist-item__image-container"
-    fxFlex="grow"
-    fxFlex.gt-xs="auto"
+  <mat-card
+  class="product"
+  *ngFor="
+    let product of wishlist
+  "
   >
-    <img
-      class="wishlist-item__img"
-      *ngIf="item.image"
-      [src]="item.image"
-      [alt]="item.title"
-    />
-    <span
-      mat-icon-button
-      class="wishlist-item__delete-btn"
-      (click)="deleteItem(item.id)"
-    >
-      <mat-icon>delete</mat-icon>
-    </span>
-  </div>
-  <div fxFlex="auto" fxFlex.gt-xs="grow">
-    <a
-      [href]="item.url"
-      target="_blank"
-      class="wishlist-item__title"
-      matTooltip="{{ item.title }}"
+    <div class="offer__product-container">
+      <img
+        class="offer__img"
+        *ngIf="product.image"
+        [src]="product.image"
+        [alt]="product.title"
+      />
+      <span
+        mat-icon-button
+        class="offer__product-delete"
+        (click)="deleteItem(product.id)"
+      >
+        <mat-icon>highlight_off</mat-icon>
+      </span>
+    </div>
+    <mat-card-title
+      class="offer__title"
+      matTooltip="{{ product.title }}"
       [matTooltipPosition]="'above'"
     >
-      {{ item.title }}
-    </a>
-    <div class="wishlist-item__price">
-      {{ item.price }}
-    </div>
-  </div>
+      {{ product.title }}
+    </mat-card-title>
+    <mat-card-content class="offer__content">
+      <div class="offer__price-container">
+        <span class="offer__price">
+          ${{ product.price }}
+        </span>
+      </div>
+      <a
+        href="{{ product.url }}"
+        target="_blank"
+        class="offer__buy-button"
+        mat-raised-button
+        color="primary"
+      >
+        BUY
+      </a>
+    </mat-card-content>
+  </mat-card>
 </div>
