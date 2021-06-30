@@ -137,8 +137,9 @@ export class ScraperService {
 
         const image = this.util.getXPathContent(doc, retailer.selectors?.product?.image);
         const sku = this.util.getXPathContent(doc, retailer.selectors?.product?.sku);
-        data[i].image = image.includes('https') ? image : `https:${image}`;
-        data[i].sku = sku;
+        
+        data[i].image = image || data[i].image;
+        data[i].sku = sku || data[i].sku;
       } catch (_) {
         continue;
       }
@@ -235,6 +236,9 @@ export class ScraperService {
       products = [...googleResult, ...scrapedResult]
         .filter(p => {
           return p.price < product.price;
+        })
+        .filter((p, index, self ) => {
+          return index === self.findIndex((t) => t.sku === p.sku);
         })
         .sort((a, b) => {
           return a.price - b.price;
