@@ -238,7 +238,7 @@ export class ScraperService {
           return p.price < product.price;
         })
         .filter((p, index, self ) => {
-          return index === self.findIndex((t) => t.sku === p.sku && t.price === p.price);
+          return index === self.findIndex((t) => t.retailer === p.retailer && t.price === p.price);
         })
         .sort((a, b) => {
           return a.price - b.price;
