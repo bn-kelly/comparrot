@@ -234,7 +234,7 @@ export class ScraperService {
 
       products = [...googleResult, ...scrapedResult]
         .filter(p => {
-          return p.retailer !== product.retailer && p.price < product.price;
+          return p.price < product.price;
         })
         .sort((a, b) => {
           return a.price - b.price;
