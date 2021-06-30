@@ -5,7 +5,7 @@ iframe#extension-iframe {
   display: block !important;
   width: 25% !important;
   min-width: 342px !important;
-  height: calc(100% - 10px) !important;
+  height: calc(100% - 10px);
   z-index: 2147483647 !important;
   border: 0 !important;
   border-radius: 24px !important;
@@ -29,6 +29,10 @@ iframe#extension-iframe.inactive {
 
 iframe#extension-iframe.expanded {
   width: calc(100% - 10px);
+}
+
+iframe#extension-iframe.notification {
+  height: 210px;
 }
 
 .exp_banner {

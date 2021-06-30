@@ -11,7 +11,7 @@ import { Project } from '../../models/project.model';
 import { User } from '../../models/user.model';
 import { Product } from '../../models/product.model';
 import { UserContext } from 'src/app/models/user-context.model';
-import { SetUserId, PerformGoogleSearch, ShowIframe, TryToScrapeData, StartSpinExtensionIcon, StopSpinExtensionIcon } from '../../constants';
+import { SetUserId, PerformGoogleSearch, ShowIframe, TryToScrapeData, StartSpinExtensionIcon, StopSpinExtensionIcon, ChangeIframeStyle } from '../../constants';
 import { FirebaseService } from '@coturiv/firebase/app';
 import { take } from 'rxjs/operators';
 
@@ -155,7 +155,19 @@ export class DashboardComponent implements OnInit {
 
       this.ngZone.run(async () => {
         this.products = await this.scraper.getProducts(product);
+
         console.log('products:', this.products);
+
+        // if (this.products.length === 0) {
+        //   this.message.sendMessageToTab(
+        //     {
+        //       action: ChangeIframeStyle,
+        //       class: 'notification',
+        //     },
+        //     null,
+        //   );
+        // }
+
         this.showExtension();
         await this.stopSpinning();
       });

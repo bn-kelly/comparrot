@@ -68,6 +68,18 @@ const toggleExpandIframeWidth = isOpen => {
   iframe.classList[toggleExpandedClass](expandedClassName);
 };
 
+const changeIframeStyle = className => {
+  const iframe = getIframe();
+
+  if (!iframe) {
+    return;
+  }
+
+  if (!iframe.classList.contains(className)) {
+    iframe.classList.add(className);
+  }
+}
+
 const tryToScrapeData = (url, retailer) => {
   let product = null;
 
@@ -167,6 +179,9 @@ const handleMessage = msg => {
     case ToggleExpandIframeWidth:
       toggleExpandIframeWidth(msg.isOpen);
       break;
+
+    case ChangeIframeStyle:
+      changeIframeStyle(msg.class);
 
     case TryToScrapeData:
       tryToScrapeData(msg.url, msg.retailer);

@@ -6,6 +6,7 @@ export const TryToScrapeData = 'try-to-scrape-data';
 export const ToggleExpandIframeWidth = 'toggle-expand-iframe-width';
 export const ShowIframe = 'show-iframe';
 export const HideIframe = 'hide-iframe';
+export const ChangeIframeStyle = 'change-iframe-style';
 export const ToggleShowIframe = 'toggle-show-iframe';
 export const StartSpinExtensionIcon = 'start-spin-extension-icon';
 export const StopSpinExtensionIcon = 'stop-spin-extension-icon';
