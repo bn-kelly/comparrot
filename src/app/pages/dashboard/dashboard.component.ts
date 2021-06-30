@@ -46,12 +46,14 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  onBuyButtonClick(event, url) {
+  onProductClick(event: any, url: string) {
     event.preventDefault();
     window.chrome.tabs.create({ url });
   }
 
-  async toggleAddToWishlist(product: Product) {
+  async toggleAddToWishlist(event: any, product: Product) {
+    event?.stopPropagation();
+
     if (this.userContext && this.userContext.wishlist) {
       this.userContext.wishlist = this.userContext.wishlist.includes(product.sku)
         ? this.userContext.wishlist.filter(s => s !== product.sku)

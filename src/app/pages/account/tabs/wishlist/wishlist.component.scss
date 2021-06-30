@@ -2,9 +2,10 @@
 @import "../../node_modules/@angular/material/button/button-base";
 
 .wishlist {
-  .mat-card {
+  .product {
     padding: 0px;
     padding-bottom: 32px;
+    cursor: pointer;
   }
   .offer {
     margin-bottom: 0 !important;

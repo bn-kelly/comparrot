@@ -51,6 +51,7 @@
             *ngFor="
               let product of products
             "
+            (click)="onProductClick($event, product.url)"
           >
             <div class="offer__product-container">
               <img
@@ -81,7 +82,6 @@
                 </span>
               </div>
               <a
-                (click)="onBuyButtonClick($event, product.url)"
                 href="{{ product.url }}"
                 target="_blank"
                 class="offer__buy-button"
@@ -102,7 +102,7 @@
               <button
                 mat-button
                 class="offer__actions-button"
-                (click)="toggleAddToWishlist(product)"
+                (click)="toggleAddToWishlist($event, product)"
               >
                 <mat-icon>{{
                   userContext && userContext.wishlist.includes(product.sku)

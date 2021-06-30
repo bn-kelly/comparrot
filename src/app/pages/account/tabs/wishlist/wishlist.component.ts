@@ -19,6 +19,11 @@ export class WishlistComponent implements OnInit {
 
   constructor(private firebaseService: FirebaseService) { }
 
+  onProductClick(event: any, url: string) {
+    event.preventDefault();
+    window.chrome.tabs.create({ url });
+  }
+
   async ngOnInit() {
     if (this.userWishlist.length === 0) {
       return;

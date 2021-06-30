@@ -5,6 +5,10 @@
   &.extension {
     padding: 0;
 
+    .product {
+      cursor: pointer;
+    }
+
     .offer {
       margin-bottom: 0 !important;
       border-radius: 0;

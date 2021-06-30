@@ -9,6 +9,7 @@
   *ngFor="
     let product of wishlist
   "
+  (click)="onProductClick($event, product.url)"
   >
     <div class="offer__product-container">
       <img
