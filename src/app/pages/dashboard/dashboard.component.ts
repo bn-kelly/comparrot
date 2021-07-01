@@ -44,6 +44,10 @@ export class DashboardComponent implements OnInit {
     this.products = this.products.filter(p => {
       return p.sku !== product.sku;
     });
+
+    if (this.products.length === 0) {
+      this.products = null;
+    }
   }
 
   onProductClick(event: any, url: string) {
