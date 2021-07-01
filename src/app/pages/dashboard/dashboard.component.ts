@@ -7,11 +7,10 @@ import { ScraperService } from '../../services/scraper.service';
 import { UtilService } from '../../services/util.service';
 import { StorageService } from '../../services/storage.service';
 import { AuthService } from '../../pages/authentication/services/auth.service';
-import { Project } from '../../models/project.model';
 import { User } from '../../models/user.model';
 import { Product } from '../../models/product.model';
 import { UserContext } from 'src/app/models/user-context.model';
-import { SetUserId, PerformGoogleSearch, ShowIframe, TryToScrapeData, StartSpinExtensionIcon, StopSpinExtensionIcon, ChangeIframeStyle, AddClass, RemoveClass } from '../../constants';
+import { PerformGoogleSearch, ShowIframe, TryToScrapeData, StartSpinExtensionIcon, StopSpinExtensionIcon, ChangeIframeStyle, AddClass, RemoveClass, SetUserId } from '../../constants';
 import { FirebaseService } from '@coturiv/firebase/app';
 import { take } from 'rxjs/operators';
 
@@ -81,23 +80,7 @@ export class DashboardComponent implements OnInit {
 
   async signInWithUid() {
     const uid = window.localStorage.getItem('uid');
-
-    if (!uid) {
-      return;
-    }
-
-    if (uid === 'null' && this.auth.isAuthenticated()) {
-      await this.auth.signOut();
-      return;
-    }
-
-    if (uid !== 'null' && !this.auth.isAuthenticated()) {
-      const data: any = await this.auth.getCustomToken(uid);
-
-      if (data.token) {
-        await this.auth.signInWithCustomToken(data.token);
-      }
-    }
+    await this.auth.signInWithUid(uid);
   }
 
   async startSpinning() {
@@ -125,6 +108,11 @@ export class DashboardComponent implements OnInit {
   async ngOnInit() {
     this.user = this.auth.currentUser;
 
+    this.message.handleMessage(SetUserId, async message => {
+      window.localStorage.setItem('uid', message.data);
+      await this.signInWithUid();
+    });
+
     if (!this.auth.isAuthenticated()) {
       this.router.navigate(['/login']);
       return;
@@ -144,10 +132,6 @@ export class DashboardComponent implements OnInit {
     }
 
     await this.startSpinning();
-
-    this.message.handleMessage(SetUserId, message => {
-      window.localStorage.setItem('uid', message.uid);
-    });
 
     this.message.handleMessage(PerformGoogleSearch, async message => {
       const product = message.data as Product;

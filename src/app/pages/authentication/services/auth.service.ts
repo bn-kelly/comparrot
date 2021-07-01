@@ -51,7 +51,6 @@ export class AuthService {
 
     this.afAuth.onAuthStateChanged(async user => {
       if (!user) {
-        await this.anonymousLogin();
         return;
       }
 
@@ -125,21 +124,6 @@ export class AuthService {
       .catch(error => this.handleError(error));
   }
 
-  anonymousLogin() {
-    return this.afAuth
-      .signInAnonymously()
-      .then(async response => {
-        // access granted for anonymous user
-        this.notify.update('Welcome to Firestarter, anonymous!!!', 'success');
-        await this.updateUserData(response.user);
-      })
-      .catch(async error => {
-        this.handleError(error);
-        // access denied
-        await this.router.navigate(['/login']);
-      });
-  }
-
   emailSignUp({ email, password, firstName, lastName }: any): Promise<any> {
     return this.afAuth
       .createUserWithEmailAndPassword(email, password)
@@ -201,7 +185,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return this.authState !== null && !this.currentUser.isAnonymous;
+    return this.authState !== null && this.currentUser && !this.currentUser.isAnonymous;
   }
 
   isEmailVerified(): boolean {
@@ -224,6 +208,25 @@ export class AuthService {
 
   async signInWithCustomToken(token: string) {
     await this.afAuth.signInWithCustomToken(token);
+  }
+
+  async signInWithUid(uid: string) {
+    if (!uid) {
+      return;
+    }
+
+    if (uid === 'null' && this.isAuthenticated()) {
+      await this.signOut();
+      return;
+    }
+
+    if (uid !== 'null' && !this.isAuthenticated()) {
+      const data: any = await this.getCustomToken(uid);
+
+      if (data.token) {
+        await this.signInWithCustomToken(data.token);
+      }
+    }
   }
 
   private handleError(error: Error) {

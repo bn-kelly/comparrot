@@ -156,10 +156,13 @@ const postMessageToSite = (message, data = null) => {
  * Send a message to chrome extension to set user id
  */
 const setUserId = data => {
-  chrome.runtime.sendMessage({
-    action: SetUserId,
-    uid: data.detail,
-  });
+  const uid = data.detail;
+
+  if (!uid) {
+    return;
+  }
+
+  sendMessage(SetUserId, uid);
 };
 
 /**
