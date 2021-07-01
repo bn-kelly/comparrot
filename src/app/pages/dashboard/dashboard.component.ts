@@ -11,7 +11,7 @@ import { Project } from '../../models/project.model';
 import { User } from '../../models/user.model';
 import { Product } from '../../models/product.model';
 import { UserContext } from 'src/app/models/user-context.model';
-import { SetUserId, PerformGoogleSearch, ShowIframe, TryToScrapeData, StartSpinExtensionIcon, StopSpinExtensionIcon, ChangeIframeStyle } from '../../constants';
+import { SetUserId, PerformGoogleSearch, ShowIframe, TryToScrapeData, StartSpinExtensionIcon, StopSpinExtensionIcon, ChangeIframeStyle, AddClass, RemoveClass } from '../../constants';
 import { FirebaseService } from '@coturiv/firebase/app';
 import { take } from 'rxjs/operators';
 
@@ -158,15 +158,16 @@ export class DashboardComponent implements OnInit {
 
         console.log('products:', this.products);
 
-        // if (this.products.length === 0) {
-        //   this.message.sendMessageToTab(
-        //     {
-        //       action: ChangeIframeStyle,
-        //       class: 'notification',
-        //     },
-        //     null,
-        //   );
-        // }
+        if (this.products.length === 0) {
+          this.message.sendMessageToTab(
+            {
+              action: ChangeIframeStyle,
+              class: 'notification',
+              type: AddClass,
+            },
+            null,
+          );
+        }
 
         this.showExtension();
         await this.stopSpinning();
@@ -183,5 +184,16 @@ export class DashboardComponent implements OnInit {
     );
 
     this.userContext = await this.firebaseService.doc(`user_context/${this.user.uid}`).pipe(take(1)).toPromise();
+  }
+
+  ngOnDestroy() {
+    this.message.sendMessageToTab(
+      {
+        action: ChangeIframeStyle,
+        class: 'notification',
+        type: RemoveClass,
+      },
+      null,
+    );
   }
 }

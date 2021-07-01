@@ -68,15 +68,19 @@ const toggleExpandIframeWidth = isOpen => {
   iframe.classList[toggleExpandedClass](expandedClassName);
 };
 
-const changeIframeStyle = className => {
+const changeIframeStyle = (className, type) => {
   const iframe = getIframe();
 
   if (!iframe) {
     return;
   }
 
-  if (!iframe.classList.contains(className)) {
+  if (!iframe.classList.contains(className) && type === AddClass) {
     iframe.classList.add(className);
+  }
+
+  if (iframe.classList.contains(className) && type === RemoveClass) {
+    iframe.classList.remove(className);
   }
 }
 
@@ -181,7 +185,7 @@ const handleMessage = msg => {
       break;
 
     case ChangeIframeStyle:
-      changeIframeStyle(msg.class);
+      changeIframeStyle(msg.class, msg.type);
 
     case TryToScrapeData:
       tryToScrapeData(msg.url, msg.retailer);
