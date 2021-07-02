@@ -42,7 +42,6 @@ export class ToolbarUserComponent implements OnInit {
         },
         null,
       );
-      this.router.navigate(['/']);
     });
     this.isOpen = false;
     this.userName = '';

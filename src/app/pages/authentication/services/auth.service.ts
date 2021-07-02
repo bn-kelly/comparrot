@@ -51,6 +51,7 @@ export class AuthService {
 
     this.afAuth.onAuthStateChanged(async user => {
       if (!user) {
+        this.router.navigate(['/login']);
         return;
       }
 
