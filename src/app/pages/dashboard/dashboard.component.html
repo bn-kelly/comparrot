@@ -51,7 +51,7 @@
             *ngFor="
               let product of products
             "
-            (click)="onProductClick($event, product.url)"
+            (click)="onProductClick($event, product)"
           >
             <div class="offer__product-container">
               <img
@@ -63,7 +63,7 @@
               <span
                 mat-icon-button
                 class="offer__product-delete"
-                (click)="deleteOffer(product)"
+                (click)="onDeleteClick(product)"
               >
                 <mat-icon>highlight_off</mat-icon>
               </span>
@@ -95,7 +95,11 @@
               align="end"
               class="offer__actions"
             >
-              <button mat-button class="offer__actions-button">
+              <button 
+                mat-button 
+                class="offer__actions-button"
+                (click)="onShareClick($event, product)"
+              >
                 <mat-icon>share</mat-icon>
                 Share
               </button>

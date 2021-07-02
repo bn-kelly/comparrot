@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit {
     private firebaseService: FirebaseService
   ) {}
 
-  deleteOffer(product: Product) {
+  onDeleteClick(product: Product) {
     this.products = this.products.filter(p => {
       return p.sku !== product.sku;
     });
@@ -49,9 +49,15 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  onProductClick(event: any, url: string) {
-    event.preventDefault();
+  onShareClick(event: any, product: Product) {
+    event?.stopPropagation();
+    const url = `mailto:?body=${encodeURIComponent(product.url)}`;
     window.chrome.tabs.create({ url });
+  }
+
+  onProductClick(event: any, product: Product) {
+    event.preventDefault();
+    window.chrome.tabs.create({ url: product.url });
   }
 
   async toggleAddToWishlist(event: any, product: Product) {
