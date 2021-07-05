@@ -255,8 +255,6 @@ export class AuthService {
       firstName: user.firstName || '',
       lastName: user.lastName || '',
       photoURL: user.photoURL || '',
-      projectName: user.projectName || environment.projectName,
-      ui: this.currentUser && this.currentUser.ui ? this.currentUser.ui : {},
       isAnonymous: user.isAnonymous,
       emailVerified: user.emailVerified || false,
       extension: {

@@ -13,6 +13,7 @@ import { AuthService } from '../services/auth.service';
 import { ThemeService } from '../../../../@fury/services/theme.service';
 import { Project } from '../../../models/project.model';
 import { MatchingValidator } from './matching.validator';
+import { environment } from 'src/environments/environment';
 
 type UserFields =
   | 'firstname'
@@ -92,18 +93,14 @@ export class RegisterComponent implements OnInit {
       this.handleLogoUrl();
     });
 
-    this.auth.user.subscribe(user => {
-      if (user && user.projectName) {
-        this.afs
-          .collection('project')
-          .doc(user.projectName)
-          .valueChanges()
-          .subscribe((project: Project) => {
-            this.project = project;
-            this.handleLogoUrl();
-          });
-      }
-    });
+    this.afs
+      .collection('project')
+      .doc(environment.projectName)
+      .valueChanges()
+      .subscribe((project: Project) => {
+        this.project = project;
+        this.handleLogoUrl();
+      });
   }
 
   handleLogoUrl() {

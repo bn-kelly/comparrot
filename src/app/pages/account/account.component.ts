@@ -17,6 +17,7 @@ import { Project } from '../../models/project.model';
 import { MessageService } from '../../services/message.service';
 import { ToggleExpandIframeWidth } from '../../constants';
 import { FirebaseService } from '@coturiv/firebase/app';
+import { environment } from 'src/environments/environment';
 
 type Fields = 'firstName' | 'lastName' | 'photoURL';
 type FormErrors = { [u in Fields]: string };
@@ -80,8 +81,7 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.user = this.auth.currentUser;
-    const { projectName, firstName, lastName, photoURL, uid} = this.user;
-    this.projectName = projectName;
+    const { firstName, lastName, photoURL, uid} = this.user;
 
     this.buildForm(this.user);
     this.toggleExpandIframe(true);
@@ -92,15 +92,13 @@ export class AccountComponent implements OnInit, OnDestroy {
     this.userSizes = sizes;
     this.userWishlist = wishlist;
 
-    if (
-      this.projectName &&
-      !this.emailAlerts
-    ) {
+    if (!this.emailAlerts) {
       this.afs
         .collection('project')
-        .doc(this.projectName)
+        .doc(environment.projectName)
         .valueChanges()
         .subscribe((project: Project) => {
+          this.projectName = project && project.name ? project.name : '';
           this.emailAlerts = project.emailAlerts || [];
 
           if (
@@ -113,9 +111,8 @@ export class AccountComponent implements OnInit, OnDestroy {
           }
         });
         
-      }
-      this.initialGeneralProfileFormData = {firstName, lastName, photoURL};
-      
+    }
+    this.initialGeneralProfileFormData = {firstName, lastName, photoURL};
   }
 
   ngOnDestroy() {

@@ -69,18 +69,14 @@ export class LoginComponent implements OnInit {
       this.handleLogoUrl();
     });
 
-    this.authService.user.subscribe(user => {
-      if (user && user.projectName) {
-        this.afs
-          .collection('project')
-          .doc(user.projectName)
-          .valueChanges()
-          .subscribe((project: Project) => {
-            this.project = project;
-            this.handleLogoUrl();
-          });
-      }
-    });
+    this.afs
+      .collection('project')
+      .doc('comparrot')
+      .valueChanges()
+      .subscribe((project: Project) => {
+        this.project = project;
+        this.handleLogoUrl();
+      });
   }
 
   handleLogoUrl() {

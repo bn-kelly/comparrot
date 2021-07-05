@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { ThemeService } from '../../../../@fury/services/theme.service';
 import { Project } from '../../../models/project.model';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'fury-verify-email',
@@ -47,18 +48,14 @@ export class VerifyEmailComponent implements OnInit {
 
     checkIfEmailIsVerified();
 
-    this.authService.user.subscribe(user => {
-      if (user && user.projectName) {
-        this.afs
-          .collection('project')
-          .doc(user.projectName)
-          .valueChanges()
-          .subscribe((project: Project) => {
-            this.project = project;
-            this.handleLogoUrl();
-          });
-      }
-    });
+    this.afs
+      .collection('project')
+      .doc(environment.projectName)
+      .valueChanges()
+      .subscribe((project: Project) => {
+        this.project = project;
+        this.handleLogoUrl();
+      });
   }
 
   handleLogoUrl() {

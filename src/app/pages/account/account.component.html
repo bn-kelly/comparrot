@@ -179,7 +179,7 @@
             >
               <mat-slide-toggle
                 *ngFor="let alert of emailAlerts"
-                [checked]="user.emailAlerts[projectName].includes(alert.id)"
+                [checked]="user.emailAlerts['comparrot'].includes(alert.id)"
                 (change)="
                   emailAlertChange({ id: alert.id, checked: $event.checked })
                 "

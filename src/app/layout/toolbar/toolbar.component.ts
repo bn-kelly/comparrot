@@ -12,6 +12,7 @@ import { map } from 'rxjs/operators';
 import { ThemeService } from '../../../@fury/services/theme.service';
 import { AuthService } from '../../pages/authentication/services/auth.service';
 import { Project } from '../../models/project.model';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'fury-toolbar',
@@ -46,20 +47,14 @@ export class ToolbarComponent implements OnInit {
       this.handleLogoUrl();
     });
 
-    this.auth.user.subscribe(user => {
-      if (user && user.projectName) {
-        this.afs
-          .collection('project')
-          .doc(user.projectName)
-          .valueChanges()
-          .subscribe((project: Project) => {
-            this.project = project;
-            this.handleLogoUrl();
-          });
-      } else {
-        this.logoUrl = 'assets/img/logo_mobile.svg';
-      }
-    });
+    this.afs
+      .collection('project')
+      .doc(environment.projectName)
+      .valueChanges()
+      .subscribe((project: Project) => {
+        this.project = project;
+        this.handleLogoUrl();
+      });
   }
 
   handleLogoUrl() {

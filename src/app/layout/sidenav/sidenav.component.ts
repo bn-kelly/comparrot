@@ -15,6 +15,7 @@ import { ThemeService } from '../../../@fury/services/theme.service';
 import { Project } from '../../models/project.model';
 import { User } from '../../models/user.model';
 import { AuthService } from '../../pages/authentication/services/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'fury-sidenav',
@@ -55,25 +56,17 @@ export class SidenavComponent implements OnInit {
       this.handleLogoUrl();
     });
 
-    this.auth.user.subscribe(user => {
-      this.user = user;
+    this.afs
+      .collection('project')
+      .doc(environment.projectName)
+      .valueChanges()
+      .subscribe((project: Project) => {
+        this.project = project;
+        this.projectName = project && project.name ? project.name : '';
+        this.handleLogoUrl();
+      });
 
-      if (user && user.projectName) {
-        this.afs
-          .collection('project')
-          .doc(user.projectName)
-          .valueChanges()
-          .subscribe((project: Project) => {
-            this.project = project;
-            this.projectName = project && project.name ? project.name : '';
-            this.handleLogoUrl();
-          });
-      } else {
-        this.projectName = '';
-        this.logoUrl = 'assets/img/logo_mobile.svg';
-      }
-    });
-
+    this.user = this.auth.currentUser;
     this.items$ = this.sidenavService.items$.pipe(
       map((items: SidenavItem[]) =>
         this.sidenavService.sortRecursive(items, 'position'),

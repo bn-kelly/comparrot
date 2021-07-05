@@ -8,6 +8,7 @@ import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.anima
 import { ThemeService } from '../../../../@fury/services/theme.service';
 import { Project } from '../../../models/project.model';
 import { AuthService } from '../services/auth.service';
+import { environment } from 'src/environments/environment';
 
 type UserFields = 'email';
 type FormErrors = { [u in UserFields]: string };
@@ -51,18 +52,14 @@ export class ForgotPasswordComponent implements OnInit {
       this.handleLogoUrl();
     });
 
-    this.auth.user.subscribe(user => {
-      if (user && user.projectName) {
-        this.afs
-          .collection('project')
-          .doc(user.projectName)
-          .valueChanges()
-          .subscribe((project: Project) => {
-            this.project = project;
-            this.handleLogoUrl();
-          });
-      }
-    });
+    this.afs
+      .collection('project')
+      .doc(environment.projectName)
+      .valueChanges()
+      .subscribe((project: Project) => {
+        this.project = project;
+        this.handleLogoUrl();
+      });
   }
 
   handleLogoUrl() {
