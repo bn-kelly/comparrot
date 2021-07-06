@@ -66,6 +66,7 @@ export class AccountComponent implements OnInit, OnDestroy {
   userInterests = [];
   userSizes = [];
   userWishlist = [];
+  totalSavings: number;
 
   constructor(
     private fb: FormBuilder,
@@ -86,11 +87,19 @@ export class AccountComponent implements OnInit, OnDestroy {
     this.buildForm(this.user);
     this.toggleExpandIframe(true);
 
-    const { interests, sizes, wishlist } = await this.firebaseService.docAsPromise(`user_context/${uid}`);
+    const { interests, sizes, wishlist, savings } = await this.firebaseService.docAsPromise(`user_context/${uid}`);
 
     this.userInterests = interests;
     this.userSizes = sizes;
     this.userWishlist = wishlist;
+    this.totalSavings = 0;
+
+    if (savings) {
+      Object.keys(savings).forEach(k => {
+        this.totalSavings += savings[k];
+      });
+    }
+
 
     if (!this.emailAlerts) {
       this.afs

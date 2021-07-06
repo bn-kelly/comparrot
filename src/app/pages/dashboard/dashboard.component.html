@@ -109,7 +109,7 @@
                 (click)="toggleAddToWishlist($event, product)"
               >
                 <mat-icon>{{
-                  userContext && userContext.wishlist.includes(product.sku)
+                  userContext && userContext.wishlist && userContext.wishlist.includes(product.sku)
                     ? 'favorite'
                     : 'favorite_border'
                 }}</mat-icon>

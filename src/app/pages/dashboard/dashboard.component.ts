@@ -75,6 +75,15 @@ export class DashboardComponent implements OnInit {
     await this.firebaseService.set(`user_context/${this.user.uid}`, this.userContext, true);
   }
 
+  async addSavings(sku: string, amount: number) {
+    amount = Math.round(amount * 100) / 100;
+
+    const savings = this.userContext?.savings || {};
+    savings[sku] = amount;
+
+    await this.firebaseService.set(`user_context/${this.user.uid}`, { savings }, true);
+  }
+
   showExtension() {
     this.message.sendMessageToTab(
       {
@@ -161,6 +170,8 @@ export class DashboardComponent implements OnInit {
             },
             null,
           );
+        } else {
+          await this.addSavings(product.sku, product.price - this.products[0].price);
         }
 
         this.showExtension();

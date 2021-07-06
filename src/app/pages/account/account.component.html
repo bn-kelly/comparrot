@@ -5,6 +5,12 @@
   fxLayout.gt-sm="row"
 >
   <div class="content" fxFlex>
+    <h3
+      *ngIf="totalSavings"
+      class="savings"
+    >
+      You've saved ${{totalSavings | number : '1.2-2'}} using Comparrot
+    </h3>
     <mat-tab-group
       class="tabs fury-tabs"
       animationDuration="0ms"
