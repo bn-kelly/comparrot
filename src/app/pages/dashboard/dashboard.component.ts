@@ -135,6 +135,8 @@ export class DashboardComponent implements OnInit {
 
     await this.signInWithUid();
 
+    this.userContext = await this.firebaseService.docAsPromise(`user_context/${this.user.uid}`);
+
     const retailers: any[] = await this.storage.getValue('retailers');
     const tab = await this.util.getSeletedTab();
     const retailer = retailers.find(r => {
@@ -187,8 +189,6 @@ export class DashboardComponent implements OnInit {
       },
       null,
     );
-
-    this.userContext = await this.firebaseService.doc(`user_context/${this.user.uid}`).pipe(take(1)).toPromise();
   }
 
   ngOnDestroy() {
