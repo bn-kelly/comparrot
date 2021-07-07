@@ -39,8 +39,7 @@ export class ToolbarUserComponent implements OnInit {
       this.message.sendMessageToTab(
         {
           action: SiteForceLogout,
-        },
-        null,
+        }
       );
     });
     this.isOpen = false;

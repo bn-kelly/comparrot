@@ -196,8 +196,7 @@ export class AccountComponent implements OnInit, OnDestroy {
       {
         action: ToggleExpandIframeWidth,
         isOpen,
-      },
-      null,
+      }
     );
   }
 

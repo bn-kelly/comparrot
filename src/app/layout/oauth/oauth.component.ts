@@ -34,8 +34,7 @@ export class OAuthComponent {
       {
         action: SiteForceLogin,
         uid: data.uid,
-      },
-      null,
+      }
     );
 
     this.auth.updateUserData(data);

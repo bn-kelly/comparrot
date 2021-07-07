@@ -84,12 +84,15 @@ export class DashboardComponent implements OnInit {
     await this.firebaseService.set(`user_context/${this.user.uid}`, { savings }, true);
   }
 
-  showExtension() {
+  showExtension(url: string) {
     this.message.sendMessageToTab(
       {
         action: ShowIframe,
       },
       null,
+      {
+        url,
+      }
     );
   }
 
@@ -170,14 +173,13 @@ export class DashboardComponent implements OnInit {
               action: ChangeIframeStyle,
               class: 'notification',
               type: AddClass,
-            },
-            null,
+            }
           );
         } else {
           await this.addSavings(product.sku, product.price - this.products[0].price);
         }
 
-        this.showExtension();
+        this.showExtension(tab.url);
         await this.stopSpinning();
       });
     });
@@ -187,8 +189,7 @@ export class DashboardComponent implements OnInit {
         action: TryToScrapeData,
         url: tab.url,
         retailer,
-      },
-      null,
+      }
     );
   }
 
@@ -198,8 +199,7 @@ export class DashboardComponent implements OnInit {
         action: ChangeIframeStyle,
         class: 'notification',
         type: RemoveClass,
-      },
-      null,
+      }
     );
   }
 }

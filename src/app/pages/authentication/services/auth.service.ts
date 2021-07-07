@@ -154,8 +154,7 @@ export class AuthService {
             {
               action: SiteForceLogin,
               uid: result.user.uid,
-            },
-            null,
+            }
           );
 
           this.notify.update('Welcome back!', 'success');

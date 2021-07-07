@@ -20,8 +20,7 @@ export class ToolbarCloseComponent {
     this.message.sendMessageToTab(
       {
         action: HideIframe
-      },
-      null
+      }
     );
   }
 }
