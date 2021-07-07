@@ -15,13 +15,15 @@ export class MessageService {
     chrome.runtime.sendMessage(data, cb);
   }
 
-  sendMessageToTab(data: any, cb?: (data: any) => void, query?: any) {
-    if (!query) {
+  sendMessageToTab(data: any, cb?: (data: any) => void, url?: string) {
+    if (!url) {
       chrome.tabs.getSelected(null, (tab: any) => {
         chrome.tabs.sendMessage(tab.id, data, cb);
       });
     } else {
-      chrome.tabs.query(query, (tabs: any[]) => {
+      chrome.tabs.query({}, (tabs: any[]) => {
+        tabs = tabs.filter(t => t.url === url);
+        console.log('tabs', tabs);
         if (tabs.length > 0) {
           for (const tab of tabs) {
             chrome.tabs.sendMessage(tab.id, data, cb);
