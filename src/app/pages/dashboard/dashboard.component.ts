@@ -159,6 +159,7 @@ export class DashboardComponent implements OnInit {
       }
 
       this.ngZone.run(async () => {
+        // Todo: We need to store a product to firebase before scraping
         this.products = await this.scraper.getProducts(product);
 
         console.log('products:', this.products);

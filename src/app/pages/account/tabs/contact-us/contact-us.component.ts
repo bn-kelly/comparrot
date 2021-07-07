@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { ContactUsService, ContactUsData } from './contact-us.service';
+import { ContactUsService } from './contact-us.service';
 
 @Component({
   selector: 'fury-contact-us',
@@ -36,13 +36,11 @@ export class ContactUsComponent implements OnInit {
 
   send(): void {
     if (this.formData.valid) {
-      const data: ContactUsData = {
-        topic: this.formData.value.topic || '',
-        message: this._keepHyphenationField(this.formData.value.message),
-      };
+      const subject = this.formData.value.topic || '';
+      const content = this._keepHyphenationField(this.formData.value.message);
 
       this.cus
-        .sendEmail(data)
+        .sendEmail(subject, content)
         .then(() => {
           this.submitted = true;
         })
