@@ -11,7 +11,7 @@ declare const chrome: any;
   providedIn: 'root',
 })
 export class MessageService {
-  sendMessage(data: any, cb: (data: any) => void) {
+  sendMessage(data: any, cb?: (data: any) => void) {
     chrome.runtime.sendMessage(data, cb);
   }
 

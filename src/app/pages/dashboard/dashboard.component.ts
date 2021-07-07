@@ -106,8 +106,7 @@ export class DashboardComponent implements OnInit {
     this.message.sendMessage(
       {
         action: StartSpinExtensionIcon,
-      },
-      null,
+      }
     );
     await this.spinner.show();
   }
@@ -117,8 +116,7 @@ export class DashboardComponent implements OnInit {
     this.message.sendMessage(
       {
         action: StopSpinExtensionIcon,
-      },
-      null,
+      }
     );
     await this.spinner.hide();
   }
