@@ -112,7 +112,7 @@ const tryToScrapeData = (url, retailer) => {
         retailer: retailer.name,
       };
     }
-  
+
     sendMessage(PerformGoogleSearch, product);
   } catch(e) {
     console.log('tryToScrapeData:', e);
@@ -121,10 +121,14 @@ const tryToScrapeData = (url, retailer) => {
 };
 
 const sendMessage = (action, data) => {
-  chrome.runtime.sendMessage({
-    action,
-    data,
-  });
+  const iframe = getIframe();
+  iframe.contentWindow.postMessage(
+    {
+      action,
+      data,
+    },
+    extensionOrigin
+  );
 };
 
 /**
