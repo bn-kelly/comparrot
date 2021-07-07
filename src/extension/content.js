@@ -84,7 +84,7 @@ const changeIframeStyle = (className, type) => {
   }
 }
 
-const tryToScrapeData = (url, retailer) => {
+const tryToScrapeData = (url, retailer, cb) => {
   let product = null;
 
   try {
@@ -113,22 +113,18 @@ const tryToScrapeData = (url, retailer) => {
       };
     }
 
-    sendMessage(PerformGoogleSearch, product);
+    cb(product);
   } catch(e) {
     console.log('tryToScrapeData:', e);
-    sendMessage(PerformGoogleSearch, product);
+    cb(product);
   }
 };
 
 const sendMessage = (action, data) => {
-  const iframe = getIframe();
-  iframe.contentWindow.postMessage(
-    {
-      action,
-      data,
-    },
-    extensionOrigin
-  );
+  chrome.runtime.sendMessage({
+    action,
+    data,
+  });
 };
 
 /**
@@ -173,7 +169,7 @@ const setUserId = data => {
  * Handle messages from background script and iframe
  * @param {string} msg
  */
-const handleMessage = msg => {
+const handleMessage = (msg, sender, sendResponse) => {
   switch (msg.action) {
     case ToggleShowIframe:
       toggleShowIframe();
@@ -195,7 +191,7 @@ const handleMessage = msg => {
       changeIframeStyle(msg.class, msg.type);
 
     case TryToScrapeData:
-      tryToScrapeData(msg.url, msg.retailer);
+      tryToScrapeData(msg.url, msg.retailer, sendResponse);
       break;
 
     case SiteForceLogin:

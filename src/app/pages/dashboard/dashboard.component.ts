@@ -147,42 +147,40 @@ export class DashboardComponent implements OnInit {
 
     await this.startSpinning();
 
-    this.message.handleMessage(PerformGoogleSearch, async message => {
-      const product = message.data as Product;
-      console.log('Product:', product);
-      if (!product) {
-        await this.stopSpinning();
-        return;
-      }
-
-      this.ngZone.run(async () => {
-        // Todo: We need to store a product to firebase before scraping
-        this.products = await this.scraper.getProducts(product);
-
-        console.log('products:', this.products);
-
-        if (this.products.length === 0) {
-          this.message.sendMessageToTab(
-            {
-              action: ChangeIframeStyle,
-              class: 'notification',
-              type: AddClass,
-            }
-          );
-        } else {
-          await this.addSavings(product.sku, product.price - this.products[0].price);
-        }
-
-        this.showExtension(tab.url);
-        await this.stopSpinning();
-      });
-    });
-
     this.message.sendMessageToTab(
       {
         action: TryToScrapeData,
         url: tab.url,
         retailer,
+      },
+      async (product: Product) => {
+        console.log('Product:', product);
+        if (!product) {
+          await this.stopSpinning();
+          return;
+        }
+  
+        this.ngZone.run(async () => {
+          // Todo: We need to store a product to firebase before scraping
+          this.products = await this.scraper.getProducts(product);
+  
+          console.log('products:', this.products);
+  
+          if (this.products.length === 0) {
+            this.message.sendMessageToTab(
+              {
+                action: ChangeIframeStyle,
+                class: 'notification',
+                type: AddClass,
+              }
+            );
+          } else {
+            await this.addSavings(product.sku, product.price - this.products[0].price);
+          }
+  
+          this.showExtension(tab.url);
+          await this.stopSpinning();
+        });
       }
     );
   }

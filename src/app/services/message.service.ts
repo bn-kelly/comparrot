@@ -35,12 +35,13 @@ export class MessageService {
     action: string,
     handler: (
       message: any,
+      sender: any,
+      sendResponse: (data: any) => void,
     ) => void,
   ) {
-    window.addEventListener(
-      'message',
-      (event) => action === event.data.action && handler(event.data),
-      false
+    chrome.runtime.onMessage.addListener(
+      (message: any, sender: any, sendResponse: (data: any) => void) => 
+        action === message.action && handler(message, sender, sendResponse)
     );
   }
 }
