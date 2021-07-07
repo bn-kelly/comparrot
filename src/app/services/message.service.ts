@@ -21,9 +21,11 @@ export class MessageService {
         chrome.tabs.sendMessage(tab.id, data, cb);
       });
     } else {
-      chrome.tabs.query(query, (tab: any) => {
-        if (tab) {
-          chrome.tabs.sendMessage(tab.id, data, cb);
+      chrome.tabs.query(query, (tabs: any[]) => {
+        if (tabs.length > 0) {
+          for (const tab of tabs) {
+            chrome.tabs.sendMessage(tab.id, data, cb);
+          }
         }
       });
     }

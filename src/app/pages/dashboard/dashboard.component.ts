@@ -88,10 +88,6 @@ export class DashboardComponent implements OnInit {
     this.message.sendMessageToTab(
       {
         action: ShowIframe,
-      },
-      null,
-      {
-        url,
       }
     );
   }
