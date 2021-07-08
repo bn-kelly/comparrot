@@ -1,0 +1,101 @@
+<div
+  class="page background-pattern"
+  fxLayout="column"
+  fxLayoutAlign="start center"
+>
+  <div [@fadeInUp] class="card border-radius elevation">
+    <div class="header padding" fxLayout="column" fxLayoutAlign="center start">
+      <div class="logo" [routerLink]="['/']"></div>
+    </div>
+
+    <form
+      class="form-login padding"
+      fxLayout="column"
+      (submit)="login()"
+      fxLayoutGap="16px"
+      [formGroup]="form"
+    >
+      <button
+        type="button" 
+        class="nav-back-btn"
+        mat-raised-button
+        [routerLink]="'/login'"
+      >
+          <img src="assets/img/icons/navigate-left.svg" />
+          Return
+      </button>
+      <div fxFlex="auto" fxLayout="column">
+        <h4>Login to Comparrot</h4>
+      </div>
+
+      <mat-form-field fxFlex="grow">
+        <mat-label>
+          Email
+        </mat-label>
+        <input matInput required formControlName="email" />
+        <mat-error *ngIf="formErrors.email">
+          {{ formErrors.email }}
+        </mat-error>
+        <mat-error
+          *ngIf="
+            form.get('email').hasError('required') &&
+            !formErrors.email
+          "
+        >
+          Please enter your email
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex="grow">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [type]="inputType"
+          formControlName="password"
+          required
+        />
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          matTooltip="Toggle Visibility"
+        >
+          <mat-icon *ngIf="visible">visibility</mat-icon>
+          <mat-icon *ngIf="!visible">visibility_off</mat-icon>
+        </button>
+        <mat-error *ngIf="formErrors.password">
+          {{ formErrors.password }}
+        </mat-error>
+        <mat-error
+          *ngIf="
+            form.get('password').hasError('required') && !formErrors.password
+          "
+        >
+          Please enter your password
+        </mat-error>
+      </mat-form-field>
+
+    <div fxLayout="row" fxLayoutAlign="end center">
+      <a class="caption" href="https://joincomparrot.com/auth/reset-password" target="_blank">
+        Forgot Password?
+      </a>
+    </div>
+
+    <div id="recaptcha-container"></div>
+
+
+      <button
+        class="form-button-submit text-center"
+        mat-raised-button        
+      >
+        Log in
+      </button>
+
+      <mat-divider></mat-divider>
+
+      <p class="secondary-text text-center">
+        <span class="opacity-64">Not a member?</span> <a [routerLink]="['/register']">Join Comparrot</a> 
+      </p>
+    </form>
+  </div>
+</div>
+

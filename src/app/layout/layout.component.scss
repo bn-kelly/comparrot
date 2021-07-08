@@ -7,6 +7,59 @@
 
 .content-container {
   overflow: hidden;
+  background: linear-gradient(113.05deg, #6366F1 -4.13%, #38BDF8 102.35%);
+  border-radius: 12px;
+
+}
+
+mat-sidenav-content {
+  .toolbar {
+    background: rgba(255, 255, 255, 0.24) !important;
+    box-shadow: none !important;
+  }
+
+  .toolbar-logo {
+    cursor: pointer;
+    outline: none;
+    margin-bottom: -5px;
+    margin-left: $spacing;
+    margin-right: $spacing;
+
+    img {
+      height: 24px;
+    }
+  }
+
+  .toolbar-divider {
+    border-top-color: rgba(255, 255, 255, 0.24) !important;
+    height: 2px;
+    position: fixed;
+    top: 64px;
+    width: calc(100% - 40px);
+    left: 20px;
+  }
+
+  .toolbar-button {
+    border: none !important;
+  }
+
+  .toolbar-buttons {
+    .toolbar-button {
+      height: 48px;
+      color: #fff;
+      font-family: Athletics;
+
+      img {
+        display: block;
+        margin: 0 auto;
+        margin-bottom: -4px;
+      }
+
+      .button-text {
+        font-size: 12px;
+      }
+    }
+  }
 }
 
 .content {

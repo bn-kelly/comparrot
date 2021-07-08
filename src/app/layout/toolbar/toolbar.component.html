@@ -1,12 +1,6 @@
 <div class="toolbar" fxLayout="row" fxLayoutAlign="space-between">
   <div fxLayout="row" fxLayoutAlign="start center">
-    <div
-      [fxShow]="true"
-      [routerLink]="['/']"
-      class="toolbar-logo"
-    >
-      <img [src]="sanitizer.bypassSecurityTrustUrl(logoUrl)" alt="logo" />
-    </div>
+    <ng-content></ng-content>
   </div>
 
   <div fxLayout="row">
@@ -15,13 +9,11 @@
       class="toolbar-button"
     ></fury-toolbar-notifications>
 
-    <fury-toolbar-user class="toolbar-button"></fury-toolbar-user>
+    <fury-toolbar-user class="toolbar-button" *ngIf="showAvatar"></fury-toolbar-user>
 
 <!--        <fury-toolbar-quickpanel-toggle (openQuickPanel)="openQuickPanel.emit()"-->
 <!--                                        class="toolbar-button"></fury-toolbar-quickpanel-toggle>-->
 
-    <fury-toolbar-close
-      class="toolbar-button"
-    ></fury-toolbar-close>
+    <fury-toolbar-close class="toolbar-button" *ngIf="showClose"></fury-toolbar-close>
   </div>
 </div>

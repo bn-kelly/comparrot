@@ -47,8 +47,50 @@
   <fury-toolbar
     *ngIf="toolbarVisible$ | async"
     fxFlex="none"
-  ></fury-toolbar>
-  <!-- END TOOLBAR -->
+  >
+    <div
+        [fxShow]="true"
+      [routerLink]="['/']"
+      class="toolbar-logo"
+    >
+      <img src="assets/img/logo.svg" alt="logo" />
+    </div>
+  </fury-toolbar>
+
+  <!-- TOOLBAR 2-->
+  <fury-toolbar
+    fxFlex="none"
+    [showAvatar]="true"
+    [showClose]="false"
+  >
+
+  <mat-divider class="toolbar-divider"></mat-divider>
+
+  <div fxLayout="row" class="toolbar-buttons">
+    <button mat-button [routerLink]="'/'" [queryParams]="{tab: 'home'}" class="toolbar-button">
+      <img src="assets/img/icons/icon-home.svg" />
+      <span class="button-text">Home</span>
+    </button>
+    
+    <button mat-button [routerLink]="'/account'" [queryParams]="{tab: 'deals'}" class="toolbar-button">
+      <img src="assets/img/icons/icon-store.svg" />
+      <span class="button-text">Deals</span>
+    </button>
+
+    <button mat-button [routerLink]="'/account'" [queryParams]="{tab: 'wishlist'}" class="toolbar-button">
+      <img src="assets/img/icons/icon-heart.svg" />
+      <span class="button-text">Liked</span>
+    </button>
+  </div>
+    <!-- <div
+        [fxShow]="true"
+      [routerLink]="['/']"
+      class="toolbar-logo"
+    >
+      <img src="assets/img/logo.svg" alt="logo" />
+    </div> -->
+  </fury-toolbar>
+  <!-- END TOOLBAR 2 -->
 </ng-template>
 
 <ng-template #footer>

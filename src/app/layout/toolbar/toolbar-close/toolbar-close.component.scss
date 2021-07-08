@@ -5,3 +5,7 @@
   padding: 0;
   min-width: $toolbar-button-width;
 }
+
+:host {
+  border: none !important;
+}

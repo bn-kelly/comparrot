@@ -5,6 +5,7 @@ import firebase from 'firebase/app';
 import { AuthService } from '../../pages/authentication/services/auth.service';
 import { MessageService } from '../../services/message.service';
 import { SiteForceLogin } from '../../constants';
+import { Autowire } from '@coturiv/firebase/app';
 
 @Component({
   selector: 'fury-oauth-component',
@@ -12,11 +13,19 @@ import { SiteForceLogin } from '../../constants';
   styleUrls: ['./oauth.component.scss'],
 })
 export class OAuthComponent {
+  @Autowire()
+  afAuth: AngularFireAuth;
+
+  @Autowire()
+  auth: AuthService;
+
+  @Autowire()
+  router: Router;
+
+  @Autowire()
+  private message: MessageService;
+
   constructor(
-    public afAuth: AngularFireAuth,
-    public auth: AuthService,
-    public router: Router,
-    private message: MessageService,
   ) {}
 
   handleResponse = (response: any) => {
