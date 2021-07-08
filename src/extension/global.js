@@ -60,3 +60,7 @@ const getStorageValue = key => {
     });
   });
 };
+
+const setExtensionInstalled = () => {
+  window.localStorage.setItem('is-comparrot-installed', 1);
+}

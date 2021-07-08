@@ -260,6 +260,10 @@ const initEvents = () => {
   window.addEventListener(SetUserId, setUserId);
 };
 
+const init = () => {
+  setExtensionInstalled();
+}
+
 window.onload = () => {
   if (!location.ancestorOrigins.contains(extensionOrigin) && !inIframe()) {
     addIframe();
@@ -272,3 +276,5 @@ window.onload = () => {
     }
   }
 }
+
+init();
