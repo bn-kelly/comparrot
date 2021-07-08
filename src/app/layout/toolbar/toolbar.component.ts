@@ -23,8 +23,14 @@ export class ToolbarComponent implements OnInit {
   @Input()
   @HostBinding('class.no-box-shadow')
   hasNavigation: boolean;
+
+  @Input()
+  showClose = true;
+
+  @Input()
+  showAvatar = false;
+
   isLoggedIn: boolean;
-  logoUrl: string;
   themeName: string;
   project: Project;
 
@@ -37,30 +43,9 @@ export class ToolbarComponent implements OnInit {
   constructor(
     private themeService: ThemeService,
     public auth: AuthService,
-    private afs: AngularFirestore,
     public sanitizer: DomSanitizer,
   ) {}
 
   ngOnInit() {
-    this.themeService.theme$.subscribe(([currentTheme]) => {
-      this.themeName = currentTheme.replace('fury-', '');
-      this.handleLogoUrl();
-    });
-
-    this.afs
-      .collection('project')
-      .doc(environment.projectName)
-      .valueChanges()
-      .subscribe((project: Project) => {
-        this.project = project;
-        this.handleLogoUrl();
-      });
-  }
-
-  handleLogoUrl() {
-    this.logoUrl =
-      this.project && this.project.logoUrl
-        ? this.project.logoUrl[this.themeName] || this.project.logoUrl.default
-        : '';
   }
 }

@@ -12,6 +12,13 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'login-with',
+    loadChildren: () =>
+      import('./pages/authentication/login-with/login-with.module').then(
+        m => m.LoginWithModule,
+      ),
+  },
+  {
     path: 'register',
     loadChildren: () =>
       import('./pages/authentication/register/register.module').then(

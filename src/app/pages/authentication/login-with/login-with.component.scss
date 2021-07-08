@@ -1,9 +1,9 @@
 @import "var";
 
-fury-login {
-  h1, h2, h3, h4, h5, h6, p, span, a {
+fury-login-with {
+   h1, h2, h3, h4, h5, h6, p, span, a {
     font-family: Athletics !important;
-  }
+   }
 
   .page {
     display: block;
@@ -53,8 +53,7 @@ fury-login {
   }
   
   .form-login {
-    margin-top: 72px;
-    font-family: Athletics;
+    margin-top: 48px;
   
     h4 {
       font-style: normal;
@@ -70,31 +69,27 @@ fury-login {
       margin-top: 40px;
       margin-bottom: 40px;
     }
+
+    .nav-back-btn {
+        color: #fff;
+        background: transparent;
+        box-shadow: none !important;
+        text-align: left;
+        width: auto;
+        padding: 0;
+        font-size: 16px;
+        margin-bottom: 0;
+    };
   
-    a.caption {
-      text-decoration: none;
-    }
-  
-    .form-button-login {
+    .form-button-submit {
       width: 100%;
       height: 48px;
       color: #fff;
-      background: transparent;
-      box-shadow: none;
-      border: 1px solid #fff;
-      border-radius: 12px;
       font-size: 16px;
-  
-      text-align: left;
-  
-      img {
-        margin-right: 16px;
-      }
-    }
-  
-    .email-btn {
+      background: #000;
+      box-shadow: none;
       border: none;
-      background: #3BB9F8;
+      border-radius: 12px;
     }
   
     p.secondary-text {
@@ -102,12 +97,38 @@ fury-login {
         opacity: .64;
         color: #fff;
       }
-  
-      a {
-        color: #fff;
-        text-decoration: none;
-        margin-left: 8px;
+
+      font-size: 14px;
+    }
+
+    a {
+      color: #fff;
+      font-size: 16px;
+      text-decoration: none;
+      margin-left: 8px;
+
+      &.caption {
+        font-size: 16px;
       }
+    }
+
+    mat-form-field {
+        font-size: 16px;
+        color: #153141;
+    }
+
+    .mat-form-field-flex {
+        background-color: #FFF !important;
+        border-radius: 12px;
+        padding: .75em .75em 0 1em;
+    }
+
+    .mat-form-field-underline::before {
+        display: none !important;
+    }
+
+    .mat-form-field-ripple {
+        display: none !important;       
     }
   }
 }
