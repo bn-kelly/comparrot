@@ -43,7 +43,7 @@ const clean = (str) => {
 
 const getNumberFromString = (price = '') => {
   const regex = /([0-9]*[.])?[0-9]+/g;
-  const m = regex.exec(price);
+  const m = regex.exec(price.replace(/,/g, ''));
   return m
     ? Number(m[0])
     : 0;

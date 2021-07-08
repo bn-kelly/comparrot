@@ -23,7 +23,7 @@ export class MessageService {
     } else {
       chrome.tabs.query({}, (tabs: any[]) => {
         tabs = tabs.filter(t => t.url === url);
-        console.log('tabs', tabs);
+
         if (tabs.length > 0) {
           for (const tab of tabs) {
             chrome.tabs.sendMessage(tab.id, data, cb);

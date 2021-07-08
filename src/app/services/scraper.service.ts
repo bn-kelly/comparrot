@@ -29,7 +29,7 @@ export class ScraperService {
       return [];
     }
 
-    const search = product.upc || product.title;
+    const search = encodeURIComponent(product.upc || product.title);
     const url = `https://www.google.com/search?tbm=shop&tbs=vw:1,price:1,ppr_max:${product.price}&q=${search}`;
     const doc = await this.util.getDocFromUrl(url);
     let data = [];
