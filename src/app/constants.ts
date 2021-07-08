@@ -1,6 +1,7 @@
 export const SiteForceLogin = 'site-force-login';
 export const SiteForceLogout = 'site-force-logout';
 export const SetUserId = 'set-user-id';
+export const GetUserId = 'get-user-id';
 export const PerformGoogleSearch = 'perform-google-search';
 export const TryToScrapeData = 'try-to-scrape-data';
 export const ToggleExpandIframeWidth = 'toggle-expand-iframe-width';

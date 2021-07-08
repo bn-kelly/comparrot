@@ -120,11 +120,14 @@ const tryToScrapeData = (url, retailer, cb) => {
   }
 };
 
-const sendMessage = (action, data) => {
-  chrome.runtime.sendMessage({
-    action,
-    data,
-  });
+const sendMessage = (action, data, cb = null) => {
+  chrome.runtime.sendMessage(
+    {
+      action,
+      data,
+    },
+    cb,
+  );
 };
 
 /**
@@ -142,6 +145,12 @@ const dispatchSiteLogout = () => {
   postMessageToSite(SiteForceLogout);
 };
 
+const dispatchSiteUserId = () => {
+  sendMessage(GetUserId, null, (uid) => {
+    dispatchSiteLogin(uid);
+  });
+}
+
 /**
  * Dispatch an event to site
  * @param {string} message
@@ -156,13 +165,7 @@ const postMessageToSite = (message, data = null) => {
  * Send a message to chrome extension to set user id
  */
 const setUserId = data => {
-  const uid = data.detail;
-
-  if (!uid) {
-    return;
-  }
-
-  sendMessage(SetUserId, uid);
+  sendMessage(SetUserId, data.detail);
 };
 
 /**
@@ -258,16 +261,17 @@ const initEvents = () => {
   chrome.extension.onMessage.addListener(handleMessage);
   document.body.addEventListener('click', hideIframe);
   window.addEventListener(SetUserId, setUserId);
+  window.addEventListener(GetUserId, dispatchSiteUserId);
 };
 
 const init = () => {
   setExtensionInstalled();
+  initEvents();
 }
 
 window.onload = () => {
   if (!location.ancestorOrigins.contains(extensionOrigin) && !inIframe()) {
     addIframe();
-    initEvents();
   
     // Homedepot prevent injecting iframe
     // Cause of this reason, replace site original iframe with extension iframe

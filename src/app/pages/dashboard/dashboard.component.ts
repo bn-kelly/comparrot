@@ -10,9 +10,8 @@ import { AuthService } from '../../pages/authentication/services/auth.service';
 import { User } from '../../models/user.model';
 import { Product } from '../../models/product.model';
 import { UserContext } from 'src/app/models/user-context.model';
-import { PerformGoogleSearch, ShowIframe, TryToScrapeData, StartSpinExtensionIcon, StopSpinExtensionIcon, ChangeIframeStyle, AddClass, RemoveClass, SetUserId } from '../../constants';
+import { GetUserId, ShowIframe, TryToScrapeData, StartSpinExtensionIcon, StopSpinExtensionIcon, ChangeIframeStyle, AddClass, RemoveClass, SetUserId } from '../../constants';
 import { FirebaseService } from '@coturiv/firebase/app';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'fury-dashboard',
@@ -125,6 +124,11 @@ export class DashboardComponent implements OnInit {
     this.message.handleMessage(SetUserId, async message => {
       window.localStorage.setItem('uid', message.data);
       await this.signInWithUid();
+    });
+
+    this.message.handleMessage(GetUserId, (message, sender, sendResponse) => {
+      const uid = window.localStorage.getItem('uid');
+      sendResponse(uid);
     });
 
     if (!this.auth.isAuthenticated()) {
