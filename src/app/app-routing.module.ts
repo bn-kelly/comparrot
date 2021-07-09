@@ -53,8 +53,14 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'deals',
+        redirectTo: 'home',
         pathMatch: 'full',
+      },
+      {
+        path: 'home',
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+          import('./pages/home/home.module').then(m => m.HomeModule),
       },
       {
         path: 'deals',
@@ -62,12 +68,6 @@ const routes: Routes = [
           import('./pages/deals/deals.module').then(
             m => m.DealsModule,
           ),
-      },
-      {
-        path: 'home',
-        canActivate: [AuthGuard],
-        loadChildren: () =>
-          import('./pages/home/home.module').then(m => m.HomeModule),
       },
       {
         path: 'wishlist',
