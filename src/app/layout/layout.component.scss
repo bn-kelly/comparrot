@@ -16,6 +16,19 @@
   .content {
     overflow-x: hidden;
     overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: white;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #7BA6F7;
+      border: 0px;
+    }
   
     &.scroll-disabled {
       overflow: hidden;
