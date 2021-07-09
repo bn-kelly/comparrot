@@ -21,10 +21,6 @@ fury-login-with {
     width: 380px;
     color: #fff;
   
-    @include media-xs {
-      width: 320px;
-    }
-  
     .header {
       border-top-left-radius: $border-radius;
       border-top-right-radius: $border-radius;
