@@ -1,5 +1,4 @@
 .cal-month-view {
-
   .cal-days {
     border-color: $theme-divider;
 
@@ -15,12 +14,12 @@
 
   .cal-cell-row {
     &:hover {
-      background: $theme-background-hover
+      background: $theme-background-hover;
     }
 
     .cal-cell {
       &:hover {
-        background: $theme-background-hover
+        background: $theme-background-hover;
       }
     }
   }
@@ -78,8 +77,8 @@
   }
 }
 
-.cal-week-view, .cal-day-view {
-
+.cal-week-view,
+.cal-day-view {
   .cal-header {
     &.cal-weekend span {
       color: $theme-secondary-text;
@@ -90,7 +89,8 @@
     }
   }
 
-  .cal-day-headers .cal-header:hover, .cal-day-headers .cal-drag-over {
+  .cal-day-headers .cal-header:hover,
+  .cal-day-headers .cal-drag-over {
     background-color: $theme-background-hover;
   }
 
@@ -111,7 +111,6 @@
   .cal-time-events {
     .cal-day-columns {
       .cal-hour-segment {
-
         &:hover {
           background: $theme-background-hover;
         }
@@ -161,7 +160,6 @@
       }
     }
   }
-
 }
 
 .cal-event-title {
@@ -173,7 +171,7 @@
 
 i.icon {
   //noinspection CssNoGenericFontName
-  font-family: 'Material Icons Outlined';
+  font-family: "Material Icons Outlined";
   font-weight: normal;
   font-style: normal;
   font-size: 20px;
@@ -184,7 +182,7 @@ i.icon {
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
-  -webkit-font-feature-settings: 'liga';
+  -webkit-font-feature-settings: "liga";
   -webkit-font-smoothing: antialiased;
   vertical-align: middle;
 }

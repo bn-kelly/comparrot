@@ -1,0 +1,13 @@
+<h3>Choose your interests</h3>
+<p class="padding-bottom">
+    Get personalized shopping recommendations
+</p>
+
+<div class="categories-container">
+    <ng-container *ngFor="let intrst of interests">
+        <button mat-raised-button [color]="intrst.selected ? 'primary' : 'default'" class="category-button" (click)="selectInterest(intrst, true)">
+        <img src="{{ intrst.image }}" alt="" class="category-button-image" />
+            {{ intrst.title }}
+        </button>
+    </ng-container>
+</div>

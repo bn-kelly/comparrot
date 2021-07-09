@@ -33,9 +33,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   exports: [
     MatInputModule,
     MatTabsModule,
@@ -68,8 +66,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatStepperModule,
     FlexLayoutModule,
     MatDividerModule,
-    MatBadgeModule
-  ]
+    MatBadgeModule,
+  ],
 })
-export class MaterialModule {
-}
+export class MaterialModule {}

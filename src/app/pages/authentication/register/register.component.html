@@ -1,55 +1,186 @@
-<div class="background-pattern page" fxLayout="column" fxLayoutAlign="center center">
+<div
+  class="page page-register background-pattern"
+  fxLayout="column"
+  fxLayoutAlign="center center"
+>
   <div [@fadeInUp] class="card border-radius elevation">
-    <div class="header padding background-primary" fxLayout="column" fxLayoutAlign="center center">
-      <div class="logo fill-primary-contrast">
-        <svg viewBox="0 0 33.74 33.99" xmlns="http://www.w3.org/2000/svg"><title>icon</title>
-          <path d="M26.83,19.33c-.36.37-.73.71-1.09,1l.31,3.22a5.41,5.41,0,0,1-2.43,5.14L15.72,34l-.67-8.74a6.54,6.54,0,0,1-6.57-6.53L0,18.18l5-7.93a5.41,5.41,0,0,1,5.23-2.54l3.1.31q.49-.55,1.05-1.11C20.78.54,30.82-.62,33.48.26,34.37,2.93,33.2,13,26.83,19.33Zm-.45-12a3.77,3.77,0,1,0,0,5.33A3.77,3.77,0,0,0,26.38,7.36ZM2.82,23.72l3.24-3.24a8.24,8.24,0,0,0,7.11,7.1L10.5,30.25,7.74,33V29.46L2.41,31.23l1.78-5.32H.64Z"></path>
-        </svg>
-      </div>
+    <div class="header padding" fxLayout="column" fxLayoutAlign="center center">
+      <div
+        class="logo"
+        [routerLink]="['/']"
+        [style.background-image]="sanitizer.bypassSecurityTrustStyle('url(' + logoUrl + ')')"
+      ></div>
     </div>
-    <div class="padding" fxLayout="column" fxLayoutGap="16px" [formGroup]="form">
+    <form
+      (ngSubmit)="signup()"
+      class="form-signup padding"
+      fxLayout="column"
+      fxLayoutGap="16px"
+      [formGroup]="form"
+    >
+      <fury-oauth-component></fury-oauth-component>
+      <div class="text-line">
+        <h4>or</h4>
+      </div>
       <div fxFlex="auto" fxLayout="column">
         <mat-form-field fxFlex="grow">
-          <mat-label>Name</mat-label>
-          <input matInput required formControlName="name">
+          <mat-label>First name</mat-label>
+          <input matInput required formControlName="firstname" />
+          <mat-error *ngIf="formErrors.firstname">
+            {{ formErrors.firstname }}
+          </mat-error>
+          <mat-error
+            *ngIf="
+              form.get('firstname').hasError('required') &&
+              !formErrors.firstname
+            "
+          >
+            Please enter your first name
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field fxFlex="grow">
-          <mat-label>E-Mail</mat-label>
-          <input matInput required formControlName="email">
+          <mat-label>Last name</mat-label>
+          <input matInput required formControlName="lastname" />
+          <mat-error *ngIf="formErrors.lastname">
+            {{ formErrors.lastname }}
+          </mat-error>
+          <mat-error
+            *ngIf="
+              form.get('lastname').hasError('required') && !formErrors.lastname
+            "
+          >
+            Please enter your last name
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="grow">
+          <mat-label>
+            Email
+          </mat-label>
+          <input matInput required formControlName="email" />
+          <mat-error *ngIf="formErrors.email">
+            {{ formErrors.email }}
+          </mat-error>
+          <mat-error
+            *ngIf="
+              form.get('email').hasError('required') &&
+              !formErrors.email
+            "
+          >
+            Please enter your email
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field fxFlex="grow">
           <mat-label>Password</mat-label>
-          <input matInput [type]="inputType" formControlName="password" required>
-          <button type="button" mat-icon-button matSuffix (click)="toggleVisibility()" matTooltip="Toggle Visibility">
+          <input
+            matInput
+            [type]="inputType"
+            formControlName="password"
+            required
+          />
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="toggleVisibility()"
+            matTooltip="Toggle Visibility"
+          >
             <mat-icon *ngIf="visible">visibility</mat-icon>
             <mat-icon *ngIf="!visible">visibility_off</mat-icon>
           </button>
-          <mat-hint>Click the eye to toggle visibility</mat-hint>
+          <mat-error *ngIf="formErrors.password"
+            >{{ formErrors.password }}
+          </mat-error>
+          <mat-error
+            *ngIf="
+              form.get('password').hasError('required') && !formErrors.password
+            "
+          >
+            Please enter your password
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field fxFlex="grow">
-          <mat-label>Password (Confirm)</mat-label>
-          <input matInput [type]="inputType" formControlName="passwordConfirm" required>
-          <button type="button" mat-icon-button matSuffix (click)="toggleVisibility()" matTooltip="Toggle Visibility">
+          <mat-label>Confirm password</mat-label>
+          <input
+            matInput
+            [type]="inputType"
+            formControlName="passwordConfirm"
+            required
+          />
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="toggleVisibility()"
+            matTooltip="Toggle Visibility"
+          >
             <mat-icon *ngIf="visible">visibility</mat-icon>
             <mat-icon *ngIf="!visible">visibility_off</mat-icon>
           </button>
-          <mat-hint>Please repeat your password from above</mat-hint>
+          <mat-error *ngIf="formErrors.passwordConfirm">
+            {{ formErrors.passwordConfirm }}
+          </mat-error>
+          <mat-error
+            *ngIf="
+              form.get('passwordConfirm').hasError('required') &&
+              !formErrors.passwordConfirm
+            "
+          >
+            Those passwords didn't match. Please try again
+          </mat-error>
         </mat-form-field>
       </div>
 
-      <div fxLayout="row" fxLayoutAlign="center center">
-        <mat-checkbox class="caption">I accept the <a href="#">terms and conditions.</a></mat-checkbox>
+      <div fxLayout="row" fxLayoutAlign="center">
+        <mat-checkbox
+          class="caption"
+          formControlName="acceptTerms"
+        ></mat-checkbox>
+        <div class="checkbox-label">
+          <label>
+            By continuing, you agree to
+            <span class="project-name" *ngIf="project">
+              {{ project.name }}
+            </span>
+            's
+            <a
+              *ngIf="project && project.links"
+              target="_blank"
+              href="{{ project.links.termsOfService }}"
+            >
+              Terms of Service
+            </a>
+            and confirm that you have read our
+            <a
+              *ngIf="project && project.links"
+              target="_blank"
+              href="{{ project.links.privacyPolicy }}"
+            >
+              Privacy Policy
+            </a>
+          </label>
+          <mat-error *ngIf="form.get('acceptTerms').errors && submitted">
+            Please accept Terms of Service and Privacy Policy
+          </mat-error>
+        </div>
       </div>
-      <button type="button" color="primary" mat-raised-button (click)="send()">
-        CREATE ACCOUNT
+
+      <div id="recaptcha-container"></div>
+
+      <button
+        type="submit"
+        class="form-button-signup"
+        color="primary"
+        mat-raised-button
+      >
+        REGISTER
       </button>
       <p class="secondary-text text-center">
-        Already have an account?<br/>
-        <a [routerLink]="['/login']">Sign in here</a>
+        Already have an account? <a [routerLink]="['/login']">Login</a>
       </p>
-    </div>
+    </form>
   </div>
 </div>

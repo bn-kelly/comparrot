@@ -1,17 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'fury-loading-overlay',
   templateUrl: './loading-overlay.component.html',
-  styleUrls: ['./loading-overlay.component.scss']
+  styleUrls: ['./loading-overlay.component.scss'],
 })
-export class LoadingOverlayComponent implements OnInit {
-
+export class LoadingOverlayComponent {
   @Input('isLoading') isLoading: boolean;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
 }

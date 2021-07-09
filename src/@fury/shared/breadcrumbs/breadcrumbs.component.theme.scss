@@ -1,5 +1,6 @@
 fury-breadcrumbs {
-  .crumb, .link {
+  .crumb,
+  .link {
     color: $theme-secondary-text;
 
     &:hover {
@@ -7,7 +8,8 @@ fury-breadcrumbs {
     }
   }
 
-  .crumb.current, .crumb.current .link {
+  .crumb.current,
+  .crumb.current .link {
     color: $theme-text;
   }
 }

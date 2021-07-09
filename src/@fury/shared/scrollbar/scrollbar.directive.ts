@@ -1,20 +1,23 @@
-import { AfterContentInit, Directive, ElementRef, Input, NgZone } from '@angular/core';
+import {
+  AfterContentInit,
+  Directive,
+  ElementRef,
+  Input,
+  NgZone,
+} from '@angular/core';
 import defaultsDeep from 'lodash-es/defaultsDeep';
 import SimpleBar from 'simplebar';
 import { scrollbarOptions } from './scrollbar-options';
 
 @Directive({
-  selector: '[furyScrollbar],fury-scrollbar'
+  selector: '[furyScrollbar],fury-scrollbar',
 })
 export class ScrollbarDirective implements AfterContentInit {
-
   @Input('furyScrollbar') options: Partial<any>;
 
   scrollbarRef: SimpleBar;
 
-  constructor(private _element: ElementRef,
-              private zone: NgZone) {
-  }
+  constructor(private _element: ElementRef, private zone: NgZone) {}
 
   ngAfterContentInit() {
     const options = defaultsDeep(this.options, scrollbarOptions);

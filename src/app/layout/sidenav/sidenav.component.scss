@@ -33,18 +33,26 @@
   .sidenav-toolbar-logo {
     cursor: pointer;
     outline: none;
-    margin-left: $sidenav-item-padding-left;
-    margin-bottom: -5px;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
 
-    svg {
-      height: 30px;
-      width: 60px;
+    img {
+      height: 35px;
     }
+  }
+
+  .sidenav-toolbar-project {
+    display: inline-block;
+    margin-left: $spacing / 2;
+    font-size: 1.5rem;
+    font-weight: 700;
   }
 }
 
 .sidenav-toolbar-collapse-toggle {
-  transition: transform .25s;
+  transition: transform 0.25s;
 
   .sidenav-toolbar-collapse-icon {
     width: 12px;
@@ -58,7 +66,8 @@
   }
 }
 
-.sidenav-toolbar-logo, .sidenav-toolbar-collapse-toggle {
+.sidenav-toolbar-logo,
+.sidenav-toolbar-collapse-toggle {
   will-change: opacity;
 }
 
@@ -78,7 +87,6 @@
   }
 
   .sidenav-user-icons {
-
     [mat-icon-button] {
       width: 32px;
       height: 32px;

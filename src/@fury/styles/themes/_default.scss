@@ -14,17 +14,17 @@
 // Sidebar
 $sidebar-width: 330px;
 $sidebar-background: $theme-background;
-$sidebar-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, .40);
+$sidebar-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.4);
 @import "../../shared/sidebar/sidebar.directive.theme";
 
 // Sidenav
 $sidenav-background: #283144 !default;
 $sidenav-color: white !default;
-$sidenav-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, .40) !default;
+$sidenav-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.4) !default;
 $sidenav-toolbar-background: darken($sidenav-background, 3.5) !default;
 $sidenav-logo-color: white !default;
 $sidenav-secondary-text: $light-secondary-text !default;
-$sidenav-collapsed-hover-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, .40) !default;
+$sidenav-collapsed-hover-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.4) !default;
 
 @import "../../../app/layout/sidenav/sidenav.component.theme";
 
@@ -67,9 +67,6 @@ $toolbar-search-dropdown-elevation: $elevation !default;
 
 @import "../../../app/layout/toolbar/toolbar.component.theme";
 
-// Navigation
-@import "../../../app/layout/navigation/navigation.component.theme";
-
 // Card
 @import "../../shared/card/card.component.theme";
 
@@ -97,22 +94,8 @@ $footer-elevation: 0 !default;
 // List
 @import "../../shared/list/list.component.theme";
 
-// Widgets
+// OAuth Component
+@import "../../../app/layout/oauth/oauth.component.theme";
 
-// Advanced Pie Chart Widget
-@import "../../../app/pages/dashboard/widgets/advanced-pie-chart-widget/advanced-pie-chart-widget.component.theme";
-
-// Recent Sales Widget
-@import "../../../app/pages/dashboard/widgets/recent-sales-widget/recent-sales-widget.component.theme";
-
-// Market Widget
-@import "../../../app/pages/dashboard/widgets/market-widget/market-widget.component.theme";
-
-// Sales Summary Widget
-@import "../../../app/pages/dashboard/widgets/sales-summary-widget/sales-summary-widget.component.theme";
-
-// Audience Overview Widget
-@import "../../../app/pages/dashboard/widgets/audience-overview-widget/audience-overview-widget.component.theme";
-
-// Donut Chart Widget
-@import "../../../app/pages/dashboard/widgets/donut-chart-widget/donut-chart-widget.component.theme";
+// Account
+@import "../../../app/pages/account/account.component.theme";

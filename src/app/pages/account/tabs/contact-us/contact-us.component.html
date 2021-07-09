@@ -1,0 +1,46 @@
+
+<div class="page-desc" [hidden]="submitted">
+  <h2 class="contact-us-header">How can we help you?</h2>
+  <form
+      (ngSubmit)="send()"
+      fxLayout="column"
+      fxLayoutGap="19px"
+      [formGroup]="formData"
+    >
+      <div fxFlex="auto" fxLayout="column">
+        <mat-form-field fxFlex="grow">
+          <mat-label>Topic</mat-label>
+          <input matInput formControlName="topic" />          
+        </mat-form-field>        
+      </div>
+
+      <div fxFlex="auto" fxLayout="column">
+        <mat-form-field fxFlex="grow">
+          <mat-label>Please enter your message here...</mat-label>
+          <textarea matInput formControlName="message" rows="5"></textarea>
+        </mat-form-field>
+      </div>
+      
+      <button
+        [disabled]="!formData.valid"
+        class="form-button"
+        type="submit"
+        color="primary"
+        mat-raised-button
+      >
+        send
+      </button>
+      
+    </form>
+  </div>
+  <div [hidden]="!submitted" class="contact-message">
+      <h2 class="contact-us-header success">Success!</h2>
+      <p>Your message has been successfully submitted.</p>
+      <br />
+      <button
+        class="form-button"
+        color="primary"
+        mat-raised-button
+        (click)="gotoOffers()"
+      >Go to Products</button>
+  </div>

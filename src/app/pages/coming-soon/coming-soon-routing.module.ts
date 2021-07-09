@@ -5,13 +5,12 @@ import { ComingSoonComponent } from './coming-soon.component';
 const routes: Routes = [
   {
     path: '',
-    component: ComingSoonComponent
-  }
+    component: ComingSoonComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class ComingSoonRoutingModule {
-}
+export class ComingSoonRoutingModule {}

@@ -10,9 +10,8 @@ import { ForgotPasswordComponent } from './forgot-password.component';
     CommonModule,
     ForgotPasswordRoutingModule,
     MaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
-  declarations: [ForgotPasswordComponent]
+  declarations: [ForgotPasswordComponent],
 })
-export class ForgotPasswordModule {
-}
+export class ForgotPasswordModule {}

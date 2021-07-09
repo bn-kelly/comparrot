@@ -2,7 +2,8 @@ fury-footer {
   .footer {
     background: $footer-background;
     color: $theme-text;
-    border-top: $footer-border-top;
+    border-top: 2px solid $color-lightgray;
+    //border-top: $footer-border-top;
     @include mat-elevation($footer-elevation);
   }
 }

@@ -1,5 +1,4 @@
 .fury-page-layout {
-
 }
 
 .fury-page-layout-header {
@@ -7,7 +6,8 @@
   color: $theme-color-primary-contrast;
 
   fury-breadcrumbs {
-    .crumb, .link {
+    .crumb,
+    .link {
       color: $light-secondary-text;
 
       &:hover {
@@ -15,7 +15,8 @@
       }
     }
 
-    .crumb.current, .crumb.current .link {
+    .crumb.current,
+    .crumb.current .link {
       color: $light-primary-text;
     }
   }

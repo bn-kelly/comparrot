@@ -17,18 +17,6 @@
     display: flex;
   }
 
-  .toolbar-logo {
-    cursor: pointer;
-    outline: none;
-    margin-bottom: -5px;
-    margin-left: $spacing;
-    margin-right: $spacing;
-
-    svg {
-      height: 35px;
-    }
-  }
-
   @include media-xs {
     padding-left: $spacing/3;
   }

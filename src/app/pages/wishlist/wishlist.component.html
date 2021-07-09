@@ -1,0 +1,52 @@
+<div
+  class="wishlist"
+  fxLayout.xs="column"
+  fxLayout="row wrap"
+>
+  <mat-card
+  class="product"
+  *ngFor="
+    let product of wishlist
+  "
+  (click)="onProductClick($event, product.url)"
+  >
+    <div class="offer__product-container">
+      <img
+        class="offer__img"
+        *ngIf="product.image"
+        [src]="product.image"
+        [alt]="product.title"
+      />
+      <span
+        mat-icon-button
+        class="offer__product-delete"
+        (click)="deleteItem(product.id)"
+      >
+        <mat-icon>highlight_off</mat-icon>
+      </span>
+    </div>
+    <mat-card-title
+      class="offer__title"
+      matTooltip="{{ product.title }}"
+      [matTooltipPosition]="'above'"
+    >
+      {{ product.title }}
+    </mat-card-title>
+    <mat-card-content class="offer__content">
+      <div class="offer__price-container">
+        <span class="offer__price">
+          ${{ product.price }}
+        </span>
+      </div>
+      <a
+        href="{{ product.url }}"
+        target="_blank"
+        class="offer__buy-button"
+        mat-raised-button
+        color="primary"
+      >
+        Buy from {{product.retailer}}
+      </a>
+    </mat-card-content>
+  </mat-card>
+</div>

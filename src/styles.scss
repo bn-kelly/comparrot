@@ -1,3 +1,65 @@
 /* You can add global styles to this file, and also import other style files */
+@font-face {
+    font-family: 'Athletics';
+    src: url('./assets/fonts/Athletics/Athletics-Light.eot');
+    src: local('Athletics Light'), local('./assets/fonts/Athletics/Athletics-Light'),
+        url('./assets/fonts/Athletics/Athletics-Light.eot?#iefix') format('embedded-opentype'),
+        url('./assets/fonts/Athletics/Athletics-Light.woff2') format('woff2'),
+        url('./assets/fonts/Athletics/Athletics-Light.woff') format('woff'),
+        url('./assets/fonts/Athletics/Athletics-Light.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 @import "./@fury/styles/core";
 @import "./app/app.theme";
+
+mat-sidenav-content {
+	.toolbar {
+		background: rgba(255, 255, 255, 0.24) !important;
+		box-shadow: none !important;
+	}
+
+	.toolbar-logo {
+		cursor: pointer;
+		outline: none;
+		margin-bottom: -5px;
+		margin-left: $spacing;
+		margin-right: $spacing;
+
+		img {
+			height: 24px;
+		}
+	}
+
+	.toolbar-divider {
+		border-top-color: rgba(255, 255, 255, 0.24) !important;
+		height: 2px;
+		position: fixed;
+		top: 64px;
+		width: calc(100% - 40px);
+		left: 20px;
+	}
+
+	.toolbar-button {
+		border: none !important;
+	}
+
+	.toolbar-buttons {
+		.toolbar-button {
+			height: 48px;
+			color: #fff;
+			font-family: Athletics;
+
+			img {
+				display: block;
+				margin: 0 auto;
+				margin-bottom: -4px;
+			}
+
+			.button-text {
+				font-size: 12px;
+			}
+		}
+	}
+}

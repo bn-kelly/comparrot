@@ -4,12 +4,8 @@ import { MaterialModule } from '../material-components.module';
 import { LoadingOverlayComponent } from './loading-overlay.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MaterialModule
-  ],
+  imports: [CommonModule, MaterialModule],
   declarations: [LoadingOverlayComponent],
-  exports: [LoadingOverlayComponent]
+  exports: [LoadingOverlayComponent],
 })
-export class LoadingOverlayModule {
-}
+export class LoadingOverlayModule {}

@@ -2,9 +2,23 @@
 
 .page {
   display: block;
-  height: 100%;
   width: 100%;
-}
+  min-height: 100vh;
+
+  &.page-register {
+    padding: $padding-xl 0;
+  }
+
+  &.background-pattern {
+    background: linear-gradient(
+        to bottom,
+        rgba(103,223,242,1) 0%,
+        rgba(102,190,235,1) 37%,
+        rgba(69,140,216,1) 69%,
+        rgba(62,134,208,1) 78%,
+        rgba(50,123,207,1) 100%);
+  }
+} 
 
 .card {
   width: 380px;
@@ -20,6 +34,191 @@
 }
 
 .logo {
-  width: 80px;
-  height: 80px;
+  cursor: pointer;
+  outline: none;
+  width: 200px;
+  height: 60px;
+  margin-bottom: 0px;
+  background-position: 0 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.project-name {
+  text-transform: capitalize;
+}
+
+.form-signup {
+  .mat-form-field-wrapper {
+    color: $form-color-text;
+
+    .mat-form-field-flex {
+      background-color: $color-lightgray;
+      border-radius: 10px;
+      padding: 0.55em 0.75em 0 1.35em;
+    }
+
+    .mat-input-element {
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .mat-form-field-label {
+      color: $form-color-text;
+    }
+
+    .mat-form-field-underline {      
+      &, &::before {
+      display: none;
+      }
+    }
+
+    .mat-form-field-subscript-wrapper {
+      margin-top: 0;
+    }
+  }
+
+  .mat-checkbox {
+    .mat-checkbox-frame {
+      border: 2px solid $color-lightgray;
+      border-radius: 4px;
+      margin-right: 12px;
+      width: 18px;
+      height: 18px;
+    }
+
+    .mat-checkbox-inner-container {
+      margin: 2px $spacing/2 auto auto;
+    }
+
+    &.mat-checkbox-checked.mat-accent {
+      .mat-checkbox-background {
+        background-color: $color-primary;
+        border-radius: 4px;
+        margin-right: 12px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+
+    .mat-checkbox-layout {
+      .mat-checkbox-label {
+        line-height: 16px;
+        font-size: 11px;
+        white-space: initial;
+      }
+    }
+  }
+
+  .checkbox-label {
+    font-size: 12px;
+
+    .mat-error {
+      font-size: 87.5%;
+    }
+  }
+
+  a.caption {
+    text-decoration: none;
+  }
+
+  .form-button-signup {
+    background: $color-primary;
+    border-radius: 25px;
+    width: 11rem;
+    margin: 10px auto;
+  }
+
+  p.secondary-text {
+    a {
+      color: $color-primary;
+      text-decoration: none;
+    }
+  }
+
+  .text-line {
+    h4 {
+      position: relative;
+      margin: 0;
+      padding: 0 20px;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 14px;
+      line-height: 21px;
+      z-index: 2;
+      background-color: #fff;
+    }
+
+    &::after {
+      content: "";
+      display: block;
+      position: relative;
+      top: -10px;
+      z-index: 1;
+      border-bottom: 1px solid #e8eaec;
+    }
+  }
+
+  .oauth-container {
+    display: block;
+
+    .oauth-container-login {
+      display: none;
+    }
+
+    .oauth-container-register {
+      .register-btn {
+        display: flex;
+        width: 100%;
+        height: 49px;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-bottom: 6px;
+        line-height: 49px;
+        color: #fff;
+
+        .register-btn-img {
+          line-height: 64px;
+          width: 0;
+
+          img {
+            margin-left: 23px;
+          }
+        }
+
+        span {
+          width: 100%;
+          text-align: center;
+        }
+
+        &.fb-color {
+          background-color: $brand-color-fb;
+        }
+
+        &.google-color {
+          background-color: $brand-color-google;
+        }
+      }
+    }
+  }
+}
+
+.code-input {
+  display: inline-flex !important;
+  max-width: 300px;
+
+  > span {
+    --item-height: 3rem;
+
+    &:not(:last-of-type) {
+      margin-right: 5px;
+    }
+  }
+}
+
+.code-input-error {
+  font-size: 75%;
+  line-height: 1.3;
+  margin-top: $padding-xs;
 }

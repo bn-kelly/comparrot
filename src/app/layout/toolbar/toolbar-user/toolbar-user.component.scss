@@ -23,11 +23,11 @@
       height: 16px;
       font-size: 16px;
       transform: rotate(0);
-      transition: transform .25s cubic-bezier(.25,.8,.25,1);
+      transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
     &.open {
-      background: rgba(0, 0, 0, .05);
+      background: rgba(0, 0, 0, 0.05);
 
       .icon {
         transform: rotate(-180deg);
@@ -37,14 +37,15 @@
 
   .dropdown {
     position: absolute;
-    top: $toolbar-height;
+    top: $toolbar-height * 2;
     right: 0;
     width: 100%;
     min-width: 160px;
     z-index: -1;
-    transform: translateY(-110%);
+    transform: translateY(-60%);
     visibility: hidden;
-    transition: transform .4s cubic-bezier(.25,.8,.25,1), visibility .4s cubic-bezier(.25,.8,.25,1);
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+      visibility 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     border-bottom-left-radius: $border-radius;
     border-bottom-right-radius: $border-radius;
 
@@ -70,7 +71,7 @@
     }
 
     &.open {
-      transform: translateY(0);
+      transform: translateY(60);
       visibility: visible;
     }
   }

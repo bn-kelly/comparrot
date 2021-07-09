@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { faFacebook } from '@fortawesome/free-brands-svg-icons/faFacebook';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons/faTwitter';
 import { faPinterest } from '@fortawesome/free-brands-svg-icons/faPinterest';
@@ -10,19 +10,12 @@ import { fadeInUpAnimation } from '../../../@fury/animations/fade-in-up.animatio
   selector: 'fury-coming-soon',
   templateUrl: './coming-soon.component.html',
   styleUrls: ['./coming-soon.component.scss'],
-  animations: [fadeInUpAnimation]
+  animations: [fadeInUpAnimation],
 })
-export class ComingSoonComponent implements OnInit {
-
+export class ComingSoonComponent {
   faFacebook = faFacebook;
   faTwitter = faTwitter;
   faInstagram = faInstagram;
   faPinterest = faPinterest;
   faGithub = faGithub;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
 }

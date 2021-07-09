@@ -1,4 +1,3 @@
-
 .display-4 {
   font: var(--font-display-4);
 }
@@ -11,31 +10,39 @@
   font: var(--font-display-2);
 }
 
-.display-1, h1 {
+.display-1,
+h1 {
   font: var(--font-display-1);
 }
 
-.headline, h2 {
+.headline,
+h2 {
   font: var(--font-headline);
 }
 
-.title, h3 {
+.title,
+h3 {
   font: var(--font-title);
 }
 
-.subheading-2, h4 {
+.subheading-2,
+h4 {
   font: var(--font-subheading-2);
 }
 
-.subheading-1, h5 {
+.subheading-1,
+h5 {
   font: var(--font-subheading-1);
 }
 
-.body-2, h6 {
+.body-2,
+h6 {
   font: var(--font-body-2);
 }
 
-.body-1, p, li {
+.body-1,
+p,
+li {
   font: var(--font-body-1);
   line-height: 1.5;
 }
@@ -44,16 +51,28 @@
   font: var(--font-caption);
 }
 
-.display-4, .display-3, .display-2, .display-1, .headline, h1, .title, h2 {
+.display-4,
+.display-3,
+.display-2,
+.display-1,
+.headline,
+h1,
+.title,
+h2 {
   font-family: var(--font-family);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: $padding-sm 0;
 }
 
 a {
-  color: $theme-text
+  color: $theme-text;
 }
 
 blockquote {
@@ -156,7 +175,9 @@ blockquote {
 }
 
 @each $property in (background, color, border-color, fill) {
-  @each $direction in (primary, accent, warn, primary-contrast, accent-contrast, warn-contrast) {
+  @each $direction
+    in (primary, accent, warn, primary-contrast, accent-contrast, warn-contrast)
+  {
     .#{$property}-#{$direction} {
       @if $direction == primary {
         #{$property}: $theme-color-primary;
@@ -181,7 +202,7 @@ blockquote {
 }
 
 @each $property in (border) {
-  @each $direction in ('', -left, -right, -top, -bottom) {
+  @each $direction in ("", -left, -right, -top, -bottom) {
     .#{$property}#{$direction} {
       #{$property}#{$direction}: 1px solid $theme-divider;
     }
@@ -189,9 +210,9 @@ blockquote {
 }
 
 @each $property in (margin, padding) {
-  @each $direction in ('', -left, -right, -top, -bottom, -vertical, -horizontal) {
+  @each $direction in ("", -left, -right, -top, -bottom, -vertical, -horizontal)
+  {
     @each $prefix, $value in $paddings {
-
       @if ($direction == -vertical) {
         .#{$property}#{$direction}#{$prefix} {
           #{$property}-top: $value;
@@ -221,9 +242,29 @@ blockquote {
 }
 
 .background-pattern {
-  background: linear-gradient(135deg, $theme-background 22px, $theme-background-hover 22px, $theme-background-hover 24px, transparent 24px, transparent 67px, $theme-background-hover 67px, $theme-background-hover 69px, transparent 69px),
-  linear-gradient(225deg, $theme-background 22px, $theme-background-hover 22px, $theme-background-hover 24px, transparent 24px, transparent 67px, $theme-background-hover 67px, $theme-background-hover 69px, transparent 69px) 0 64px;
+  background: linear-gradient(
+      135deg,
+      $theme-background 22px,
+      $theme-background-hover 22px,
+      $theme-background-hover 24px,
+      transparent 24px,
+      transparent 67px,
+      $theme-background-hover 67px,
+      $theme-background-hover 69px,
+      transparent 69px
+    ),
+    linear-gradient(
+        225deg,
+        $theme-background 22px,
+        $theme-background-hover 22px,
+        $theme-background-hover 24px,
+        transparent 24px,
+        transparent 67px,
+        $theme-background-hover 67px,
+        $theme-background-hover 69px,
+        transparent 69px
+      )
+      0 64px;
   background-color: $theme-background;
   background-size: 64px 128px;
 }
-

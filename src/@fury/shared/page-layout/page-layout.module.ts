@@ -5,11 +5,16 @@ import { PageLayoutHeaderDirective } from './page-layout-header.directive';
 import { PageLayoutContentDirective } from './page-layout-content.directive';
 
 @NgModule({
-  imports: [
-    CommonModule
+  imports: [CommonModule],
+  declarations: [
+    PageLayoutDirective,
+    PageLayoutHeaderDirective,
+    PageLayoutContentDirective,
   ],
-  declarations: [PageLayoutDirective, PageLayoutHeaderDirective, PageLayoutContentDirective],
-  exports: [PageLayoutDirective, PageLayoutHeaderDirective, PageLayoutContentDirective]
+  exports: [
+    PageLayoutDirective,
+    PageLayoutHeaderDirective,
+    PageLayoutContentDirective,
+  ],
 })
-export class PageLayoutModule {
-}
+export class PageLayoutModule {}

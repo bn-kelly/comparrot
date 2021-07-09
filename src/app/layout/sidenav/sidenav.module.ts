@@ -8,15 +8,9 @@ import { SidenavComponent } from './sidenav.component';
 import { SidenavService } from './sidenav.service';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    MaterialModule,
-    ScrollbarModule
-  ],
+  imports: [CommonModule, RouterModule, MaterialModule, ScrollbarModule],
   declarations: [SidenavComponent, SidenavItemComponent],
   exports: [SidenavComponent],
-  providers: [SidenavService]
+  providers: [SidenavService],
 })
-export class SidenavModule {
-}
+export class SidenavModule {}

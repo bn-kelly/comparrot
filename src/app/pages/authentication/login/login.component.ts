@@ -1,52 +1,84 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import {
+  Component,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.animation';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
+import { MessageService } from 'src/app/services/message.service';
+import firebase from 'firebase/app';
+import { SiteForceLogin } from 'src/app/constants';
 
 @Component({
   selector: 'fury-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  animations: [fadeInUpAnimation]
+  animations: [fadeInUpAnimation],
+  encapsulation: ViewEncapsulation.None,
 })
 export class LoginComponent implements OnInit {
 
-  form: FormGroup;
-
-  inputType = 'password';
-  visible = false;
-
-  constructor(private router: Router,
-              private fb: FormBuilder,
-              private cd: ChangeDetectorRef,
-              private snackbar: MatSnackBar
-  ) {
+  constructor(private afAuth: AngularFireAuth, private auth: AuthService, private router: Router, private message: MessageService) {
   }
+
+
 
   ngOnInit() {
-    this.form = this.fb.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required]
-    });
   }
 
-  send() {
+  handleResponse = (response: any) => {
+    const [firstNameFromDisplayName, lastNameFromDisplayName] = (
+      response.user.displayName || ''
+    ).split(' ');
+    const data = {
+      ...response.user,
+      firstName: response.user.firstName || firstNameFromDisplayName || '',
+      lastName: response.user.lastName || lastNameFromDisplayName || '',
+    };
+
+    window.localStorage.setItem('uid', data.uid);
+    this.message.sendMessageToTab(
+      {
+        action: SiteForceLogin,
+        uid: data.uid,
+      }
+    );
+
+    this.auth.updateUserData(data);
     this.router.navigate(['/']);
-    this.snackbar.open('Lucky you! Looks like you didn\'t need a password or email address! For a real application we provide validators to prevent this. ;)', 'LOL THANKS', {
-      duration: 10000
+  };
+
+  doGoogleLogin() {
+    return new Promise<any>((resolve, reject) => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      provider.addScope('profile');
+      provider.addScope('email');
+      this.afAuth
+        .signInWithPopup(provider)
+        .then(response => {
+          resolve(response);
+          this.handleResponse(response);
+        })
+        .catch(error => {
+          reject(error);
+        });
     });
   }
 
-  toggleVisibility() {
-    if (this.visible) {
-      this.inputType = 'password';
-      this.visible = false;
-      this.cd.markForCheck();
-    } else {
-      this.inputType = 'text';
-      this.visible = true;
-      this.cd.markForCheck();
-    }
+  doFacebookLogin() {
+    return new Promise<any>((resolve, reject) => {
+      const provider = new firebase.auth.FacebookAuthProvider();
+      this.afAuth.signInWithPopup(provider).then(
+        response => {
+          resolve(response);
+          this.handleResponse(response);
+        },
+        error => {
+          reject(error);
+        },
+      );
+    });
   }
 }

@@ -12,9 +12,12 @@ fury-sidenav {
   .sidenav-toolbar {
     background: $sidenav-toolbar-background;
 
-    .sidenav-toolbar-logo,
     .sidenav-toolbar-icon {
       fill: $sidenav-logo-color;
+    }
+
+    .sidenav-toolbar-logo {
+      //custom styles for logos according to the theme
     }
   }
 
@@ -59,13 +62,15 @@ fury-sidenav {
     .sidenav-item > .sidenav-item-link > .name,
     .sidenav-item > .sidenav-item-link > .badge,
     .sidenav-item > .sidenav-item-link > .expand-indicator {
-      transition: opacity $swift-ease-out-duration $swift-ease-out-timing-function;
+      transition: opacity $swift-ease-out-duration
+        $swift-ease-out-timing-function;
       opacity: 0;
     }
 
     .sidenav-user-image {
-      transform: scale(0.70);
-      transition: transform $swift-ease-out-duration $swift-ease-out-timing-function;
+      transform: scale(0.7);
+      transition: transform $swift-ease-out-duration
+        $swift-ease-out-timing-function;
     }
 
     &.expanded {

@@ -26,6 +26,15 @@ $theme-color-primary: mat-color($theme-color-primary-palette);
 $theme-color-accent: mat-color($theme-color-accent-palette);
 $theme-color-warn: mat-color($theme-color-warn-palette);
 
-$theme-color-primary-contrast: mat-contrast($theme-color-primary-palette, $theme-primary-hue);
-$theme-color-accent-contrast: mat-contrast($theme-color-accent-palette, $theme-accent-hue);
-$theme-color-warn-contrast: mat-contrast($theme-color-warn-palette, $theme-warn-hue);
+$theme-color-primary-contrast: mat-contrast(
+  $theme-color-primary-palette,
+  $theme-primary-hue
+);
+$theme-color-accent-contrast: mat-contrast(
+  $theme-color-accent-palette,
+  $theme-accent-hue
+);
+$theme-color-warn-contrast: mat-contrast(
+  $theme-color-warn-palette,
+  $theme-warn-hue
+);

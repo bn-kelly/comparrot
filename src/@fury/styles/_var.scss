@@ -1,4 +1,4 @@
-@import '~@angular/material/theming';
+@import "~@angular/material/theming";
 
 /**
   General
@@ -7,7 +7,16 @@
 $page-load-background: #13293d;
 $elevation: 2;
 
-$color-success: #7cb342;
+$color-success: #2bc711;
+$color-primary: #408bd3;
+$color-error: #f44336;
+$color-warning: #ffc107;
+$color-accent: #8778a7;
+$color-default: #a09fae;
+$color-lightgray: #eff1f3;
+$brand-color-fb: #5664e6;
+$brand-color-google: #f79234;
+$form-color-text: #153141;
 
 $spacing: 24px;
 $border-radius: 8px;
@@ -22,24 +31,17 @@ $padding-xxs: 4px;
 $padding-0: 0px;
 
 $paddings: (
-  '-0': $padding-0,
+  "-0": $padding-0,
   -xxs: $padding-xxs,
   -xs: $padding-xs,
   -sm: $padding-sm,
   -md: $padding-md,
-  '': $padding,
+  "": $padding,
   -lg: $padding-lg,
   -xl: $padding-xl,
 );
 
-$icon-sizes: (
-  -xs: 14px,
-  -sm: 18px,
-  -md: 20px,
-  '': 24px,
-  -lg: 28px,
-  -xl: 32px
-);
+$icon-sizes: (-xs: 14px, -sm: 18px, -md: 20px, "": 24px, -lg: 28px, -xl: 32px);
 
 /**
   Card
@@ -89,16 +91,30 @@ $page-layout-toolbar-height: $toolbar-height;
 /**
   Mixins
  */
-$media-xs: 'screen and (max-width: 599px)';
+$media-xs: "screen and (max-width: 599px)";
 @mixin media-xs {
   @media #{$media-xs} {
     @content;
   }
 }
 
-$media-sm: 'screen and (min-width: 599px) and (max-width: 959px)';
+$media-sm: "screen and (min-width: 599px) and (max-width: 959px)";
 @mixin media-sm {
   @media #{$media-sm} {
+    @content;
+  }
+}
+
+$media-md: "screen and (min-width: 959px) and (max-width: 1199px)";
+@mixin media-md {
+  @media #{$media-md} {
+    @content;
+  }
+}
+
+$media-lg: "screen and (min-width: 1200px)";
+@mixin media-lg {
+  @media #{$media-lg} {
     @content;
   }
 }

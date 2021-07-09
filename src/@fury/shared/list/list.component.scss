@@ -52,7 +52,8 @@
     text-transform: uppercase;
   }
 
-  .mat-cell.image-cell, .mat-header-cell.image-cell {
+  .mat-cell.image-cell,
+  .mat-header-cell.image-cell {
     flex: 0;
     width: 35px + $spacing;
 
@@ -65,13 +66,15 @@
     }
   }
 
-  .mat-cell, .mat-header-cell {
+  .mat-cell,
+  .mat-header-cell {
     white-space: nowrap;
     padding-left: $padding-sm;
     padding-right: $padding-sm;
   }
 
-  .mat-cell.actions-cell, .mat-header-cell.actions-cell {
+  .mat-cell.actions-cell,
+  .mat-header-cell.actions-cell {
     flex: 0;
     width: 40px;
     overflow: visible;

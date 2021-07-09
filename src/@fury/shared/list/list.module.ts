@@ -5,13 +5,8 @@ import { MaterialModule } from '../material-components.module';
 import { ListComponent } from './list.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MaterialModule,
-    FormsModule
-  ],
+  imports: [CommonModule, MaterialModule, FormsModule],
   declarations: [ListComponent],
-  exports: [ListComponent]
+  exports: [ListComponent],
 })
-export class ListModule {
-}
+export class ListModule {}

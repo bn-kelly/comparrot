@@ -1,0 +1,10 @@
+.oauth-container {
+  svg {
+    width: 49px;
+
+    &:hover,
+    &:focus {
+      cursor: pointer;
+    }
+  }
+}

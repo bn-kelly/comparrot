@@ -1,23 +1,28 @@
 @import "var";
 
-.container {
-  height: 100%;
-  position: relative;
-}
-
-.content-container {
-  overflow: hidden;
-}
-
-.content {
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  &.scroll-disabled {
+:host {
+  .container {
+    height: 100%;
+    position: relative;
+  }
+  
+  .content-container {
     overflow: hidden;
-
-    .content-inner {
-      min-height: 0;
+    background: linear-gradient(113.05deg, #6366F1 -4.13%, #38BDF8 102.35%);
+    border-radius: 12px;
+  
+  }
+  
+  .content {
+    overflow-x: hidden;
+    overflow-y: auto;
+  
+    &.scroll-disabled {
+      overflow: hidden;
+  
+      .content-inner {
+        min-height: 0;
+      }
     }
   }
 }

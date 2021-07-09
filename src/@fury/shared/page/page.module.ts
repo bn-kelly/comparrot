@@ -3,11 +3,8 @@ import { CommonModule } from '@angular/common';
 import { PageDirective } from './page.directive';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   declarations: [PageDirective],
-  exports: [PageDirective]
+  exports: [PageDirective],
 })
-export class PageModule {
-}
+export class PageModule {}
