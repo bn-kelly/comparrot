@@ -8,8 +8,7 @@ import { AuthService } from '../pages/authentication/services/auth.service';
 @Component({
   selector: 'fury-layout',
   templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./layout.component.scss']
 })
 export class LayoutComponent implements OnInit {
 

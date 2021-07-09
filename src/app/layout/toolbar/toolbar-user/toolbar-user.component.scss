@@ -37,12 +37,12 @@
 
   .dropdown {
     position: absolute;
-    top: $toolbar-height;
+    top: $toolbar-height * 2;
     right: 0;
     width: 100%;
     min-width: 160px;
     z-index: -1;
-    transform: translateY(-110%);
+    transform: translateY(-60%);
     visibility: hidden;
     transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
       visibility 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -71,7 +71,7 @@
     }
 
     &.open {
-      transform: translateY(0);
+      transform: translateY(60);
       visibility: visible;
     }
   }
