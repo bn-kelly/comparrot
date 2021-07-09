@@ -14,11 +14,11 @@ import { GetUserId, ShowIframe, TryToScrapeData, StartSpinExtensionIcon, StopSpi
 import { FirebaseService } from '@coturiv/firebase/app';
 
 @Component({
-  selector: 'fury-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
+  selector: 'fury-deals',
+  templateUrl: './deals.component.html',
+  styleUrls: ['./deals.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class DealsComponent implements OnInit {
   user: User;
   isLoggedIn: boolean;
   products: Product[];

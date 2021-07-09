@@ -202,9 +202,6 @@
       >
         <fury-personalization [userSizes]="userSizes" (selectionChange)="updateSizingPreference($event)"></fury-personalization>
       </mat-tab>
-      <mat-tab label="My Wishlist">
-        <fury-wishlist [userWishlist]="userWishlist" *ngIf="userWishlist?.length" (itemDelete)="deleteItemFromWishList($event)"></fury-wishlist>
-      </mat-tab>
       <mat-tab label="FAQ">
         <fury-faq></fury-faq>
       </mat-tab>

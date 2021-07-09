@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { QueryBuilder } from '@coturiv/firebase';
 import { FirebaseService, leftJoin } from '@coturiv/firebase/app';
 import { take } from 'rxjs/operators';
+import { User } from 'src/app/models/user.model';
+import { AuthService } from '../authentication/services/auth.service';
 
 @Component({
   selector: 'fury-wishlist',
@@ -9,15 +11,13 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./wishlist.component.scss']
 })
 export class WishlistComponent implements OnInit {
-  @Input()
-  userWishlist: [];
-
-  @Output()
-  itemDelete = new EventEmitter();
-
+  user: User;
   wishlist = [];
 
-  constructor(private firebaseService: FirebaseService) { }
+  constructor(
+    private firebaseService: FirebaseService,
+    private auth: AuthService,
+  ) { }
 
   onProductClick(event: any, url: string) {
     event.preventDefault();
@@ -25,19 +25,22 @@ export class WishlistComponent implements OnInit {
   }
 
   async ngOnInit() {
-    if (this.userWishlist.length === 0) {
+    this.user = this.auth.currentUser;
+    const { wishlist } = await this.firebaseService.docAsPromise(`user_context/${this.user.uid}`) || [];
+    
+    if (!wishlist || wishlist.length === 0) {
       return;
     }
 
     const qb = new QueryBuilder();
-    qb.where(['id', 'in', this.userWishlist]);
+    qb.where(['id', 'in', wishlist]);
     this.wishlist = await this.firebaseService.collectionAsPromise('product', qb);
   }
 
-  deleteItem(id: string) {
-    const ids = this.userWishlist.filter(s => s !== id);
+  async deleteItem(id: string) {
     this.wishlist = this.wishlist.filter(p => p.id !== id);
-    this.itemDelete.emit(ids);
+    const ids = this.wishlist.map(p => p.id);
+    await this.firebaseService.set(`user_context/${this.user.uid}`, { wishlist: ids }, true);
   }
 
 }

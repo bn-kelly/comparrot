@@ -53,11 +53,27 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: () =>
-          import('./pages/dashboard/dashboard.module').then(
-            m => m.DashboardModule,
-          ),
+        redirectTo: 'deals',
         pathMatch: 'full',
+      },
+      {
+        path: 'deals',
+        loadChildren: () =>
+          import('./pages/deals/deals.module').then(
+            m => m.DealsModule,
+          ),
+      },
+      {
+        path: 'home',
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+          import('./pages/home/home.module').then(m => m.HomeModule),
+      },
+      {
+        path: 'wishlist',
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+          import('./pages/wishlist/wishlist.module').then(m => m.WishlistModule),
       },
       {
         path: 'account',

@@ -9,11 +9,10 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
 import { FaqComponent } from './faq/faq.component';
 import { PersonalizationComponent } from './personalization/personalization.component';
 import { InterestsComponent } from './components/interests/interests.component';
-import { WishlistComponent } from './wishlist/wishlist.component';
 
 import { OrderByPipe } from '../../../pipes/order-by.pipe';
 
-const components = [ContactUsComponent, FaqComponent, PersonalizationComponent, WishlistComponent, InterestsComponent, OrderByPipe];
+const components = [ContactUsComponent, FaqComponent, PersonalizationComponent, InterestsComponent, OrderByPipe];
 
 @NgModule({
   declarations: [...components, InterestsComponent],

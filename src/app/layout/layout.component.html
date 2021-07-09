@@ -67,17 +67,17 @@
   <mat-divider class="toolbar-divider"></mat-divider>
 
   <div fxLayout="row" class="toolbar-buttons">
-    <button mat-button [routerLink]="'/'" [queryParams]="{tab: 'home'}" class="toolbar-button">
+    <button mat-button [routerLink]="'/home'" [queryParams]="{tab: 'home'}" class="toolbar-button">
       <img src="assets/img/icons/icon-home.svg" />
       <span class="button-text">Home</span>
     </button>
     
-    <button mat-button [routerLink]="'/account'" [queryParams]="{tab: 'deals'}" class="toolbar-button">
+    <button mat-button [routerLink]="'/deals'" [queryParams]="{tab: 'deals'}" class="toolbar-button">
       <img src="assets/img/icons/icon-store.svg" />
       <span class="button-text">Deals</span>
     </button>
 
-    <button mat-button [routerLink]="'/account'" [queryParams]="{tab: 'wishlist'}" class="toolbar-button">
+    <button mat-button [routerLink]="'/wishlist'" [queryParams]="{tab: 'wishlist'}" class="toolbar-button">
       <img src="assets/img/icons/icon-heart.svg" />
       <span class="button-text">Liked</span>
     </button>

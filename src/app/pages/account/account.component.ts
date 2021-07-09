@@ -12,7 +12,6 @@ import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { AuthService } from '../authentication/services/auth.service';
 import { User } from '../../models/user.model';
 import { EmailAlert } from '../../models/email-alert.model';
-import { Offer } from '../../models/offer.model';
 import { Project } from '../../models/project.model';
 import { MessageService } from '../../services/message.service';
 import { ToggleExpandIframeWidth } from '../../constants';
@@ -65,7 +64,6 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   userInterests = [];
   userSizes = [];
-  userWishlist = [];
   totalSavings: number;
 
   constructor(
@@ -87,11 +85,10 @@ export class AccountComponent implements OnInit, OnDestroy {
     this.buildForm(this.user);
     this.toggleExpandIframe(true);
 
-    const { interests, sizes, wishlist, savings } = await this.firebaseService.docAsPromise(`user_context/${uid}`);
+    const { interests, sizes, savings } = await this.firebaseService.docAsPromise(`user_context/${uid}`);
 
     this.userInterests = interests;
     this.userSizes = sizes;
-    this.userWishlist = wishlist;
     this.totalSavings = 0;
 
     if (savings) {
@@ -289,9 +286,5 @@ export class AccountComponent implements OnInit, OnDestroy {
         { emailAlerts: { [this.projectName]: emailAlerts } },
         { merge: true },
       );
-  }
-
-  async deleteItemFromWishList(wishlist: string[]) {
-    await this.firebaseService.set(`user_context/${this.user.uid}`, { wishlist }, true);
   }
 }
