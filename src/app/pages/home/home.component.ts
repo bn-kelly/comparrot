@@ -2,6 +2,7 @@ import { Component, NgZone, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import sha1 from 'sha1';
 import { MessageService } from '../../services/message.service';
 import { ScraperService } from '../../services/scraper.service';
 import { UtilService } from '../../services/util.service';
@@ -164,6 +165,10 @@ export class HomeComponent implements OnInit {
         if (!product) {
           await this.stopSpinning();
           return;
+        }
+
+        if (product.sku === '') {
+          product.sku = sha1(`${product.title}${product.retailer}`);
         }
   
         this.ngZone.run(async () => {

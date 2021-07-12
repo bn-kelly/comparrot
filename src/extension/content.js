@@ -100,7 +100,7 @@ const tryToScrapeData = (url, retailer, cb) => {
         : getNumberFromString(originalPrice);
       const image = getXPathContent(retailer?.selectors?.product?.image);
       const upc = getXPathContent(retailer?.selectors?.product?.upc).replace(/_~_/g,'');
-      const sku = getXPathContent(retailer?.selectors?.product?.sku).replace(/_~_/g,'') || url;
+      const sku = getXPathContent(retailer?.selectors?.product?.sku).replace(/_~_/g,'');
       product = {
         title,
         upc,
