@@ -35,11 +35,10 @@
           </div>
         </div>
       </mat-card>
-      <mat-card *ngIf="products" class="landing-ext">
-        <div class="landing-ext-area">
-          <div class="landng-content-area">
-            <h3 fxLayoutAlign="center center">Congrats! You have the best price.</h3>
-          </div>
+      <mat-card *ngIf="products" class="congrats-area">
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px">
+          <h6>Congrats! You found the best price!</h6>
+          <img src="/assets/img/icons/icon-congrats.svg" />
         </div>
       </mat-card>
     </div>

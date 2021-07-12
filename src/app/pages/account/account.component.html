@@ -4,210 +4,126 @@
   fxLayout="column"
   fxLayout.gt-sm="row"
 >
-  <div class="content" fxFlex>
-    <h3
-      *ngIf="totalSavings"
-      class="savings"
+  <div class="content" fxFlex>    
+    <mat-card class="total-savings" *ngIf="totalSavings">
+      <p>You've saved</p>
+      <h1>
+        ${{totalSavings}}
+      </h1>
+    </mat-card>
+    
+    <form
+      fxLayout="column"
     >
-      You've saved ${{totalSavings | number : '1.2-2'}} using Comparrot
-    </h3>
-    <mat-tab-group
-      class="tabs fury-tabs"
-      animationDuration="0ms"
-      dynamicHeight
-      [(selectedIndex)]="index"
-    >
-      <mat-tab label="General Profile">
-        <h2 class="tab-header">General Profile</h2>
-        <p>
-          General profile allows you to change your profile picture and adjust
-          your account information.
-        </p>
-        <form
-          (ngSubmit)="updateGeneralProfile()"
-          fxLayout="column"
-          [formGroup]="form"
+
+    <h4 class="caption">Account settings</h4>
+
+      <div
+        fxLayout="column"
+        fxLayout.gt-xs="row"
+        fxLayoutGap="16px"
+        fxLayoutAlign="start"
+        fxLayoutAlign.gt-xs="start start"
+      >
+        <div
+          fxLayout="row"
+          fxLayoutAlign="space-between center"
         >
-          <div
-            fxLayout="column"
-            fxLayout.gt-xs="row"
-            fxLayoutGap="16px"
-            fxLayoutAlign="start"
-            fxLayoutAlign.gt-xs="start start"
-          >
-            <div
-              fxFlex="grow"
-              fxFlex.gt-xs="auto"
-              fxLayout="column"
-              fxLayoutAlign="start center"
+            <img
+              class="user-image"
+              src="{{
+                user.photoURL ||
+                  '../../../assets/img/default-user.jpg'
+              }}"
+              alt=""
+            />
+
+            <a
+              type="button"
+              class="button-outline-img social-btn"
+              mat-button
+              href="https://joincomparrot.com/settings?act=upload" target="_blank"
             >
-              <div
-                *ngIf="!isPhotoURLFileChanged"
-                class="input-file-image-container"
-              >
-                <input
-                  type="file"
-                  id="userPhotoURL"
-                  (change)="changeUserPhotoURL($event)"
-                />
-                <img
-                  class="user-image"
-                  src="{{
-                    form.value.photoURL ||
-                      '../../../assets/img/default-user.jpg'
-                  }}"
-                  alt=""
-                />
-              </div>
-              <div
-                *ngIf="isPhotoURLFileChanged"
-                class="input-file-cropper__container"
-                [class]="{
-                  'input-file-cropper__container__submitting': isGeneralProfileFormSubmitting
-                }"
-              >
-                <image-cropper
-                  class="input-file-cropper"
-                  [imageChangedEvent]="imageChangedEvent"
-                  [maintainAspectRatio]="true"
-                  [aspectRatio]="1 / 1"
-                  cropperMinWidth="100"
-                  cropperMinHeight="100"
-                  format="png"
-                  (imageCropped)="imageCropped($event)"
-                ></image-cropper>
-                <mat-spinner
-                  *ngIf="isGeneralProfileFormSubmitting"
-                  class="input-file-cropper__spinner"
-                ></mat-spinner>
-              </div>
-            </div>
-            <div fxFlex="grow" fxLayout="column">
-              <div fxFlex="auto" fxLayout="column">
-                <mat-form-field>
-                  <mat-label>First name</mat-label>
-                  <input
-                    matInput
-                    required
-                    formControlName="firstName"
-                    autocomplete="off"
-                  />
-                  <mat-error *ngIf="form.get('firstName').hasError('required')"
-                    >Please fill out this field</mat-error
-                  >
-                  {{ formErrors.firstName }}
-                </mat-form-field>
-                <div
-                  *ngIf="formErrors.firstName"
-                  class="notification is-danger"
-                >
-                  {{ formErrors.firstName }}
-                </div>
-              </div>
-              <div fxFlex="auto" fxLayout="column">
-                <mat-form-field>
-                  <mat-label>Last name</mat-label>
-                  <input
-                    matInput
-                    required
-                    formControlName="lastName"
-                    autocomplete="off"
-                  />
-                  <mat-error *ngIf="form.get('lastName').hasError('required')"
-                    >Please fill out this field</mat-error
-                  >
-                  {{ formErrors.lastName }}
-                </mat-form-field>
-                <div *ngIf="formErrors.lastName" class="notification is-danger">
-                  {{ formErrors.lastName }}
-                </div>
-              </div>
-
-              <div
-                fxLayout="column"
-                fxLayout.gt-xs="row"
-                fxLayoutGap="16px"
-                fxLayoutAlign="center"
-              >
-                <div fxLayout="column">
-                  <button
-                    type="submit"
-                    color="primary"
-                    mat-button
-                    [disabled]="areGeneralProfileFormButtonsDisabled()"
-                    class="form-profile-btn"
-                  >
-                    UPDATE
-                  </button>
-                </div>
-                <div fxLayout="column">
-                  <button
-                    (click)="resetGeneralProfile()"
-                    type="button"
-                    color="primary"
-                    mat-button
-                    [disabled]="areGeneralProfileFormButtonsDisabled()"
-                    class="form-profile-btn"
-                  >
-                    RESET
-                  </button>
-                </div>
-                <div fxLayout="column" fxLayoutAlign="center start">
-                  <div
-                    class="submit-area__message success"
-                    *ngIf="isGeneralProfileUpdated"
-                  >
-                    <mat-icon class="submit-area__icon">check_circle</mat-icon>
-                    Saved
-                  </div>
-                </div>
-              </div>
-            </div>
+              <img src="assets/img/icons/icon-cloud-up.svg" />
+              Upload new photo
+            </a>
+        </div>
+        <div fxFlex="grow" fxLayout="column">
+          <div fxFlex="auto" fxLayout="column">
+            <mat-form-field>
+              <input
+                matInput
+                readonly
+                [value]="user.firstName"
+              />
+            </mat-form-field>
           </div>
-        </form>
-
-        <mat-divider class="divider general-profile-divider"></mat-divider>
-
-        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="16px">
-          <div fxFlex="grow">
-              <fury-interests [userInterests]="userInterests" (selectionChange)="updateUserInterests($event)"></fury-interests>
+          <div fxFlex="auto" fxLayout="column">
+            <mat-form-field>
+              <input
+                matInput
+                readonly
+                [value]="user.lastName"
+              />
+            </mat-form-field>
           </div>
-          <div fxFlex="grow">
-            <h3>Alerts</h3>
-            <p class="padding-bottom">
-              General email alerts, we promise we won’t spam you!
-            </p>
-            <div
-              fxLayout="column"
-              fxLayoutGap="8px"
-              class="padding-horizontal"
-              *ngIf="user && user.emailAlerts"
-            >
-              <mat-slide-toggle
-                *ngFor="let alert of emailAlerts"
-                [checked]="user.emailAlerts['comparrot'].includes(alert.id)"
-                (change)="
-                  emailAlertChange({ id: alert.id, checked: $event.checked })
-                "
-                color="primary"
-              >
-                {{ alert.description }}
-              </mat-slide-toggle>
-            </div>
+          <div fxFlex="auto" fxLayout="column">
+            <mat-form-field>
+              <input
+                matInput
+                readonly
+                [value]="user.email"
+              />
+            </mat-form-field>
           </div>
         </div>
-      </mat-tab>
-      <mat-tab
-        label="Personalization"
-      >
-        <fury-personalization [userSizes]="userSizes" (selectionChange)="updateSizingPreference($event)"></fury-personalization>
-      </mat-tab>
-      <mat-tab label="FAQ">
-        <fury-faq></fury-faq>
-      </mat-tab>
-      <mat-tab label="Contact Us">
-        <fury-contact-us></fury-contact-us>
-      </mat-tab>
-    </mat-tab-group>
+
+        <mat-divider></mat-divider>
+
+        <div fxFlex="grow" fxLayout="column">
+          <a
+              type="button"
+              class="button-with-caret"
+              mat-button
+              href="https://joincomparrot.com/settings" target="_blank"
+            >
+            Settings
+            <img src="assets/img/icons/icon-caretright.svg" />
+        </a>
+          <a
+              type="button"
+              class="button-with-caret"
+              mat-button
+              href="https://joincomparrot.com/settings?act=prsnl" target="_blank"
+            >
+            Personalization
+            <img src="assets/img/icons/icon-caretright.svg" />
+        </a>
+          <a
+              type="button"
+              class="button-with-caret"
+              mat-button
+              href="https://joincomparrot.com/help" target="_blank"
+            >
+            Help
+            <img src="assets/img/icons/icon-caretright.svg" />
+        </a>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div fxFlex="grow" fxLayout="column" class="mb-48">
+          <a
+              type="button"
+              class="button-with-caret"
+              mat-button
+              (click)="logout()"
+            >
+            Logout
+            <img src="assets/img/icons/icon-signout.svg" />
+        </a>
+        </div>
+      </div>
+    </form>
   </div>
 </div>
