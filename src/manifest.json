@@ -33,6 +33,7 @@
         "extension/content.js"
       ],
       "css": ["extension/content.css"],
+      "all_frames": false,
       "run_at": "document_end"
     }
   ],
