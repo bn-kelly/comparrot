@@ -14,6 +14,11 @@ export const ToggleShowIframe = 'toggle-show-iframe';
 export const StartSpinExtensionIcon = 'start-spin-extension-icon';
 export const StopSpinExtensionIcon = 'stop-spin-extension-icon';
 
+export const SiteURL = 'https://joincomparrot.com';
+export const PathToSiteSettings = `${SiteURL}/settings`;
+export const PathToSiteTermsOfService = `${SiteURL}/terms`;
+export const PathToSitePrivacyPolicy = `${SiteURL}/privacy`;
+
 export const GoogleXPaths = {
   g_prod_url:
     'https://www.google.com/shopping/product/xxxxx/offers?q=qqqqq&prds=cid:xxxxx,scoring:p',

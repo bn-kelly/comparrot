@@ -33,6 +33,20 @@ export class LayoutComponent implements OnInit {
     ),
   );
 
+  toolbarButtons = [{
+    title: 'Home',
+    url: '/home',
+    icon: 'icon-home'
+  }, {
+    title: 'Deals',
+    url: '/deals',
+    icon: 'icon-store'
+  }, {
+    title: 'Liked',
+    url: '/wishlist',
+    icon: 'icon-heart'
+  }]
+
   constructor(
     public auth: AuthService,
     private themeService: ThemeService,
@@ -57,6 +71,14 @@ export class LayoutComponent implements OnInit {
           }
         });
       }
+    });
+
+    this.router.events.pipe(
+      filter<NavigationEnd>(event => event instanceof NavigationEnd),
+    ).subscribe((evt) => {
+      this.toolbarButtons.forEach((btn: any) => {
+        btn.selected = evt.url.includes(btn.url);
+      })
     });
   }
 }
