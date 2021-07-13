@@ -58,6 +58,7 @@
           mat-icon-button
           matSuffix
           matTooltip="Toggle Visibility"
+          (click)="toggleVisibility()"
         >
           <mat-icon *ngIf="visible">visibility</mat-icon>
           <mat-icon *ngIf="!visible">visibility_off</mat-icon>
