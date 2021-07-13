@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../pages/authentication/services/auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MessageService } from '../../../services/message.service';
-import { SiteForceLogout } from '../../../constants';
 
 @Component({
   selector: 'fury-toolbar-user',
@@ -12,7 +11,6 @@ import { SiteForceLogout } from '../../../constants';
   styleUrls: ['./toolbar-user.component.scss'],
 })
 export class ToolbarUserComponent implements OnInit {
-  isOpen: boolean;
   user: any = {};
   userName: string;
   isLoggedIn: boolean;
@@ -26,24 +24,6 @@ export class ToolbarUserComponent implements OnInit {
 
   goToAccount() {
     this.router.navigate(['/account']);
-    this.isOpen = false;
-  }
-
-  goToLogin() {
-    this.router.navigate(['/login']);
-  }
-
-  signOut() {
-    this.auth.signOut().then(() => {
-      window.localStorage.setItem('uid', null);
-      this.message.sendMessageToTab(
-        {
-          action: SiteForceLogout,
-        }
-      );
-    });
-    this.isOpen = false;
-    this.userName = '';
   }
 
   ngOnInit() {
@@ -57,13 +37,5 @@ export class ToolbarUserComponent implements OnInit {
       }
       this.isLoggedIn = !!user && !user.isAnonymous;
     });
-  }
-
-  toggleDropdown() {
-    this.isOpen = !this.isOpen;
-  }
-
-  onClickOutside() {
-    this.isOpen = false;
   }
 }

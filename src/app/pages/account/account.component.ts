@@ -9,7 +9,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { AuthService } from '../authentication/services/auth.service';
 import { User } from '../../models/user.model';
 import { MessageService } from '../../services/message.service';
-import { ToggleExpandIframeWidth } from '../../constants';
+import { SiteForceLogout, ToggleExpandIframeWidth } from '../../constants';
 import { FirebaseService } from '@coturiv/firebase/app';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -71,6 +71,12 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   async logout() {
     await this.auth.signOut();
+    window.localStorage.setItem('uid', null);
+    this.message.sendMessageToTab(
+      {
+        action: SiteForceLogout,
+      }
+    );
     this.router.navigateByUrl('/login');
   }
 }
