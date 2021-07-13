@@ -8,7 +8,7 @@
     <mat-card class="total-savings" *ngIf="totalSavings">
       <p>You've saved</p>
       <h1>
-        ${{totalSavings}}
+        ${{totalSavings | number:'1.2-2'}}
       </h1>
     </mat-card>
     
