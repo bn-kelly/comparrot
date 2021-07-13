@@ -111,41 +111,23 @@ const tryToScrapeData = (url, retailer, cb) => {
         sku,
         retailer: retailer.name,
       };
+
+      if (!image || !price) {
+        sendMessage(LogError,
+          `URL: ${url} <br>
+          Title: ${title} <br>
+          Image: ${image} <br>
+          Price: ${price} <br>`
+        );
+      }
     }
 
-    if (!title || !image || !price) {
-      logError(`
-        title: ${title} \n
-        image: ${image} \n
-        price: ${price} \n
-        url: ${url} \n
-      `);
-    }
     cb(product);
   } catch(e) {
     console.log('tryToScrapeData:', e);
-    logError(e.message);
+    sendMessage(LogError, `URL: ${url} <br> ${e.message}`);
     cb(product);
   }
-};
-
-const logError = (message) => {
-  fetch(`${BaseUrl}/logError`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: {
-      type: 'extension',
-      message: message,
-      created: Date.now(),
-    },
-  })
-  .then(response => response.json())
-  .then(async data => {
-    console.log('logError', data);
-  });
 };
 
 const sendMessage = (action, data, cb = null) => {

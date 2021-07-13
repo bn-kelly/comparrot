@@ -67,6 +67,23 @@ const syncRetailers = () => {
     });
 };
 
+const logError = (message) => {
+  message = 'Type: Extension <br>' + message;
+
+  fetch(`${BaseUrl}/logError`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ message }),
+  })
+  .then(response => response.json())
+  .then(async data => {
+    console.log('logError', data);
+  });
+};
+
 const onBrowserActionClicked = tab => {
   chrome.tabs.sendMessage(tab.id, {
     action: ToggleShowIframe,
@@ -127,6 +144,8 @@ const onMessageReceived = async (message, sender, sendResponse) => {
   } else if (message.action === StopSpinExtensionIcon && spinIcon) {
     spinIcon = false;
     chrome.browserAction.setIcon({ path: 'assets/img/icons/extension-active-128.png' });
+  } else if (message.action === LogError && message.data) {
+    logError(message.data);
   }
 }
 
