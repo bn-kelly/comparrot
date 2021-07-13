@@ -6,7 +6,7 @@
 >
   <div class="content" fxFlex>    
     <mat-card class="total-savings" *ngIf="totalSavings">
-      <p>You've saved</p>
+      <p>By using Comparrot you've saved</p>
       <h1>
         ${{totalSavings | number:'1.2-2'}}
       </h1>
@@ -27,7 +27,7 @@
       >
         <div
           fxLayout="row"
-          fxLayoutAlign="space-between center"
+          fxLayoutAlign="space-around center"
         >
             <img
               class="user-image"
