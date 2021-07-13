@@ -75,15 +75,25 @@ export class LayoutComponent implements OnInit {
       }
     });
 
+    this.initSelection(this.router.url);
+
     this.router.events.pipe(
       filter<NavigationEnd>(event => event instanceof NavigationEnd),
     ).subscribe((evt) => {
-      this.toolbarButtons.forEach((btn: any) => {
-        btn.selected = evt.url.includes(btn.url);
-      });
-
-      const el = this.elementRef.nativeElement.querySelector('.avatar');
-      this.renderer.setStyle(el, 'border',  evt.url.includes('/account') ? 'solid 3px #FFF' : '');
+      this.initSelection(evt.url)
     });
+  }
+
+  private initSelection(path: string) {
+    path = path === '/' ? '/home' : path;
+
+    this.toolbarButtons.forEach((btn: any) => {
+      btn.selected = path.includes(btn.url);
+    });
+
+    const el = this.elementRef.nativeElement.querySelector('.avatar');
+    if (el) {
+      this.renderer.setStyle(el, 'border',  path.includes('/account') ? 'solid 3px #FFF' : '');
+    }
   }
 }
