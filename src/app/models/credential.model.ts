@@ -1,7 +1,6 @@
 export interface Credential {
   uid: string;
   email?: string;
-  emailVerified?: boolean;
   displayName?: string;
   phoneNumber?: string;
   firstName?: string;
