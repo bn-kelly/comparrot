@@ -148,6 +148,11 @@ const onMessageReceived = async (message, sender, sendResponse) => {
     chrome.browserAction.setIcon({ path: 'assets/img/icons/extension-active-128.png' });
   } else if (message.action === LogError && message.data) {
     logError(message.data);
+  } else if (message.action === OpenDemoProduct && message.data) {
+    chrome.tabs.create({
+      url: message.data,
+      active: false,
+    });
   }
 }
 

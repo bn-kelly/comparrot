@@ -178,6 +178,10 @@ const setUserId = data => {
   sendMessage(SetUserId, data.detail);
 };
 
+const openDemoProduct = data => {
+  sendMessage(OpenDemoProduct, data.detail);
+}
+
 /**
  * Handle messages from background script and iframe
  * @param {string} msg
@@ -272,6 +276,7 @@ const initEvents = () => {
   document.body.addEventListener('click', hideIframe);
   window.addEventListener(SetUserId, setUserId);
   window.addEventListener(GetUserId, dispatchSiteUserId);
+  window.addEventListener(OpenDemoProduct, openDemoProduct);
 };
 
 const init = () => {

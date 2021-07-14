@@ -220,6 +220,10 @@ export class ScraperService {
     return response.products as [Product];
   }
 
+  async getAmazonProduct(product: Product) {
+    return [];
+  }
+
   async getProducts(product: Product) {
     const key = product.sku;
     let products = this.map.get(key);
@@ -228,12 +232,13 @@ export class ScraperService {
 
       const googleResult = await this.searchGoogle(product);
       const scrapedResult = await this.getScrapedProducts(product);
+      const amazonResult = await this.getAmazonProduct(product);
 
       if (scrapedResult.length === 0) {
         this.triggerScraper(product);
       }
 
-      products = [...googleResult, ...scrapedResult]
+      products = [...googleResult, ...scrapedResult, ...amazonResult]
         .filter(p => {
           return p.price < product.price;
         })

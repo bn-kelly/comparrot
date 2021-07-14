@@ -8,6 +8,7 @@ const SiteForceLogin = 'site-force-login';
 const SiteForceLogout = 'site-force-logout';
 const SetUserId = 'set-user-id';
 const GetUserId = 'get-user-id';
+const OpenDemoProduct = 'open-demo-product';
 const PerformGoogleSearch = 'perform-google-search';
 const TryToScrapeData = 'try-to-scrape-data';
 const ToggleExpandIframeWidth = 'toggle-expand-iframe-width';
