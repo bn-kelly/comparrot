@@ -6,6 +6,9 @@ import { filter } from 'rxjs/operators';
 import { Platform } from '@angular/cdk/platform';
 import { SplashScreenService } from '../@fury/services/splash-screen.service';
 import { ThemeService } from '../@fury/services/theme.service';
+import { MessageService } from './services/message.service';
+import { AuthService } from './pages/authentication/services/auth.service';
+import { GetUserId, SetUserId } from './constants';
 
 declare global {
   interface Window {
@@ -27,6 +30,8 @@ export class AppComponent {
     private platform: Platform,
     private route: ActivatedRoute,
     private splashScreenService: SplashScreenService,
+    public auth: AuthService,
+    private message: MessageService,
   ) {
     this.route.queryParamMap
       .pipe(filter(queryParamMap => queryParamMap.has('style')))
@@ -46,5 +51,16 @@ export class AppComponent {
     if (this.platform.BLINK) {
       this.renderer.addClass(this.document.body, 'is-blink');
     }
+
+    this.message.handleMessage(SetUserId, async message => {
+      window.localStorage.setItem('uid', message.data);
+      const uid = window.localStorage.getItem('uid');
+      await this.auth.signInWithUid(uid);
+    });
+
+    this.message.handleMessage(GetUserId, (message, sender, sendResponse) => {
+      const uid = window.localStorage.getItem('uid');
+      sendResponse(uid);
+    });
   }
 }

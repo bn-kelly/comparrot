@@ -30,7 +30,6 @@ export class HomeComponent implements OnInit {
     private ngZone: NgZone,
     private router: Router,
     private auth: AuthService,
-    private afs: AngularFirestore,
     private spinner: NgxSpinnerService,
     private message: MessageService,
     private scraper: ScraperService,
@@ -121,16 +120,6 @@ export class HomeComponent implements OnInit {
 
   async ngOnInit() {
     this.user = this.auth.currentUser;
-
-    this.message.handleMessage(SetUserId, async message => {
-      window.localStorage.setItem('uid', message.data);
-      await this.signInWithUid();
-    });
-
-    this.message.handleMessage(GetUserId, (message, sender, sendResponse) => {
-      const uid = window.localStorage.getItem('uid');
-      sendResponse(uid);
-    });
 
     if (!this.auth.isAuthenticated()) {
       this.router.navigate(['/login']);
