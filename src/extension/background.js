@@ -108,11 +108,13 @@ const onCommand = command => {
   }
 };
 
-const onInstalled = () => {
-  chrome.tabs.create({
-    url: WelcomeUrl,
-    active: true,
-  });
+const onInstalled = (details) => {
+  if (details.reason === 'install') {
+    chrome.tabs.create({
+      url: WelcomeUrl,
+      active: true,
+    });
+  }
   return false;
 };
 
