@@ -169,32 +169,24 @@ export class RegisterComponent implements OnInit, OnDestroy {
     if (!this.form) {
       return;
     }
-    const form = this.form;
-    for (const field in this.formErrors) {
-      if (
-        Object.prototype.hasOwnProperty.call(this.formErrors, field) &&
-        ['email', 'password'].includes(field)
-      ) {
-        // clear previous error message (if any)
-        this.formErrors[field] = '';
-        const control = form.get(field);
-        if (control && control.dirty && !control.valid) {
-          const messages = this.validationMessages[field];
-          if (control.errors) {
-            for (const key in control.errors) {
+
+    this.formErrors['email'] = '';
+    const emailCtr = this.form.controls['email'];
+    emailCtr.valueChanges.subscribe(() => {
+      const messages = this.validationMessages['email'];
+          if (emailCtr.errors) {
+            for (const key in emailCtr.errors) {
               if (
-                Object.prototype.hasOwnProperty.call(control.errors, key) &&
+                Object.prototype.hasOwnProperty.call(emailCtr.errors, key) &&
                 messages[key]
               ) {
-                this.formErrors[field] += `${
+                this.formErrors['email'] += `${
                   (messages as { [key: string]: string })[key]
                 } `;
               }
             }
           }
-        }
-      }
-    }
+    })
   }
 
   handleResponse = (response: any) => {
