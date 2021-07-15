@@ -148,9 +148,9 @@ export class AuthService {
           return;
         }
         window.localStorage.setItem('uid', result.user.uid);
-        this.message.sendMessageToTab(
+        this.message.postMessage(
+          SiteForceLogin,
           {
-            action: SiteForceLogin,
             uid: result.user.uid,
           }
         );

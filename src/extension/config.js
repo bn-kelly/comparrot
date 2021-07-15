@@ -20,6 +20,8 @@ const RemoveClass = 'remove-class';
 const ToggleShowIframe = 'toggle-show-iframe';
 const StartSpinExtensionIcon = 'start-spin-extension-icon';
 const StopSpinExtensionIcon = 'stop-spin-extension-icon';
+const ExtensionHomeLoaded = 'extension-home-loaded';
+const GetProductURL = 'get-product-url';
 const LogError = 'log-error';
 
 const extensionOrigin = `chrome-extension://${chrome.runtime.id}`;

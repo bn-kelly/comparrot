@@ -92,12 +92,12 @@ const onBrowserActionClicked = tab => {
 
 const onCommand = command => {
   switch (command) {
-    case 'show-iframe':
+    case ShowIframe:
       chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         const id = tabs && tabs[0] && tabs[0].id;
         if (id) {
           chrome.tabs.sendMessage(id, {
-            action: command,
+            action: ShowIframe,
           });
         }
       });

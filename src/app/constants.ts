@@ -10,9 +10,10 @@ export const HideIframe = 'hide-iframe';
 export const ChangeIframeStyle = 'change-iframe-style';
 export const AddClass = 'add-class';
 export const RemoveClass = 'remove-class';
-export const ToggleShowIframe = 'toggle-show-iframe';
 export const StartSpinExtensionIcon = 'start-spin-extension-icon';
 export const StopSpinExtensionIcon = 'stop-spin-extension-icon';
+export const ExtensionHomeLoaded = 'extension-home-loaded';
+export const GetProductURL = 'get-product-url';
 
 export const SiteURL = 'https://joincomparrot.com';
 export const PathToSiteSettings = `${SiteURL}/settings`;

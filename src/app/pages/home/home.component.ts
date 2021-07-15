@@ -10,7 +10,7 @@ import { AuthService } from '../../pages/authentication/services/auth.service';
 import { User } from '../../models/user.model';
 import { Product } from '../../models/product.model';
 import { UserContext } from 'src/app/models/user-context.model';
-import { GetUserId, ShowIframe, TryToScrapeData, StartSpinExtensionIcon, StopSpinExtensionIcon, ChangeIframeStyle, AddClass, RemoveClass, SetUserId } from '../../constants';
+import { GetUserId, ShowIframe, TryToScrapeData, StartSpinExtensionIcon, StopSpinExtensionIcon, ChangeIframeStyle, AddClass, RemoveClass, ExtensionHomeLoaded, GetProductURL } from '../../constants';
 import { FirebaseService } from '@coturiv/firebase/app';
 import { getSeletedTab } from 'src/app/shared/utils';
 
@@ -82,14 +82,8 @@ export class HomeComponent implements OnInit {
     await this.firebaseService.set(`user_context/${this.user.uid}`, { savings }, true);
   }
 
-  showExtension(url: string) {
-    this.message.sendMessageToTab(
-      {
-        action: ShowIframe,
-      },
-      null,
-      url,
-    );
+  showExtension() {
+    this.message.postMessage(ShowIframe);
   }
 
   async signInWithUid() {
@@ -130,64 +124,68 @@ export class HomeComponent implements OnInit {
     this.userContext = await this.firebaseService.docAsPromise(`user_context/${this.user.uid}`);
 
     const retailers: any[] = await this.storage.getValue('retailers');
-    const tab = await getSeletedTab();
-    const retailer = retailers.find(r => {
-      return tab.url.includes(r.url);
-    });
-    
-    if (!retailer) {
-      this.showResult = true;
-      return;
-    }
 
-    await this.startSpinning();
-
-    this.message.sendMessageToTab(
-      {
-        action: TryToScrapeData,
-        url: tab.url,
-        retailer,
-      },
-      async (product: Product) => {
-        console.log('Product:', product);
-        if (!product) {
-          await this.stopSpinning();
-          return;
-        }
-
-        if (product.sku === '') {
-          product.sku = sha1(`${product.title}${product.retailer}`);
-        }
-  
-        this.ngZone.run(async () => {
-          // Todo: We need to store a product to firebase before scraping
-          this.products = await this.scraper.getProducts(product);
-  
-          console.log('products:', this.products);
-  
-          if (this.products.length === 0) {
-            this.message.sendMessageToTab(
-              {
-                action: ChangeIframeStyle,
-                class: 'notification',
-                type: AddClass,
-              }
-            );
-          } else {
-            await this.addSavings(product.sku, product.price - this.products[0].price);
-          }
-  
-          this.showExtension(tab.url);
-          await this.stopSpinning();
-        });
+    this.message.postMessage(ExtensionHomeLoaded);
+    this.message.handleMessage(GetProductURL, async ({ productUrl }) => {
+      console.log('GetProductURL', productUrl);
+      const retailer = retailers.find(r => {
+        return productUrl.includes(r.url);
+      });
+      
+      if (!retailer) {
+        this.showResult = true;
+        return;
       }
-    );
+  
+      await this.startSpinning();
+
+      this.message.postMessage(
+        TryToScrapeData,
+        {
+          url: productUrl,
+          retailer,
+        }
+      );
+    });
+    this.message.handleMessage(TryToScrapeData, async ({ product }) => {
+      console.log('Product:', product);
+      if (!product) {
+        await this.stopSpinning();
+        return;
+      }
+
+      if (product.sku === '') {
+        product.sku = sha1(`${product.title}${product.retailer}`);
+      }
+
+      this.ngZone.run(async () => {
+        // Todo: We need to store a product to firebase before scraping
+        this.products = await this.scraper.getProducts(product);
+
+        console.log('products:', this.products);
+
+        if (this.products.length === 0) {
+          this.message.postMessage(
+            ChangeIframeStyle,
+            {
+              class: 'notification',
+              type: AddClass,
+            }
+          );
+        } else {
+          await this.addSavings(product.sku, product.price - this.products[0].price);
+        }
+
+        this.showExtension();
+        await this.stopSpinning();
+      });
+    });
   }
 
   ngOnDestroy() {
-    this.message.sendMessageToTab(
+    this.message.postMessage(
+      ChangeIframeStyle,
       {
-        action: ChangeIframeStyle,
         class: 'notification',
         type: RemoveClass,
       }

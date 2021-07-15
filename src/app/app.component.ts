@@ -8,7 +8,7 @@ import { SplashScreenService } from '../@fury/services/splash-screen.service';
 import { ThemeService } from '../@fury/services/theme.service';
 import { MessageService } from './services/message.service';
 import { AuthService } from './pages/authentication/services/auth.service';
-import { GetUserId, SetUserId } from './constants';
+import { GetUserId, SetUserId, SiteForceLogin } from './constants';
 
 declare global {
   interface Window {
@@ -52,15 +52,15 @@ export class AppComponent {
       this.renderer.addClass(this.document.body, 'is-blink');
     }
 
-    this.message.handleMessage(SetUserId, async message => {
-      window.localStorage.setItem('uid', message.data);
-      const uid = window.localStorage.getItem('uid');
-      await this.auth.signInWithUid(uid);
+    this.message.handleMessage(SetUserId, async ({ uid }) => {
+      window.localStorage.setItem('uid', uid);
+      const id = window.localStorage.getItem('uid');
+      await this.auth.signInWithUid(id);
     });
 
-    this.message.handleMessage(GetUserId, (message, sender, sendResponse) => {
+    this.message.handleMessage(GetUserId, () => {
       const uid = window.localStorage.getItem('uid');
-      sendResponse(uid);
+      this.message.postMessage(SiteForceLogin, { uid });
     });
   }
 }

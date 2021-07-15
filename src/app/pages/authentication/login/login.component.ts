@@ -39,13 +39,7 @@ export class LoginComponent implements OnInit {
     };
 
     window.localStorage.setItem('uid', data.uid);
-    this.message.sendMessageToTab(
-      {
-        action: SiteForceLogin,
-        uid: data.uid,
-      }
-    );
-
+    this.message.postMessage(SiteForceLogin,  { uid: data.uid });
     this.auth.updateUserData(data);
     this.router.navigate(['/']);
   };
