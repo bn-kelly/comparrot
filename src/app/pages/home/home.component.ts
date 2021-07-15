@@ -5,7 +5,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import sha1 from 'sha1';
 import { MessageService } from '../../services/message.service';
 import { ScraperService } from '../../services/scraper.service';
-import { UtilService } from '../../services/util.service';
 import { StorageService } from '../../services/storage.service';
 import { AuthService } from '../../pages/authentication/services/auth.service';
 import { User } from '../../models/user.model';
@@ -13,6 +12,7 @@ import { Product } from '../../models/product.model';
 import { UserContext } from 'src/app/models/user-context.model';
 import { GetUserId, ShowIframe, TryToScrapeData, StartSpinExtensionIcon, StopSpinExtensionIcon, ChangeIframeStyle, AddClass, RemoveClass, SetUserId } from '../../constants';
 import { FirebaseService } from '@coturiv/firebase/app';
+import { getSeletedTab } from 'src/app/shared/utils';
 
 @Component({
   selector: 'fury-home',
@@ -33,7 +33,6 @@ export class HomeComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private message: MessageService,
     private scraper: ScraperService,
-    private util: UtilService,
     private storage: StorageService,
     private firebaseService: FirebaseService
   ) {}
@@ -131,7 +130,7 @@ export class HomeComponent implements OnInit {
     this.userContext = await this.firebaseService.docAsPromise(`user_context/${this.user.uid}`);
 
     const retailers: any[] = await this.storage.getValue('retailers');
-    const tab = await this.util.getSeletedTab();
+    const tab = await getSeletedTab();
     const retailer = retailers.find(r => {
       return tab.url.includes(r.url);
     });

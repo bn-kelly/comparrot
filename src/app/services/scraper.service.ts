@@ -1,11 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { DomSanitizer } from '@angular/platform-browser';
 import sha1 from 'sha1';
 import { environment } from '../../environments/environment';
-import { UtilService } from './util.service';
 import { StorageService } from './storage.service';
-import { GoogleXPaths } from '../constants';
+import { BaseAmazonURL, GoogleXPaths } from '../constants';
 import { Product } from '../models/product.model';
+import { 
+  getXPathString,
+  getXPathArray,
+  extractGUrl,
+  getNumberFromString,
+  clean,
+  validURL,
+  getXPathContent,
+} from '../shared/utils';
 
 /**
  * @class ScraperService
@@ -19,9 +28,9 @@ export class ScraperService {
   private map = new Map<string, any>();
 
   constructor(
-    private util: UtilService,
     private storage: StorageService,
     private http: HttpClient,
+    private sanitizer: DomSanitizer,
   ) {}
 
   async searchGoogle(product: Product): Promise<Product[]> {
@@ -31,10 +40,10 @@ export class ScraperService {
 
     const search = encodeURIComponent(product.upc || product.title);
     const url = `https://www.google.com/search?tbm=shop&tbs=vw:1,price:1,ppr_max:${product.price}&q=${search}`;
-    const doc = await this.util.getDocFromUrl(url);
+    const doc = await this.getDocFromUrl(url);
     let data = [];
 
-    const noResults = this.util.getXPathString(
+    const noResults = getXPathString(
       doc,
       GoogleXPaths.g_step1_no_results_xpath,
     );
@@ -44,10 +53,10 @@ export class ScraperService {
       return [];
     }
 
-    const href = this.util.getXPathString(doc, GoogleXPaths.g_step1_href_xpath);
+    const href = getXPathString(doc, GoogleXPaths.g_step1_href_xpath);
 
     if (href.length === 0) {
-      const urls = this.util.getXPathArray(doc, GoogleXPaths.g_step1_url_xpath);
+      const urls = getXPathArray(doc, GoogleXPaths.g_step1_url_xpath);
       const arrUrls = [];
       let node = urls.iterateNext();
 
@@ -56,12 +65,12 @@ export class ScraperService {
       }
 
       while (node) {
-        const url = this.util.extractGUrl(node.getAttribute('href'));
+        const url = extractGUrl(node.getAttribute('href'));
         arrUrls.push(url);
         node = urls.iterateNext();
       }
 
-      const prices = this.util.getXPathArray(
+      const prices = getXPathArray(
         doc,
         GoogleXPaths.g_step1_price_xpath,
       );
@@ -72,7 +81,7 @@ export class ScraperService {
         node = prices.iterateNext();
       }
 
-      const retailers = this.util.getXPathArray(
+      const retailers = getXPathArray(
         doc,
         GoogleXPaths.g_step1_retailer_xpath,
       );
@@ -84,7 +93,7 @@ export class ScraperService {
         node = retailers.iterateNext();
       }
 
-      const titles = this.util.getXPathArray(
+      const titles = getXPathArray(
         doc,
         GoogleXPaths.g_step1_title_xpath,
       );
@@ -99,8 +108,8 @@ export class ScraperService {
       for (let i = 0; i < arrRetailers.length; i++) {
         const url = `https://www.google.com${arrUrls[i]}`;
         const title = arrTitles[i];
-        const price = this.util.getNumberFromString(this.util.clean(arrPrices[i])).toFixed(2);
-        const retailer = this.util.clean(arrRetailers[i]);
+        const price = getNumberFromString(clean(arrPrices[i])).toFixed(2);
+        const retailer = clean(arrRetailers[i]);
 
         data.push({
           url,
@@ -115,17 +124,24 @@ export class ScraperService {
       data = await this.getGooglePrices(id, search);
     }
 
+    const amazonProduct = await this.getAmazonProduct(product);
+    console.log('amazonProduct', amazonProduct);
+
+    if (amazonProduct) {
+      data.push(amazonProduct);
+    }
+
     data = data.filter(p => {
       return p.price < product.price;
     });
 
     for (let i = 0; i < data.length; i++) {
-      if (!this.util.validURL(data[i].url)) {
+      if (!validURL(data[i].url)) {
         continue;
       }
 
       try {
-        const doc = await this.util.getDocFromUrl(data[i].url);
+        const doc = await this.getDocFromUrl(data[i].url);
         const retailers = await this.storage.getValue('retailers');
         const retailer = retailers.find(r => {
           return data[i].retailer === r.name;
@@ -135,8 +151,8 @@ export class ScraperService {
           continue;
         }
 
-        const image = this.util.getXPathContent(doc, retailer.selectors?.product?.image);
-        const sku = this.util.getXPathContent(doc, retailer.selectors?.product?.sku);
+        const image = getXPathContent(doc, retailer.selectors?.product?.image);
+        const sku = getXPathContent(doc, retailer.selectors?.product?.sku);
         
         data[i].image = image || data[i].image;
         data[i].sku = sku || data[i].sku;
@@ -153,13 +169,13 @@ export class ScraperService {
     url = url.replace(/xxxxx/g, id);
     url = url.replace(/qqqqq/g, search);
     console.log('getGooglePrices:', url);
-    const doc = await this.util.getDocFromUrl(url);
+    const doc = await this.getDocFromUrl(url);
 
     const arrRetailers = [];
     const arrUrls = [];
     const arrPrices = [];
 
-    const links = this.util.getXPathArray(doc, GoogleXPaths.g_step2_href_xpath);
+    const links = getXPathArray(doc, GoogleXPaths.g_step2_href_xpath);
     let node = links.iterateNext();
 
     while (node) {
@@ -168,7 +184,7 @@ export class ScraperService {
       node = links.iterateNext();
     }
 
-    const prices = this.util.getXPathArray(
+    const prices = getXPathArray(
       doc,
       GoogleXPaths.g_step2_price_xpath,
     );
@@ -179,20 +195,20 @@ export class ScraperService {
       node = prices.iterateNext();
     }
 
-    const title = this.util.getXPathString(
+    const title = getXPathString(
       doc,
       GoogleXPaths.g_step2_title_xpath,
     );
-    const image = this.util.getXPathString(
+    const image = getXPathString(
       doc,
       GoogleXPaths.g_step2_image_xpath,
     );
     const data = [];
 
     for (let i = 0; i < arrRetailers.length; i++) {
-      const url = `https://www.google.com${this.util.extractGUrl(arrUrls[i])}`;
-      const price = this.util.getNumberFromString(this.util.clean(arrPrices[i])).toFixed(2);
-      const retailer = this.util.clean(arrRetailers[i]);
+      const url = `https://www.google.com${extractGUrl(arrUrls[i])}`;
+      const price = getNumberFromString(clean(arrPrices[i])).toFixed(2);
+      const retailer = clean(arrRetailers[i]);
 
       data.push({
         url,
@@ -221,7 +237,36 @@ export class ScraperService {
   }
 
   async getAmazonProduct(product: Product) {
-    return [];
+    const search = encodeURIComponent(product.upc || product.title);
+    const searchUrl = GoogleXPaths.a_search_url.replace('qqqqq', search);
+    const doc = await this.getDocFromUrl(searchUrl);
+
+    const url = BaseAmazonURL + getXPathString(doc, GoogleXPaths.a_asin_xpath);
+    const price = getXPathString(doc, GoogleXPaths.a_price_xpath);
+    const title = getXPathString(doc, GoogleXPaths.a_title_xpath);
+
+    if (url.length > BaseAmazonURL.length && price !== '') {
+      return {
+        url,
+        title,
+        price,
+        retailer: 'Amazon.com',
+        sku: sha1(`${title}Amazon.com`),
+      }
+    }
+
+    return null;
+  }
+
+  async getDocFromUrl(url: string): Promise<Document> {
+    const responseText = await this.http
+      .get(url, { responseType: 'text' })
+      .toPromise();
+    const doc = document.implementation.createHTMLDocument('');
+    doc.documentElement.innerHTML = this.sanitizer.bypassSecurityTrustHtml(
+      responseText,
+    ) as string;
+    return doc;
   }
 
   async getProducts(product: Product) {
@@ -232,13 +277,12 @@ export class ScraperService {
 
       const googleResult = await this.searchGoogle(product);
       const scrapedResult = await this.getScrapedProducts(product);
-      const amazonResult = await this.getAmazonProduct(product);
 
       if (scrapedResult.length === 0) {
         this.triggerScraper(product);
       }
 
-      products = [...googleResult, ...scrapedResult, ...amazonResult]
+      products = [...googleResult, ...scrapedResult]
         .filter(p => {
           return p.price < product.price;
         })
