@@ -200,9 +200,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
     };
 
     window.localStorage.setItem('uid', data.uid);
-    this.message.sendMessageToTab(
+    this.message.postMessage(
+      SiteForceLogin,
       {
-        action: SiteForceLogin,
         uid: data.uid,
       }
     );

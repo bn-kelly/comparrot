@@ -61,22 +61,13 @@ export class AccountComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.message.sendMessageToTab(
-      {
-        action: ToggleExpandIframeWidth,
-        isOpen,
-      }
-    );
+    this.message.postMessage(ToggleExpandIframeWidth,  { isOpen });
   }
 
   async logout() {
     await this.auth.signOut();
     window.localStorage.setItem('uid', null);
-    this.message.sendMessageToTab(
-      {
-        action: SiteForceLogout,
-      }
-    );
+    this.message.postMessage(SiteForceLogout);
     this.router.navigateByUrl('/login');
   }
 }

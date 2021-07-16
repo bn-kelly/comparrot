@@ -1,3 +1,5 @@
+let isExtensionLoaded = false;
+
 const getIframe = () => document.getElementById(iframeID);
 
 const inIframe = () => {
@@ -84,7 +86,7 @@ const changeIframeStyle = (className, type) => {
   }
 }
 
-const tryToScrapeData = (url, retailer, cb) => {
+const tryToScrapeData = (url, retailer) => {
   let product = null;
 
   try {
@@ -122,11 +124,11 @@ const tryToScrapeData = (url, retailer, cb) => {
       }
     }
 
-    cb(product);
+    postMessage(TryToScrapeData, { product });
   } catch(e) {
     console.log('tryToScrapeData:', e);
     sendMessage(LogError, `URL: ${url} <br> ${e.message}`);
-    cb(product);
+    postMessage(TryToScrapeData, { product });
   }
 };
 
@@ -155,10 +157,13 @@ const dispatchSiteLogout = () => {
   postMessageToSite(SiteForceLogout);
 };
 
-const dispatchSiteUserId = () => {
-  sendMessage(GetUserId, null, (uid) => {
-    dispatchSiteLogin(uid);
-  });
+const getUserId = () => {
+  const interval = setInterval(() => {
+    if (isExtensionLoaded) {
+      postMessage(GetUserId);
+      clearInterval(interval);
+    }
+  }, 50);
 }
 
 /**
@@ -175,7 +180,12 @@ const postMessageToSite = (message, data = null) => {
  * Send a message to chrome extension to set user id
  */
 const setUserId = data => {
-  sendMessage(SetUserId, data.detail);
+  const interval = setInterval(() => {
+    if (isExtensionLoaded) {
+      postMessage(SetUserId, { uid: data.detail });
+      clearInterval(interval);
+    }
+  }, 50);
 };
 
 const openDemoProduct = data => {
@@ -201,28 +211,46 @@ const handleMessage = (msg, sender, sendResponse) => {
       break;
 
     case ToggleExpandIframeWidth:
-      toggleExpandIframeWidth(msg.isOpen);
+      toggleExpandIframeWidth(msg.data.isOpen);
       break;
 
     case ChangeIframeStyle:
-      changeIframeStyle(msg.class, msg.type);
+      changeIframeStyle(msg.data.class, msg.data.type);
 
     case TryToScrapeData:
-      tryToScrapeData(msg.url, msg.retailer, sendResponse);
+      tryToScrapeData(msg.data.url, msg.data.retailer);
       break;
 
     case SiteForceLogin:
-      dispatchSiteLogin(msg.uid);
+      dispatchSiteLogin(msg.data.uid);
       break;
 
     case SiteForceLogout:
       dispatchSiteLogout();
       break;
 
+    case ExtensionHomeLoaded:
+      postMessage(GetProductURL, { productUrl: location.href });
+      break;
+
+    case ExtensionLoaded:
+      isExtensionLoaded = true;
+
     default:
       break;
   }
 };
+
+const postMessage = (action, data) => {
+  const iframe = getIframe();
+  iframe.contentWindow.postMessage(
+    {
+      action,
+      data,
+    },
+    '*'
+  );
+}
 
 /**
  * Create an iframe to show the extension UI
@@ -272,11 +300,14 @@ const setZIndex = () => {
  * Initialize event handlers
  */
 const initEvents = () => {
-  chrome.extension.onMessage.addListener(handleMessage);
   document.body.addEventListener('click', hideIframe);
   window.addEventListener(SetUserId, setUserId);
-  window.addEventListener(GetUserId, dispatchSiteUserId);
+  window.addEventListener(GetUserId, getUserId);
   window.addEventListener(OpenDemoProduct, openDemoProduct);
+  chrome.extension.onMessage.addListener(handleMessage);
+  window.addEventListener('message', (e) => {
+    handleMessage(e.data);
+  });
 };
 
 const init = () => {
@@ -287,7 +318,7 @@ const init = () => {
 window.onload = () => {
   if (!location.ancestorOrigins.contains(extensionOrigin) && !inIframe()) {
     addIframe();
-  
+
     // Homedepot prevent injecting iframe
     // Cause of this reason, replace site original iframe with extension iframe
     if (location.href.includes('www.homedepot.com')) {
