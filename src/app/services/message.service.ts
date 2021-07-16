@@ -37,7 +37,7 @@ export class MessageService {
     handler: (data: any) => void,
   ) {
     window.addEventListener('message', (e) => {
-      console.log('iframe message:', e);
+      console.log('iframe message:', e.data.action);
       return action === e.data.action && handler(e.data.data);
     });
   }
