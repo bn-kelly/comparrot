@@ -108,6 +108,16 @@ $avatar-size-desktop: 300px;
     width: 88px;
     height: 88px;
   }
+
+  div.user-image {
+    background: #4ba4db;
+    text-align: center;
+    color: #FFFFFF;
+    font-size: 64px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
   
   .mat-form-field-wrapper {
     color: $form-color-text;

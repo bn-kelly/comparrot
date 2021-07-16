@@ -9,14 +9,13 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
 import { FaqComponent } from './faq/faq.component';
 import { PersonalizationComponent } from './personalization/personalization.component';
 import { InterestsComponent } from './components/interests/interests.component';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
-import { OrderByPipe } from '../../../pipes/order-by.pipe';
-
-const components = [ContactUsComponent, FaqComponent, PersonalizationComponent, InterestsComponent, OrderByPipe];
+const components = [ContactUsComponent, FaqComponent, PersonalizationComponent, InterestsComponent];
 
 @NgModule({
   declarations: [...components, InterestsComponent],
-  imports: [ReactiveFormsModule, MaterialModule, CommonModule, MatExpansionModule],
+  imports: [ReactiveFormsModule, MaterialModule, CommonModule, MatExpansionModule, PipesModule],
   exports: [...components],
 })
 export class TabsModule {}
