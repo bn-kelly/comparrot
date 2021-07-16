@@ -1,185 +1,121 @@
 <div
-  class="page page-register background-pattern"
+  class="page background-pattern"
   fxLayout="column"
-  fxLayoutAlign="center center"
+  fxLayoutAlign="start center"
 >
   <div [@fadeInUp] class="card border-radius elevation">
-    <div class="header padding" fxLayout="column" fxLayoutAlign="center center">
-      <div
-        class="logo"
-        [routerLink]="['/']"
-        [style.background-image]="sanitizer.bypassSecurityTrustStyle('url(' + logoUrl + ')')"
-      ></div>
+    <div class="header padding" fxLayout="column" fxLayoutAlign="center start">
+      <div class="logo" [routerLink]="['/']"></div>
     </div>
+
     <form
-      (ngSubmit)="signup()"
-      class="form-signup padding"
+      class="form-register padding"
       fxLayout="column"
-      fxLayoutGap="16px"
+      (submit)="signup()"
       [formGroup]="form"
     >
-      <fury-oauth-component></fury-oauth-component>
-      <div class="text-line">
-        <h4>or</h4>
-      </div>
-      <div fxFlex="auto" fxLayout="column">
-        <mat-form-field fxFlex="grow">
-          <mat-label>First name</mat-label>
-          <input matInput required formControlName="firstname" />
-          <mat-error *ngIf="formErrors.firstname">
-            {{ formErrors.firstname }}
-          </mat-error>
-          <mat-error
-            *ngIf="
-              form.get('firstname').hasError('required') &&
-              !formErrors.firstname
-            "
-          >
-            Please enter your first name
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field fxFlex="grow">
-          <mat-label>Last name</mat-label>
-          <input matInput required formControlName="lastname" />
-          <mat-error *ngIf="formErrors.lastname">
-            {{ formErrors.lastname }}
-          </mat-error>
-          <mat-error
-            *ngIf="
-              form.get('lastname').hasError('required') && !formErrors.lastname
-            "
-          >
-            Please enter your last name
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field fxFlex="grow">
-          <mat-label>
-            Email
-          </mat-label>
-          <input matInput required formControlName="email" />
-          <mat-error *ngIf="formErrors.email">
-            {{ formErrors.email }}
-          </mat-error>
-          <mat-error
-            *ngIf="
-              form.get('email').hasError('required') &&
-              !formErrors.email
-            "
-          >
-            Please enter your email
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field fxFlex="grow">
-          <mat-label>Password</mat-label>
-          <input
-            matInput
-            [type]="inputType"
-            formControlName="password"
-            required
-          />
-          <button
-            type="button"
-            mat-icon-button
-            matSuffix
-            (click)="toggleVisibility()"
-            matTooltip="Toggle Visibility"
-          >
-            <mat-icon *ngIf="visible">visibility</mat-icon>
-            <mat-icon *ngIf="!visible">visibility_off</mat-icon>
-          </button>
-          <mat-error *ngIf="formErrors.password"
-            >{{ formErrors.password }}
-          </mat-error>
-          <mat-error
-            *ngIf="
-              form.get('password').hasError('required') && !formErrors.password
-            "
-          >
-            Please enter your password
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field fxFlex="grow">
-          <mat-label>Confirm password</mat-label>
-          <input
-            matInput
-            [type]="inputType"
-            formControlName="passwordConfirm"
-            required
-          />
-          <button
-            type="button"
-            mat-icon-button
-            matSuffix
-            (click)="toggleVisibility()"
-            matTooltip="Toggle Visibility"
-          >
-            <mat-icon *ngIf="visible">visibility</mat-icon>
-            <mat-icon *ngIf="!visible">visibility_off</mat-icon>
-          </button>
-          <mat-error *ngIf="formErrors.passwordConfirm">
-            {{ formErrors.passwordConfirm }}
-          </mat-error>
-          <mat-error
-            *ngIf="
-              form.get('passwordConfirm').hasError('required') &&
-              !formErrors.passwordConfirm
-            "
-          >
-            Those passwords didn't match. Please try again
-          </mat-error>
-        </mat-form-field>
+      <button
+        type="button" 
+        class="nav-back-btn"
+        mat-raised-button
+        [routerLink]="'/login'"
+      >
+          <img src="assets/img/icons/navigate-left.svg" />
+          Return
+      </button>
+      <div fxLayout="row" fxLayoutAlign="start start">
+        <h4>Registration</h4>
       </div>
 
-      <div fxLayout="row" fxLayoutAlign="center">
-        <mat-checkbox
-          class="caption"
-          formControlName="acceptTerms"
-        ></mat-checkbox>
-        <div class="checkbox-label">
-          <label>
-            By continuing, you agree to
-            <span class="project-name" *ngIf="project">
-              {{ project.name }}
-            </span>
-            's
-            <a
-              *ngIf="project && project.links"
-              target="_blank"
-              href="{{ project.links.termsOfService }}"
-            >
-              Terms of Service
-            </a>
-            and confirm that you have read our
-            <a
-              *ngIf="project && project.links"
-              target="_blank"
-              href="{{ project.links.privacyPolicy }}"
-            >
-              Privacy Policy
-            </a>
-          </label>
-          <mat-error *ngIf="form.get('acceptTerms').errors && submitted">
-            Please accept Terms of Service and Privacy Policy
-          </mat-error>
-        </div>
+      <button
+        type="button"
+        class="form-button-login social-btn"
+        mat-raised-button
+        (click)="doGoogleLogin()"
+      >
+        <img src="assets/img/icons/icon-auth-google.svg" />
+        Join with Google
+      </button>
+
+      <button
+        type="button"
+        class="form-button-login social-btn mb-0"
+        mat-raised-button
+        (click)="doFacebookLogin()"
+      >
+        <img src="assets/img/icons/icon-auth-facebook.svg" />
+        Join with Facebook
+      </button>
+
+      <mat-divider></mat-divider>
+
+      <mat-form-field fxFlex="grow">
+        <mat-label>
+          Email
+        </mat-label>
+        <input matInput required formControlName="email" />
+        <mat-error *ngIf="formErrors.email">
+          {{ formErrors.email }}
+        </mat-error>
+        <mat-error
+          *ngIf="
+            form.get('email').hasError('required') &&
+            !formErrors.email
+          "
+        >
+          Please enter your email
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex="grow" class="p-0 mb-0">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [type]="inputType"
+          formControlName="password"
+          required
+        />
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          matTooltip="Toggle Visibility"
+          (click)="toggleVisibility()"
+        >
+          <mat-icon *ngIf="visible">visibility</mat-icon>
+          <mat-icon *ngIf="!visible">visibility_off</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <div class="password-strength">
+        <ul class="strength-progress" [ngClass]="'strength-progress-' + strengthOfPassword.length">
+            <li *ngFor="let i of [].constructor(3)"></li>
+        </ul>
+        <ul class="strength-list" [ngClass]="strengthOfPassword">
+            <li>Upper & lower case</li>
+            <li>Contains a number and a symbol</li>
+            <li>More than 8 characters</li>
+        </ul>
       </div>
 
       <div id="recaptcha-container"></div>
 
       <button
-        type="submit"
-        class="form-button-signup"
-        color="primary"
-        mat-raised-button
+        class="form-button-submit text-center"
+        mat-raised-button        
       >
-        REGISTER
+        Join Comparrot
       </button>
-      <p class="secondary-text text-center">
-        Already have an account? <a [routerLink]="['/login']">Login</a>
+
+      <mat-divider></mat-divider>
+
+      <p class="secondary-text text-left p-0 m-0">
+        By continueing, you agree to Comparrot's<br /><a href="https://joincomparrot.com/terms" target="_blank">Terms of Service</a> and confirm that you have <br />read our <a href="https://joincomparrot.com/privacy" target="_blank">Privacy Policy</a>
+      </p>
+
+      <mat-divider></mat-divider>
+
+      <p class="secondary-text text-center p-0 m-0">
+        Already a member? <a [routerLink]="['/login']">Login to Comparrot</a> 
       </p>
     </form>
   </div>

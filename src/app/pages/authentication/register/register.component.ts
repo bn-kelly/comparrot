@@ -1,6 +1,7 @@
 import {
   ChangeDetectorRef,
   Component,
+  OnDestroy,
   OnInit,
   ViewEncapsulation,
 } from '@angular/core';
@@ -14,14 +15,16 @@ import { ThemeService } from '../../../../@fury/services/theme.service';
 import { Project } from '../../../models/project.model';
 import { MatchingValidator } from './matching.validator';
 import { environment } from 'src/environments/environment';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import firebase from 'firebase/app';
+import { SiteForceLogin } from 'src/app/constants';
+import { MessageService } from 'src/app/services/message.service';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 type UserFields =
-  | 'firstname'
-  | 'lastname'
   | 'email'
-  | 'password'
-  | 'passwordConfirm'
-  | 'acceptTerms';
+  | 'password';
 type FormErrors = { [u in UserFields]: string };
 
 @Component({
@@ -31,83 +34,68 @@ type FormErrors = { [u in UserFields]: string };
   animations: [fadeInUpAnimation],
   encapsulation: ViewEncapsulation.None,
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   form: FormGroup;
-  firstName: '';
-  lastName: '';
   email: '';
   password: '';
   formErrors: FormErrors = {
-    firstname: '',
-    lastname: '',
     email: '',
-    password: '',
-    passwordConfirm: '',
-    acceptTerms: '',
+    password: ''
   };
   validationMessages = {
-    firstname: {
-      required: 'Please enter your firstname',
-    },
-    lastname: {
-      required: 'Please enter your lastname',
-    },
     email: {
       required: 'Please enter your email',
       email: 'Must be a valid email',
-    },
-    password: {
-      required: 'Please enter your password',
-      pattern: 'Password must be include at one letter and one number.',
-      minlength: 'Password must be at least 6 characters long.',
-      maxlength: 'Password cannot be more than 25 characters long.',
-    },
-    passwordConfirm: {
-      required: 'Please confirm your password',
-      matchingValidator: `Those passwords didn't match. Please try again`,
-    },
+    }
   };
 
   inputType = 'password';
   visible = false;
-  logoUrl: string;
-  project: Project;
-  themeName: string;
   submitted = false;
 
+  strengthOfPassword = [];
+
+  untilFn: Subject<any>;
+
   constructor(
-    private router: Router,
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
-    private afs: AngularFirestore,
     private auth: AuthService,
-    private themeService: ThemeService,
-    public sanitizer: DomSanitizer,
-  ) {}
+    public sanitizer: DomSanitizer, 
+    private router: Router, 
+    private message: MessageService,
+    private afAuth: AngularFireAuth
+  ) {
+    this.untilFn = new Subject();
+  }
 
   ngOnInit() {
     this.buildForm();
 
-    this.themeService.theme$.subscribe(([currentTheme]) => {
-      this.themeName = currentTheme.replace('fury-', '');
-      this.handleLogoUrl();
-    });
+    this.form.controls['password'].valueChanges.pipe(takeUntil(this.untilFn)).subscribe((value: string) => {
+      this.strengthOfPassword = [];
 
-    this.afs
-      .collection('project')
-      .doc(environment.projectName)
-      .valueChanges()
-      .subscribe((project: Project) => {
-        this.project = project;
-        this.handleLogoUrl();
-      });
+      if (!value) {
+        return;
+      }
+
+      if (value.match('^(?=.*[a-z])(?=.*[A-Z])')?.length) {
+        this.strengthOfPassword.push('match-ul-case');
+      }
+
+      if (value.match('^(?=.*?[0-9])(?=.*[@$!%*#?&])')?.length) {
+        this.strengthOfPassword.push('match-ds-case');
+      }
+
+      if (value.length >= 8) {
+        this.strengthOfPassword.push('match-length');
+      }
+    });
   }
 
-  handleLogoUrl() {
-    this.logoUrl =
-      this.project && this.project.logoUrl
-        ? this.project.logoUrl[this.themeName] || this.project.logoUrl.default
-        : '';
+  ngOnDestroy() {
+    this.untilFn.next();
+    this.untilFn.complete();
   }
 
   toggleVisibility() {
@@ -128,17 +116,13 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    this.firstName = this.form.value['firstname'];
-    this.lastName = this.form.value['lastname'];
     this.email = this.form.value['email'];
     this.password = this.form.value['password'];
 
     this.auth
       .emailSignUp({
         email: this.email,
-        password: this.password,
-        firstName: this.firstName,
-        lastName: this.lastName,
+        password: this.password
       })
       .then(response => {
         const data: any = response ? { ...response } : {};
@@ -164,24 +148,16 @@ export class RegisterComponent implements OnInit {
   buildForm() {
     this.form = this.fb.group(
       {
-        firstname: ['', Validators.required],
-        lastname: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
         password: [
           '',
           [
             Validators.required,
             Validators.pattern('^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$'),
-            Validators.minLength(6),
-            Validators.maxLength(25),
+            Validators.minLength(8)
           ],
-        ],
-        passwordConfirm: ['', Validators.required],
-        acceptTerms: [false, Validators.requiredTrue],
-      },
-      {
-        validator: MatchingValidator('password', 'passwordConfirm'),
-      },
+        ]
+      }
     );
 
     this.form.valueChanges.subscribe(() => this.onValueChanged());
@@ -193,31 +169,77 @@ export class RegisterComponent implements OnInit {
     if (!this.form) {
       return;
     }
-    const form = this.form;
-    for (const field in this.formErrors) {
-      if (
-        Object.prototype.hasOwnProperty.call(this.formErrors, field) &&
-        ['name', 'email', 'password', 'passwordConfirm'].includes(field)
-      ) {
-        // clear previous error message (if any)
-        this.formErrors[field] = '';
-        const control = form.get(field);
-        if (control && control.dirty && !control.valid) {
-          const messages = this.validationMessages[field];
-          if (control.errors) {
-            for (const key in control.errors) {
+
+    this.formErrors['email'] = '';
+    const emailCtr = this.form.controls['email'];
+    emailCtr.valueChanges.subscribe(() => {
+      const messages = this.validationMessages['email'];
+          if (emailCtr.errors) {
+            for (const key in emailCtr.errors) {
               if (
-                Object.prototype.hasOwnProperty.call(control.errors, key) &&
+                Object.prototype.hasOwnProperty.call(emailCtr.errors, key) &&
                 messages[key]
               ) {
-                this.formErrors[field] += `${
+                this.formErrors['email'] += `${
                   (messages as { [key: string]: string })[key]
                 } `;
               }
             }
           }
-        }
+    })
+  }
+
+  handleResponse = (response: any) => {
+    const [firstNameFromDisplayName, lastNameFromDisplayName] = (
+      response.user.displayName || ''
+    ).split(' ');
+    const data = {
+      ...response.user,
+      firstName: response.user.firstName || firstNameFromDisplayName || '',
+      lastName: response.user.lastName || lastNameFromDisplayName || '',
+    };
+
+    window.localStorage.setItem('uid', data.uid);
+    this.message.postMessage(
+      SiteForceLogin,
+      {
+        uid: data.uid,
       }
-    }
+    );
+
+    this.auth.updateUserData(data, true);
+    this.router.navigate(['/']);
+  };
+
+  doGoogleLogin() {
+    return new Promise<any>((resolve, reject) => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      provider.addScope('profile');
+      provider.addScope('email');
+      this.afAuth
+        .signInWithPopup(provider)
+        .then(response => {
+          resolve(response);
+          this.handleResponse(response);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
+  doFacebookLogin() {
+    return new Promise<any>((resolve, reject) => {
+      const provider = new firebase.auth.FacebookAuthProvider();
+      this.afAuth.signInWithPopup(provider).then(
+        response => {
+          resolve(response);
+          this.handleResponse(response);
+        },
+        error => {
+          reject(error);
+        },
+      );
+    });
   }
 }

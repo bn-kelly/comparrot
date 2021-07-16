@@ -1,3 +1,5 @@
+import { AngularFirestore } from '@angular/fire/firestore';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 /**
@@ -6,5 +8,5 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class HomeService {
-  constructor() {}
+  constructor(private http: HttpClient, private afs: AngularFirestore) {}
 }

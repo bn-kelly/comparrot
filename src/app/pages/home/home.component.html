@@ -1,15 +1,126 @@
-<mat-card class="landing-ext">
-  <div class="landing-ext-area">
-    <div class="landng-ext-header">
-      <div class="landng-welcome-title">Welcome <br>to Comparrot!</div>
+<fury-page
+  [fxLayoutGap]="'16px'"
+  class="home"
+  fxLayout="column"
+>
+  <ngx-spinner
+    class="ngx-spinner"
+    [fullScreen]="false"
+    type="square-spin"
+    size="medium"
+    bdColor="rgba(100,149,237,0.8)"
+    color="white">
+    <p class="loading">Loading Products...</p>
+  </ngx-spinner>
+  <div
+    *ngIf="showResult"
+    [fxLayoutGap]="'16px'"
+    fxFlex="noshrink"
+    fxLayout="column"
+    fxLayout.gt-lg="row"
+  >
+    <div *ngIf="!products || !products.length; else productList">
+      <mat-card *ngIf="!products" class="landing-ext">
+        <div class="landing-ext-area">
+          <div class="landng-ext-header">
+            <div class="landng-welcome-title">Welcome <br>to Comparrot!</div>
+          </div>
+          <div class="landng-content-area">
+            <p>Look for the blue &nbsp; <img src=".\assets\img\icons\ext-active.png" alt="Comparrot logo"> &nbsp; to save</p>
+        
+            <mat-divider></mat-divider>
+            
+            <p><img src=".\assets\img\icons\ext-active.png" alt="Comparrot logo"> — you’re on a site where Comparrot automatically finds the cheapest price.</p>
+            <p><img src=".\assets\img\icons\ext-inactive.png" alt="Comparrot logo"> — you're on a site that is unsupported.</p>
+          </div>
+        </div>
+      </mat-card>
+      <mat-card *ngIf="products" class="congrats-area">
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px">
+          <h6>Congrats! You found the best price!</h6>
+          <img src="/assets/img/icons/icon-congrats.svg" />
+        </div>
+      </mat-card>
     </div>
-    <div class="landng-content-area">
-      <p>Look for the blue &nbsp; <img src=".\assets\img\icons\ext-active.png" alt="Comparrot logo"> &nbsp; to save</p>
-  
-      <mat-divider></mat-divider>
-      
-      <p><img src=".\assets\img\icons\ext-active.png" alt="Comparrot logo"> — you’re on a site where Comparrot automatically finds the cheapest price.</p>
-      <p><img src=".\assets\img\icons\ext-inactive.png" alt="Comparrot logo"> — you're on a site that is unsupported.</p>
-    </div>
+    <ng-template #productList>
+      <div>
+        <div
+          fxLayout.xs="column"
+          fxLayout="row wrap"
+        >
+          <mat-card
+            class="product"
+            *ngFor="
+              let product of products
+            "
+            (click)="onProductClick($event, product)"
+          >
+            <div class="offer__product-container">
+              <img
+                class="offer__img"
+                *ngIf="product.image"
+                [src]="product.image"
+                [alt]="product.title"
+              />
+              <span
+                mat-icon-button
+                class="offer__product-delete"
+                (click)="onDeleteClick(product)"
+              >
+                <mat-icon>highlight_off</mat-icon>
+              </span>
+            </div>
+            <mat-card-title
+              class="offer__title"
+              matTooltip="{{ product.title }}"
+              [matTooltipPosition]="'above'"
+            >
+              {{ product.title }}
+            </mat-card-title>
+            <mat-card-content class="offer__content">
+              <div class="offer__price-container">
+                <span class="offer__price">
+                  ${{ product.price }}
+                </span>
+              </div>
+              <a
+                href="{{ product.url }}"
+                target="_blank"
+                class="offer__buy-button"
+                mat-raised-button
+                color="primary"
+              >
+                Buy from {{product.retailer}}
+              </a>
+            </mat-card-content>
+            <mat-card-actions
+              align="end"
+              class="offer__actions"
+            >
+              <button 
+                mat-button 
+                class="offer__actions-button"
+                (click)="onShareClick($event, product)"
+              >
+                <mat-icon>share</mat-icon>
+                Share
+              </button>
+              <button
+                mat-button
+                class="offer__actions-button"
+                (click)="toggleAddToWishlist($event, product)"
+              >
+                <mat-icon>{{
+                  userContext && userContext.wishlist && userContext.wishlist.includes(product.sku)
+                    ? 'favorite'
+                    : 'favorite_border'
+                }}</mat-icon>
+                Wishlist
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </div>
+    </ng-template>
   </div>
-</mat-card>
+</fury-page>

@@ -10,9 +10,17 @@ export const HideIframe = 'hide-iframe';
 export const ChangeIframeStyle = 'change-iframe-style';
 export const AddClass = 'add-class';
 export const RemoveClass = 'remove-class';
-export const ToggleShowIframe = 'toggle-show-iframe';
 export const StartSpinExtensionIcon = 'start-spin-extension-icon';
 export const StopSpinExtensionIcon = 'stop-spin-extension-icon';
+export const ExtensionHomeLoaded = 'extension-home-loaded';
+export const ExtensionLoaded = 'extension-loaded';
+export const GetProductURL = 'get-product-url';
+
+export const SiteURL = 'https://joincomparrot.com';
+export const PathToSiteSettings = `${SiteURL}/settings`;
+export const PathToSiteTermsOfService = `${SiteURL}/terms`;
+export const PathToSitePrivacyPolicy = `${SiteURL}/privacy`;
+export const BaseAmazonURL = 'https://www.amazon.com/exec/obidos/ASIN/';
 
 export const GoogleXPaths = {
   g_prod_url:
@@ -46,4 +54,11 @@ export const GoogleXPaths = {
     "//tr[@class='sh-osd__offer-row']//td[contains(text(),'Total price')]/following-sibling::*",
   order_confirmation_xpath:
     "count(//*[text()[contains(.,'Your order has been placed') or contains(.,'Thank you for placing your order') or contains(.,'Order complete') or contains(.,'Thank you for ordering') or contains(.,'Thanks for ordering from') or contains(.,'Thank you for your order') or contains(.,'Order receipt') or contains(.,'Purchase complete') or contains(.,'Thanks for your purchase') or contains(.,'Thank you for your purchase') or contains(.,'Your order has been placed') or contains(.,'Your Order Has Been Placed') or contains(.,'Thank You For Placing Your Order') or contains(.,'Order Complete') or contains(.,'Thank You For Ordering') or contains(.,'Thanks For Ordering From') or contains(.,'Thank You For Your Order') or contains(.,'Order Receipt') or contains(.,'Purchase Complete') or contains(.,'Thanks For Your Purchase') or contains(.,'Thank You For Your Purchase') or contains(.,'Your Order Has Been Placed') or contains(.,'your order has been placed') or contains(.,'thank you for placing your order') or contains(.,'order complete') or contains(.,'thank you for ordering') or contains(.,'thanks for ordering from') or contains(.,'thank you for your order') or contains(.,'order receipt') or contains(.,'purchase complete') or contains(.,'thanks for your purchase') or contains(.,'thank you for your purchase') or contains(.,'your order has been placed')]])",
+  a_search_url: "https://www.amazon.com/gp/aw/s/ref=is_s_?ie=UTF8&k=qqqqq",
+  a_asin_xpath: "//span[@data-component-type='s-search-results']//div[@data-asin][.//a[contains(@class, 'a-link-normal a-text-normal') and not(contains(@href,'slredirect'))]][1]/@data-asin",
+  a_price_xpath: "concat(//span[@data-component-type='s-search-results']//div[@data-asin][.//a[contains(@class, 'a-link-normal a-text-normal') and not(contains(@href,'slredirect'))]][1]//span[@class='a-price-whole'],//span[@data-component-type='s-search-results']//div[@data-asin][.//a[contains(@class, 'a-link-normal a-text-normal') and not(contains(@href,'slredirect'))]][1]//span[@class='a-price-fraction'])",
+  a_prime_xpath: "//span[@data-component-type='s-search-results']//div[@data-asin][.//a[contains(@class, 'a-link-normal a-text-normal') and not(contains(@href,'slredirect'))]][1]//i[@aria-label='Amazon Prime']/@aria-label",
+  a_ship_xpath: "//span[@data-component-type='s-search-results']//div[@data-asin][.//a[contains(@class, 'a-link-normal a-text-normal') and not(contains(@href,'slredirect'))]][1]//span[contains(text(), 'Shipping') or contains(text(), 'shipping') or contains(text(), 'FREE')]",
+  a_title_xpath: "//span[@data-component-type='s-search-results']//div[@data-asin][.//a[contains(@class, 'a-link-normal a-text-normal') and not(contains(@href,'slredirect'))]][1]//span[contains(@class,'a-text-normal')]",
+  a_image_xpath: "//div[@id='imgTagWrapperId']/img/@src",
 };

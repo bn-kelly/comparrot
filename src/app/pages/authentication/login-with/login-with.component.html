@@ -25,7 +25,7 @@
           Return
       </button>
       <div fxFlex="auto" fxLayout="column">
-        <h4>Login to Comparrot</h4>
+        <h4>Log in to Comparrot</h4>
       </div>
 
       <mat-form-field fxFlex="grow">
@@ -58,6 +58,7 @@
           mat-icon-button
           matSuffix
           matTooltip="Toggle Visibility"
+          (click)="toggleVisibility()"
         >
           <mat-icon *ngIf="visible">visibility</mat-icon>
           <mat-icon *ngIf="!visible">visibility_off</mat-icon>

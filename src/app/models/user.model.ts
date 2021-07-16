@@ -4,7 +4,6 @@ export interface User {
   firstName?: string;
   lastName?: string;
   email?: string;
-  emailVerified?: boolean;
   photoURL?: string;
   extension?: {
     show: boolean;
@@ -12,6 +11,7 @@ export interface User {
   };
   uid: string;
   isAnonymous: boolean;
+  isFirstSignIn: boolean;
   isAdmin?: boolean;
   emailAlerts?: any;
 }

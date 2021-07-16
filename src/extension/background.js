@@ -67,6 +67,23 @@ const syncRetailers = () => {
     });
 };
 
+const logError = (message) => {
+  message = 'Type: Extension <br>' + message;
+
+  fetch(`${BaseUrl}/logError`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ message }),
+  })
+  .then(response => response.json())
+  .then(async data => {
+    console.log('logError', data);
+  });
+};
+
 const onBrowserActionClicked = tab => {
   chrome.tabs.sendMessage(tab.id, {
     action: ToggleShowIframe,
@@ -75,12 +92,12 @@ const onBrowserActionClicked = tab => {
 
 const onCommand = command => {
   switch (command) {
-    case 'show-iframe':
+    case ShowIframe:
       chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         const id = tabs && tabs[0] && tabs[0].id;
         if (id) {
           chrome.tabs.sendMessage(id, {
-            action: command,
+            action: ShowIframe,
           });
         }
       });
@@ -91,11 +108,13 @@ const onCommand = command => {
   }
 };
 
-const onInstalled = () => {
-  chrome.tabs.create({
-    url: WelcomeUrl,
-    active: true,
-  });
+const onInstalled = (details) => {
+  if (details.reason === 'install') {
+    chrome.tabs.create({
+      url: WelcomeUrl,
+      active: true,
+    });
+  }
   return false;
 };
 
@@ -127,6 +146,13 @@ const onMessageReceived = async (message, sender, sendResponse) => {
   } else if (message.action === StopSpinExtensionIcon && spinIcon) {
     spinIcon = false;
     chrome.browserAction.setIcon({ path: 'assets/img/icons/extension-active-128.png' });
+  } else if (message.action === LogError && message.data) {
+    logError(message.data);
+  } else if (message.action === OpenDemoProduct && message.data) {
+    chrome.tabs.create({
+      url: message.data,
+      active: false,
+    });
   }
 }
 

@@ -134,9 +134,8 @@ export class AuthService {
           ...credential.user,
           firstName,
           lastName,
-        });
-        this.sendVerificationMail();
-        this.router.navigate(['/verify-email']);
+        }, true);
+        this.router.navigate(['/']);
       })
       .catch(error => this.handleError(error));
   }
@@ -148,33 +147,18 @@ export class AuthService {
         if (!result || !result.user) {
           return;
         }
-        if (result.user.emailVerified) {
-          window.localStorage.setItem('uid', result.user.uid);
-          this.message.sendMessageToTab(
-            {
-              action: SiteForceLogin,
-              uid: result.user.uid,
-            }
-          );
+        window.localStorage.setItem('uid', result.user.uid);
+        this.message.postMessage(
+          SiteForceLogin,
+          {
+            uid: result.user.uid,
+          }
+        );
 
-          this.notify.update('Welcome back!', 'success');
-          this.router.navigate(['/']);
-        } else {
-          this.sendVerificationMail();
-          this.notify.update(
-            'Please validate your email address. Kindly check your inbox.',
-            'error',
-          );
-          this.router.navigate(['/verify-email']);
-        }
+        this.notify.update('Welcome back!', 'success');
+        this.router.navigate(['/']);
       })
       .catch(error => this.handleError(error));
-  }
-
-  async sendVerificationMail() {
-    if (!this.currentUser.emailVerified) {
-      return (await this.afAuth.currentUser).sendEmailVerification();
-    }
   }
 
   resetPassword(email: string) {
@@ -186,10 +170,6 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return this.authState !== null && this.currentUser && !this.currentUser.isAnonymous;
-  }
-
-  isEmailVerified(): boolean {
-    return this.isAuthenticated ? this.authState.emailVerified : false;
   }
 
   signOut() {
@@ -241,7 +221,7 @@ export class AuthService {
     return this.afs.collection('user').doc(uid).get().toPromise();
   }
 
-  public updateUserData(user: Credential) {
+  public updateUserData(user: Credential, isFirstSignIn = false) {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(
       `user/${user.uid}`,
     );
@@ -255,7 +235,7 @@ export class AuthService {
       lastName: user.lastName || '',
       photoURL: user.photoURL || '',
       isAnonymous: user.isAnonymous,
-      emailVerified: user.emailVerified || false,
+      isFirstSignIn,
       extension: {
         show:
           user.extension && user.extension.show ? user.extension.show : false,

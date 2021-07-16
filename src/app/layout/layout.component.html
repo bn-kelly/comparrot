@@ -67,19 +67,9 @@
   <mat-divider class="toolbar-divider"></mat-divider>
 
   <div fxLayout="row" class="toolbar-buttons">
-    <button mat-button [routerLink]="'/home'" [queryParams]="{tab: 'home'}" class="toolbar-button">
-      <img src="assets/img/icons/icon-home.svg" />
-      <span class="button-text">Home</span>
-    </button>
-    
-    <button mat-button [routerLink]="'/deals'" [queryParams]="{tab: 'deals'}" class="toolbar-button">
-      <img src="assets/img/icons/icon-store.svg" />
-      <span class="button-text">Deals</span>
-    </button>
-
-    <button mat-button [routerLink]="'/wishlist'" [queryParams]="{tab: 'wishlist'}" class="toolbar-button">
-      <img src="assets/img/icons/icon-heart.svg" />
-      <span class="button-text">Liked</span>
+    <button mat-button *ngFor="let btn of toolbarButtons" [routerLink]="btn.url" class="toolbar-button">
+      <img [src]="'assets/img/icons/' + btn.icon + (btn.selected ? '-filled' : '') + '.svg'" />
+      <span class="button-text">{{btn.title}}</span>
     </button>
   </div>
   </fury-toolbar>

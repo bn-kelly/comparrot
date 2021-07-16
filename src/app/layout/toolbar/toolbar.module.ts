@@ -15,6 +15,7 @@ import { ToolbarSearchComponent } from './toolbar-search/toolbar-search.componen
 import { ToolbarSidenavMobileToggleComponent } from './toolbar-sidenav-mobile-toggle/toolbar-sidenav-mobile-toggle.component';
 import { ToolbarUserComponent } from './toolbar-user/toolbar-user.component';
 import { ToolbarComponent } from './toolbar.component';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { ToolbarComponent } from './toolbar.component';
     FormsModule,
     ClickOutsideModule,
     FuryCardModule,
+    PipesModule
   ],
   declarations: [
     ToolbarComponent,

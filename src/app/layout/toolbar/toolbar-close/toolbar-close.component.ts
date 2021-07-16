@@ -17,10 +17,6 @@ export class ToolbarCloseComponent {
       return;
     }
 
-    this.message.sendMessageToTab(
-      {
-        action: HideIframe
-      }
-    );
+    this.message.postMessage(HideIframe);
   }
 }

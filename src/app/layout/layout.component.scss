@@ -10,12 +10,24 @@
     overflow: hidden;
     background: linear-gradient(113.05deg, #6366F1 -4.13%, #38BDF8 102.35%);
     border-radius: 12px;
-  
   }
   
   .content {
     overflow-x: hidden;
     overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: white;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #7BA6F7;
+      border: 0px;
+    }
   
     &.scroll-disabled {
       overflow: hidden;

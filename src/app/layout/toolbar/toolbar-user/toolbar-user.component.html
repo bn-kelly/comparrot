@@ -1,50 +1,28 @@
-<div class="toolbar-user" (furyClickOutside)="onClickOutside()" fxFlex="grow">
+<div class="toolbar-user" fxFlex="grow">
   <button
     class="button"
     mat-button
-    (click)="toggleDropdown()"
-    [class.open]="isOpen"
+    (click)="goToAccount()"
     fxFlex="grow"
   >
     <span fxLayout="row" fxLayoutAlign="start center">
-      <img
-        class="avatar"
-        src="{{ user.photoURL || '../../../assets/img/default-user.jpg' }}"
-      />
+      <ng-container *ngIf="user.photoURL as avatar; else showInitials">
+        <img [src]="avatar" class="avatar" />
+      </ng-container>
+      
+      <!-- Display Name initials -->
+      <ng-template #showInitials>
+        <div class="avatar" *ngIf="user.displayName; else showDefaultAvatar">
+          {{user.displayName | nameInitials}}
+        </div>
+
+        <!-- Display Default avatar -->
+        <ng-template #showDefaultAvatar>
+          <img src="assets/img/default-user.jpg" class="avatar" />
+        </ng-template>
+      </ng-template>
       <span class="name" fxHide fxShow.gt-sm>{{ userName }}</span>
       <mat-icon class="icon" fxHide fxShow.gt-sm>keyboard_arrow_down</mat-icon>
     </span>
   </button>
-
-  <div class="dropdown" [class.open]="isOpen">
-    <div class="content">
-      <div class="list">
-        <div
-          *ngIf="isLoggedIn"
-          (click)="goToAccount()"
-          class="list-item"
-          matRipple
-        >
-          <mat-icon class="list-item-icon">account_circle</mat-icon>
-          <span>Account</span>
-        </div>
-
-        <div
-          *ngIf="!isLoggedIn"
-          class="list-item"
-          matRipple
-          (click)="goToLogin()"
-        >
-          <mat-icon class="list-item-icon">how_to_reg</mat-icon>
-          <span>Login</span>
-        </div>
-        
-        <mat-divider></mat-divider>
-        <div *ngIf="isLoggedIn" class="list-item" matRipple (click)="signOut()">
-          <mat-icon class="list-item-icon">exit_to_app</mat-icon>
-          <span>Logout</span>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>

@@ -1,5 +1,5 @@
 import { filter, map, startWith } from 'rxjs/operators';
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewEncapsulation } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ThemeService } from '../../@fury/services/theme.service';
 import { checkRouterChildsData } from '../../@fury/utils/check-router-childs-data';
@@ -33,10 +33,26 @@ export class LayoutComponent implements OnInit {
     ),
   );
 
+  toolbarButtons = [{
+    title: 'Home',
+    url: '/home',
+    icon: 'icon-home'
+  }, {
+    title: 'Deals',
+    url: '/deals',
+    icon: 'icon-store'
+  }, {
+    title: 'Liked',
+    url: '/wishlist',
+    icon: 'icon-heart'
+  }]
+
   constructor(
     public auth: AuthService,
     private themeService: ThemeService,
     private router: Router,
+    private renderer: Renderer2,
+    private elementRef: ElementRef
   ) {}
 
   ngOnInit() {
@@ -58,5 +74,26 @@ export class LayoutComponent implements OnInit {
         });
       }
     });
+
+    this.initSelection(this.router.url);
+
+    this.router.events.pipe(
+      filter<NavigationEnd>(event => event instanceof NavigationEnd),
+    ).subscribe((evt) => {
+      this.initSelection(evt.url)
+    });
+  }
+
+  private initSelection(path: string) {
+    path = path === '/' ? '/home' : path;
+
+    this.toolbarButtons.forEach((btn: any) => {
+      btn.selected = path.includes(btn.url);
+    });
+
+    const el = this.elementRef.nativeElement.querySelector('.avatar');
+    if (el) {
+      this.renderer.setStyle(el, 'border',  path.includes('/account') ? 'solid 3px #FFF' : '');
+    }
   }
 }
