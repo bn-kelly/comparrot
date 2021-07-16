@@ -1,3 +1,5 @@
+let isExtensionLoaded = false;
+
 const getIframe = () => document.getElementById(iframeID);
 
 const inIframe = () => {
@@ -156,7 +158,12 @@ const dispatchSiteLogout = () => {
 };
 
 const getUserId = () => {
-  sendMessage(GetUserId);
+  const interval = setInterval(() => {
+    if (isExtensionLoaded) {
+      postMessage(GetUserId);
+      clearInterval(interval);
+    }
+  }, 50);
 }
 
 /**
@@ -173,7 +180,12 @@ const postMessageToSite = (message, data = null) => {
  * Send a message to chrome extension to set user id
  */
 const setUserId = data => {
-  postMessage(SetUserId, { uid: data.detail });
+  const interval = setInterval(() => {
+    if (isExtensionLoaded) {
+      postMessage(SetUserId, { uid: data.detail });
+      clearInterval(interval);
+    }
+  }, 50);
 };
 
 const openDemoProduct = data => {
@@ -220,6 +232,9 @@ const handleMessage = (msg, sender, sendResponse) => {
     case ExtensionHomeLoaded:
       postMessage(GetProductURL, { productUrl: location.href });
       break;
+
+    case ExtensionLoaded:
+      isExtensionLoaded = true;
 
     default:
       break;
@@ -295,11 +310,14 @@ const initEvents = () => {
   });
 };
 
+const init = () => {
+  setExtensionInstalled();
+  initEvents();
+}
+
 window.onload = () => {
   if (!location.ancestorOrigins.contains(extensionOrigin) && !inIframe()) {
     addIframe();
-    initEvents();
-    setExtensionInstalled();
 
     // Homedepot prevent injecting iframe
     // Cause of this reason, replace site original iframe with extension iframe
@@ -308,3 +326,5 @@ window.onload = () => {
     }
   }
 }
+
+init();

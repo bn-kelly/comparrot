@@ -21,6 +21,7 @@ const ToggleShowIframe = 'toggle-show-iframe';
 const StartSpinExtensionIcon = 'start-spin-extension-icon';
 const StopSpinExtensionIcon = 'stop-spin-extension-icon';
 const ExtensionHomeLoaded = 'extension-home-loaded';
+const ExtensionLoaded = 'extension-loaded';
 const GetProductURL = 'get-product-url';
 const LogError = 'log-error';
 

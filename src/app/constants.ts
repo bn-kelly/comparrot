@@ -13,6 +13,7 @@ export const RemoveClass = 'remove-class';
 export const StartSpinExtensionIcon = 'start-spin-extension-icon';
 export const StopSpinExtensionIcon = 'stop-spin-extension-icon';
 export const ExtensionHomeLoaded = 'extension-home-loaded';
+export const ExtensionLoaded = 'extension-loaded';
 export const GetProductURL = 'get-product-url';
 
 export const SiteURL = 'https://joincomparrot.com';

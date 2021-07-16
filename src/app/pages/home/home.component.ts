@@ -10,9 +10,8 @@ import { AuthService } from '../../pages/authentication/services/auth.service';
 import { User } from '../../models/user.model';
 import { Product } from '../../models/product.model';
 import { UserContext } from 'src/app/models/user-context.model';
-import { GetUserId, ShowIframe, TryToScrapeData, StartSpinExtensionIcon, StopSpinExtensionIcon, ChangeIframeStyle, AddClass, RemoveClass, ExtensionHomeLoaded, GetProductURL } from '../../constants';
+import { ShowIframe, TryToScrapeData, StartSpinExtensionIcon, StopSpinExtensionIcon, ChangeIframeStyle, AddClass, RemoveClass, ExtensionHomeLoaded, GetProductURL } from '../../constants';
 import { FirebaseService } from '@coturiv/firebase/app';
-import { getSeletedTab } from 'src/app/shared/utils';
 
 @Component({
   selector: 'fury-home',
