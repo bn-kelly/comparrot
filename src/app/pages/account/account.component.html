@@ -29,14 +29,21 @@
           fxLayout="row"
           fxLayoutAlign="space-around center"
         >
-            <img
-              class="user-image"
-              src="{{
-                user.photoURL ||
-                  '../../../assets/img/default-user.jpg'
-              }}"
-              alt=""
-            />
+            <ng-container *ngIf="user.photoURL as avatar; else showInitials">
+              <img [src]="avatar" class="user-image" />
+            </ng-container>
+            
+            <!-- Display Name initials -->
+            <ng-template #showInitials>
+              <div class="user-image" *ngIf="user.displayName; else showDefaultAvatar">
+                {{user.displayName | nameInitials}}
+              </div>
+      
+              <!-- Display Default avatar -->
+              <ng-template #showDefaultAvatar>
+                <img src="assets/img/default-user.jpg" class="user-image" />
+              </ng-template>
+            </ng-template>
 
             <a
               type="button"

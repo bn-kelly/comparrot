@@ -10,6 +10,7 @@ import { AccountRoutingModule } from './account-routing.module';
 import { AccountComponent } from './account.component';
 
 import { TabsModule } from './tabs/tabs.module';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { TabsModule } from './tabs/tabs.module';
     ImageCropperModule,
     MatExpansionModule,
     TabsModule,
+    PipesModule
   ],
   declarations: [AccountComponent],
 })

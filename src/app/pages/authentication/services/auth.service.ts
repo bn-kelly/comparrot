@@ -134,7 +134,7 @@ export class AuthService {
           ...credential.user,
           firstName,
           lastName,
-        });
+        }, true);
         this.router.navigate(['/']);
       })
       .catch(error => this.handleError(error));
@@ -221,7 +221,7 @@ export class AuthService {
     return this.afs.collection('user').doc(uid).get().toPromise();
   }
 
-  public updateUserData(user: Credential) {
+  public updateUserData(user: Credential, isFirstSignIn = false) {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(
       `user/${user.uid}`,
     );
@@ -235,6 +235,7 @@ export class AuthService {
       lastName: user.lastName || '',
       photoURL: user.photoURL || '',
       isAnonymous: user.isAnonymous,
+      isFirstSignIn,
       extension: {
         show:
           user.extension && user.extension.show ? user.extension.show : false,
