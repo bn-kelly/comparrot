@@ -1,4 +1,5 @@
 let isExtensionLoaded = false;
+let lastProductUrl = null;
 
 const getIframe = () => document.getElementById(iframeID);
 
@@ -86,23 +87,38 @@ const changeIframeStyle = (className, type) => {
   }
 }
 
-const tryToScrapeData = (url, retailer) => {
+const tryToScrapeData = async (url, retailer) => {
+  let maxAttempts = 40;
   let product = null;
+  let title = null;
+  let price = null;
+  let image = null;
+  let upc = null;
+  let sku = null;
 
   try {
-    const title = getXPathContent(retailer?.selectors?.product?.title)
+    while (maxAttempts > 0) {
+      title = getXPathContent(retailer?.selectors?.product?.title)
       .trim()
       .replace(/(\r\n|\n|\r)/gm, ' ');
-
-    if (!!title) {
       const priceDivider = ' - ';
       const originalPrice = getXPathContent(retailer?.selectors?.product?.price).trim();
-      const price = originalPrice.includes(priceDivider)
+      price = originalPrice.includes(priceDivider)
         ? getNumberFromString(originalPrice.split(priceDivider)[0])
         : getNumberFromString(originalPrice);
-      const image = getXPathContent(retailer?.selectors?.product?.image);
-      const upc = getXPathContent(retailer?.selectors?.product?.upc).replace(/_~_/g,'');
-      const sku = getXPathContent(retailer?.selectors?.product?.sku).replace(/_~_/g,'');
+      image = getXPathContent(retailer?.selectors?.product?.image);
+      upc = getXPathContent(retailer?.selectors?.product?.upc).replace(/_~_/g,'');
+      sku = getXPathContent(retailer?.selectors?.product?.sku).replace(/_~_/g,'');
+
+      if (!!title && !!price && !!image) {
+        break;
+      }
+
+      maxAttempts--;
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+    if (!!title) {
       product = {
         title,
         upc,
@@ -126,7 +142,7 @@ const tryToScrapeData = (url, retailer) => {
 
     postMessage(TryToScrapeData, { product });
   } catch(e) {
-    console.log('tryToScrapeData:', e);
+    console.log('tryToScrapeData=================', e);
     sendMessage(LogError, `URL: ${url} <br> ${e.message}`);
     postMessage(TryToScrapeData, { product });
   }
@@ -230,7 +246,10 @@ const handleMessage = (msg, sender, sendResponse) => {
       break;
 
     case ExtensionHomeLoaded:
-      postMessage(GetProductURL, { productUrl: location.href });
+      if (lastProductUrl !== location.href) {
+        postMessage(GetProductURL, { productUrl: location.href });
+        lastProductUrl = location.href;
+      }
       break;
 
     case ExtensionLoaded:
@@ -311,13 +330,10 @@ const initEvents = () => {
 };
 
 const init = () => {
-  setExtensionInstalled();
-  initEvents();
-}
-
-window.onload = () => {
   if (!location.ancestorOrigins.contains(extensionOrigin) && !inIframe()) {
     addIframe();
+    setExtensionInstalled();
+    initEvents();
 
     // Homedepot prevent injecting iframe
     // Cause of this reason, replace site original iframe with extension iframe

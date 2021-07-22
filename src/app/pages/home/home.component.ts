@@ -10,7 +10,7 @@ import { AuthService } from '../../pages/authentication/services/auth.service';
 import { User } from '../../models/user.model';
 import { Product } from '../../models/product.model';
 import { UserContext } from 'src/app/models/user-context.model';
-import { ShowIframe, TryToScrapeData, StartSpinExtensionIcon, StopSpinExtensionIcon, ChangeIframeStyle, AddClass, RemoveClass, ExtensionHomeLoaded, GetProductURL } from '../../constants';
+import { ShowIframe, TryToScrapeData, StartSpinExtensionIcon, StopSpinExtensionIcon, ChangeIframeStyle, AddClass, RemoveClass, ExtensionHomeLoaded, GetProductURL, HideIframe } from '../../constants';
 import { FirebaseService } from '@coturiv/firebase/app';
 
 @Component({
@@ -81,10 +81,6 @@ export class HomeComponent implements OnInit {
     await this.firebaseService.set(`user_context/${this.user.uid}`, { savings }, true);
   }
 
-  showExtension() {
-    this.message.postMessage(ShowIframe);
-  }
-
   async signInWithUid() {
     const uid = window.localStorage.getItem('uid');
     await this.auth.signInWithUid(uid);
@@ -138,6 +134,7 @@ export class HomeComponent implements OnInit {
   
       await this.startSpinning();
 
+      this.message.postMessage(HideIframe);
       this.message.postMessage(
         TryToScrapeData,
         {
@@ -175,7 +172,7 @@ export class HomeComponent implements OnInit {
           await this.addSavings(product.sku, product.price - this.products[0].price);
         }
 
-        this.showExtension();
+        this.message.postMessage(ShowIframe);
         await this.stopSpinning();
       });
     });

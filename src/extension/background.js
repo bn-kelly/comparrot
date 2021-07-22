@@ -126,12 +126,19 @@ const onTabsActivated = async () => {
 };
 
 const onTabsUpdated = async (tabId, changeInfo) => {
-  if (changeInfo.url) {
-    const activeTab = await getActiveTab();
-    if (activeTab && activeTab.id === tabId) {
-      setIcon(changeInfo.url);
-    }
+  const activeTab = await getActiveTab();
+  if (activeTab && activeTab.id === tabId) {
+    setIcon(activeTab.url);
   }
+
+  chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+    const id = tabs && tabs[0] && tabs[0].id;
+    if (id) {
+      chrome.tabs.sendMessage(id, {
+        action: ExtensionHomeLoaded,
+      });
+    }
+  });
 };
 
 const onMessageReceived = async (message, sender, sendResponse) => {
