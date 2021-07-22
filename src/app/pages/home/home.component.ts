@@ -132,8 +132,14 @@ export class HomeComponent implements OnInit {
         return;
       }
   
+      this.message.postMessage(
+        ChangeIframeStyle,
+        {
+          class: 'notification',
+          type: RemoveClass,
+        }
+      );
       await this.startSpinning();
-
       this.message.postMessage(
         TryToScrapeData,
         {
