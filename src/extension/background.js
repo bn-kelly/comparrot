@@ -142,7 +142,6 @@ const onTabsUpdated = async (tabId, changeInfo) => {
 };
 
 const onMessageReceived = async (message, sender, sendResponse) => {
-  console.log('message:', message);
   if (message.action === StartSpinExtensionIcon && !spinIcon) {
     let index = 0;
     spinIcon = true;
