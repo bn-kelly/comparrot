@@ -245,15 +245,21 @@ const handleMessage = (msg, sender, sendResponse) => {
       dispatchSiteLogout();
       break;
 
-    case ExtensionHomeLoaded:
+    case TabUpdated:
       if (lastProductUrl !== location.href) {
         postMessage(GetProductURL, { productUrl: location.href });
         lastProductUrl = location.href;
       }
       break;
 
+    case ExtensionHomeLoaded:
+      lastProductUrl = location.href;
+      postMessage(GetProductURL, { productUrl: location.href });
+      break;
+
     case ExtensionLoaded:
       isExtensionLoaded = true;
+      break;
 
     default:
       break;

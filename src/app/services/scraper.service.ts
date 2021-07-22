@@ -108,7 +108,7 @@ export class ScraperService {
       for (let i = 0; i < arrRetailers.length; i++) {
         const url = `https://www.google.com${arrUrls[i]}`;
         const title = arrTitles[i];
-        const price = getNumberFromString(clean(arrPrices[i])).toFixed(2);
+        const price = Number(getNumberFromString(clean(arrPrices[i])).toFixed(2));
         const retailer = clean(arrRetailers[i]);
 
         data.push({
@@ -207,7 +207,7 @@ export class ScraperService {
 
     for (let i = 0; i < arrRetailers.length; i++) {
       const url = `https://www.google.com${extractGUrl(arrUrls[i])}`;
-      const price = getNumberFromString(clean(arrPrices[i])).toFixed(2);
+      const price = Number(getNumberFromString(clean(arrPrices[i])).toFixed(2));
       const retailer = clean(arrRetailers[i]);
 
       data.push({
@@ -242,10 +242,10 @@ export class ScraperService {
     const doc = await this.getDocFromUrl(searchUrl);
 
     const url = BaseAmazonURL + getXPathString(doc, GoogleXPaths.a_asin_xpath);
-    const price = getXPathString(doc, GoogleXPaths.a_price_xpath);
+    const price = Number(getXPathString(doc, GoogleXPaths.a_price_xpath));
     const title = getXPathString(doc, GoogleXPaths.a_title_xpath);
 
-    if (url.length > BaseAmazonURL.length && price !== '') {
+    if (url.length > BaseAmazonURL.length && price !== 0) {
       return {
         url,
         title,

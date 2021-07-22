@@ -135,7 +135,7 @@ const onTabsUpdated = async (tabId, changeInfo) => {
     const id = tabs && tabs[0] && tabs[0].id;
     if (id) {
       chrome.tabs.sendMessage(id, {
-        action: ExtensionHomeLoaded,
+        action: TabUpdated,
       });
     }
   });

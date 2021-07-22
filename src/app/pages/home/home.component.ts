@@ -134,7 +134,6 @@ export class HomeComponent implements OnInit {
   
       await this.startSpinning();
 
-      this.message.postMessage(HideIframe);
       this.message.postMessage(
         TryToScrapeData,
         {
