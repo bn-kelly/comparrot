@@ -88,7 +88,7 @@ const changeIframeStyle = (className, type) => {
 }
 
 const tryToScrapeData = async (url, retailer) => {
-  let maxAttempts = 40;
+  let maxAttempts = 15;
   let product = null;
   let title = null;
   let price = null;
