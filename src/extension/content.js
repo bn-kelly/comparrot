@@ -110,7 +110,7 @@ const tryToScrapeData = async (url, retailer) => {
       upc = getXPathContent(retailer?.selectors?.product?.upc).replace(/_~_/g,'');
       sku = getXPathContent(retailer?.selectors?.product?.sku).replace(/_~_/g,'');
 
-      if (!!title && !!price && !!image) {
+      if (!!title && !!price) {
         break;
       }
 
@@ -232,6 +232,7 @@ const handleMessage = (msg, sender, sendResponse) => {
 
     case ChangeIframeStyle:
       changeIframeStyle(msg.data.class, msg.data.type);
+      break;
 
     case TryToScrapeData:
       tryToScrapeData(msg.data.url, msg.data.retailer);

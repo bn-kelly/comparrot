@@ -120,34 +120,6 @@ export class HomeComponent implements OnInit {
 
     const retailers: any[] = await this.storage.getValue('retailers');
 
-    this.message.postMessage(ExtensionHomeLoaded);
-    this.message.handleMessage(GetProductURL, async ({ productUrl }) => {
-      console.log('GetProductURL', productUrl);
-      const retailer = retailers.find(r => {
-        return productUrl.includes(r.url);
-      });
-      
-      if (!retailer) {
-        this.showResult = true;
-        return;
-      }
-  
-      this.message.postMessage(
-        ChangeIframeStyle,
-        {
-          class: 'notification',
-          type: RemoveClass,
-        }
-      );
-      await this.startSpinning();
-      this.message.postMessage(
-        TryToScrapeData,
-        {
-          url: productUrl,
-          retailer,
-        }
-      );
-    });
     this.message.handleMessage(TryToScrapeData, async ({ product }) => {
       console.log('Product:', product);
       if (!product) {
@@ -181,6 +153,34 @@ export class HomeComponent implements OnInit {
         await this.stopSpinning();
       });
     });
+    this.message.handleMessage(GetProductURL, async ({ productUrl }) => {
+      console.log('GetProductURL', productUrl);
+      const retailer = retailers.find(r => {
+        return productUrl.includes(r.url);
+      });
+      
+      if (!retailer) {
+        this.showResult = true;
+        return;
+      }
+  
+      this.message.postMessage(
+        ChangeIframeStyle,
+        {
+          class: 'notification',
+          type: RemoveClass,
+        }
+      );
+      await this.startSpinning();
+      this.message.postMessage(
+        TryToScrapeData,
+        {
+          url: productUrl,
+          retailer,
+        }
+      );
+    });
+    this.message.postMessage(ExtensionHomeLoaded);
   }
 
   ngOnDestroy() {
