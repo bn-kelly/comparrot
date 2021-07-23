@@ -123,7 +123,6 @@ export class HomeComponent implements OnInit {
     this.message.handleMessage(TryToScrapeData, async ({ product }) => {
       console.log('Product:', product);
       if (!product) {
-        await this.stopSpinning();
         return;
       }
 
@@ -131,6 +130,7 @@ export class HomeComponent implements OnInit {
         product.sku = sha1(`${product.title}${product.retailer}`);
       }
 
+      await this.startSpinning();
       this.ngZone.run(async () => {
         // Todo: We need to store a product to firebase before scraping
         this.products = await this.scraper.getProducts(product);
@@ -171,7 +171,6 @@ export class HomeComponent implements OnInit {
           type: RemoveClass,
         }
       );
-      await this.startSpinning();
       this.message.postMessage(
         TryToScrapeData,
         {
