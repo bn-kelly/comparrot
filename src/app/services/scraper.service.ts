@@ -135,32 +135,6 @@ export class ScraperService {
       return p.price < product.price;
     });
 
-    for (let i = 0; i < data.length; i++) {
-      if (!validURL(data[i].url)) {
-        continue;
-      }
-
-      try {
-        const doc = await this.getDocFromUrl(data[i].url);
-        const retailers = await this.storage.getValue('retailers');
-        const retailer = retailers.find(r => {
-          return data[i].retailer === r.name;
-        });
-
-        if (!retailer) {
-          continue;
-        }
-
-        const image = getXPathContent(doc, retailer.selectors?.product?.image);
-        const sku = getXPathContent(doc, retailer.selectors?.product?.sku);
-        
-        data[i].image = image || data[i].image;
-        data[i].sku = sku || data[i].sku;
-      } catch (_) {
-        continue;
-      }
-    }
-
     return data;
   }
 

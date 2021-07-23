@@ -1,6 +1,6 @@
 {
   "name": "Comparrot",
-  "version": "2.8.5",
+  "version": "2.8.6",
   "description": "Comparrot automatically finds the cheapest prices in real-time as you shop!",
   "manifest_version": 2,
   "content_security_policy": "script-src 'self' https://apis.google.com; object-src 'self'",
