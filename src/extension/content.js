@@ -301,7 +301,11 @@ const replaceIframe = () => {
     if (iframe) {
       iframe.id = iframeID;
       iframe.src = chrome.runtime.getURL('index.html');
-      observer.disconnect();
+    }
+
+    const extensionIframe = getIframe();
+    if (extensionIframe.getAttribute("src") !== chrome.runtime.getURL('index.html')) {
+      extensionIframe.src = chrome.runtime.getURL('index.html');
     }
   });
   observer.observe(document.body, {
