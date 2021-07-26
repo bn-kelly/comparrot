@@ -33,7 +33,7 @@ export class HomeComponent implements OnInit {
     private message: MessageService,
     private scraper: ScraperService,
     private storage: StorageService,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
   ) {}
 
   onDeleteClick(product: Product) {

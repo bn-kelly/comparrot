@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
+import { FirebaseService } from '@coturiv/firebase/app';
 import sha1 from 'sha1';
 import { environment } from '../../environments/environment';
-import { StorageService } from './storage.service';
 import { BaseAmazonURL, GoogleXPaths } from '../constants';
 import { Product } from '../models/product.model';
 import { 
@@ -12,7 +12,6 @@ import {
   extractGUrl,
   getNumberFromString,
   clean,
-  validURL,
   getXPathContent,
 } from '../shared/utils';
 
@@ -26,12 +25,18 @@ import {
 })
 export class ScraperService {
   private map = new Map<string, any>();
+  private blacklist: any[] = [];
 
   constructor(
-    private storage: StorageService,
     private http: HttpClient,
     private sanitizer: DomSanitizer,
-  ) {}
+    private firebaseService: FirebaseService,
+  ) {
+    this.firebaseService.collection('blacklist').subscribe(data => {
+      this.blacklist = data.map(x => x.name);
+      console.log('blacklist', this.blacklist);
+    });
+  }
 
   async searchGoogle(product: Product): Promise<Product[]> {
     if (!product) {
@@ -41,7 +46,7 @@ export class ScraperService {
     const search = encodeURIComponent(product.upc || product.title);
     const url = `https://www.google.com/search?tbm=shop&tbs=vw:1,price:1,ppr_max:${product.price}&q=${search}`;
     const doc = await this.getDocFromUrl(url);
-    let data = [];
+    let data: Product[] = [];
 
     const noResults = getXPathString(
       doc,
@@ -117,6 +122,7 @@ export class ScraperService {
           price,
           retailer,
           sku: sha1(`${title}${retailer}`),
+          created: Date.now(),
         });
       }
     } else {
@@ -132,7 +138,7 @@ export class ScraperService {
     }
 
     data = data.filter(p => {
-      return p.price < product.price;
+      return p.price < product.price && !this.blacklist.includes(p.retailer);
     });
 
     return data;
@@ -177,7 +183,7 @@ export class ScraperService {
       doc,
       GoogleXPaths.g_step2_image_xpath,
     );
-    const data = [];
+    const data: Product[] = [];
 
     for (let i = 0; i < arrRetailers.length; i++) {
       const url = `https://www.google.com${extractGUrl(arrUrls[i])}`;
@@ -191,6 +197,7 @@ export class ScraperService {
         image,
         retailer,
         sku: sha1(`${title}${retailer}`),
+        created: Date.now()
       });
     }
 
@@ -228,6 +235,7 @@ export class ScraperService {
         image,
         retailer: 'Amazon.com',
         sku: sha1(`${title}Amazon.com`),
+        created: Date.now(),
       }
     }
 
