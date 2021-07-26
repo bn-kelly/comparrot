@@ -130,11 +130,10 @@ const tryToScrapeData = async (url, retailer) => {
         retailer: retailer.name,
       };
 
-      if (!image || !price) {
+      if (!price) {
         sendMessage(LogError,
           `URL: ${url} <br>
           Title: ${title} <br>
-          Image: ${image} <br>
           Price: ${price} <br>`
         );
       }
