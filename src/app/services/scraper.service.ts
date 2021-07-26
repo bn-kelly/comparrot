@@ -218,12 +218,14 @@ export class ScraperService {
     const url = BaseAmazonURL + getXPathString(doc, GoogleXPaths.a_asin_xpath);
     const price = Number(getXPathString(doc, GoogleXPaths.a_price_xpath));
     const title = getXPathString(doc, GoogleXPaths.a_title_xpath);
+    const image = getXPathContent(doc, GoogleXPaths.a_image_xpath);
 
     if (url.length > BaseAmazonURL.length && price !== 0) {
       return {
         url,
         title,
         price,
+        image,
         retailer: 'Amazon.com',
         sku: sha1(`${title}Amazon.com`),
       }

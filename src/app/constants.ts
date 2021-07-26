@@ -60,5 +60,5 @@ export const GoogleXPaths = {
   a_prime_xpath: "//span[@data-component-type='s-search-results']//div[@data-asin][.//a[contains(@class, 'a-link-normal a-text-normal') and not(contains(@href,'slredirect'))]][1]//i[@aria-label='Amazon Prime']/@aria-label",
   a_ship_xpath: "//span[@data-component-type='s-search-results']//div[@data-asin][.//a[contains(@class, 'a-link-normal a-text-normal') and not(contains(@href,'slredirect'))]][1]//span[contains(text(), 'Shipping') or contains(text(), 'shipping') or contains(text(), 'FREE')]",
   a_title_xpath: "//span[@data-component-type='s-search-results']//div[@data-asin][.//a[contains(@class, 'a-link-normal a-text-normal') and not(contains(@href,'slredirect'))]][1]//span[contains(@class,'a-text-normal')]",
-  a_image_xpath: "//div[@id='imgTagWrapperId']/img/@src",
+  a_image_xpath: "//span[@data-component-type='s-search-results']//div[@data-asin][.//a[contains(@class, 'a-link-normal s-no-outline') and not(contains(@href,'slredirect'))]][1]//img[contains(@class,'s-image')]/@src",
 };
