@@ -6,6 +6,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 import { AngularFireFunctionsModule } from '@angular/fire/functions';
 import {
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -48,6 +49,7 @@ import { PendingInterceptorModule } from '../@fury/shared/loading-indicator/pend
     AngularFireAuthModule,
     AngularFireStorageModule,
     AngularFireFunctionsModule,
+    AngularFireAnalyticsModule
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
