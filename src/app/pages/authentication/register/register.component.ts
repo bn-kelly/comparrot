@@ -153,7 +153,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
           '',
           [
             Validators.required,
-            Validators.pattern('^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$'),
             Validators.minLength(8)
           ],
         ]

@@ -86,11 +86,11 @@ $avatar-size-desktop: 300px;
   }
 
   .button-with-caret {
-    height: 48px;
+    height: 40px;
     color: #fff;
     background: transparent;
     box-shadow: none !important;
-    border-radius: 12px;
+    border-radius: 8px;
     border: none;
     font-size: 16px;
     padding: 0;
@@ -100,6 +100,11 @@ $avatar-size-desktop: 300px;
     img {
       float: right;
       right: 0;
+    }
+
+    .mat-button-wrapper {
+      display: flex;
+      justify-content: space-between;
     }
   }
 
