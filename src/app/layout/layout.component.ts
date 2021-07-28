@@ -4,6 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { ThemeService } from '../../@fury/services/theme.service';
 import { checkRouterChildsData } from '../../@fury/utils/check-router-childs-data';
 import { AuthService } from '../pages/authentication/services/auth.service';
+import { AnalyticsService } from '../services/analytics.service';
 
 @Component({
   selector: 'fury-layout',
@@ -52,7 +53,8 @@ export class LayoutComponent implements OnInit {
     private themeService: ThemeService,
     private router: Router,
     private renderer: Renderer2,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private analyticsService: AnalyticsService
   ) {}
 
   ngOnInit() {
@@ -79,8 +81,12 @@ export class LayoutComponent implements OnInit {
 
     this.router.events.pipe(
       filter<NavigationEnd>(event => event instanceof NavigationEnd),
-    ).subscribe((evt) => {
-      this.initSelection(evt.url)
+    ).subscribe(async (evt) => {
+      this.initSelection(evt.url);
+
+      await this.analyticsService.logEvent('page_view', {
+        page: `ext_${evt.url}`
+      })
     });
   }
 

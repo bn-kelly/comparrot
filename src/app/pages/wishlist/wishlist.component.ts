@@ -3,6 +3,7 @@ import { QueryBuilder } from '@coturiv/firebase';
 import { FirebaseService, leftJoin } from '@coturiv/firebase/app';
 import { take } from 'rxjs/operators';
 import { User } from 'src/app/models/user.model';
+import { AnalyticsService } from 'src/app/services/analytics.service';
 import { AuthService } from '../authentication/services/auth.service';
 
 @Component({
@@ -17,11 +18,16 @@ export class WishlistComponent implements OnInit {
   constructor(
     private firebaseService: FirebaseService,
     private auth: AuthService,
+    private analyticsService: AnalyticsService
   ) { }
 
-  onProductClick(event: any, url: string) {
+  async onProductClick(event: any, url: string) {
     event.preventDefault();
     window.chrome.tabs.create({ url });
+
+    await this.analyticsService.logEvent('product_search', {
+      url: url
+    })
   }
 
   async ngOnInit() {
@@ -41,6 +47,10 @@ export class WishlistComponent implements OnInit {
     this.wishlist = this.wishlist.filter(p => p.id !== id);
     const ids = this.wishlist.map(p => p.id);
     await this.firebaseService.set(`user_context/${this.user.uid}`, { wishlist: ids }, true);
+
+    await this.analyticsService.logEvent('product_remove_from_wishlist', {
+      sku: id
+    });
   }
 
 }

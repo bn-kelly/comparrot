@@ -6,7 +6,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
+import { AngularFireAnalyticsModule, APP_NAME, APP_VERSION, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
 import { AngularFireFunctionsModule } from '@angular/fire/functions';
 import {
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -68,6 +68,14 @@ import { PendingInterceptorModule } from '../@fury/shared/loading-indicator/pend
         verticalPosition: 'bottom',
       } as MatSnackBarConfig,
     },
+    ScreenTrackingService,
+    UserTrackingService,
+    {
+      provide: APP_NAME, useValue: 'extension'
+    },
+    {
+      provide: APP_VERSION, useValue: '2.8.0'
+    }
   ],
 })
 export class AppModule {

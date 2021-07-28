@@ -12,6 +12,7 @@ import { Product } from '../../models/product.model';
 import { UserContext } from 'src/app/models/user-context.model';
 import { ShowIframe, TryToScrapeData, StartSpinExtensionIcon, StopSpinExtensionIcon, ChangeIframeStyle, AddClass, RemoveClass, ExtensionHomeLoaded, GetProductURL, HideIframe } from '../../constants';
 import { FirebaseService } from '@coturiv/firebase/app';
+import { AnalyticsService } from 'src/app/services/analytics.service';
 
 @Component({
   selector: 'fury-home',
@@ -34,9 +35,10 @@ export class HomeComponent implements OnInit {
     private scraper: ScraperService,
     private storage: StorageService,
     private firebaseService: FirebaseService,
+    private analyticsService: AnalyticsService
   ) {}
 
-  onDeleteClick(product: Product) {
+  async onDeleteClick(product: Product) {
     this.products = this.products.filter(p => {
       return p.sku !== product.sku;
     });
@@ -44,17 +46,32 @@ export class HomeComponent implements OnInit {
     if (this.products.length === 0) {
       this.products = null;
     }
+
+    await this.analyticsService.logEvent('product_remove', {
+      sku: product.sku,
+      url: product.url
+    });
   }
 
-  onShareClick(event: any, product: Product) {
+  async onShareClick(event: any, product: Product) {
     event?.stopPropagation();
     const url = `mailto:?body=${encodeURIComponent(product.url)}`;
     window.chrome.tabs.create({ url });
+
+    await this.analyticsService.logEvent('product_share', {
+      sku: product.sku,
+      url: product.url
+    });
   }
 
-  onProductClick(event: any, product: Product) {
+  async onProductClick(event: any, product: Product) {
     event.preventDefault();
     window.chrome.tabs.create({ url: product.url });
+
+    await this.analyticsService.logEvent('product_click', {
+      sku: product.sku,
+      url: product.url,
+    })
   }
 
   async toggleAddToWishlist(event: any, product: Product) {
@@ -70,6 +87,11 @@ export class HomeComponent implements OnInit {
 
     await this.firebaseService.set(`product/${product.sku}`, {...product, ...{id: product.sku}}, true);
     await this.firebaseService.set(`user_context/${this.user.uid}`, this.userContext, true);
+
+    await this.analyticsService.logEvent('product_add_to_wishlist', {
+      sku: product.sku,
+      url: product.url
+    });
   }
 
   async addSavings(sku: string, amount: number) {
@@ -79,6 +101,11 @@ export class HomeComponent implements OnInit {
     savings[sku] = amount;
 
     await this.firebaseService.set(`user_context/${this.user.uid}`, { savings }, true);
+
+    await this.analyticsService.logEvent('product_savings', {
+      sku,
+      amount
+    });
   }
 
   async signInWithUid() {
