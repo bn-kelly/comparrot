@@ -137,6 +137,7 @@ export class AuthService {
           firstName,
           lastName,
         }, true);
+        window.localStorage.setItem('uid', credential.user.uid);
         this.router.navigate(['/']);
       })
       .catch(error => this.handleError(error));
