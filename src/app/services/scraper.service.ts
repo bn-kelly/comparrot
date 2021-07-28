@@ -34,7 +34,6 @@ export class ScraperService {
   ) {
     this.firebaseService.collection('blacklist').subscribe(data => {
       this.blacklist = data.map(x => x.name);
-      console.log('blacklist', this.blacklist);
     });
   }
 
