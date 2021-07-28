@@ -110,7 +110,10 @@ const tryToScrapeData = async (url, retailer) => {
       upc = getXPathContent(retailer?.selectors?.product?.upc).replace(/_~_/g,'');
       sku = getXPathContent(retailer?.selectors?.product?.sku).replace(/_~_/g,'');
 
-      if (!!title && !!price) {
+      if (!!title
+        && !!price
+        && (!retailer?.selectors?.product?.upc
+          || (retailer?.selectors?.product?.upc && !!upc))) {
         break;
       }
 
