@@ -15,6 +15,7 @@ import { MessageService } from '../../../services/message.service';
 import { SiteForceLogin } from '../../../constants';
 import { User } from '../../../models/user.model';
 import { Credential } from '../../../models/credential.model';
+import { AnalyticsService } from 'src/app/services/analytics.service';
 
 @Injectable()
 export class AuthService {
@@ -32,6 +33,7 @@ export class AuthService {
     private http: HttpClient,
     private message: MessageService,
     private ngZone: NgZone,
+    private analyticsService: AnalyticsService
   ) {
     this.user = this.afAuth.authState.pipe(
       switchMap(user => {
@@ -221,10 +223,14 @@ export class AuthService {
     return this.afs.collection('user').doc(uid).get().toPromise();
   }
 
-  public updateUserData(user: Credential, isFirstSignIn = false) {
+  public async updateUserData(user: Credential, isFirstSignIn = false) {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(
       `user/${user.uid}`,
     );
+
+    if (isFirstSignIn) {
+      await this.analyticsService.logEvent('new_user', { user: user.uid });
+    }
 
     const data: User = {
       uid: user.uid,
