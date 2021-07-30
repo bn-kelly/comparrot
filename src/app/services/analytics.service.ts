@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAnalytics } from '@angular/fire/analytics';
+
+declare const gtag: any;
 
 @Injectable({
   providedIn: 'root'
 })
 export class AnalyticsService {
-  constructor(private afAnalytics: AngularFireAnalytics) {}
+  constructor() {}
 
   logEvent(event: AnalyticsEvent, eventParams?: { [key: string]: any }) {
-    return this.afAnalytics.logEvent(event, eventParams);
+    try {
+      gtag('event', event, eventParams);
+    } catch(e) {}
   }
 }
 
