@@ -8,15 +8,14 @@ declare const ga: any;
 export class AnalyticsService {
   constructor() {}
 
-  logEvent(event: EventType, eventParams?: { [key: string]: any }) {
+  logEvent(category: CategoryType, event: EventType, eventParams?: { [key: string]: any }) {
     try {
       ga('send', {
         hitType: 'event',
-        eventCategory: 'Event',
+        eventCategory: category,
         eventAction: event,
         ...eventParams,
       });
-      console.log('event', eventParams);
     } catch(e) {}
   }
 
@@ -26,10 +25,13 @@ export class AnalyticsService {
         hitType: 'pageview',
         page: url,
       });
-      console.log('pageview', url);
     } catch(e) {}
   }
 }
+
+export type CategoryType
+   = 'User' 
+   | 'Product';
 
 export type EventType
    = 'new_user' 
