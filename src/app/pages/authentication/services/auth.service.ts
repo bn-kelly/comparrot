@@ -229,6 +229,10 @@ export class AuthService {
       `user/${user.uid}`,
     );
 
+    if (user.isAnonymous) {
+      return;
+    }
+
     if (isFirstSignIn) {
       await this.analyticsService.logEvent('User', 'new_user', { user: user.uid });
     }
