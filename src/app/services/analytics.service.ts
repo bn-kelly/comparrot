@@ -48,5 +48,5 @@ export const analyticsEvents = {
   'product_search': 'Clicked Wishlist Item',
   'product_add_to_wishlist': 'Added Product to Wishlist',
   'product_remove_from_wishlist': 'Removed Product from Wishlist',
-  'product_share': 'Shared Product'
+  'product_share': 'Product shared'
 }
