@@ -49,7 +49,7 @@ import { PendingInterceptorModule } from '../@fury/shared/loading-indicator/pend
     AngularFireAuthModule,
     AngularFireStorageModule,
     AngularFireFunctionsModule,
-    AngularFireAnalyticsModule
+    // AngularFireAnalyticsModule
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
@@ -68,14 +68,14 @@ import { PendingInterceptorModule } from '../@fury/shared/loading-indicator/pend
         verticalPosition: 'bottom',
       } as MatSnackBarConfig,
     },
-    ScreenTrackingService,
-    UserTrackingService,
-    {
-      provide: APP_NAME, useValue: 'extension'
-    },
-    {
-      provide: APP_VERSION, useValue: '2.8.0'
-    }
+    // ScreenTrackingService,
+    // UserTrackingService,
+    // {
+    //   provide: APP_NAME, useValue: 'extension'
+    // },
+    // {
+    //   provide: APP_VERSION, useValue: '2.8.0'
+    // }
   ],
 })
 export class AppModule {

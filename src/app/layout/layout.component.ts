@@ -83,10 +83,7 @@ export class LayoutComponent implements OnInit {
       filter<NavigationEnd>(event => event instanceof NavigationEnd),
     ).subscribe(async (evt) => {
       this.initSelection(evt.url);
-
-      await this.analyticsService.logEvent('page_view', {
-        page: `ext_${evt.url}`
-      })
+      await this.analyticsService.logPageView(evt.url);
     });
   }
 

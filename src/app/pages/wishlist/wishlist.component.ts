@@ -25,7 +25,7 @@ export class WishlistComponent implements OnInit {
     event.preventDefault();
     window.chrome.tabs.create({ url });
 
-    await this.analyticsService.logEvent('product_search', {
+    await this.analyticsService.logEvent('Product', 'product_search', {
       url: url
     })
   }
@@ -48,7 +48,7 @@ export class WishlistComponent implements OnInit {
     const ids = this.wishlist.map(p => p.id);
     await this.firebaseService.set(`user_context/${this.user.uid}`, { wishlist: ids }, true);
 
-    await this.analyticsService.logEvent('product_remove_from_wishlist', {
+    await this.analyticsService.logEvent('Product', 'product_remove_from_wishlist', {
       sku: id
     });
   }

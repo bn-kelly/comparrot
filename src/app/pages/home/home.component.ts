@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit {
       this.products = null;
     }
 
-    await this.analyticsService.logEvent('product_remove', {
+    await this.analyticsService.logEvent('Product', 'product_remove', {
       sku: product.sku,
       url: product.url
     });
@@ -58,7 +58,7 @@ export class HomeComponent implements OnInit {
     const url = `mailto:?body=${encodeURIComponent(product.url)}`;
     window.chrome.tabs.create({ url });
 
-    await this.analyticsService.logEvent('product_share', {
+    await this.analyticsService.logEvent('Product', 'product_share', {
       sku: product.sku,
       url: product.url
     });
@@ -68,7 +68,7 @@ export class HomeComponent implements OnInit {
     event.preventDefault();
     window.chrome.tabs.create({ url: product.url });
 
-    await this.analyticsService.logEvent('product_click', {
+    await this.analyticsService.logEvent('Product', 'product_click', {
       sku: product.sku,
       url: product.url,
     })
@@ -88,7 +88,7 @@ export class HomeComponent implements OnInit {
     await this.firebaseService.set(`product/${product.sku}`, {...product, ...{id: product.sku}}, true);
     await this.firebaseService.set(`user_context/${this.user.uid}`, this.userContext, true);
 
-    await this.analyticsService.logEvent('product_add_to_wishlist', {
+    await this.analyticsService.logEvent('Product', 'product_add_to_wishlist', {
       sku: product.sku,
       url: product.url
     });
@@ -102,7 +102,7 @@ export class HomeComponent implements OnInit {
 
     await this.firebaseService.set(`user_context/${this.user.uid}`, { savings }, true);
 
-    await this.analyticsService.logEvent('product_savings', {
+    await this.analyticsService.logEvent('Product', 'product_savings', {
       sku,
       amount
     });

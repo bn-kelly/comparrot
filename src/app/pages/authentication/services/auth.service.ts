@@ -230,7 +230,7 @@ export class AuthService {
     );
 
     if (isFirstSignIn) {
-      await this.analyticsService.logEvent('new_user', { user: user.uid });
+      await this.analyticsService.logEvent('User', 'new_user', { user: user.uid });
     }
 
     const data: User = {
