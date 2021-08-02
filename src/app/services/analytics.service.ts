@@ -13,7 +13,7 @@ export class AnalyticsService {
       ga('send', {
         hitType: 'event',
         eventCategory: category,
-        eventAction: event,
+        eventAction: analyticsEvents[event] || event,
         ...eventParams,
       });
     } catch(e) {}
@@ -42,3 +42,11 @@ export type EventType
    | 'product_savings'
    | 'product_share'
    | 'product_remove';
+
+export const analyticsEvents = {
+  'product_click': 'Extension Buy Button Click',
+  'product_search': 'Clicked Wishlist Item',
+  'product_add_to_wishlist': 'Added Product to Wishlist',
+  'product_remove_from_wishlist': 'Removed Product from Wishlist',
+  'product_share': 'Shared Product'
+}
