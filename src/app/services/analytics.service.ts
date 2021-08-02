@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-declare const gtag: any;
+declare const ga: any;
 
 @Injectable({
   providedIn: 'root'
@@ -8,16 +8,31 @@ declare const gtag: any;
 export class AnalyticsService {
   constructor() {}
 
-  logEvent(event: AnalyticsEvent, eventParams?: { [key: string]: any }) {
+  logEvent(event: EventType, eventParams?: { [key: string]: any }) {
     try {
-      gtag('event', event, eventParams);
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'Event',
+        eventAction: event,
+        ...eventParams,
+      });
+      console.log('event', eventParams);
+    } catch(e) {}
+  }
+
+  logPageView(url: string) {
+    try {
+      ga('send', {
+        hitType: 'pageview',
+        page: url,
+      });
+      console.log('pageview', url);
     } catch(e) {}
   }
 }
 
-export type AnalyticsEvent
+export type EventType
    = 'new_user' 
-   | 'page_view' 
    | 'product_add_to_wishlist'
    | 'product_remove_from_wishlist'
    | 'product_click'
