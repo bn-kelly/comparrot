@@ -30,7 +30,7 @@ export class AnalyticsService {
 }
 
 export type CategoryType
-   = 'User' 
+   = 'User'
    | 'Product';
 
 export type EventType

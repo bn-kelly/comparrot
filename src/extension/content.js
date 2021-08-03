@@ -297,7 +297,7 @@ const addIframe = () => {
 /**
  * Replace an iframe to show the extension UI
  */
-const replaceIframe = () => {
+const observeIframe = () => {
   const observer = new MutationObserver(() => {
     const iframe = document.querySelector('#minicartIFrame');
     if (iframe) {
@@ -306,10 +306,11 @@ const replaceIframe = () => {
     }
 
     const extensionIframe = getIframe();
-    if (extensionIframe.getAttribute("src") !== chrome.runtime.getURL('index.html')) {
+    if (extensionIframe.src !== chrome.runtime.getURL('index.html')) {
       extensionIframe.src = chrome.runtime.getURL('index.html');
     }
   });
+
   observer.observe(document.body, {
     subtree: true,
     childList: true,
@@ -343,16 +344,14 @@ const initEvents = () => {
 };
 
 const init = () => {
-  if (!location.ancestorOrigins.contains(extensionOrigin) && !inIframe()) {
-    addIframe();
-    setExtensionInstalled();
-    initEvents();
+  addIframe();
+  setExtensionInstalled();
+  initEvents();
 
-    // Homedepot prevent injecting iframe
-    // Cause of this reason, replace site original iframe with extension iframe
-    if (location.href.includes('www.homedepot.com')) {
-      replaceIframe();
-    }
+  // Homedepot prevent injecting iframe
+  // Cause of this reason, replace site original iframe with extension iframe
+  if (location.href.includes('www.homedepot.com')) {
+    observeIframe();
   }
 }
 
