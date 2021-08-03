@@ -20,10 +20,12 @@ export class AnalyticsService {
   }
 
   logPageView(url: string) {
+    url = siteMap[url] ? url : `/${url.split('/')[1]}`;
+
     try {
       ga('send', {
         hitType: 'pageview',
-        page: url,
+        page: siteMap[url],
       });
     } catch(e) {}
   }
@@ -50,3 +52,17 @@ export const analyticsEvents = {
   'product_remove_from_wishlist': 'Removed Product from Wishlist',
   'product_share': 'Product shared'
 }
+
+export const siteMap = {
+  '/': 'Home',
+  '/home': 'Home',
+  '/account': 'Account',
+  '/deals': 'Deals',
+  '/wishlist': 'Wishlist',
+
+  // Authentication Pages
+  '/login': 'Login',
+  '/login-with': 'Login With Email',
+  '/register': 'Registration',
+  '/coming-soon': 'Coming Soon'
+};
