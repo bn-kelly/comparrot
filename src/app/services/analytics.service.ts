@@ -54,7 +54,6 @@ export const analyticsEvents = {
 }
 
 export const siteMap = {
-  '/': 'Home',
   '/home': 'Home',
   '/account': 'Account',
   '/deals': 'Deals',
