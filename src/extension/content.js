@@ -108,7 +108,7 @@ const tryToScrapeData = async (url, retailer) => {
         : getNumberFromString(originalPrice);
       image = getXPathContent(retailer?.selectors?.product?.image);
       upc = getXPathContent(retailer?.selectors?.product?.upc).replace(/_~_/g,'').replace(/ /g,'');
-      upc = /^(?=.*0)[0-9]{12}$/.test(upc) ? upc : '';
+      upc = RegUPC.test(upc) ? upc : '';
       sku = getXPathContent(retailer?.selectors?.product?.sku).replace(/_~_/g,'');
 
       if (!!title

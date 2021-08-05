@@ -26,6 +26,8 @@ const ExtensionLoaded = 'extension-loaded';
 const GetProductURL = 'get-product-url';
 const LogError = 'log-error';
 
+const RegUPC = /^(?=.*0)[0-9]{12}$|^(?=.*0)[0-9]{13}$/;
+
 const extensionOrigin = `chrome-extension://${chrome.runtime.id}`;
 const iframeID = 'extension-iframe';
 const activeClassName = 'active';
