@@ -88,7 +88,7 @@ const changeIframeStyle = (className, type) => {
 }
 
 const tryToScrapeData = async (url, retailer) => {
-  let maxAttempts = 1;
+  let maxAttempts = 5;
   let product = null;
   let title = null;
   let price = null;
@@ -111,6 +111,10 @@ const tryToScrapeData = async (url, retailer) => {
       upc = RegUPC.test(upc) ? upc : '';
       sku = getXPathContent(retailer?.selectors?.product?.sku).replace(/_~_/g,'');
 
+      if (title) {
+        sendMessage(StartSpinExtensionIcon);
+      }
+
       if (!!title
         && !!price
         && (!retailer?.selectors?.product?.upc
@@ -119,7 +123,7 @@ const tryToScrapeData = async (url, retailer) => {
       }
 
       maxAttempts--;
-      // await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
     if (!!title) {
