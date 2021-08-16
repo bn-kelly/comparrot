@@ -127,18 +127,17 @@ const onTabsActivated = async () => {
 
 const onTabsUpdated = async (tabId, changeInfo) => {
   const activeTab = await getActiveTab();
-  if (activeTab && activeTab.id === tabId) {
+  const activeTabId = activeTab ? activeTab.id : null;
+
+  if (activeTab && activeTabId === tabId) {
     setIcon(activeTab.url);
   }
 
-  chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-    const id = tabs && tabs[0] && tabs[0].id;
-    if (id) {
-      chrome.tabs.sendMessage(id, {
-        action: TabUpdated,
-      });
-    }
-  });
+  if (activeTabId) {
+    chrome.tabs.sendMessage(activeTabId, {
+      action: TabUpdated,
+    });
+  }
 };
 
 const onMessageReceived = async (message, sender, sendResponse) => {
