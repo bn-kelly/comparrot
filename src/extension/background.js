@@ -125,9 +125,46 @@ const onTabsActivated = async () => {
   }
 };
 
-const onTabsUpdated = async (tabId, changeInfo) => {
+const onTabsUpdated = async (tabId, changeInfo, tab) => {
+  console.log('onTabsUpdated', changeInfo, tabId, tab.url);
+  const retailers = await getStorageValue('retailers');
   const activeTab = await getActiveTab();
   const activeTabId = activeTab ? activeTab.id : null;
+
+  if (changeInfo.status === 'loading'
+    && validateUrl(tab.url)
+    && !tab.url.includes('track.flexlinkspro.com')
+    && !tab.url.includes('irclickid')
+    && Array.isArray(retailers))
+  {
+    const retailer = retailers.find((r) => {
+      const url = new URL(tab.url);
+      return r.url && r.url !== '' && r.affiliateId && url.hostname.includes(r.url);
+    });
+
+    console.log('retailer', retailer);
+
+    if (retailer) {
+      const response = await fetch(`${BaseUrl}/getAffiliateLink`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          url: tab.url,
+          advertiserId: retailer.affiliateId,
+        }),
+      });
+      const data = await response.json();
+      const affiliateLink = data.affiliateLink;
+      if (affiliateLink) {
+        chrome.tabs.update(tabId, {
+          url: affiliateLink,
+        });
+      }
+    }
+  }
 
   if (activeTab && activeTabId === tabId) {
     setIcon(activeTab.url);
