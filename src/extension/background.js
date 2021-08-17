@@ -1,4 +1,5 @@
 let spinIcon = false;
+let affiliateTabs = {};
 
 const init = () => {
   chrome.browserAction.setPopup({ popup: '' });
@@ -126,42 +127,67 @@ const onTabsActivated = async () => {
 };
 
 const onTabsUpdated = async (tabId, changeInfo, tab) => {
-  console.log('onTabsUpdated', changeInfo, tabId, tab.url);
   const retailers = await getStorageValue('retailers');
   const activeTab = await getActiveTab();
   const activeTabId = activeTab ? activeTab.id : null;
 
   if (changeInfo.status === 'loading'
     && validateUrl(tab.url)
-    && !tab.url.includes('track.flexlinkspro.com')
-    && !tab.url.includes('irclickid')
     && Array.isArray(retailers))
   {
+    let shouldUpdateTab = false;
+
+    if (affiliateTabs[tabId]
+      && affiliateTabs[tabId].origin
+      && !affiliateTabs[tabId].affiliateLink)
+    {
+      affiliateTabs[tabId].affiliateLink = tab.url;
+    } 
+    else
+    {
+      affiliateTabs[tabId] = {
+        origin: tab.url
+      };
+      shouldUpdateTab = true;
+    }
+
     const retailer = retailers.find((r) => {
       const url = new URL(tab.url);
       return r.url && r.url !== '' && r.affiliateId && url.hostname.includes(r.url);
     });
 
-    console.log('retailer', retailer);
-
-    if (retailer) {
-      const response = await fetch(`${BaseUrl}/getAffiliateLink`, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          url: tab.url,
-          advertiserId: retailer.affiliateId,
-        }),
+    if (retailer && shouldUpdateTab) {
+      chrome.tabs.executeScript(tabId, {
+        code: 'window.stop();',
+        runAt: 'document_start',
       });
-      const data = await response.json();
-      const affiliateLink = data.affiliateLink;
-      if (affiliateLink) {
-        chrome.tabs.update(tabId, {
-          url: affiliateLink,
+  
+      try {
+        const response = await fetch(`${BaseUrl}/getAffiliateLink`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            url: tab.url,
+            advertiserId: retailer.affiliateId,
+          }),
         });
+        const data = await response.json();
+        const affiliateLink = data.affiliateLink;
+
+        if (affiliateLink) {
+          chrome.tabs.update(tabId, {
+            url: affiliateLink,
+          });
+        } else {
+          chrome.tabs.update(tabId, {
+            url: tab.url,
+          });
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
   }
