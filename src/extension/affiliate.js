@@ -19,7 +19,7 @@
         let do_break = false;
         const domains = flex_convert_domains[i][1].split("|");
 
-        for ( j = 0; j < domains.length; j++ ) {
+        for (let j = 0; j < domains.length; j++ ) {
           const du = new URL("http://" + domains[j]);
 
           if (atags[len].host.includes(du.host) 
