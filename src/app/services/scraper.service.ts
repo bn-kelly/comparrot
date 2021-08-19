@@ -136,9 +136,14 @@ export class ScraperService {
       data.push(amazonProduct);
     }
 
-    data = data.filter(p => {
-      return p.price < product.price && !this.blacklist.includes(p.retailer);
-    });
+    data = data
+      .filter(p => {
+        return p.price < product.price && !this.blacklist.includes(p.retailer);
+      })
+      .map(p => {
+        p.url = `${environment.cloudFunctions}/affiliate?url=${encodeURIComponent(p.url)}`;
+        return p;
+      });
 
     return data;
   }
