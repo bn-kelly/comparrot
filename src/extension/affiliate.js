@@ -11,11 +11,11 @@
     const flex_user_id = 1241601;
     const fcd_len = flex_convert_domains.length;
 
-    const atags = document.getElementsByTagName("a"),
-    len = atags.length;
+    const atags = document.getElementsByTagName("a");
+    let len = atags.length;
 
     while (len--) {
-      for (i = 0; i < fcd_len; i++) {
+      for (let i = 0; i < fcd_len; i++) {
         let do_break = false;
         const domains = flex_convert_domains[i][1].split("|");
 
