@@ -248,18 +248,18 @@ export class ScraperService {
     if (!products) {
       const googleResult = await this.searchGoogle(product);
       const amazonProduct = await this.getAmazonProduct(product);
-      const scrapedResult = await this.getScrapedProducts(product);
+      // const scrapedResult = await this.getScrapedProducts(product);
       console.log('amazonProduct', amazonProduct);
 
-      products = [...googleResult, ...scrapedResult];
+      products = [...googleResult];
 
       if (amazonProduct) {
         products.push(amazonProduct);
       }
 
-      if (scrapedResult.length === 0) {
-        this.triggerScraper(product);
-      }
+      // if (scrapedResult.length === 0) {
+      //   this.triggerScraper(product);
+      // }
 
       products = products
         .filter(p => {
