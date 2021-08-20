@@ -129,22 +129,6 @@ export class ScraperService {
       data = await this.getGooglePrices(id, search);
     }
 
-    const amazonProduct = await this.getAmazonProduct(product);
-    console.log('amazonProduct', amazonProduct);
-
-    if (amazonProduct) {
-      data.push(amazonProduct);
-    }
-
-    data = data
-      .filter(p => {
-        return p.price < product.price && !this.blacklist.includes(p.retailer);
-      })
-      .map(p => {
-        p.url = `${environment.cloudFunctions}/affiliate?url=${encodeURIComponent(p.url)}`;
-        return p;
-      });
-
     return data;
   }
 
@@ -262,23 +246,34 @@ export class ScraperService {
     let products = this.map.get(key);
     
     if (!products) {
-
       const googleResult = await this.searchGoogle(product);
+      const amazonProduct = await this.getAmazonProduct(product);
       const scrapedResult = await this.getScrapedProducts(product);
+      console.log('amazonProduct', amazonProduct);
+
+      products = [...googleResult, ...scrapedResult];
+
+      if (amazonProduct) {
+        products.push(amazonProduct);
+      }
 
       if (scrapedResult.length === 0) {
         this.triggerScraper(product);
       }
 
-      products = [...googleResult, ...scrapedResult]
+      products = products
         .filter(p => {
-          return p.price < product.price;
+          return p.price < product.price && !this.blacklist.includes(p.retailer);
         })
         .filter((p, index, self ) => {
           return index === self.findIndex((t) => t.retailer === p.retailer && t.price === p.price);
         })
         .sort((a, b) => {
           return a.price - b.price;
+        })
+        .map(p => {
+          p.url = `${environment.cloudFunctions}/affiliate?url=${encodeURIComponent(p.url)}`;
+          return p;
         });
 
       this.map.set(key, products);
