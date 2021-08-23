@@ -36,6 +36,8 @@ export const GoogleXPaths = {
   g_step1_ship_xpath: "//span[@class='price']/following-sibling::text()",
   g_step1_title_xpath:
     "//div[(contains(@class,'_Ked') or contains(@class,'shop-result-group')) and count(div[contains(text(),'Results for')])=0]//h3[contains(@class,'r')]|//div[(contains(@class,'_Ked') or contains(@class,'shop-result-group')) and count(div[contains(text(),'Results for')])=0]//a[contains(@data-what,'1')]//h3",
+  g_step1_image_xpath:
+    "//div[(contains(@class,'_Ked') or contains(@class,'shop-result-group')) and count(div[contains(text(),'Results for')])=0]//div[contains(@class,'sh-dlr__thumbnail')]//div[@data-tu]/@data-tu",
   g_step1_url_xpath:
     "//div[contains(@class,'psmkhead')]/preceding-sibling::div//h3[@class='r']/a|(//div[(contains(@class,'_Ked') or contains(@class,'shop-result-group')) and count(div[contains(text(),'Results for')])=0 and count(div[contains(text(),'Other Matches')])=0]//a[contains(@data-what,'1') and not(//div[contains(@class,'psmkhead')]) and not(//span[contains(text(), 'Did you mean:')]) and not(span[contains(text(), 'Shop for all')])])|(//div[@class='psgicont' and not(//div[contains(@class,'psmkhead')]) and not(//span[contains(text(), 'Did you mean:')]) and not(span[contains(text(), 'Shop for all')])]/a)",
   g_step2_href_xpath:

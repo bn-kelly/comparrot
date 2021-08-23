@@ -91,7 +91,6 @@ export class ScraperService {
       );
       const arrRetailers = [];
       node = retailers.iterateNext();
-
       while (node) {
         arrRetailers.push(node.textContent);
         node = retailers.iterateNext();
@@ -103,10 +102,20 @@ export class ScraperService {
       );
       const arrTitles = [];
       node = titles.iterateNext();
-
       while (node) {
         arrTitles.push(node.textContent);
         node = titles.iterateNext();
+      }
+
+      const images = getXPathArray(
+        doc,
+        GoogleXPaths.g_step1_image_xpath,
+      );
+      const arrImages = [];
+      node = images.iterateNext();
+      while (node) {
+        arrImages.push(node.textContent);
+        node = images.iterateNext();
       }
 
       for (let i = 0; i < arrRetailers.length; i++) {
@@ -114,11 +123,13 @@ export class ScraperService {
         const title = arrTitles[i];
         const price = Number(getNumberFromString(clean(arrPrices[i])).toFixed(2));
         const retailer = clean(arrRetailers[i]);
+        const image = arrImages[i];
 
         data.push({
           url,
           title,
           price,
+          image,
           retailer,
           sku: sha1(`${title}${retailer}`),
           created: Date.now(),
