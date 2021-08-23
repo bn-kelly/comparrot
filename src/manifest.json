@@ -38,7 +38,10 @@
       "run_at": "document_end"
     }
   ],
-  "web_accessible_resources": ["index.html"],
+  "web_accessible_resources": [
+    "index.html",
+    "extension/content.css"
+  ],
   "icons": {
     "16": "assets/img/icons/16x16.png",
     "32": "assets/img/icons/32x32.png",

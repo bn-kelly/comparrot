@@ -1,89 +1,72 @@
 let isExtensionLoaded = false;
 let lastProductUrl = null;
+let extensionIframe = null;
 
-const getIframe = () => document.getElementById(iframeID);
-
-const inIframe = () => {
-  try {
-    return window.self !== window.top;
-  } catch (e) {
-    return true;
-  }
-};
+const getContainer = () => document.getElementById(containerId);
 
 const toggleShowIframe = () => {
-  const iframe = getIframe();
-
-  if (!iframe) {
+  if (!extensionIframe) {
     return;
   }
 
-  const isActive = iframe.classList.contains(activeClassName);
+  const isActive = extensionIframe.classList.contains(activeClassName);
 
   const toggleActiveClass = isActive ? remove : add;
   const toggleInactiveClass = isActive ? add : remove;
-  iframe.classList[toggleActiveClass](activeClassName);
-  iframe.classList[toggleActiveClass](inClassName);
-  iframe.classList[toggleInactiveClass](inactiveClassName);
+  extensionIframe.classList[toggleActiveClass](activeClassName);
+  extensionIframe.classList[toggleActiveClass](inClassName);
+  extensionIframe.classList[toggleInactiveClass](inactiveClassName);
 
   setZIndex();
 };
 
 const showIframe = () => {
-  const iframe = getIframe();
-
-  if (!iframe) {
+  if (!extensionIframe) {
     return;
   }
 
-  if (!iframe.classList.contains(activeClassName)) {
-    iframe.classList.add(activeClassName);
-    iframe.classList.add(inClassName);
-    iframe.classList.remove(inactiveClassName);
+  if (!extensionIframe.classList.contains(activeClassName)) {
+    extensionIframe.classList.add(activeClassName);
+    extensionIframe.classList.add(inClassName);
+    extensionIframe.classList.remove(inactiveClassName);
   }
 
   setZIndex();
 };
 
 const hideIframe = () => {
-  const iframe = getIframe();
-
-  if (!iframe) {
+  if (!extensionIframe) {
     return;
   }
 
-  if (iframe.classList.contains(activeClassName)) {
-    iframe.classList.remove(activeClassName);
-    iframe.classList.remove(inClassName);
-    iframe.classList.add(inactiveClassName);
+  if (extensionIframe.classList.contains(activeClassName)) {
+    extensionIframe.classList.remove(activeClassName);
+    extensionIframe.classList.remove(inClassName);
+    extensionIframe.classList.add(inactiveClassName);
   }
 };
 
 const toggleExpandIframeWidth = isOpen => {
-  const iframe = getIframe();
-
-  if (!iframe) {
+  if (!extensionIframe) {
     return;
   }
 
   const toggleExpandedClass = isOpen ? add : remove;
 
-  iframe.classList[toggleExpandedClass](expandedClassName);
+  extensionIframe.classList[toggleExpandedClass](expandedClassName);
 };
 
 const changeIframeStyle = (className, type) => {
-  const iframe = getIframe();
-
-  if (!iframe) {
+  if (!extensionIframe) {
     return;
   }
 
-  if (!iframe.classList.contains(className) && type === AddClass) {
-    iframe.classList.add(className);
+  if (!extensionIframe.classList.contains(className) && type === AddClass) {
+    extensionIframe.classList.add(className);
   }
 
-  if (iframe.classList.contains(className) && type === RemoveClass) {
-    iframe.classList.remove(className);
+  if (extensionIframe.classList.contains(className) && type === RemoveClass) {
+    extensionIframe.classList.remove(className);
   }
 }
 
@@ -275,8 +258,7 @@ const handleMessage = (msg, sender, sendResponse) => {
 };
 
 const postMessage = (action, data) => {
-  const iframe = getIframe();
-  iframe.contentWindow.postMessage(
+  extensionIframe.contentWindow.postMessage(
     {
       action,
       data,
@@ -288,49 +270,48 @@ const postMessage = (action, data) => {
 /**
  * Create an iframe to show the extension UI
  */
-const addIframe = () => {
-  if (getIframe()) {
+const addIframe = async () => {
+  if (getContainer()) {
     return;
   }
 
-  const iframe = document.createElement('iframe');
-  iframe.id = iframeID;
-  iframe.src = chrome.runtime.getURL('index.html');
-  document.documentElement.appendChild(iframe);
-};
+  const container = document.createElement('div');
+  container.id = containerId;
 
-/**
- * Replace an iframe to show the extension UI
- */
-const observeIframe = () => {
-  const observer = new MutationObserver(() => {
-    const iframe = document.querySelector('#minicartIFrame');
-    if (iframe) {
-      iframe.id = iframeID;
-      iframe.src = chrome.runtime.getURL('index.html');
-    }
+  const shadowRoot = container.attachShadow({mode: 'closed'});
 
-    const extensionIframe = getIframe();
-    if (extensionIframe.src !== chrome.runtime.getURL('index.html')) {
-      extensionIframe.src = chrome.runtime.getURL('index.html');
-    }
-  });
+  extensionIframe = document.createElement('iframe');
+  extensionIframe.id = iframeID;
+  extensionIframe.src = chrome.runtime.getURL('index.html');
 
-  observer.observe(document.body, {
-    subtree: true,
-    childList: true,
-  });
+  const style = document.createElement('style');
+  style.innerHTML = await getFileContent(chrome.runtime.getURL('extension/content.css'));
+
+  shadowRoot.append(style);
+  shadowRoot.append(extensionIframe);
+  document.documentElement.append(container);
 };
 
 const setZIndex = () => {
-  const iframe = getIframe();
-  let nextElement = iframe.nextSibling;
+  const container = getContainer();
+
+  if (!container) {
+    return;
+  }
+
+  let nextElement = container.nextSibling;
 
   while (nextElement && nextElement.nodeType === Node.ELEMENT_NODE) {
     if (nextElement.style.zIndex === '2147483647') {
       nextElement.style.zIndex = '2147483646';
     }
     nextElement = nextElement.nextSibling;
+  }
+
+  const honeyContainer = document.querySelector('#honeyContainer');
+  if (honeyContainer) {
+    const honeyShadowRoot = honeyContainer.shadowRoot;
+    honeyShadowRoot.querySelector('#honey-shadow').style.zIndex = '2147483646';
   }
 }
 
@@ -348,16 +329,10 @@ const initEvents = () => {
   });
 };
 
-const init = () => {
-  addIframe();
+const init = async () => {
+  await addIframe();
   setExtensionInstalled();
   initEvents();
-
-  // Homedepot prevent injecting iframe
-  // Cause of this reason, replace site original iframe with extension iframe
-  if (location.href.includes('www.homedepot.com')) {
-    observeIframe();
-  }
 }
 
 init();

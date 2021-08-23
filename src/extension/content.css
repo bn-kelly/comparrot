@@ -1,3 +1,6 @@
+#comparrot-container {
+  z-index: 2147483647 !important;
+}
 iframe#extension-iframe {
   position: fixed !important;
   right: 5px !important;

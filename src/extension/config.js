@@ -29,6 +29,7 @@ const LogError = 'log-error';
 const RegUPC = /^[0-9]{12}$|^[0-9]{13}$|^[0-9]{14}$/;
 
 const extensionOrigin = `chrome-extension://${chrome.runtime.id}`;
+const containerId = 'comparrot-container';
 const iframeID = 'extension-iframe';
 const activeClassName = 'active';
 const inactiveClassName = 'inactive';
