@@ -150,6 +150,7 @@ export class HomeComponent implements OnInit {
     this.message.handleMessage(TryToScrapeData, async ({ product }) => {
       console.log('Product:', product);
       if (!product) {
+        this.showResult = true;
         return;
       }
 
