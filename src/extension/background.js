@@ -23,9 +23,10 @@ const initEvents = () => {
  * @param {string} url
  */
 const setIcon = async url => {
+  const urlObj = new URL(url);
   const retailers = await getStorageValue('retailers');
 
-  if (!Array.isArray(retailers)) {
+  if (!Array.isArray(retailers) || !urlObj) {
     return;
   }
 
@@ -36,13 +37,13 @@ const setIcon = async url => {
       continue;
     }
 
-    const regex = new RegExp(`\\\\*\\\.${retailer.url}\\\\*`);
+    const regex = new RegExp(`\\\\*${retailer.url}\\\\*`);
     regexes.push(regex);
   }
 
   const isSupported =
     regexes.filter(regex => {
-      return regex.test(url);
+      return regex.test(urlObj.hostname);
     }).length > 0;
 
   if (isSupported) {
