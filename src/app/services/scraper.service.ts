@@ -282,7 +282,8 @@ export class ScraperService {
         .sort((a, b) => {
           return a.price - b.price;
         })
-        .map(p => {
+        .map((p) => {
+          p.retailer = p.retailer.split('-')[0].trim();
           p.url = `${environment.cloudFunctions}/affiliate?url=${encodeURIComponent(p.url)}`;
           return p;
         });
