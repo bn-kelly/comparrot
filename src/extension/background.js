@@ -23,32 +23,36 @@ const initEvents = () => {
  * @param {string} url
  */
 const setIcon = async url => {
-  const urlObj = new URL(url);
-  const retailers = await getStorageValue('retailers');
+  try {
+    const urlObj = new URL(url);
+    const retailers = await getStorageValue('retailers');
 
-  if (!Array.isArray(retailers) || !urlObj) {
-    return;
-  }
-
-  const regexes = [/\\*\.?joincomparrot\.com\\*/];
-
-  for (const retailer of retailers) {
-    if (!retailer.url || retailer.url === '') {
-      continue;
+    if (!Array.isArray(retailers) || !urlObj) {
+      return;
     }
 
-    const regex = new RegExp(`\\\\*${retailer.url}\\\\*`);
-    regexes.push(regex);
-  }
+    const regexes = [/\\*\.?joincomparrot\.com\\*/];
 
-  const isSupported =
-    regexes.filter(regex => {
-      return regex.test(urlObj.hostname);
-    }).length > 0;
+    for (const retailer of retailers) {
+      if (!retailer.url || retailer.url === '') {
+        continue;
+      }
 
-  if (isSupported) {
-    chrome.browserAction.setIcon({ path: LogoActivePath });
-  } else {
+      const regex = new RegExp(`\\\\*${retailer.url}\\\\*`);
+      regexes.push(regex);
+    }
+
+    const isSupported =
+      regexes.filter(regex => {
+        return regex.test(urlObj.hostname);
+      }).length > 0;
+
+    if (isSupported) {
+      chrome.browserAction.setIcon({ path: LogoActivePath });
+    } else {
+      chrome.browserAction.setIcon({ path: LogoInactivePath });
+    }
+  } catch (e) {
     chrome.browserAction.setIcon({ path: LogoInactivePath });
   }
 };
