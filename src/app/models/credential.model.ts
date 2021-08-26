@@ -7,8 +7,11 @@ export interface Credential {
   lastName?: string;
   photoURL?: string;
   extension?: {
-    show: boolean;
-    lastShown: number;
+    isInstalled?: boolean;
+    reminders?: {
+      count: number;
+      lastSent: Date;
+    };
   };
   isAnonymous: boolean;
   isAdmin?: boolean;

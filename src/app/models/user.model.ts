@@ -6,8 +6,11 @@ export interface User {
   email?: string;
   photoURL?: string;
   extension?: {
-    show: boolean;
-    lastShown: number;
+    isInstalled?: boolean;
+    reminders?: {
+      count: number;
+      lastSent: Date;
+    };
   };
   uid: string;
   isAnonymous: boolean;

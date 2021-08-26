@@ -248,12 +248,7 @@ export class AuthService {
       isAnonymous: user.isAnonymous,
       isFirstSignIn,
       extension: {
-        show:
-          user.extension && user.extension.show ? user.extension.show : false,
-        lastShown:
-          user.extension && user.extension.lastShown
-            ? user.extension.lastShown
-            : 0,
+        isInstalled: true,
       },
     };
 
