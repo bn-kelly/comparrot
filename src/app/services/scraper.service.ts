@@ -217,8 +217,13 @@ export class ScraperService {
   }
 
   async getAmazonProduct(product: Product) {
-    const search = encodeURIComponent(product.upc || product.title);
+    if (!product.upc) {
+      return null;
+    }
+
+    const search = encodeURIComponent(product.upc);
     const searchUrl = GoogleXPaths.a_search_url.replace('qqqqq', search);
+    console.log('Amazon Search URL:', searchUrl);
     const doc = await this.getDocFromUrl(searchUrl);
 
     const url = BaseAmazonURL + getXPathString(doc, GoogleXPaths.a_asin_xpath);
