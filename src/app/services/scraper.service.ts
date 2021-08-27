@@ -283,7 +283,10 @@ export class ScraperService {
           return a.price - b.price;
         })
         .map((p) => {
-          p.retailer = p.retailer.split('-')[0].trim();
+          if (p.retailer.includes('Walmart')) {
+            p.retailer = p.retailer.split('-')[0].trim();
+          }
+
           p.url = `${environment.cloudFunctions}/affiliate?url=${encodeURIComponent(p.url)}`;
           return p;
         });
