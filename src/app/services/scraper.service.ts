@@ -288,7 +288,7 @@ export class ScraperService {
           return a.price - b.price;
         })
         .map((p) => {
-          if (p.retailer.includes('Walmart')) {
+          if (p.retailer.includes('Walmart') || p.retailer.includes('eBay')) {
             p.retailer = p.retailer.split('-')[0].trim();
           }
 
