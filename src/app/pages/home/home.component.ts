@@ -147,7 +147,7 @@ export class HomeComponent implements OnInit {
 
     const retailers: any[] = await this.storage.getValue('retailers');
 
-    this.message.handleMessage(TryToScrapeData, async ({ product }) => {
+    this.message.handleMessage(TryToScrapeData, async ({ product, retailer }) => {
       console.log('Product:', product);
       if (!product) {
         this.showResult = true;
@@ -161,7 +161,7 @@ export class HomeComponent implements OnInit {
       await this.startSpinning();
       this.ngZone.run(async () => {
         // Todo: We need to store a product to firebase before scraping
-        this.products = await this.scraper.getProducts(product);
+        this.products = await this.scraper.getProducts(product, retailer);
 
         console.log('products:', this.products);
 

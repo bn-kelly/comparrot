@@ -130,7 +130,7 @@ const tryToScrapeData = async (url, retailer) => {
       }
     }
 
-    postMessage(TryToScrapeData, { product });
+    postMessage(TryToScrapeData, { product, retailer });
   } catch(e) {
     console.log('tryToScrapeData=================', e);
     sendMessage(LogError, `URL: ${url} <br> ${e.message}`);

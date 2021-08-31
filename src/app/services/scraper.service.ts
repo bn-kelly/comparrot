@@ -14,6 +14,7 @@ import {
   clean,
   getXPathContent,
 } from '../shared/utils';
+import { Retailer } from '../models/retailer.model';
 
 /**
  * @class ScraperService
@@ -37,12 +38,12 @@ export class ScraperService {
     });
   }
 
-  async searchGoogle(product: Product): Promise<Product[]> {
+  async searchGoogle(product: Product, retailer: Retailer): Promise<Product[]> {
     if (!product) {
       return [];
     }
 
-    const search = encodeURIComponent(product.upc || product.title);
+    const search = encodeURIComponent(product.upc || `${product.title} ${retailer.name}`);
     const url = `https://www.google.com/search?tbm=shop&tbs=vw:1,price:1,ppr_max:${product.price}&q=${search}`;
     const doc = await this.getDocFromUrl(url);
     let data: Product[] = [];
@@ -257,12 +258,12 @@ export class ScraperService {
     return doc;
   }
 
-  async getProducts(product: Product) {
+  async getProducts(product: Product, retailer: Retailer) {
     const key = product.sku;
     let products = this.map.get(key);
     
     if (!products) {
-      const googleResult = await this.searchGoogle(product);
+      const googleResult = await this.searchGoogle(product, retailer);
       const amazonProduct = await this.getAmazonProduct(product);
       // const scrapedResult = await this.getScrapedProducts(product);
       console.log('amazonProduct', amazonProduct);
