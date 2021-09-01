@@ -4,7 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FirebaseService } from '@coturiv/firebase/app';
 import sha1 from 'sha1';
 import { environment } from '../../environments/environment';
-import { BaseAmazonURL, GoogleXPaths } from '../constants';
+import { BaseAmazonURL, GoogleXPaths, RegUPC } from '../constants';
 import { Product } from '../models/product.model';
 import { 
   getXPathString,
@@ -218,7 +218,7 @@ export class ScraperService {
   }
 
   async getAmazonProduct(product: Product) {
-    if (!product.upc) {
+    if (!RegUPC.test(product.upc)) {
       return null;
     }
 

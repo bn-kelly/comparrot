@@ -21,6 +21,7 @@ export const PathToSiteSettings = `${SiteURL}/settings`;
 export const PathToSiteTermsOfService = `${SiteURL}/terms`;
 export const PathToSitePrivacyPolicy = `${SiteURL}/privacy`;
 export const BaseAmazonURL = 'https://www.amazon.com/exec/obidos/ASIN/';
+export const RegUPC = /^[0-9]{12}$|^[0-9]{13}$|^[0-9]{14}$/;
 
 export const GoogleXPaths = {
   g_prod_url:
