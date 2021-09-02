@@ -25,8 +25,7 @@ export class OAuthComponent {
   @Autowire()
   private message: MessageService;
 
-  constructor(
-  ) {}
+  constructor() {}
 
   handleResponse = (response: any) => {
     const [firstNameFromDisplayName, lastNameFromDisplayName] = (

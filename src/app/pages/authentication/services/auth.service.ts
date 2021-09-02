@@ -33,7 +33,7 @@ export class AuthService {
     private http: HttpClient,
     private message: MessageService,
     private ngZone: NgZone,
-    private analyticsService: AnalyticsService
+    private analyticsService: AnalyticsService,
   ) {
     this.user = this.afAuth.authState.pipe(
       switchMap(user => {
@@ -46,7 +46,7 @@ export class AuthService {
       }),
       tap(user => {
         this.currentUser = user;
-      })
+      }),
     );
 
     this.user$ = new BehaviorSubject(null);
@@ -84,11 +84,15 @@ export class AuthService {
 
   loadUserData(): Observable<any> {
     return this.afAuth.authState.pipe(
-      switchMap((auth) => (auth && !auth.isAnonymous ? this.afs.doc<User>(`user/${auth.uid}`).valueChanges() : of(null))),
+      switchMap(auth =>
+        auth && !auth.isAnonymous
+          ? this.afs.doc<User>(`user/${auth.uid}`).valueChanges()
+          : of(null),
+      ),
       take(1),
-      map((user) => {
+      map(user => {
         return (this.currentUser = user);
-      })
+      }),
     );
   }
 
@@ -132,11 +136,14 @@ export class AuthService {
       .createUserWithEmailAndPassword(email, password)
       .then(credential => {
         this.notify.update('Welcome new user!', 'success');
-        this.updateUserData({
-          ...credential.user,
-          firstName,
-          lastName,
-        }, true);
+        this.updateUserData(
+          {
+            ...credential.user,
+            firstName,
+            lastName,
+          },
+          true,
+        );
         window.localStorage.setItem('uid', credential.user.uid);
         this.router.navigate(['/']);
       })
@@ -151,12 +158,9 @@ export class AuthService {
           return;
         }
         window.localStorage.setItem('uid', result.user.uid);
-        this.message.postMessage(
-          SiteForceLogin,
-          {
-            uid: result.user.uid,
-          }
-        );
+        this.message.postMessage(SiteForceLogin, {
+          uid: result.user.uid,
+        });
 
         this.notify.update('Welcome back!', 'success');
         this.router.navigate(['/']);
@@ -172,7 +176,11 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return this.authState !== null && this.currentUser && !this.currentUser.isAnonymous;
+    return (
+      this.authState !== null &&
+      this.currentUser &&
+      !this.currentUser.isAnonymous
+    );
   }
 
   signOut() {
@@ -234,7 +242,9 @@ export class AuthService {
     }
 
     if (isFirstSignIn) {
-      await this.analyticsService.logEvent('User', 'new_user', { user: user.uid });
+      await this.analyticsService.logEvent('User', 'new_user', {
+        user: user.uid,
+      });
     }
 
     const data: User = {

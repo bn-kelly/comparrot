@@ -6,7 +6,7 @@ import sha1 from 'sha1';
 import { environment } from '../../environments/environment';
 import { BaseAmazonURL, GoogleXPaths, RegUPC } from '../constants';
 import { Product } from '../models/product.model';
-import { 
+import {
   getXPathString,
   getXPathArray,
   extractGUrl,
@@ -43,7 +43,9 @@ export class ScraperService {
       return [];
     }
 
-    const search = encodeURIComponent(product.upc || `${product.title} ${retailer.name}`);
+    const search = encodeURIComponent(
+      product.upc || `${product.title} ${retailer.name}`,
+    );
     const url = `https://www.google.com/search?tbm=shop&tbs=vw:1,price:1,ppr_max:${product.price}&q=${search}`;
     const doc = await this.getDocFromUrl(url);
     let data: Product[] = [];
@@ -75,10 +77,7 @@ export class ScraperService {
         node = urls.iterateNext();
       }
 
-      const prices = getXPathArray(
-        doc,
-        GoogleXPaths.g_step1_price_xpath,
-      );
+      const prices = getXPathArray(doc, GoogleXPaths.g_step1_price_xpath);
       const arrPrices = [];
       node = prices.iterateNext();
       while (node) {
@@ -86,10 +85,7 @@ export class ScraperService {
         node = prices.iterateNext();
       }
 
-      const retailers = getXPathArray(
-        doc,
-        GoogleXPaths.g_step1_retailer_xpath,
-      );
+      const retailers = getXPathArray(doc, GoogleXPaths.g_step1_retailer_xpath);
       const arrRetailers = [];
       node = retailers.iterateNext();
       while (node) {
@@ -97,10 +93,7 @@ export class ScraperService {
         node = retailers.iterateNext();
       }
 
-      const titles = getXPathArray(
-        doc,
-        GoogleXPaths.g_step1_title_xpath,
-      );
+      const titles = getXPathArray(doc, GoogleXPaths.g_step1_title_xpath);
       const arrTitles = [];
       node = titles.iterateNext();
       while (node) {
@@ -108,10 +101,7 @@ export class ScraperService {
         node = titles.iterateNext();
       }
 
-      const images = getXPathArray(
-        doc,
-        GoogleXPaths.g_step1_image_xpath,
-      );
+      const images = getXPathArray(doc, GoogleXPaths.g_step1_image_xpath);
       const arrImages = [];
       node = images.iterateNext();
       while (node) {
@@ -122,7 +112,9 @@ export class ScraperService {
       for (let i = 0; i < arrRetailers.length; i++) {
         const url = `https://www.google.com${arrUrls[i]}`;
         const title = arrTitles[i];
-        const price = Number(getNumberFromString(clean(arrPrices[i])).toFixed(2));
+        const price = Number(
+          getNumberFromString(clean(arrPrices[i])).toFixed(2),
+        );
         const retailer = clean(arrRetailers[i]);
         const image = arrImages[i];
 
@@ -164,10 +156,7 @@ export class ScraperService {
       node = links.iterateNext();
     }
 
-    const prices = getXPathArray(
-      doc,
-      GoogleXPaths.g_step2_price_xpath,
-    );
+    const prices = getXPathArray(doc, GoogleXPaths.g_step2_price_xpath);
     node = prices.iterateNext();
 
     while (node) {
@@ -175,14 +164,8 @@ export class ScraperService {
       node = prices.iterateNext();
     }
 
-    const title = getXPathString(
-      doc,
-      GoogleXPaths.g_step2_title_xpath,
-    );
-    const image = getXPathString(
-      doc,
-      GoogleXPaths.g_step2_image_xpath,
-    );
+    const title = getXPathString(doc, GoogleXPaths.g_step2_title_xpath);
+    const image = getXPathString(doc, GoogleXPaths.g_step2_image_xpath);
     const data: Product[] = [];
 
     for (let i = 0; i < arrRetailers.length; i++) {
@@ -197,7 +180,7 @@ export class ScraperService {
         image,
         retailer,
         sku: sha1(`${title}${retailer}`),
-        created: Date.now()
+        created: Date.now(),
       });
     }
 
@@ -241,7 +224,7 @@ export class ScraperService {
         retailer: 'Amazon.com',
         sku: sha1(`${title}Amazon.com`),
         created: Date.now(),
-      }
+      };
     }
 
     return null;
@@ -261,7 +244,7 @@ export class ScraperService {
   async getProducts(product: Product, retailer: Retailer) {
     const key = product.sku;
     let products: Product[] = this.map.get(key);
-    
+
     if (!products) {
       const googleResult = await this.searchGoogle(product, retailer);
       const amazonProduct = await this.getAmazonProduct(product);
@@ -280,12 +263,19 @@ export class ScraperService {
 
       products = products
         .filter(p => {
-          return p.price < product.price && !this.blacklist.includes(p.retailer);
+          return (
+            p.price < product.price && !this.blacklist.includes(p.retailer)
+          );
         })
         .filter((p, index, self) => {
-          return index === self.findIndex((t) => t.retailer === p.retailer && t.price === p.price);
+          return (
+            index ===
+            self.findIndex(
+              t => t.retailer === p.retailer && t.price === p.price,
+            )
+          );
         })
-        .filter((p) => {
+        .filter(p => {
           if (product.upc) {
             return true;
           }
@@ -302,12 +292,14 @@ export class ScraperService {
         .sort((a, b) => {
           return a.price - b.price;
         })
-        .map((p) => {
+        .map(p => {
           if (p.retailer.includes('Walmart') || p.retailer.includes('eBay')) {
             p.retailer = p.retailer.split('-')[0].trim();
           }
 
-          p.url = `${environment.cloudFunctions}/affiliate?url=${encodeURIComponent(p.url)}`;
+          p.url = `${
+            environment.cloudFunctions
+          }/affiliate?url=${encodeURIComponent(p.url)}`;
           return p;
         });
 

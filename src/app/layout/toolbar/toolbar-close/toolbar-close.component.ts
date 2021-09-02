@@ -8,9 +8,7 @@ import { HideIframe } from '../../../constants';
   styleUrls: ['./toolbar-close.component.scss'],
 })
 export class ToolbarCloseComponent {
-  constructor(
-    private message: MessageService,
-  ) {}
+  constructor(private message: MessageService) {}
 
   hideExtension() {
     if (!window.chrome || !window.chrome.tabs) {

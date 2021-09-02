@@ -21,13 +21,13 @@ export class AuthGuard implements CanActivate {
     return currentUser
       ? of(true)
       : this.auth.loadUserData().pipe(
-          map((user) => !!user),
-          tap((isLoggedIn) => {
+          map(user => !!user),
+          tap(isLoggedIn => {
             if (!isLoggedIn) {
               this.notify.update('You must be logged in!', 'error');
               this.router.navigate(['/login']);
             }
-          })
+          }),
         );
   }
 }

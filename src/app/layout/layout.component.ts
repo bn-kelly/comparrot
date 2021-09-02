@@ -1,5 +1,11 @@
 import { filter, map, startWith } from 'rxjs/operators';
-import { Component, ElementRef, OnInit, Renderer2, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  Renderer2,
+  ViewEncapsulation,
+} from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ThemeService } from '../../@fury/services/theme.service';
 import { checkRouterChildsData } from '../../@fury/utils/check-router-childs-data';
@@ -9,10 +15,9 @@ import { AnalyticsService } from '../services/analytics.service';
 @Component({
   selector: 'fury-layout',
   templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.scss']
+  styleUrls: ['./layout.component.scss'],
 })
 export class LayoutComponent implements OnInit {
-
   toolbarVisible$ = this.themeService.config$.pipe(
     map(config => config.toolbarVisible),
   );
@@ -34,19 +39,23 @@ export class LayoutComponent implements OnInit {
     ),
   );
 
-  toolbarButtons = [{
-    title: 'Home',
-    url: '/home',
-    icon: 'icon-home'
-  }, {
-    title: 'Deals',
-    url: '/deals',
-    icon: 'icon-store'
-  }, {
-    title: 'Liked',
-    url: '/wishlist',
-    icon: 'icon-heart'
-  }]
+  toolbarButtons = [
+    {
+      title: 'Home',
+      url: '/home',
+      icon: 'icon-home',
+    },
+    {
+      title: 'Deals',
+      url: '/deals',
+      icon: 'icon-store',
+    },
+    {
+      title: 'Liked',
+      url: '/wishlist',
+      icon: 'icon-heart',
+    },
+  ];
 
   constructor(
     public auth: AuthService,
@@ -54,7 +63,7 @@ export class LayoutComponent implements OnInit {
     private router: Router,
     private renderer: Renderer2,
     private elementRef: ElementRef,
-    private analyticsService: AnalyticsService
+    private analyticsService: AnalyticsService,
   ) {}
 
   ngOnInit() {
@@ -79,16 +88,16 @@ export class LayoutComponent implements OnInit {
 
     this.initSelection(this.router.url);
 
-    this.router.events.pipe(
-      filter<NavigationEnd>(event => event instanceof NavigationEnd),
-    ).subscribe(async (evt) => {
-      this.initSelection(evt.url);
-      if (evt.url === '/') {
-        return;
-      }
+    this.router.events
+      .pipe(filter<NavigationEnd>(event => event instanceof NavigationEnd))
+      .subscribe(async evt => {
+        this.initSelection(evt.url);
+        if (evt.url === '/') {
+          return;
+        }
 
-      this.analyticsService.logPageView(evt.url);
-    });
+        this.analyticsService.logPageView(evt.url);
+      });
   }
 
   private initSelection(path: string) {
@@ -100,7 +109,11 @@ export class LayoutComponent implements OnInit {
 
     const el = this.elementRef.nativeElement.querySelector('.avatar');
     if (el) {
-      this.renderer.setStyle(el, 'border',  path.includes('/account') ? 'solid 3px #FFF' : '');
+      this.renderer.setStyle(
+        el,
+        'border',
+        path.includes('/account') ? 'solid 3px #FFF' : '',
+      );
     }
   }
 }

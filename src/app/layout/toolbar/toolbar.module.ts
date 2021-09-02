@@ -26,7 +26,7 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
     FormsModule,
     ClickOutsideModule,
     FuryCardModule,
-    PipesModule
+    PipesModule,
   ],
   declarations: [
     ToolbarComponent,

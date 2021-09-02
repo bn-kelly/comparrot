@@ -8,7 +8,12 @@ import { SplashScreenService } from '../@fury/services/splash-screen.service';
 import { ThemeService } from '../@fury/services/theme.service';
 import { MessageService } from './services/message.service';
 import { AuthService } from './pages/authentication/services/auth.service';
-import { ExtensionLoaded, GetUserId, SetUserId, SiteForceLogin } from './constants';
+import {
+  ExtensionLoaded,
+  GetUserId,
+  SetUserId,
+  SiteForceLogin,
+} from './constants';
 
 declare global {
   interface Window {

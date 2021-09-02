@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'nameInitials'
+  name: 'nameInitials',
 })
 export class NameInitialsPipe implements PipeTransform {
   transform(displayName: string): string {
@@ -10,8 +10,10 @@ export class NameInitialsPipe implements PipeTransform {
     }
 
     const [firstName, lastName] = displayName.split(' ');
-    const ni = firstName && lastName ? firstName.charAt(0) + lastName.charAt(0) 
-                                     : (firstName || lastName).slice(0, 2);
+    const ni =
+      firstName && lastName
+        ? firstName.charAt(0) + lastName.charAt(0)
+        : (firstName || lastName).slice(0, 2);
     return ni.toUpperCase();
   }
 }

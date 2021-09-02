@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import firebase from "firebase/app";
+import firebase from 'firebase/app';
 
 import { AuthService } from '../../../authentication/services/auth.service';
 import { environment } from '../../../../../environments/environment';
@@ -35,7 +35,7 @@ export class ContactUsService {
       .catch(e => console.error('Error get to mails: ', e));
   }
 
-  sendEmail(subject: String, content: string): Promise<string> {
+  sendEmail(subject: string, content: string): Promise<string> {
     if (
       this.auth.currentUser &&
       this.auth.currentUser.email &&
@@ -47,7 +47,7 @@ export class ContactUsService {
                Email: ${this.auth.currentUser.email} <br> \
                Subject: ${subject} <br> \
                Message: ${content}`,
-      }
+      };
       const email: Email = {
         to: this.adminEmails,
         message,

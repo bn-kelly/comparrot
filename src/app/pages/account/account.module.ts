@@ -22,7 +22,7 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
     ImageCropperModule,
     MatExpansionModule,
     TabsModule,
-    PipesModule
+    PipesModule,
   ],
   declarations: [AccountComponent],
 })

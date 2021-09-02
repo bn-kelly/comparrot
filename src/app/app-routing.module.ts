@@ -58,15 +58,15 @@ const routes: Routes = [
       {
         path: 'deals',
         loadChildren: () =>
-          import('./pages/deals/deals.module').then(
-            m => m.DealsModule,
-          ),
+          import('./pages/deals/deals.module').then(m => m.DealsModule),
       },
       {
         path: 'wishlist',
         canActivate: [AuthGuard],
         loadChildren: () =>
-          import('./pages/wishlist/wishlist.module').then(m => m.WishlistModule),
+          import('./pages/wishlist/wishlist.module').then(
+            m => m.WishlistModule,
+          ),
       },
       {
         path: 'account',
@@ -81,11 +81,11 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
-    initialNavigation: 'enabled',
-    scrollPositionRestoration: 'enabled',
-    anchorScrolling: 'enabled',
-    relativeLinkResolution: 'legacy'
-}),
+      initialNavigation: 'enabled',
+      scrollPositionRestoration: 'enabled',
+      anchorScrolling: 'enabled',
+      relativeLinkResolution: 'legacy',
+    }),
   ],
   exports: [RouterModule],
 })

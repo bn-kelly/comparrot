@@ -46,6 +46,5 @@ export class ToolbarComponent implements OnInit {
     public sanitizer: DomSanitizer,
   ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }

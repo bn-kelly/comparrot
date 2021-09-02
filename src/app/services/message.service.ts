@@ -11,11 +11,10 @@ declare const chrome: any;
   providedIn: 'root',
 })
 export class MessageService {
-
   /**
    * Send a message to content script
-   * @param action 
-   * @param data 
+   * @param action
+   * @param data
    */
   postMessage(action: string, data?: any) {
     window.top.postMessage(
@@ -23,20 +22,17 @@ export class MessageService {
         action,
         data,
       },
-      '*'
+      '*',
     );
   }
 
   /**
    * Handle messages from content script
-   * @param action 
-   * @param handler 
+   * @param action
+   * @param handler
    */
-  handleMessage(
-    action: string,
-    handler: (data: any) => void,
-  ) {
-    window.addEventListener('message', (e) => {
+  handleMessage(action: string, handler: (data: any) => void) {
+    window.addEventListener('message', e => {
       console.log('iframe message:', e.data.action);
       return action === e.data.action && handler(e.data.data);
     });
@@ -44,8 +40,8 @@ export class MessageService {
 
   /**
    * Send a message to background script
-   * @param data 
-   * @param cb 
+   * @param data
+   * @param cb
    */
   sendMessage(data: any, cb?: (data: any) => void) {
     chrome.runtime.sendMessage(data, cb);
@@ -78,7 +74,7 @@ export class MessageService {
   //   ) => void,
   // ) {
   //   chrome.runtime.onMessage.addListener(
-  //     (message: any, sender: any, sendResponse: (data: any) => void) => 
+  //     (message: any, sender: any, sendResponse: (data: any) => void) =>
   //       action === message.action && handler(message, sender, sendResponse)
   //   );
   // }

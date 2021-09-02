@@ -22,9 +22,7 @@ import { SiteForceLogin } from 'src/app/constants';
 import { MessageService } from 'src/app/services/message.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 
-type UserFields =
-  | 'email'
-  | 'password';
+type UserFields = 'email' | 'password';
 type FormErrors = { [u in UserFields]: string };
 
 @Component({
@@ -40,13 +38,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
   password: '';
   formErrors: FormErrors = {
     email: '',
-    password: ''
+    password: '',
   };
   validationMessages = {
     email: {
       required: 'Please enter your email',
       email: 'Must be a valid email',
-    }
+    },
   };
 
   inputType = 'password';
@@ -61,10 +59,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
     private auth: AuthService,
-    public sanitizer: DomSanitizer, 
-    private router: Router, 
+    public sanitizer: DomSanitizer,
+    private router: Router,
     private message: MessageService,
-    private afAuth: AngularFireAuth
+    private afAuth: AngularFireAuth,
   ) {
     this.untilFn = new Subject();
   }
@@ -72,25 +70,27 @@ export class RegisterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.buildForm();
 
-    this.form.controls['password'].valueChanges.pipe(takeUntil(this.untilFn)).subscribe((value: string) => {
-      this.strengthOfPassword = [];
+    this.form.controls['password'].valueChanges
+      .pipe(takeUntil(this.untilFn))
+      .subscribe((value: string) => {
+        this.strengthOfPassword = [];
 
-      if (!value) {
-        return;
-      }
+        if (!value) {
+          return;
+        }
 
-      if (value.match('^(?=.*[a-z])(?=.*[A-Z])')?.length) {
-        this.strengthOfPassword.push('match-ul-case');
-      }
+        if (value.match('^(?=.*[a-z])(?=.*[A-Z])')?.length) {
+          this.strengthOfPassword.push('match-ul-case');
+        }
 
-      if (value.match('^(?=.*?[0-9])(?=.*[@$!%*#?&])')?.length) {
-        this.strengthOfPassword.push('match-ds-case');
-      }
+        if (value.match('^(?=.*?[0-9])(?=.*[@$!%*#?&])')?.length) {
+          this.strengthOfPassword.push('match-ds-case');
+        }
 
-      if (value.length >= 8) {
-        this.strengthOfPassword.push('match-length');
-      }
-    });
+        if (value.length >= 8) {
+          this.strengthOfPassword.push('match-length');
+        }
+      });
   }
 
   ngOnDestroy() {
@@ -122,7 +122,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.auth
       .emailSignUp({
         email: this.email,
-        password: this.password
+        password: this.password,
       })
       .then(response => {
         const data: any = response ? { ...response } : {};
@@ -146,18 +146,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   buildForm() {
-    this.form = this.fb.group(
-      {
-        email: ['', [Validators.required, Validators.email]],
-        password: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(8)
-          ],
-        ]
-      }
-    );
+    this.form = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+    });
 
     this.form.valueChanges.subscribe(() => this.onValueChanged());
     this.onValueChanged(); // reset validation messages
@@ -173,19 +165,19 @@ export class RegisterComponent implements OnInit, OnDestroy {
     const emailCtr = this.form.controls['email'];
     emailCtr.valueChanges.subscribe(() => {
       const messages = this.validationMessages['email'];
-          if (emailCtr.errors) {
-            for (const key in emailCtr.errors) {
-              if (
-                Object.prototype.hasOwnProperty.call(emailCtr.errors, key) &&
-                messages[key]
-              ) {
-                this.formErrors['email'] += `${
-                  (messages as { [key: string]: string })[key]
-                } `;
-              }
-            }
+      if (emailCtr.errors) {
+        for (const key in emailCtr.errors) {
+          if (
+            Object.prototype.hasOwnProperty.call(emailCtr.errors, key) &&
+            messages[key]
+          ) {
+            this.formErrors['email'] += `${
+              (messages as { [key: string]: string })[key]
+            } `;
           }
-    })
+        }
+      }
+    });
   }
 
   handleResponse = (response: any) => {
@@ -199,12 +191,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
     };
 
     window.localStorage.setItem('uid', data.uid);
-    this.message.postMessage(
-      SiteForceLogin,
-      {
-        uid: data.uid,
-      }
-    );
+    this.message.postMessage(SiteForceLogin, {
+      uid: data.uid,
+    });
 
     this.auth.updateUserData(data, true);
     this.router.navigate(['/']);

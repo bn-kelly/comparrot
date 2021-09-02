@@ -1,8 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { fadeInUpAnimation } from '../../../../@fury/animations/fade-in-up.animation';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from '../services/auth.service';
@@ -19,14 +15,14 @@ import { SiteForceLogin } from 'src/app/constants';
   encapsulation: ViewEncapsulation.None,
 })
 export class LoginComponent implements OnInit {
+  constructor(
+    private afAuth: AngularFireAuth,
+    private auth: AuthService,
+    private router: Router,
+    private message: MessageService,
+  ) {}
 
-  constructor(private afAuth: AngularFireAuth, private auth: AuthService, private router: Router, private message: MessageService) {
-  }
-
-
-
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   handleResponse = (response: any) => {
     const [firstNameFromDisplayName, lastNameFromDisplayName] = (
@@ -39,7 +35,7 @@ export class LoginComponent implements OnInit {
     };
 
     window.localStorage.setItem('uid', data.uid);
-    this.message.postMessage(SiteForceLogin,  { uid: data.uid });
+    this.message.postMessage(SiteForceLogin, { uid: data.uid });
     this.auth.updateUserData(data);
     this.router.navigate(['/']);
   };

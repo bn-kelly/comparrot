@@ -32,16 +32,18 @@ export class AccountComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private message: MessageService,
     private firebaseService: FirebaseService,
-    private router: Router
+    private router: Router,
   ) {}
 
   async ngOnInit() {
     this.user = this.auth.currentUser;
-    const { uid} = this.user;
+    const { uid } = this.user;
 
     this.toggleExpandIframe(true);
 
-    const { savings } = await this.firebaseService.docAsPromise(`user_context/${uid}`);
+    const { savings } = await this.firebaseService.docAsPromise(
+      `user_context/${uid}`,
+    );
 
     this.totalSavings = 0;
 
@@ -61,7 +63,7 @@ export class AccountComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.message.postMessage(ToggleExpandIframeWidth,  { isOpen });
+    this.message.postMessage(ToggleExpandIframeWidth, { isOpen });
   }
 
   async logout() {

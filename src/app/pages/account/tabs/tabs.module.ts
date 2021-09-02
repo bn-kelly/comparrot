@@ -11,11 +11,22 @@ import { PersonalizationComponent } from './personalization/personalization.comp
 import { InterestsComponent } from './components/interests/interests.component';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 
-const components = [ContactUsComponent, FaqComponent, PersonalizationComponent, InterestsComponent];
+const components = [
+  ContactUsComponent,
+  FaqComponent,
+  PersonalizationComponent,
+  InterestsComponent,
+];
 
 @NgModule({
   declarations: [...components, InterestsComponent],
-  imports: [ReactiveFormsModule, MaterialModule, CommonModule, MatExpansionModule, PipesModule],
+  imports: [
+    ReactiveFormsModule,
+    MaterialModule,
+    CommonModule,
+    MatExpansionModule,
+    PipesModule,
+  ],
   exports: [...components],
 })
 export class TabsModule {}
