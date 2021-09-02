@@ -260,7 +260,7 @@ export class ScraperService {
 
   async getProducts(product: Product, retailer: Retailer) {
     const key = product.sku;
-    let products = this.map.get(key);
+    let products: Product[] = this.map.get(key);
     
     if (!products) {
       const googleResult = await this.searchGoogle(product, retailer);
@@ -282,8 +282,22 @@ export class ScraperService {
         .filter(p => {
           return p.price < product.price && !this.blacklist.includes(p.retailer);
         })
-        .filter((p, index, self ) => {
+        .filter((p, index, self) => {
           return index === self.findIndex((t) => t.retailer === p.retailer && t.price === p.price);
+        })
+        .filter((p) => {
+          if (product.upc) {
+            return true;
+          }
+
+          const words = product.title.split(' ');
+          for (const word of words) {
+            if (!p.title.toLowerCase().includes(word.toLowerCase())) {
+              return false;
+            }
+          }
+
+          return true;
         })
         .sort((a, b) => {
           return a.price - b.price;

@@ -36,7 +36,7 @@ export const GoogleXPaths = {
     "//div[(contains(@class,'_Ked') or contains(@class,'shop-result-group')) and count(div[contains(text(),'Results for')])=0]//span[@class='price']/following-sibling::text()|//div[(contains(@class,'_Ked') or contains(@class,'shop-result-group')) and count(div[contains(text(),'Results for')])=0]//div[@data-sh-or='price']//following-sibling::div/span",
   g_step1_ship_xpath: "//span[@class='price']/following-sibling::text()",
   g_step1_title_xpath:
-    "//div[(contains(@class,'_Ked') or contains(@class,'shop-result-group')) and count(div[contains(text(),'Results for')])=0]//h3[contains(@class,'r')]|//div[(contains(@class,'_Ked') or contains(@class,'shop-result-group')) and count(div[contains(text(),'Results for')])=0]//a[contains(@data-what,'1')]//h3",
+    "//div[(contains(@class,'_Ked') or contains(@class,'shop-result-group')) and count(div[contains(text(),'Results for')])=0]//h3[contains(@class,'r') and not(contains(@class,'sh-sr__shop-result-header'))]|//div[(contains(@class,'_Ked') or contains(@class,'shop-result-group')) and count(div[contains(text(),'Results for')])=0]//a[contains(@data-what,'1')]//h3[not(contains(@class,'sh-sr__shop-result-header'))]",
   g_step1_image_xpath:
     "//div[(contains(@class,'_Ked') or contains(@class,'shop-result-group')) and count(div[contains(text(),'Results for')])=0]//div[contains(@class,'sh-dlr__thumbnail')]//div[@data-tu]/@data-tu",
   g_step1_url_xpath:
