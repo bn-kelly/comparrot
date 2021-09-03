@@ -13,6 +13,7 @@ import {
   getNumberFromString,
   clean,
   getXPathContent,
+  formatUPC,
 } from '../shared/utils';
 import { Retailer } from '../models/retailer.model';
 
@@ -44,7 +45,7 @@ export class ScraperService {
     }
 
     const search = encodeURIComponent(
-      product.upc || `${product.title} ${retailer.name}`,
+      formatUPC(product.upc) || `${product.title} ${retailer.name}`,
     );
     const url = `https://www.google.com/search?tbm=shop&tbs=vw:1,price:1,ppr_max:${product.price}&q=${search}`;
     const doc = await this.getDocFromUrl(url);

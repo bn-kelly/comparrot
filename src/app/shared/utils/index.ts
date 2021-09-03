@@ -79,3 +79,16 @@ export const validURL = (url: string) => {
   ); // fragment locator
   return !!pattern.test(url);
 };
+
+export const formatUPC = ( str: string) => {
+  if (str === '' || !Number(str)) {
+    return str;
+  }
+
+  const width = 14 - str.length;
+  if ( width > 0 )
+  {
+    return new Array( width + (/\./.test(str) ? 2 : 1) ).join( '0' ) + str;
+  }
+  return str;
+}
