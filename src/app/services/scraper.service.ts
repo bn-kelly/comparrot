@@ -304,8 +304,21 @@ export class ScraperService {
         });
 
       this.map.set(key, products);
+      this.map.set('last-scraped-products', products);
     }
 
     return products;
+  }
+
+  getLastProducts() {
+    return this.map.get('last-scraped-products');
+  }
+
+  getScraped() {
+    return !!this.map.get('is-scraped');
+  }
+
+  setScraped(scraped: Boolean) {
+    this.map.set('is-scraped', scraped);
   }
 }

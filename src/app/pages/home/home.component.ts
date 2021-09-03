@@ -175,6 +175,7 @@ export class HomeComponent implements OnInit {
       async ({ product, retailer }) => {
         console.log('Product:', product);
         if (!product) {
+          this.scraper.setScraped(true);
           this.showResult = true;
           return;
         }
@@ -203,6 +204,7 @@ export class HomeComponent implements OnInit {
           }
 
           this.message.postMessage(ShowIframe);
+          this.scraper.setScraped(true);
           await this.stopSpinning();
         });
       },
@@ -214,6 +216,7 @@ export class HomeComponent implements OnInit {
       });
 
       if (!retailer) {
+        this.scraper.setScraped(true);
         this.showResult = true;
         return;
       }
@@ -227,7 +230,13 @@ export class HomeComponent implements OnInit {
         retailer,
       });
     });
-    this.message.postMessage(ExtensionHomeLoaded);
+
+    if (this.scraper.getScraped()) {
+      this.products = this.scraper.getLastProducts();
+      this.showResult = true;
+    } else {
+      this.message.postMessage(ExtensionHomeLoaded);
+    }
   }
 
   ngOnDestroy() {
