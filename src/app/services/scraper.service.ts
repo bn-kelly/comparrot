@@ -45,7 +45,7 @@ export class ScraperService {
     }
 
     const search = encodeURIComponent(
-      formatUPC(product.upc) || `${product.title} ${retailer.name}`,
+      product.upc || `${product.title} ${retailer.name}`,
     );
     const url = `https://www.google.com/search?tbm=shop&tbs=vw:1,price:1,ppr_max:${product.price}&q=${search}`;
     const doc = await this.getDocFromUrl(url);
@@ -62,7 +62,7 @@ export class ScraperService {
     }
 
     const href = getXPathString(doc, GoogleXPaths.g_step1_href_xpath);
-
+    console.log('href', href);
     if (href.length === 0) {
       const urls = getXPathArray(doc, GoogleXPaths.g_step1_url_xpath);
       const arrUrls = [];
@@ -250,6 +250,7 @@ export class ScraperService {
       const googleResult = await this.searchGoogle(product, retailer);
       const amazonProduct = await this.getAmazonProduct(product);
       // const scrapedResult = await this.getScrapedProducts(product);
+      console.log('googleResult', googleResult);
       console.log('amazonProduct', amazonProduct);
 
       products = [...googleResult];

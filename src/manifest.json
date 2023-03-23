@@ -1,10 +1,14 @@
 {
   "name": "Comparrot",
-  "version": "2.9.4",
+  "version": "2.9.5",
   "description": "Comparrot automatically finds the cheapest prices in real-time as you shop!",
   "manifest_version": 2,
   "content_security_policy": "script-src 'self' https://apis.google.com https://www.google-analytics.com/analytics.js 'sha256-opd4Jdch7gpP31nxVnbM5NSFV/BrTaVCHh1RUcWTVzI='; object-src 'self'",
-  "permissions": ["tabs", "storage", "<all_urls>"],
+  "permissions": [
+    "tabs",
+    "storage",
+    "<all_urls>"
+  ],
   "commands": {
     "show-iframe": {
       "suggested_key": {
@@ -26,19 +30,26 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": [
+        "<all_urls>"
+      ],
       "js": [
         "extension/config.js",
         "extension/global.js",
         "extension/affiliate.js",
         "extension/content.js"
       ],
-      "css": ["extension/content.css"],
+      "css": [
+        "extension/content.css"
+      ],
       "all_frames": false,
       "run_at": "document_end"
     }
   ],
-  "web_accessible_resources": ["index.html", "extension/content.css"],
+  "web_accessible_resources": [
+    "index.html",
+    "extension/content.css"
+  ],
   "icons": {
     "16": "assets/img/icons/16x16.png",
     "32": "assets/img/icons/32x32.png",
